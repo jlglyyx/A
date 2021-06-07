@@ -2,7 +2,7 @@ package com.example.lib_common.base.di.module
 
 import android.app.Application
 import com.example.lib_common.base.di.factory.BaseViewModelFactory
-import com.example.lib_common.scope.ApplicationScope
+import com.yang.common_lib.scope.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

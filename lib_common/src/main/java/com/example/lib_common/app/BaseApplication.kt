@@ -3,7 +3,6 @@ package com.example.lib_common.app
 import android.app.Application
 import android.content.Context
 import com.alibaba.android.arouter.launcher.ARouter
-import com.example.lib_common.BuildConfig
 import com.example.lib_common.base.di.component.DaggerBaseComponent
 import com.example.lib_common.base.di.module.BaseModule
 import com.tencent.bugly.crashreport.CrashReport
