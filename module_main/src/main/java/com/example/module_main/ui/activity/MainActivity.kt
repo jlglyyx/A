@@ -7,20 +7,19 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.lib_common.base.ui.activity.BaseActivity
-import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.help.getBaseComponent
-import com.example.lib_common.util.getScreenSize
+import com.example.lib_common.util.getScreenPx
+import com.example.lib_common.util.px2dip
 import com.example.module_main.R
-import com.example.module_main.di.component.DaggerMainComponent
 import com.example.module_main.di.factory.MainViewModelFactory
+import com.example.module_main.helper.getMainComponent
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
-@Route(path = AppConstant.RoutePath.A_MAIN)
+@Route(path = AppConstant.RoutePath.MAIN_ACTIVITY)
 class MainActivity : BaseActivity() {
 
     companion object {
@@ -34,7 +33,7 @@ class MainActivity : BaseActivity() {
 
     lateinit var fragments: MutableList<Fragment>
 
-    lateinit var titles: MutableList<String>
+    private lateinit var titles: MutableList<String>
 
 
     override fun getLayout(): Int {
@@ -43,10 +42,10 @@ class MainActivity : BaseActivity() {
 
     override fun initData() {
         fragments = mutableListOf<Fragment>().apply {
-            add(ARouter.getInstance().build(AppConstant.RoutePath.F_MAIN).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.F_MAIN).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.F_MAIN).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.F_MAIN).navigation() as Fragment)
+            add(ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_FRAGMENT).navigation() as Fragment)
+            add(ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
+            add(ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
+            add(ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
         }
         titles = mutableListOf<String>().apply {
             add("首页")
@@ -57,14 +56,9 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        DaggerMainComponent.builder().baseComponent(getBaseComponent()).build().inject(this)
+        getMainComponent().inject(this)
         mainViewModel = getViewModel(mainViewModelFactory, MainViewModel::class.java)
-        mainViewModel.getMainRepository()
 
-    }
-
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return mainViewModel.uC
     }
 
     override fun initView() {
@@ -75,7 +69,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initDrawerLayout() {
-        val screenSize = getScreenSize(this.window)
+        val screenSize = getScreenPx(this)
         fragmentContainerView.post {
             val layoutParams = fragmentContainerView.layoutParams as DrawerLayout.LayoutParams
             fragmentContainerView.layoutParams = layoutParams
@@ -100,6 +94,10 @@ class MainActivity : BaseActivity() {
             TabLayoutMediator.TabConfigurationStrategy { tab, position ->
                 tab.text = titles[position]
             }).attach()
+
+        tabLayout.post {
+            viewPager.setPadding(0,0,0,tabLayout.height+10f.px2dip(this))
+        }
 
     }
 

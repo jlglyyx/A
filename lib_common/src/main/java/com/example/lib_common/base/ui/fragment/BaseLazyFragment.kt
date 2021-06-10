@@ -6,10 +6,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.NonNull
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yang.common_lib.util.getStatusBarHeight
+import com.example.lib_common.R
+import com.example.lib_common.base.viewmodel.BaseViewModel
+import com.example.lib_common.bus.event.UIChangeLiveData
+import com.example.lib_common.util.getStatusBarHeight
 
 
 /**
@@ -24,8 +30,14 @@ import com.yang.common_lib.util.getStatusBarHeight
 abstract class BaseLazyFragment : Fragment() {
 
     private var mView: View? = null
+
     private var isFirstLoad = true
+
     lateinit var mContext: Context
+
+    private var uC: UIChangeLiveData? = null
+
+    private var dialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,34 +54,72 @@ abstract class BaseLazyFragment : Fragment() {
         return mView
     }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        uC = initUIChangeLiveData()
         initView()
+        registerListener()
     }
 
 
     abstract fun getLayout(): Int
+
     abstract fun initView()
+
     abstract fun initData()
+
     abstract fun initViewModel()
+
+    open fun initUIChangeLiveData(): UIChangeLiveData? {//在ViewModel层操作ui
+        return null
+    }
 
     open fun setStatusPadding(): Boolean {
         return false
     }
 
+    fun <T : BaseViewModel> getViewModel(@NonNull clazz: Class<T>): T {
 
-    fun <T:ViewModel> getViewModel(factory: ViewModelProvider.Factory, viewModel: Class<T>): T {
-
-        return ViewModelProvider(this, factory).get(viewModel)
+        return ViewModelProvider(this).get(clazz)
     }
 
-    fun <T:ViewModel> getViewModel(viewModel: Class<T>): T {
+    fun <T : BaseViewModel> getViewModel(
+        @NonNull factory: ViewModelProvider.Factory,
+        @NonNull clazz: Class<T>
+    ): T {
 
-        return ViewModelProvider(this).get(viewModel)
+        return ViewModelProvider(this, factory).get(clazz)
     }
 
+    private fun registerListener() {
+        uC?.let { uC ->
+            uC.showLoadingEvent.observe(this, Observer {
+                if (dialog == null){
+                    dialog = AlertDialog.Builder(requireContext()).setTitle("标题").setMessage(it).setIcon(
+                        R.drawable.sample_footer_loading
+                    ).create()
+                }else{
+                    dialog?.setMessage(it)
+                }
+                if (!dialog?.isShowing!!){
+                    dialog?.show()
+                }
+            })
+
+            uC.dismissDialogEvent.observe(this, Observer {
+                dialog?.dismiss()
+            })
+        }
+
+    }
+
+    private fun unRegisterListener() {
+        uC?.let { uC ->
+            uC.showLoadingEvent.removeObservers(this)
+            uC.dismissDialogEvent.removeObservers(this)
+        }
+    }
 
     override fun onResume() {
         super.onResume()
@@ -81,10 +131,6 @@ abstract class BaseLazyFragment : Fragment() {
         }
     }
 
-//    override fun onStop() {
-//        super.onStop()
-//        isFirstLoad = true
-//    }
 
     override fun onPause() {
         super.onPause()
@@ -115,6 +161,7 @@ abstract class BaseLazyFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        unRegisterListener()
         if (mView != null) {
             (mView?.parent as ViewGroup).removeView(mView)
         }

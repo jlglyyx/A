@@ -1,4 +1,4 @@
-package com.yang.common_lib.constant
+package com.example.lib_common.constant
 
 
 /**

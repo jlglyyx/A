@@ -1,4 +1,4 @@
-package com.yang.common_lib.adapter
+package com.example.lib_common.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

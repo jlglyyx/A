@@ -1,4 +1,4 @@
-package com.yang.common_lib.helper
+package com.example.lib_common.helper
 
 import android.graphics.Color
 import androidx.recyclerview.widget.ItemTouchHelper

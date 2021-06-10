@@ -1,4 +1,4 @@
-package com.yang.common_lib.util
+package com.example.lib_common.util
 
 import android.R.id
 import android.annotation.SuppressLint

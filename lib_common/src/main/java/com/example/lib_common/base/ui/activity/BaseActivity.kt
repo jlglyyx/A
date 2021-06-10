@@ -7,11 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.lib_common.R
-import com.example.lib_common.base.di.factory.BaseViewModelFactory
 import com.example.lib_common.base.viewmodel.BaseViewModel
 import com.example.lib_common.bus.event.UIChangeLiveData
-import com.example.lib_common.help.getBaseComponent
-import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -20,13 +17,12 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private var uC: UIChangeLiveData? = null
-    @Inject
-    lateinit var baseViewModelFactory: BaseViewModelFactory
+
+    private var dialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayout())
-        getBaseComponent().inject(this)
         initViewModel()
         uC = initUIChangeLiveData()
         initData()
@@ -57,14 +53,14 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
 
-    private var dialog: AlertDialog? = null
+
 
     private fun registerListener() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
                 if (dialog == null){
                     dialog = AlertDialog.Builder(this).setTitle("标题").setMessage(it).setIcon(
-                        R.drawable.iv_test
+                        R.drawable.sample_footer_loading
                     ).create()
                 }else{
                     dialog?.setMessage(it)

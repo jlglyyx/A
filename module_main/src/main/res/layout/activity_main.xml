@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,13 +22,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             style="@style/parentTabLayout"
+            android:background="@color/colorMainTab"
             android:id="@id/tabLayout"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:background="@android:color/white"
         android:id="@+id/fragmentContainerView"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>

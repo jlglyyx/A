@@ -1,4 +1,4 @@
-package com.yang.common_lib.remote.di.response
+package com.example.lib_common.remote.di.response
 
 
 /**

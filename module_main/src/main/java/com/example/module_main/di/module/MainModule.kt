@@ -1,5 +1,4 @@
 package com.example.module_main.di.module
-
 import android.app.Application
 import com.example.lib_common.scope.ActivityScope
 import com.example.module_main.api.MainApiService

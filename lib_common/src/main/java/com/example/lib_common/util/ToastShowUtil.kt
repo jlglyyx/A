@@ -1,11 +1,11 @@
 @file:JvmName("ToastShowUtil")
 
-package com.yang.common_lib.util
+package com.example.lib_common.util
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
-import com.yang.common_lib.base.app.BaseApplication
+import com.example.lib_common.app.BaseApplication
 
 
 /**
@@ -18,7 +18,7 @@ import com.yang.common_lib.base.app.BaseApplication
  * @Date 2020/12/2 9:38
  */
 private var toast: Toast? = null
-private val context: Context = BaseApplication.applicationContext
+private val context: Context = BaseApplication.baseApplication
 
 @SuppressLint("ShowToast")
 fun showShort(msg: Any) {

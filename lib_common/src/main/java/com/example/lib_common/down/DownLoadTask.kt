@@ -1,13 +1,13 @@
-package com.yang.common_lib.down
+package com.example.lib_common.down
 
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.yang.common_lib.R
-import com.yang.common_lib.down.DownLoadListener
-import com.yang.common_lib.down.DownLoadService
+import com.example.lib_common.R
+import com.example.lib_common.down.DownLoadListener
+import com.example.lib_common.down.DownLoadService
 
 
 /**
@@ -60,7 +60,7 @@ class DownLoadTask constructor(private val service: DownLoadService) :
             .setContentText(contentText)
             .setContentTitle(contentTitle)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.img_launcher)
+            //.setSmallIcon(R.drawable.img_launcher)
             .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .build()
@@ -71,7 +71,7 @@ class DownLoadTask constructor(private val service: DownLoadService) :
             .setContentText("$progress%")
             .setContentTitle(contentTitle)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.img_launcher)
+            //.setSmallIcon(R.drawable.img_launcher)
             .setAutoCancel(true)
             .setProgress(100,progress,false)
             .setDefaults(NotificationCompat.DEFAULT_ALL)

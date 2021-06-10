@@ -1,4 +1,4 @@
-package com.yang.common_lib.scope
+package com.example.lib_common.scope
 
 import javax.inject.Scope
 

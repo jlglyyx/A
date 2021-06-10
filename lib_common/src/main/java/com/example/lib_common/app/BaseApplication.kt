@@ -3,8 +3,10 @@ package com.example.lib_common.app
 import android.app.Application
 import android.content.Context
 import com.alibaba.android.arouter.launcher.ARouter
+import com.example.lib_common.BuildConfig
 import com.example.lib_common.base.di.component.DaggerBaseComponent
-import com.example.lib_common.base.di.module.BaseModule
+import com.example.lib_common.help.getRemoteComponent
+import com.example.lib_common.remote.di.component.DaggerRemoteComponent
 import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -14,13 +16,12 @@ class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
     }
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         baseApplication = this
-        DaggerBaseComponent.builder().baseModule(BaseModule(baseApplication)).build()
+        getRemoteComponent()
         initCrashReport(baseApplication)
         initARouter(baseApplication)
     }

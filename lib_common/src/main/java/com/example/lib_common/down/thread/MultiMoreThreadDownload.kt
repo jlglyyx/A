@@ -1,7 +1,8 @@
-package com.yang.common_lib.down.thread
+package com.example.lib_common.down.thread
 
 import android.util.Log
-import com.yang.common_lib.util.showShort
+import com.example.lib_common.util.showShort
+import com.example.lib_common.down.thread.FileDownloadMoreThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.yang.common_lib.down.thread
+package com.example.lib_common.down.thread
 
 import android.util.Log
 import java.io.BufferedInputStream

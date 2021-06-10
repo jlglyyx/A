@@ -3,5 +3,6 @@
     <item name="viewPager" type="id"/>
     <item name="tabLayout" type="id"/>
     <item name="recyclerView" type="id"/>
+    <item name="banner" type="id"/>
 
 </resources>

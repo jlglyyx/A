@@ -1,9 +1,9 @@
-package com.yang.common_lib.down
+package com.example.lib_common.down
 
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
-import com.yang.common_lib.down.DownLoadListener
+import com.example.lib_common.down.DownLoadListener
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.RandomAccessFile

@@ -6,8 +6,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.lib_common.data.BannerBean
+import com.example.lib_common.util.showShort
 import com.google.android.material.imageview.ShapeableImageView
-import com.yang.common_lib.util.showShort
 import com.youth.banner.adapter.BannerAdapter
 
 

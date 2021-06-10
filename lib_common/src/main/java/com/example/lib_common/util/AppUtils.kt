@@ -1,12 +1,12 @@
 @file:JvmName("AppUtils")
 
-package com.yang.common_lib.util
+package com.example.lib_common.util
 
 import android.content.Context
 import android.view.View
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
-import com.yang.common_lib.constant.Constant.CLICK_TIME
+import com.example.lib_common.constant.Constant.CLICK_TIME
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 
@@ -42,21 +42,21 @@ fun getStatusBarHeight(context: Context): Int {
 /**
  * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
  */
-fun dip2px(context: Context, dpValue: Float): Int {
+fun Float.dip2px(context: Context): Int {
     val scale = context.resources.displayMetrics.density
-    return (dpValue * scale + 0.5f).toInt()
+    return (this * scale + 0.5f).toInt()
 }
 
 /**
  * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
  */
-fun px2dip(context: Context, pxValue: Float): Int {
+fun Float.px2dip(context: Context): Int{
     val scale = context.resources.displayMetrics.density
-    return (pxValue / scale + 0.5f).toInt()
+    return (this / scale + 0.5f).toInt()
 }
 
-fun clicks(view: View): Observable<Unit> {
-    return view.clicks().throttleFirst(CLICK_TIME, TimeUnit.MILLISECONDS)
+fun View.clicks() :Observable<Unit> {
+    return this.clicks().throttleFirst(CLICK_TIME, TimeUnit.MILLISECONDS)
 }
 
 fun toJson(src: Any): String {

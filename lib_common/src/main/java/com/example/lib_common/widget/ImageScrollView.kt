@@ -41,7 +41,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         defStyleAttr
     ) {
         setWillNotDraw(false)
-        bitmap = BitmapFactory.decodeResource(resources, R.drawable.iv_test)
+        bitmap = BitmapFactory.decodeResource(resources, R.drawable.sample_footer_loading)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

@@ -1,4 +1,4 @@
-package com.yang.common_lib.handle
+package com.example.lib_common.handle
 
 import android.util.Log
 import com.google.gson.JsonSyntaxException

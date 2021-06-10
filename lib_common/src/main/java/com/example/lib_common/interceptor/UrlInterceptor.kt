@@ -1,4 +1,4 @@
-package com.yang.common_lib.interceptor
+package com.example.lib_common.interceptor
 
 import android.text.TextUtils
 import android.util.Log

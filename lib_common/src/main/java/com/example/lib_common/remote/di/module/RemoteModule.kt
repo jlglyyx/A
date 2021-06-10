@@ -1,9 +1,9 @@
 package com.example.lib_common.remote.di.module
 
 import android.util.Log
-import com.yang.common_lib.api.BaseApiService
-import com.yang.common_lib.interceptor.UrlInterceptor
-import com.yang.common_lib.scope.RemoteScope
+import com.example.lib_common.api.BaseApiService
+import com.example.lib_common.scope.RemoteScope
+import com.example.lib_common.interceptor.UrlInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
@@ -99,7 +99,7 @@ class RemoteModule {
     }
 
     companion object {
-        const val baseUrl = "http://192.168.0.222:20001/"
+        const val baseUrl = "https://wanandroid.com/"
 //        const val baseUrl = "http://jlgl.free.idcfengye.com/"
         private const val TAG = "RemoteModule"
         private const val TAG_LOG = "httpLog"

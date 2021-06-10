@@ -1,4 +1,4 @@
-package com.yang.common_lib.down
+package com.example.lib_common.down
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -8,12 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.*
 import android.util.Log
-import androidx.lifecycle.Observer
-import com.yang.common_lib.base.viewmodel.BaseViewModel
-import com.yang.common_lib.constant.Constant
-import com.yang.common_lib.down.DownLoadTask
-import com.yang.common_lib.down.thread.MultiMoreThreadDownload
-import com.yang.common_lib.interceptor.UrlInterceptor
 import java.io.File
 
 
