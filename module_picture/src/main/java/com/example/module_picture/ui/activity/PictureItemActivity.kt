@@ -7,8 +7,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.module_picture.R
 import com.google.android.material.imageview.ShapeableImageView
+import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.fra_item_picture.*
 
 
@@ -34,11 +36,22 @@ class PictureItemActivity : BaseActivity() {
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         mAdapter = MAdapter(R.layout.item_image, mutableListOf<String>().apply {
-            for (i in 1..50){
+            for (i in 1..50) {
                 this.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg")
             }
         }).also {
             it.setOnItemClickListener { adapter, view, position ->
+                val imageViewPagerDialog =
+                    ImageViewPagerDialog(this, adapter.data as MutableList<String>, position)
+                imageViewPagerDialog.imageViewPagerDialogCallBack = object :
+                    ImageViewPagerDialog.ImageViewPagerDialogCallBack {
+                    override fun getPosition(position: Int) {
+                        recyclerView.smoothScrollToPosition(position)
+                        //recyclerView.scrollToPosition(position)
+                    }
+
+                }
+                XPopup.Builder(this).asCustom(imageViewPagerDialog).show()
 
             }
         }

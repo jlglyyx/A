@@ -1,5 +1,6 @@
 package com.example.module_main.ui.activity
 
+import android.Manifest
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -15,6 +16,7 @@ import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import com.tbruyelle.rxpermissions3.RxPermissions
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -42,10 +44,22 @@ class MainActivity : BaseActivity() {
 
     override fun initData() {
         fragments = mutableListOf<Fragment>().apply {
-            add(ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_FRAGMENT).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT).navigation() as Fragment)
+            add(
+                ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_FRAGMENT)
+                    .navigation() as Fragment
+            )
+            add(
+                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
+                    .navigation() as Fragment
+            )
+            add(
+                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
+                    .navigation() as Fragment
+            )
+            add(
+                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
+                    .navigation() as Fragment
+            )
         }
         titles = mutableListOf<String>().apply {
             add("首页")
@@ -65,6 +79,7 @@ class MainActivity : BaseActivity() {
         initDrawerLayout()
         initViewPager()
         initTabLayout()
+        initPermission()
 
     }
 
@@ -96,9 +111,30 @@ class MainActivity : BaseActivity() {
             }).attach()
 
         tabLayout.post {
-            viewPager.setPadding(0,0,0,tabLayout.height+10f.px2dip(this))
+            viewPager.setPadding(0, 0, 0, tabLayout.height + 10f.px2dip(this))
         }
 
+    }
+
+    private fun initPermission() {
+        RxPermissions(this).requestEachCombined(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+            .subscribe {
+                when {
+                    it.granted -> {
+
+                    }
+
+                    it.shouldShowRequestPermissionRationale -> {
+
+                    }
+                    else -> {
+
+                    }
+                }
+            }
     }
 
 

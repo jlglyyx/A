@@ -2,7 +2,6 @@ package com.example.lib_common.down.thread
 
 import android.util.Log
 import com.example.lib_common.util.showShort
-import com.example.lib_common.down.thread.FileDownloadMoreThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,7 +20,7 @@ import java.net.URL
  *
  * @Date 2021/1/4 14:30
  */
-class MultiMoreThreadDownload(var filePath: String, var fileUrl: String) : Thread() {
+class MultiMoreThreadDownload(private var parentFilePath: String,private var filePath: String, private var fileUrl: String) : Thread() {
 
 
     var threadNum: Int = 10
@@ -44,7 +43,11 @@ class MultiMoreThreadDownload(var filePath: String, var fileUrl: String) : Threa
     override fun run() {
 
         try {
-            val file = File(filePath)
+            val parentFile = File(parentFilePath)
+            if (!parentFile.exists()){
+                parentFile.mkdirs()
+            }
+            val file = File(parentFile,filePath)
             val url = URL(fileUrl)
             val openConnection = url.openConnection() as HttpURLConnection
             if (openConnection.responseCode == 200 || openConnection.responseCode == 206) {
