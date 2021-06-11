@@ -131,7 +131,7 @@ class MultiMoreThreadDownload(private var parentFilePath: String,private var fil
                 }
 
                 GlobalScope.launch(Dispatchers.Main) {
-                    showShort("下载完成：$filePath")
+                    showShort("下载完成：${file.absolutePath}")
                 }
 
             }
