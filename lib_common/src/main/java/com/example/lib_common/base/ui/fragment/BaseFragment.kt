@@ -107,8 +107,6 @@ abstract class BaseFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         unRegisterListener()
-        if (mView != null) {
-            (mView?.parent as ViewGroup).removeView(mView)
-        }
+        mView = null
     }
 }

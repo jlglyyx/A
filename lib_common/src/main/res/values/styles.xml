@@ -9,7 +9,12 @@
 <!--        <item name="android:fitsSystemWindows">true</item>-->
 <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
-    
+    <style name="SplashActivityTheme" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@drawable/layer_list_splash</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
     <style name="parentTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabRippleColor">@android:color/transparent</item>
         <item name="tabIndicatorColor">@android:color/transparent</item>
