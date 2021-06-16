@@ -11,8 +11,9 @@
         tools:layout="@layout/fra_login">
         <action android:id="@+id/action_login_to_register"
             app:destination="@id/fragment_register"
-            app:popUpTo="@id/fragment_login"
-            app:popUpToInclusive="true"/>
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"
+            />
 
     </fragment>
 
@@ -23,6 +24,7 @@
         tools:layout="@layout/fra_register">
         <action android:id="@+id/action_register_to_login"
             app:destination="@id/fragment_login"
+            app:launchSingleTop="true"
             app:popUpTo="@id/fragment_login"
             app:popUpToInclusive="true"/>
     </fragment>
