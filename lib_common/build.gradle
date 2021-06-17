@@ -147,6 +147,9 @@ dependencies {
 
     api 'com.tencent:mmkv:1.0.22'
 
+    api 'androidx.navigation:navigation-fragment-ktx:2.1.0'
+    api 'androidx.navigation:navigation-ui-ktx:2.1.0'
+
 //    api rootProject.ext.dependencies['BaseRecyclerViewAdapterHelper']
 //    api rootProject.ext.dependencies['dagger']
 //    kapt rootProject.ext.dependencies['dagger-compiler']

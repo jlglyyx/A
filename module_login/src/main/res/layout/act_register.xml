@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/dp_10"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditText
+        android:id="@+id/et_user"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@drawable/shape_user_input_bg"
+        android:hint="账号"
+        android:maxLines="1"
+        android:padding="@dimen/dp_10"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/shape_user_input_bg"
+        android:hint="密码"
+        android:textSize="@dimen/sp_16"
+        android:maxLines="1"
+        android:padding="@dimen/dp_10"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_user" />
+
+    <EditText
+        android:id="@+id/et_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/shape_user_input_bg"
+        android:hint="确认密码"
+        android:textSize="@dimen/sp_16"
+        android:maxLines="1"
+        android:padding="@dimen/dp_10"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_password" />
+
+    <LinearLayout
+        android:id="@+id/ll_verification_code"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/shape_user_input_bg"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_confirm_password">
+
+        <EditText
+            android:id="@+id/et_verification_code"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="验证码"
+            android:textSize="@dimen/sp_16"
+            android:background="@null"
+            android:padding="@dimen/dp_10"
+            android:maxLines="1" />
+        <View
+            android:layout_width="@dimen/dp_0_5"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/tv_verification_code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="@dimen/dp_10"
+            android:text="获取验证码" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_to_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="@dimen/dp_10"
+        android:text="已有账号，立即登录" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="register"
+        android:layout_marginTop="@dimen/dp_10"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_verification_code"
+        android:id="@+id/bt_register"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
