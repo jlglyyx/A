@@ -23,6 +23,7 @@ class SplashActivity : BaseActivity() {
         GlobalScope.launch {
             delay(1000)
             ARouter.getInstance().build(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            finish()
             //ARouter.getInstance().build(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
     }
