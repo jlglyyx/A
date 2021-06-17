@@ -29,7 +29,7 @@ class MainFragment : BaseLazyFragment() {
     }
 
     override fun initData() {
-        mainViewModel.getMainRepository()
+        //mainViewModel.getMainRepository()
     }
 
     override fun initView() {

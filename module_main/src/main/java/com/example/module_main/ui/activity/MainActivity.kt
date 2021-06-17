@@ -1,6 +1,7 @@
 package com.example.module_main.ui.activity
 
 import android.Manifest
+import android.util.Log
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -9,6 +10,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.help.buildARouter
 import com.example.lib_common.util.getScreenPx
 import com.example.lib_common.util.px2dip
 import com.example.module_main.R
@@ -17,6 +19,7 @@ import com.example.module_main.helper.getMainComponent
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tbruyelle.rxpermissions3.RxPermissions
+import com.tencent.mmkv.MMKV
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -43,27 +46,27 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initData() {
-        fragments = mutableListOf<Fragment>().apply {
-            add(
-                ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_FRAGMENT)
-                    .navigation() as Fragment
-            )
-            add(
-                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
-                    .navigation() as Fragment
-            )
-            add(
-                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
-                    .navigation() as Fragment
-            )
-            add(
-                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
-                    .navigation() as Fragment
-            )
-        }
+            fragments = mutableListOf<Fragment>().apply {
+                add(
+                    buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT)
+                        .navigation() as Fragment
+                )
+                add(
+                    buildARouter(AppConstant.RoutePath.PICTURE_FRAGMENT)
+                        .navigation() as Fragment
+                )
+                add(
+                    buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT)
+                        .navigation() as Fragment
+                )
+                add(
+                    buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT)
+                        .navigation() as Fragment
+                )
+            }
         titles = mutableListOf<String>().apply {
             add("首页")
-            add("首页")
+            add("图片")
             add("首页")
             add("首页")
         }
@@ -98,6 +101,7 @@ class MainActivity : BaseActivity() {
 
         viewPager.adapter = MFragmentViewPagerAdapter(this)
         viewPager.isUserInputEnabled = false
+        viewPager.offscreenPageLimit = fragments.size
 
     }
 
@@ -111,7 +115,8 @@ class MainActivity : BaseActivity() {
             }).attach()
 
         tabLayout.post {
-            viewPager.setPadding(0, 0, 0, tabLayout.height + 10f.px2dip(this))
+            val defaultMMKV = MMKV.defaultMMKV()
+            defaultMMKV.encode(AppConstant.Constant.TAB_HEIGHT,tabLayout.height)
         }
 
     }

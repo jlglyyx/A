@@ -21,7 +21,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            style="@style/parentTabLayout"
+            style="@style/mainTabLayout"
+            android:padding="@dimen/dp_5"
             android:background="@color/colorMainTab"
             android:id="@id/tabLayout"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

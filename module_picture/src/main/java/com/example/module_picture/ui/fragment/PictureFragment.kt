@@ -1,6 +1,7 @@
 package com.example.module_picture.ui.fragment
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
@@ -9,9 +10,11 @@ import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.data.BannerBean
+import com.example.lib_common.help.buildARouter
 import com.example.module_picture.R
 import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
+import com.example.module_picture.model.ImageTypeData
 import com.example.module_picture.viewmodel.PictureViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.youth.banner.indicator.CircleIndicator
@@ -35,26 +38,29 @@ class PictureFragment : BaseLazyFragment() {
     }
 
     override fun initData() {
+        pictureModule.getImageTypeData()
 
-        pictureModule.getPictureRepository()
+        pictureModule.mImageTypeData.observe(this, Observer {
+
+            it.forEach { imageTypeData ->
+                titles.add(imageTypeData.name)
+                fragments.add(
+                    buildARouter(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT)
+                        .withString(AppConstant.Constant.TYPE,imageTypeData.type)
+                        .navigation() as Fragment
+                )
+            }
+            initViewPager()
+            initTabLayout()
+        })
     }
 
     override fun initView() {
-        fragments = mutableListOf<Fragment>().apply {
-            add(ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
-        }
-        titles = mutableListOf<String>().apply {
-            add("首页")
-            add("首页")
-            add("首页")
-            add("首页")
-        }
-        initViewPager()
-        initTabLayout()
+        titles = mutableListOf()
+        fragments = mutableListOf()
         initBanner()
+
+
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -71,7 +77,7 @@ class PictureFragment : BaseLazyFragment() {
     private fun initViewPager() {
 
         viewPager.adapter = MFragmentViewPagerAdapter(this)
-
+        viewPager.offscreenPageLimit = fragments.size
     }
 
     private fun initTabLayout() {
@@ -85,7 +91,7 @@ class PictureFragment : BaseLazyFragment() {
 
     }
 
-    private fun initBanner(){
+    private fun initBanner() {
         banner.addBannerLifecycleObserver(this)//添加生命周期观察者
             .setAdapter(MBannerAdapter(mutableListOf<BannerBean>().apply {
                 add(BannerBean("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg"))

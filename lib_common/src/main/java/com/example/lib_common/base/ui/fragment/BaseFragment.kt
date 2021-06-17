@@ -6,16 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.lib_common.R
 import com.example.lib_common.base.viewmodel.BaseViewModel
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.util.getStatusBarHeight
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.impl.LoadingPopupView
 
-abstract class BaseFragment: Fragment() {
+abstract class BaseFragment : Fragment() {
 
     private var mView: View? = null
 
@@ -23,7 +23,7 @@ abstract class BaseFragment: Fragment() {
 
     private var uC: UIChangeLiveData? = null
 
-    private var dialog: AlertDialog? = null
+    private var loadingPopupView: LoadingPopupView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,12 +65,15 @@ abstract class BaseFragment: Fragment() {
     abstract fun initViewModel()
 
 
-    fun <T: BaseViewModel> getViewModel(@NonNull clazz: Class<T>):T{
+    fun <T : BaseViewModel> getViewModel(@NonNull clazz: Class<T>): T {
 
         return ViewModelProvider(this).get(clazz)
     }
 
-    fun <T: BaseViewModel> getViewModel(@NonNull factory: ViewModelProvider.Factory, @NonNull clazz: Class<T>):T{
+    fun <T : BaseViewModel> getViewModel(
+        @NonNull factory: ViewModelProvider.Factory,
+        @NonNull clazz: Class<T>
+    ): T {
 
         return ViewModelProvider(this, factory).get(clazz)
     }
@@ -78,20 +81,19 @@ abstract class BaseFragment: Fragment() {
     private fun registerListener() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
-                if (dialog == null){
-                    dialog = AlertDialog.Builder(requireContext()).setTitle("标题").setMessage(it).setIcon(
-                        R.drawable.sample_footer_loading
-                    ).create()
-                }else{
-                    dialog?.setMessage(it)
+                if (loadingPopupView == null) {
+                    loadingPopupView = XPopup.Builder(requireContext())
+                        .asLoading(it)
+                } else {
+                    loadingPopupView?.setTitle(it)
                 }
-                if (!dialog?.isShowing!!){
-                    dialog?.show()
+                if (!loadingPopupView?.isShow!!) {
+                    loadingPopupView?.show()
                 }
             })
 
             uC.dismissDialogEvent.observe(this, Observer {
-                dialog?.dismiss()
+                loadingPopupView?.dismiss()
             })
         }
 
@@ -107,8 +109,8 @@ abstract class BaseFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         unRegisterListener()
-        if (mView != null) {
-            (mView?.parent as ViewGroup).removeView(mView)
-        }
+        loadingPopupView?.dismiss()
+        loadingPopupView = null
+        mView = null
     }
 }

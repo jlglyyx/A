@@ -23,6 +23,14 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         uC.dismissDialogEvent.call()
     }
 
+    fun cancleRefresh() {
+        uC.refreshEvent.call()
+    }
+
+    fun cancleLoadMore() {
+        uC.loadMoreEvent.call()
+    }
+
 
     private suspend fun delayShowDialog(timeMillis: Long = 1000) {
         delay(timeMillis)
@@ -42,20 +50,20 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     ) {
         viewModelScope.launch {
             try {
-                if (messages.isNotEmpty() && messages[0] != null) {
+                if (messages.isNotEmpty()) {
                     showDialog(messages[0])
                     delayShowDialog()
                 }
                 val data = onRequest()
                 onSuccess(data)
-                if (messages.isNotEmpty() && messages.size >= 2 && messages[1] != null) {
+                if (messages.isNotEmpty() && messages.size >= 2) {
                     showDialog(messages[1])
                 }
                 delayShowDialog()
                 dismissDialog()
             } catch (t: Throwable) {
                 error(t)
-                if (messages.isNotEmpty() && messages.size >= 3 && messages[2] != null) {
+                if (messages.isNotEmpty() && messages.size >= 3) {
                     handleException(t, messages[2])
                 } else {
                     handleException(t)
