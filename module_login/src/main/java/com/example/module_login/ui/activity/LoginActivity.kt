@@ -22,7 +22,7 @@ class LoginActivity : BaseActivity() {
 
     override fun initView() {
 
-        bt_login.setOnClickListener {
+        bt_login.clicks().subscribe {
             ARouter.getInstance().build(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
 

@@ -21,7 +21,7 @@ class RegisterActivity : BaseActivity() {
     }
 
     override fun initView() {
-        bt_register.setOnClickListener {
+        bt_register.clicks().subscribe {
             finish()
         }
         tv_verification_code.clicks().subscribe {
