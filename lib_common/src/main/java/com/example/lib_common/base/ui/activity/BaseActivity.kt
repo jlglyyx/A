@@ -87,6 +87,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        dialog?.dismiss()
         unRegisterListener()
     }
 }

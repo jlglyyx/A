@@ -1,18 +1,33 @@
 package com.example.module_login.ui.activity
 
+import android.text.TextUtils
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.base.ui.activity.BaseActivity
+import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.interceptor.UrlInterceptor
 import com.example.lib_common.util.clicks
+import com.example.lib_common.util.showShort
 import com.example.module_login.R
+import com.example.module_login.di.factory.LoginViewModelFactory
+import com.example.module_login.helper.getLoginComponent
+import com.example.module_login.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.act_register.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.REGISTER_ACTIVITY)
 class RegisterActivity : BaseActivity() {
+
+    @Inject
+    lateinit var loginViewModelFactory: LoginViewModelFactory
+
+    private lateinit var loginViewModel: LoginViewModel
+
     override fun getLayout(): Int {
         return R.layout.act_register
     }
@@ -22,7 +37,7 @@ class RegisterActivity : BaseActivity() {
 
     override fun initView() {
         bt_register.clicks().subscribe {
-            finish()
+            checkForm()
         }
         tv_verification_code.clicks().subscribe {
             initTimer()
@@ -31,8 +46,37 @@ class RegisterActivity : BaseActivity() {
             finish()
         }
     }
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return loginViewModel.uC
+    }
 
     override fun initViewModel() {
+        getLoginComponent().inject(this)
+        loginViewModel = getViewModel(loginViewModelFactory,LoginViewModel::class.java)
+    }
+
+    private fun checkForm(){
+        if (TextUtils.isEmpty(et_user.text.toString())){
+            showShort("请输入账号")
+            return
+        }
+        if (TextUtils.isEmpty(et_password.text.toString())){
+            showShort("请输入密码")
+            return
+        }
+        if (TextUtils.isEmpty(et_confirm_password.text.toString())){
+            showShort("请确认密码")
+            return
+        }
+        if (!TextUtils.equals(et_password.text.toString(),et_confirm_password.text.toString())){
+            showShort("两次密码不一致")
+            return
+        }
+        UrlInterceptor.url = "https://www.wanandroid.com/"
+        loginViewModel.register(et_user.text.toString(),et_password.text.toString(),et_confirm_password.text.toString())
+        loginViewModel.mLoginData.observe(this, Observer {
+            finish()
+        })
     }
 
     private fun initTimer() {
