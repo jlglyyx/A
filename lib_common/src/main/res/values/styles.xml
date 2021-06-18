@@ -10,7 +10,6 @@
 <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
     
-    <style name="parentTabLayout" parent="Base.Widget.Design.TabLayout">
     <style name="SplashActivityTheme" parent="AppTheme">
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/layer_list_splash</item>
