@@ -21,4 +21,9 @@
         <item name="tabIndicatorColor">@android:color/transparent</item>
     </style>
 
+    <style name="circleShapeImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

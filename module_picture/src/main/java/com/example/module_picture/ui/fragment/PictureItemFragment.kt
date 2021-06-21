@@ -34,7 +34,7 @@ class PictureItemFragment : BaseLazyFragment() {
     }
 
     override fun initData() {
-        pictureModule.getPictureRepository()
+        //pictureModule.getPictureRepository()
     }
 
     override fun initView() {

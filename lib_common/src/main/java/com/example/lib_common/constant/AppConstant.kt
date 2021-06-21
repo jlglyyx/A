@@ -33,5 +33,9 @@ interface AppConstant {
 
     object Constant{
 
+        const val ITEM_MAIN_TITLE = 0
+        const val ITEM_MAIN_CONTENT_TEXT = 1
+        const val ITEM_MAIN_CONTENT_IMAGE = 2
+        const val ITEM_MAIN_IDENTIFICATION = 3
     }
 }
