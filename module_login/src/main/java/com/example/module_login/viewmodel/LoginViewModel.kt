@@ -19,19 +19,26 @@ class LoginViewModel @Inject constructor(
 
     var mLoginData = MutableLiveData<LoginData>()
 
-    fun login(username: String, password: String) {
+    fun login(userAccount: String, password: String) {
         launch({
-            loginRepository.login(username,password)
+            loginRepository.login(userAccount, password)
         }, {
             mLoginData.postValue(it.data)
-        }, messages = *arrayOf("请求中...","请求成功..."))
+            showDialog(it.message)
+            delayShowDialog()
+            dismissDialog()
+        }, messages = *arrayOf("请求中..."))
     }
-    fun register(username: String, password: String, repassword: String) {
+
+    fun register(loginData: LoginData) {
         launch({
-            loginRepository.register(username,password,repassword)
+            loginRepository.register(loginData)
         }, {
             mLoginData.postValue(it.data)
-        }, messages = *arrayOf("请求中...","请求成功..."))
+            showDialog(it.message)
+            delayShowDialog()
+            dismissDialog()
+        }, messages = *arrayOf("请求中..."))
     }
 
 }

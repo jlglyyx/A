@@ -32,7 +32,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
-    private suspend fun delayShowDialog(timeMillis: Long = 1000) {
+    suspend fun delayShowDialog(timeMillis: Long = 1000) {
         delay(timeMillis)
     }
 

@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.lib_common.api.BaseApiService
 import com.example.lib_common.scope.RemoteScope
 import com.example.lib_common.interceptor.UrlInterceptor
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
@@ -40,7 +42,7 @@ class RemoteModule {
             .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()))
             .client(okHttpClient)
             .build()
     }

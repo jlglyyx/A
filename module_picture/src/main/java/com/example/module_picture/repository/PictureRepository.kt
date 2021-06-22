@@ -1,9 +1,8 @@
 package com.example.module_picture.repository
 
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.data.MResult
+import com.example.lib_common.remote.di.response.MResult
 import com.example.module_picture.api.PictureApiService
-import com.example.module_picture.model.AccountList
 import com.example.module_picture.model.ImageData
 import com.example.module_picture.model.ImageDataItem
 import com.example.module_picture.model.ImageTypeData
