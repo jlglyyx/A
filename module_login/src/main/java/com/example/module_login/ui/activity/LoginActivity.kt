@@ -39,8 +39,8 @@ class LoginActivity : BaseActivity() {
     override fun initView() {
 
         bt_login.clicks().subscribe {
-            checkForm()
-
+            //checkForm()
+            ARouter.getInstance().build(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
 
         tv_verification_code.clicks().subscribe {
