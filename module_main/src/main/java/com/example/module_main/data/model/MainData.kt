@@ -9,4 +9,7 @@ class MainData constructor(private val itemType: Int) : MultiItemEntity {
     }
 
 
+    var imageList: MutableList<String>? = null
+
+
 }

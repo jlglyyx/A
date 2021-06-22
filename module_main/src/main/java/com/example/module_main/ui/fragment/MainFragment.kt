@@ -7,11 +7,14 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.dialog.ImageViewPagerDialog
+import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
 import com.example.module_main.data.model.MainData
 import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.viewmodel.MainViewModel
+import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.fra_main.*
 import javax.inject.Inject
 
@@ -56,17 +59,99 @@ class MainFragment : BaseLazyFragment() {
 //        })
 
         val mutableListOf = mutableListOf<MainData>().apply {
+
+
+
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                imageList = mutableListOf<String>().apply {
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+
+                }
+            })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                imageList = mutableListOf<String>().apply {
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                    add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32189.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32188.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg")
+                }
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                imageList = mutableListOf<String>().apply {
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                }
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                imageList = mutableListOf<String>().apply {
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                    add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
+                }
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                imageList = mutableListOf<String>().apply {
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                    add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
+                }
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                imageList = mutableListOf<String>().apply {
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32188.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                    add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32189.jpg")
+                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg")
+                }
+            })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
         }
         recyclerView.adapter = MAdapter(mutableListOf)
@@ -108,6 +193,14 @@ class MainFragment : BaseLazyFragment() {
                 }
                 AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE -> {
 
+                    val gridNinePictureView = helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
+                    gridNinePictureView.data = item.imageList!!
+                    gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback{
+                        override fun imageClickListener(position: Int) {
+                            val imageViewPagerDialog = ImageViewPagerDialog(requireContext(), item.imageList!!, position)
+                            XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
+                        }
+                    }
                 }
                 AppConstant.Constant.ITEM_MAIN_IDENTIFICATION -> {
 

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_text"
         android:text="发表感言"
-        android:textSize="@dimen/sp_16"
+        android:textSize="@dimen/sp_14"
         android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"/>
 

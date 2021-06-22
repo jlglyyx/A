@@ -2,20 +2,56 @@ package com.example.lib_common.widget
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
-import android.view.ViewGroup
-import android.widget.FrameLayout
+import android.util.Log
 import android.widget.ImageView
+import android.widget.LinearLayout
 import com.bumptech.glide.Glide
+import com.example.lib_common.util.dip2px
+import kotlin.math.abs
+import kotlin.math.ceil
 
-class GridNinePictureView : FrameLayout {
+class GridNinePictureView : LinearLayout {
 
-    private var mContext: Context;
-    private var mWidth: Int = 0;
-    private var mHeight: Int = 0;
-    private var dataSize = 7
+    private var mContext: Context
+    private var mWidth: Int = 0
+    private var mHeight: Int = 0
+    private var dataSize = 0
     private var spanCount = 3
     private var mImageViewWidth: Int = 0
+    private var rectF: RectF = RectF()
+    private var maxChild = 9
+    private var mPaint = Paint()
+    private var mTextPaint = Paint()
+    var imageCallback: ImageCallback? = null
+    interface ImageCallback {
+        fun imageClickListener(position: Int)
+    }
+    var data: MutableList<String> = mutableListOf()
+        set(value) {
+            this.removeAllViews()
+            field = value
+            dataSize = field.size
+            if (!field.isNullOrEmpty()) {
+                for (i in 0 until dataSize) {
+                    val imageView = ImageView(mContext)
+                    imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                    imageView.setOnClickListener {
+                        imageCallback?.imageClickListener(i)
+                    }
+                    Glide.with(mContext)
+                        .load(
+                            data[i]
+                        )
+                        .into(imageView)
+                    addView(imageView)
+                }
+            }
+        }
+
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -30,19 +66,21 @@ class GridNinePictureView : FrameLayout {
 
 
     private fun init() {
-        for (i in 0 until dataSize) {
-            val imageView = ImageView(mContext)
-            imageView.layoutParams = ViewGroup.LayoutParams(mImageViewWidth, mImageViewWidth)
-            Glide.with(mContext).load("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg").into(imageView)
-            addView(imageView)
-        }
+
+        mPaint.color = Color.parseColor("#afffffff")
+        mPaint.style = Paint.Style.FILL
+
+        mTextPaint.color = Color.parseColor("#8a8a8a")
+        mTextPaint.style = Paint.Style.FILL
+        mTextPaint.textSize = 50f.dip2px(mContext).toFloat()
+
     }
+
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         mWidth = w
         mHeight = h
-        mImageViewWidth = mWidth / spanCount
     }
 
 
@@ -54,52 +92,95 @@ class GridNinePictureView : FrameLayout {
     private fun layoutImage() {
         var countWidth = 0
         var countHeight = 0
-        var columnCount = 0
-        for (i in 0 until childCount) {
+        mImageViewWidth = measuredWidth / spanCount
+        for (i in 0 until if (childCount > maxChild) {
+            maxChild
+        } else {
+            childCount
+        }) {
             val childAt = getChildAt(i)
             if (i % spanCount == 0) {
                 countWidth = 0
-                columnCount++
-                countHeight = columnCount* mImageViewWidth
-                childAt.layout(countWidth, countHeight, mImageViewWidth, countHeight+mImageViewWidth)
+                if (i != 0) {
+                    countHeight += mImageViewWidth
+                }
+                childAt.layout(
+                    countWidth,
+                    countHeight,
+                    countWidth + mImageViewWidth,
+                    countHeight + mImageViewWidth
+                )
+                Log.i(
+                    "TAG",
+                    "layoutImage===$i: $countWidth, $countHeight, ${countWidth + mImageViewWidth}, ${countHeight + mImageViewWidth}"
+                )
             } else {
-                childAt.layout(countWidth, countHeight, countWidth+mImageViewWidth, countHeight+mImageViewWidth)
+                countWidth += mImageViewWidth
+                childAt.layout(
+                    countWidth,
+                    countHeight,
+                    countWidth + mImageViewWidth,
+                    countHeight + mImageViewWidth
+                )
+                Log.i(
+                    "TAG",
+                    "layoutImage===$i: $countWidth, $countHeight, ${countWidth + mImageViewWidth}, ${countHeight + mImageViewWidth}"
+                )
+                if (i == 8) {
+                    rectF.set(
+                        countWidth.toFloat(),
+                        countHeight.toFloat(),
+                        (countWidth + mImageViewWidth).toFloat(),
+                        (countHeight + mImageViewWidth).toFloat()
+                    )
+                }
             }
-            countWidth += mImageViewWidth
 
         }
     }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        setMeasuredDimension(
+            widthSize,
+            (measuredWidth / spanCount) * ceil(
+                if (dataSize > maxChild) {
+                    maxChild.toFloat()
+                } else {
+                    dataSize.toFloat()
+                } / spanCount.toFloat()
+            ).toInt()
+        )
+
     }
 
-//    private fun init(){
-//        val inflate = LayoutInflater.from(mContext).inflate(R.layout.view_grid_nine_picture, this)
-//        val recyclerView = inflate.findViewById<RecyclerView>(R.id.recyclerView)
-//        val gridLayoutManager = GridLayoutManager(mContext, 3)
-//        recyclerView.layoutManager = gridLayoutManager
-//        recyclerView.adapter = GridNinePictureAdapter(mutableListOf<String>().apply {
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-//        }, R.layout.view_item_grid_nine_picture)
-//    }
-//
-//    inner class GridNinePictureAdapter(data:MutableList<String>, layoutResId: Int) : BaseQuickAdapter<String, BaseViewHolder>(layoutResId, data) {
-//
-//        override fun convert(helper: BaseViewHolder, item: String) {
-//            val ivImage = helper.getView<ImageView>(R.id.iv_nine_image)
-//            Glide.with(mContext).load(item).into(ivImage)
-//        }
-//
-//    }
+    override fun dispatchDraw(canvas: Canvas) {
+        super.dispatchDraw(canvas)
+        if (childCount - maxChild > 0) {
+            val exceedCount = childCount - maxChild
+            val bgLayer = canvas.saveLayer(rectF, null)
+            canvas.drawRect(rectF, mPaint)
+            canvas.restoreToCount(bgLayer)
+            val textLayer = canvas.saveLayer(rectF, null)
+            val drawTextContent = "+$exceedCount"
+            canvas.drawText(
+                drawTextContent,
+                (rectF.left + (rectF.right - rectF.left) / 2) - mTextPaint.measureText(
+                    drawTextContent
+                ) / 2,
+                (rectF.top + (rectF.bottom - rectF.top) / 2) + (abs(
+                    mTextPaint.ascent() + abs(
+                        mTextPaint.descent()
+                    )
+                )) / 2,
+                mTextPaint
+            )
+            canvas.restoreToCount(textLayer)
+        }
+    }
+
 
 }
