@@ -4,12 +4,32 @@ import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.lib_common.R
+import com.example.lib_common.util.getStatusBarHeight
 
 class CommonToolBar : ConstraintLayout {
+
+    var imageBackCallBack: ImageBackCallBack? = null
+
+    var imageAddCallBack: ImageAddCallBack? = null
+
+    var tVRightCallBack: TVRightCallBack? = null
+
+    interface ImageBackCallBack {
+        fun imageBackClickListener(view: View)
+    }
+
+    interface ImageAddCallBack {
+        fun imageAddClickListener(view: View)
+    }
+
+    interface TVRightCallBack {
+        fun tvRightClickListener(view: View)
+    }
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -23,14 +43,48 @@ class CommonToolBar : ConstraintLayout {
 
     private fun init(context: Context, attrs: AttributeSet) {
         val inflate = LayoutInflater.from(context).inflate(R.layout.view_common_toolbar, this)
-        val tvTitle = inflate.findViewById<TextView>(R.id.tv_title)
+        val clToolbar = inflate.findViewById<ConstraintLayout>(R.id.cl_toolbar)
+        clToolbar.setPadding(0, getStatusBarHeight(context), 0, 0)
+        val tvCenterContent = inflate.findViewById<TextView>(R.id.tv_centerContent)
+        val tvLeftContent = inflate.findViewById<TextView>(R.id.tv_leftContent)
+        val tvRightContent = inflate.findViewById<TextView>(R.id.tv_rightContent)
         val ivBack = inflate.findViewById<ImageView>(R.id.iv_back)
+        val ivAdd = inflate.findViewById<ImageView>(R.id.iv_add)
         val obtainStyledAttributes =
             context.obtainStyledAttributes(attrs, R.styleable.CommonToolBar)
-        val title = obtainStyledAttributes.getString(R.styleable.CommonToolBar_title)
-        tvTitle.text = title
+        val centerContent =
+            obtainStyledAttributes.getString(R.styleable.CommonToolBar_centerContent)
+        val leftContent = obtainStyledAttributes.getString(R.styleable.CommonToolBar_leftContent)
+        val rightContent = obtainStyledAttributes.getString(R.styleable.CommonToolBar_rightContent)
+        val rightImgVisible =
+            obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_rightImgVisible, false)
+        val rightContentVisible =
+            obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_rightContentVisible, false)
+        tvCenterContent.text = centerContent
+        tvLeftContent.text = leftContent
+        tvRightContent.text = rightContent
+        if (rightImgVisible) {
+            ivAdd.visibility = View.VISIBLE
+        } else {
+            ivAdd.visibility = View.GONE
+        }
+        if (rightContentVisible) {
+            tvRightContent.visibility = View.VISIBLE
+        } else {
+            tvRightContent.visibility = View.GONE
+        }
+        ivAdd.setOnClickListener {
+            imageAddCallBack?.imageAddClickListener(it)
+        }
         ivBack.setOnClickListener {
-            (context as Activity).finish()
+            if (null != imageBackCallBack) {
+                imageBackCallBack?.imageBackClickListener(it)
+            } else {
+                (context as Activity).finish()
+            }
+        }
+        tvRightContent.setOnClickListener {
+            tVRightCallBack?.tvRightClickListener(it)
         }
         obtainStyledAttributes.recycle()
     }

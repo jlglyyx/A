@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.example.lib_common.widget.CommonToolBar
-        android:id="@+id/commonToolBar"
+        android:id="@id/commonToolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="图片"
+        app:centerContent="图片"
         app:layout_constraintTop_toTopOf="parent"/>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

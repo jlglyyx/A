@@ -11,5 +11,7 @@ class MainData constructor(private val itemType: Int) : MultiItemEntity {
 
     var imageList: MutableList<String>? = null
 
+    var dynamicContent: String? = null
+
 
 }

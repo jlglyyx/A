@@ -17,6 +17,7 @@ interface AppConstant {
 
         const val MAIN_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/MainActivity"
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
+        const val ADD_DYNAMIC_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AddDynamicActivity"
 
 
         const val PICTURE_ITEM_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/PictureItemActivity"

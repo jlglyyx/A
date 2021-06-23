@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <com.example.lib_common.widget.CommonToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:centerContent="发表"
+        android:id="@id/commonToolBar"
+        app:rightContent="确定"
+        app:rightContentVisible="true"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="发表些什么..."
+        android:textSize="@dimen/sp_14"
+        android:id="@+id/et_dynamic"
+        android:background="@null"
+        android:gravity="top"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:minLines="5"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@id/recyclerView"
+        android:layout_width="match_parent"
+        android:overScrollMode="never"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
