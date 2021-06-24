@@ -215,6 +215,7 @@ class MainFragment : BaseLazyFragment() {
             when (item.itemType) {
                 AppConstant.Constant.ITEM_MAIN_TITLE -> {
 
+                    helper.setText(R.id.tv_time,item.createTime)
                 }
                 AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT -> {
                     helper.setText(R.id.tv_text, item.dynamicContent)

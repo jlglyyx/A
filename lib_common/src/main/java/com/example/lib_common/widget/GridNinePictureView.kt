@@ -27,16 +27,22 @@ class GridNinePictureView : LinearLayout {
     private var mPaint = Paint()
     private var mTextPaint = Paint()
     var imageCallback: ImageCallback? = null
+
     interface ImageCallback {
         fun imageClickListener(position: Int)
     }
+
     var data: MutableList<String> = mutableListOf()
         set(value) {
             this.removeAllViews()
             field = value
             dataSize = field.size
             if (!field.isNullOrEmpty()) {
-                for (i in 0 until dataSize) {
+                for (i in 0 until if (dataSize > maxChild) {
+                    maxChild
+                } else {
+                    dataSize
+                }) {
                     val imageView = ImageView(mContext)
                     imageView.scaleType = ImageView.ScaleType.CENTER_CROP
                     imageView.setOnClickListener {
@@ -93,11 +99,7 @@ class GridNinePictureView : LinearLayout {
         var countWidth = 0
         var countHeight = 0
         mImageViewWidth = measuredWidth / spanCount
-        for (i in 0 until if (childCount > maxChild) {
-            maxChild
-        } else {
-            childCount
-        }) {
+        for (i in 0 until childCount) {
             val childAt = getChildAt(i)
             if (i % spanCount == 0) {
                 countWidth = 0
@@ -159,8 +161,8 @@ class GridNinePictureView : LinearLayout {
 
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
-        if (childCount - maxChild > 0) {
-            val exceedCount = childCount - maxChild
+        if (dataSize - maxChild > 0) {
+            val exceedCount = dataSize - maxChild
             val bgLayer = canvas.saveLayer(rectF, null)
             canvas.drawRect(rectF, mPaint)
             canvas.restoreToCount(bgLayer)
