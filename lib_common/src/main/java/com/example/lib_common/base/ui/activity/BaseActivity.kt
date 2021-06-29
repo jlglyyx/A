@@ -20,6 +20,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private var dialog: AlertDialog? = null
 
+    val TAG = this.javaClass.simpleName
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayout())

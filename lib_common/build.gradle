@@ -146,6 +146,8 @@ dependencies {
     api 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     api 'androidx.navigation:navigation-ui-ktx:2.1.0'
 
+    api 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5-jitpack'
+
 //    api rootProject.ext.dependencies['BaseRecyclerViewAdapterHelper']
 //    api rootProject.ext.dependencies['dagger']
 //    kapt rootProject.ext.dependencies['dagger-compiler']

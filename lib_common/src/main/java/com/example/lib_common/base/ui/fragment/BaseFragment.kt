@@ -25,6 +25,8 @@ abstract class BaseFragment: Fragment() {
 
     private var dialog: AlertDialog? = null
 
+    val TAG = this.javaClass.simpleName
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

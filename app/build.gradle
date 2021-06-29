@@ -40,5 +40,6 @@ dependencies {
         implementation project(path: ':module_login')
         implementation project(path: ':module_main')
         implementation project(path: ':module_picture')
+        implementation project(path: ':module_video')
     }
 }

@@ -28,15 +28,29 @@ class SplashActivity : BaseActivity() {
                 tv_timer.text = "${i}s点击跳过"
                 delay(1000)
             }
-            ARouter.getInstance().build(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            ARouter.getInstance().build(AppConstant.RoutePath.VIDEO_MAIN_ACTIVITY).navigation()
             finish()
         }
 
         tv_timer.clicks().subscribe{
             launch.cancel()
-            ARouter.getInstance().build(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            ARouter.getInstance().build(AppConstant.RoutePath.VIDEO_MAIN_ACTIVITY).navigation()
             finish()
         }
+//        val launch = lifecycleScope.launch {
+//            for (i in 3 downTo 0) {
+//                tv_timer.text = "${i}s点击跳过"
+//                delay(1000)
+//            }
+//            ARouter.getInstance().build(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+//            finish()
+//        }
+//
+//        tv_timer.clicks().subscribe{
+//            launch.cancel()
+//            ARouter.getInstance().build(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+//            finish()
+//        }
 
     }
 

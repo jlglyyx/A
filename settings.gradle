@@ -1,3 +1,4 @@
+include ':module_video'
 include ':module_picture'
 include ':app'
 include ':lib_common'
