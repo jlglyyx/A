@@ -15,7 +15,7 @@ import com.example.lib_common.base.viewmodel.BaseViewModel
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.util.getStatusBarHeight
 
-abstract class BaseFragment: Fragment() {
+abstract class BaseFragment : Fragment() {
 
     private var mView: View? = null
 
@@ -26,6 +26,7 @@ abstract class BaseFragment: Fragment() {
     private var dialog: AlertDialog? = null
 
     val TAG = this.javaClass.simpleName
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,12 +68,15 @@ abstract class BaseFragment: Fragment() {
     abstract fun initViewModel()
 
 
-    fun <T: BaseViewModel> getViewModel(@NonNull clazz: Class<T>):T{
+    fun <T : BaseViewModel> getViewModel(@NonNull clazz: Class<T>): T {
 
         return ViewModelProvider(this).get(clazz)
     }
 
-    fun <T: BaseViewModel> getViewModel(@NonNull factory: ViewModelProvider.Factory, @NonNull clazz: Class<T>):T{
+    fun <T : BaseViewModel> getViewModel(
+        @NonNull factory: ViewModelProvider.Factory,
+        @NonNull clazz: Class<T>
+    ): T {
 
         return ViewModelProvider(this, factory).get(clazz)
     }
@@ -80,14 +84,15 @@ abstract class BaseFragment: Fragment() {
     private fun registerListener() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
-                if (dialog == null){
-                    dialog = AlertDialog.Builder(requireContext()).setTitle("标题").setMessage(it).setIcon(
-                        R.drawable.sample_footer_loading
-                    ).create()
-                }else{
+                if (dialog == null) {
+                    dialog =
+                        AlertDialog.Builder(requireContext()).setTitle("标题").setMessage(it).setIcon(
+                            R.drawable.sample_footer_loading
+                        ).create()
+                } else {
                     dialog?.setMessage(it)
                 }
-                if (!dialog?.isShowing!!){
+                if (!dialog?.isShowing!!) {
                     dialog?.show()
                 }
             })

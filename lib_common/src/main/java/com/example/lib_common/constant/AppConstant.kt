@@ -41,9 +41,21 @@ interface AppConstant {
         /**
          * video
          */
+        const val VIDEO_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/VideoFragment"
+        const val VIDEO_ITEM_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/VideoItemFragment"
+
+
         const val ADVERTISEMENT_VIDEO_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
         const val VIDEO_MAIN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/MainActivity"
 
+        const val VIDEO_ITEM_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoItemActivity"
+
+        /**
+         * mine
+         */
+        const val MINE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MainActivity"
+
+        const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
     }
 

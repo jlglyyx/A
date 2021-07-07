@@ -107,7 +107,7 @@ dependencies {
 
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 
-    api 'com.tencent.bugly:crashreport:latest.release'
+    //api 'com.tencent.bugly:crashreport:latest.release'
 
     api 'com.huawei.hms:scanplus:1.1.1.301'
     api 'com.github.tbruyelle:rxpermissions:0.12'

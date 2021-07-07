@@ -14,6 +14,7 @@ import com.example.lib_common.util.px2dip
 import com.example.module_main.R
 import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
+import com.example.module_main.ui.fragment.LeftFragment
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tbruyelle.rxpermissions3.RxPermissions
@@ -45,27 +46,27 @@ class MainActivity : BaseActivity() {
     override fun initData() {
         fragments = mutableListOf<Fragment>().apply {
             add(
+                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
+                    .navigation() as Fragment
+            )
+            add(
+                ARouter.getInstance().build(AppConstant.RoutePath.VIDEO_FRAGMENT)
+                    .navigation() as Fragment
+            )
+            add(
                 ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_FRAGMENT)
                     .navigation() as Fragment
             )
             add(
-                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
-                    .navigation() as Fragment
-            )
-            add(
-                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
-                    .navigation() as Fragment
-            )
-            add(
-                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
+                ARouter.getInstance().build(AppConstant.RoutePath.MINE_FRAGMENT)
                     .navigation() as Fragment
             )
         }
         titles = mutableListOf<String>().apply {
             add("首页")
-            add("首页")
-            add("首页")
-            add("首页")
+            add("视频")
+            add("图片")
+            add("我的")
         }
     }
 
@@ -80,7 +81,7 @@ class MainActivity : BaseActivity() {
         initViewPager()
         initTabLayout()
         initPermission()
-
+        initLeftFragment()
     }
 
     private fun initDrawerLayout() {
@@ -135,6 +136,13 @@ class MainActivity : BaseActivity() {
                     }
                 }
             }
+    }
+
+    private fun initLeftFragment() {
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragmentContainerView,
+            LeftFragment()
+        ).commit()
     }
 
 

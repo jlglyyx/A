@@ -25,25 +25,25 @@ class MBannerAdapter(mData: MutableList<BannerBean>) : BannerAdapter<BannerBean,
 
     inner class BannerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var shapeableImageView: ShapeableImageView = itemView as ShapeableImageView
+        var shapeAbleImageView: ShapeableImageView = itemView as ShapeableImageView
 
     }
 
     override fun onCreateHolder(parent: ViewGroup, viewType: Int): BannerViewHolder {
 
-        val shapeableImageView = ShapeableImageView(parent.context)
-        shapeableImageView.layoutParams = ViewGroup.LayoutParams(
+        val shapeAbleImageView = ShapeableImageView(parent.context)
+        shapeAbleImageView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
-        shapeableImageView.scaleType = ImageView.ScaleType.CENTER_CROP
-        return BannerViewHolder(shapeableImageView)
+        shapeAbleImageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        return BannerViewHolder(shapeAbleImageView)
 
     }
 
     override fun onBindView(holder: BannerViewHolder, data: BannerBean, position: Int, size: Int) {
-        holder.shapeableImageView.setOnClickListener {
+        holder.shapeAbleImageView.setOnClickListener {
             showShort("$position ${data.url}")
         }
-        Glide.with(holder.shapeableImageView).load(data.url).into(holder.shapeableImageView)
+        Glide.with(holder.shapeAbleImageView).load(data.url).into(holder.shapeAbleImageView)
     }
 
 
