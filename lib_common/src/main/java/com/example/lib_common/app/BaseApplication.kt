@@ -1,15 +1,17 @@
 package com.example.lib_common.app
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.lib_common.BuildConfig
-import com.example.lib_common.base.di.component.DaggerBaseComponent
 import com.example.lib_common.help.getRemoteComponent
-import com.example.lib_common.remote.di.component.DaggerRemoteComponent
 import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class BaseApplication : Application() {
@@ -42,6 +44,17 @@ class BaseApplication : Application() {
     private fun initCrashReport(application: BaseApplication) {
         GlobalScope.launch(Dispatchers.IO) {
             CrashReport.initCrashReport(application, "4f807733a2", BuildConfig.DEBUG)
+            delay(1000)
+            createNotificationChannel()
+        }
+    }
+
+    private fun createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel =
+                NotificationChannel("download", "下载通知", NotificationManager.IMPORTANCE_HIGH)
+            val systemService = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            systemService.createNotificationChannel(notificationChannel)
         }
     }
 }

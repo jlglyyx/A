@@ -15,6 +15,8 @@ class MainData constructor(private val itemType: Int) : MultiItemEntity {
 
     var imageList: MutableList<String>? = null
 
+    var videoUrl: String? = null
+
     var dynamicContent: String? = null
 
     var createTime : String = simpleDateFormat.format(Date())

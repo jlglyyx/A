@@ -23,7 +23,7 @@ class FileDownloadMoreThread(
     var startPosition: Int,
     var endPosition: Int,
     var threadName: String
-) : Thread() {
+) : Runnable {
 
     companion object {
         private const val TAG = "FileDownloadMoreThread"

@@ -61,9 +61,13 @@ interface AppConstant {
 
     object Constant{
 
+        /**
+         * 主页布局类型
+         */
         const val ITEM_MAIN_TITLE = 0
         const val ITEM_MAIN_CONTENT_TEXT = 1
         const val ITEM_MAIN_CONTENT_IMAGE = 2
         const val ITEM_MAIN_IDENTIFICATION = 3
+        const val ITEM_MAIN_CONTENT_VIDEO = 4
     }
 }

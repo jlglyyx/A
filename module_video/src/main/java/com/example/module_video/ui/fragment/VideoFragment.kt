@@ -3,12 +3,12 @@ package com.example.module_video.ui.fragment
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.launcher.ARouter
 import com.example.lib_common.adapter.MBannerAdapter
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.data.BannerBean
+import com.example.lib_common.help.buildARouter
 import com.example.module_video.R
 import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
@@ -40,10 +40,10 @@ class VideoFragment : BaseLazyFragment() {
 
     override fun initView() {
         fragments = mutableListOf<Fragment>().apply {
-            add(ARouter.getInstance().build(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
-            add(ARouter.getInstance().build(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
         }
         titles = mutableListOf<String>().apply {
             add("首页")

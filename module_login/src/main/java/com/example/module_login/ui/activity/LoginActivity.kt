@@ -4,10 +4,10 @@ import android.text.TextUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.launcher.ARouter
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.help.buildARouter
 import com.example.lib_common.interceptor.UrlInterceptor
 import com.example.lib_common.util.clicks
 import com.example.lib_common.util.showShort
@@ -40,14 +40,14 @@ class LoginActivity : BaseActivity() {
 
         bt_login.clicks().subscribe {
             //checkForm()
-            ARouter.getInstance().build(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
 
         tv_verification_code.clicks().subscribe {
             initTimer()
         }
         tv_to_register.clicks().subscribe {
-            ARouter.getInstance().build(AppConstant.RoutePath.REGISTER_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.REGISTER_ACTIVITY).navigation()
         }
     }
 
@@ -72,7 +72,7 @@ class LoginActivity : BaseActivity() {
         UrlInterceptor.url = "https://www.wanandroid.com/"
         loginViewModel.login(et_user.text.toString(),et_password.text.toString())
         loginViewModel.mLoginData.observe(this, Observer {
-            ARouter.getInstance().build(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         })
     }
 

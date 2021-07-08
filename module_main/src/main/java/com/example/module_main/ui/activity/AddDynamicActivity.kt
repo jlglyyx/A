@@ -26,6 +26,8 @@ class AddDynamicActivity : BaseActivity() {
 
     private var data: MutableList<String> = mutableListOf()
 
+    private var addType = "image/*"
+
 
     override fun getLayout(): Int {
         return R.layout.act_add_dynamic
@@ -77,7 +79,7 @@ class AddDynamicActivity : BaseActivity() {
                 if (normalImageAdapter.data.size == 8) {
                     this.visibility = View.GONE
                 }
-                registerForActivityResult.launch(arrayOf("image/*"))
+                registerForActivityResult.launch(arrayOf(addType))
 
             }
         }

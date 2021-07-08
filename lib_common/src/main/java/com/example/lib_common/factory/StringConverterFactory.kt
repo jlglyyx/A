@@ -1,4 +1,4 @@
-package com.example.myapplication.factory
+package com.example.lib_common.factory
 
 import okhttp3.MediaType
 import okhttp3.RequestBody

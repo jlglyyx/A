@@ -138,7 +138,6 @@ dependencies {
     api 'com.github.chrisbanes.photoview:library:1.2.4'
     api 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
 
-    api 'com.google.dagger:dagger:2.2'
     api 'com.alibaba:arouter-api:1.5.1'
 
     api 'com.github.li-xiaojun:XPopup:2.4.0'

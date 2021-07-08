@@ -1,12 +1,15 @@
 package com.example.module_video.ui.activity
 
 import android.content.res.Configuration
+import android.os.Environment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.down.thread.MultiMoreThreadDownload
+import com.example.lib_common.util.clicks
 import com.example.module_video.R
 import com.google.android.material.tabs.TabLayout
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -28,8 +31,6 @@ class VideoItemActivity : BaseActivity() {
 
     private var isPause = false
     private var isPlay = false
-    private var isFirstVisible = true
-    private var isFirstGone = true
 
     override fun getLayout(): Int {
         return R.layout.act_video_item
@@ -55,6 +56,20 @@ class VideoItemActivity : BaseActivity() {
         detailPlayer.backButton.setOnClickListener {
             finish()
         }
+
+        tv_send_comment.clicks().subscribe {
+
+        }
+        tv_video_down.clicks().subscribe {
+            MultiMoreThreadDownload.Builder(this)
+                .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
+                .filePath("${System.currentTimeMillis()}.mp4")
+                .fileUrl(url)
+                .build()
+                .start()
+        }
+
+
     }
 
     override fun initViewModel() {

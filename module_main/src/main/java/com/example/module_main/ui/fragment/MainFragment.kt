@@ -2,9 +2,11 @@ package com.example.module_main.ui.fragment
 
 import android.content.Intent
 import android.view.View
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -21,8 +23,11 @@ import com.example.module_main.helper.getMainComponent
 import com.example.module_main.ui.activity.AddDynamicActivity
 import com.example.module_main.viewmodel.MainViewModel
 import com.lxj.xpopup.XPopup
+import com.shuyu.gsyvideoplayer.GSYVideoManager
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import kotlinx.android.synthetic.main.fra_main.*
 import javax.inject.Inject
+
 
 @Route(path = AppConstant.RoutePath.MAIN_FRAGMENT)
 class MainFragment : BaseLazyFragment() {
@@ -46,7 +51,7 @@ class MainFragment : BaseLazyFragment() {
         initRecyclerView()
         val registerForActivityResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode != AppCompatActivity.RESULT_OK){
+                if (it.resultCode != AppCompatActivity.RESULT_OK) {
                     return@registerForActivityResult
                 }
                 val images = it.data?.getStringArrayListExtra("Data")
@@ -74,6 +79,8 @@ class MainFragment : BaseLazyFragment() {
                 )
             }
         }
+
+
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -112,6 +119,63 @@ class MainFragment : BaseLazyFragment() {
 
                 }
             })
+
+
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+
+
+
+
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
@@ -130,6 +194,12 @@ class MainFragment : BaseLazyFragment() {
                     add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg")
                 }
             })
+
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
@@ -153,6 +223,12 @@ class MainFragment : BaseLazyFragment() {
                     add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
                     add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
                 }
+            })
+
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
@@ -187,9 +263,43 @@ class MainFragment : BaseLazyFragment() {
                 }
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+
+            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                videoUrl =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
         }
         mAdapter = MAdapter(mutableListOf)
         recyclerView.adapter = mAdapter
+
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val firstVisibleItem =
+                    linearLayoutManager.findFirstVisibleItemPosition()
+                val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+                //大于0说明有播放
+                if (GSYVideoManager.instance().playPosition >= 0) {
+                    //当前播放的位置
+                    val position = GSYVideoManager.instance().playPosition
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance()
+                            .playTag == TAG && (position < firstVisibleItem || position > lastVisibleItem)
+                    ) {
+                        if (GSYVideoManager.isFullState(requireActivity())) {
+                            return
+                        }
+                        //如果滑出去了上面和下面就是否，和今日头条一样
+                        GSYVideoManager.releaseAllVideos()
+                        mAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+        })
     }
 
     inner class MAdapter(list: MutableList<MainData>) :
@@ -209,13 +319,17 @@ class MainFragment : BaseLazyFragment() {
                 AppConstant.Constant.ITEM_MAIN_IDENTIFICATION,
                 R.layout.item_main_identification
             )
+            addItemType(
+                AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO,
+                R.layout.item_main_content_video
+            )
         }
 
         override fun convert(helper: BaseViewHolder, item: MainData) {
             when (item.itemType) {
                 AppConstant.Constant.ITEM_MAIN_TITLE -> {
 
-                    helper.setText(R.id.tv_time,item.createTime)
+                    helper.setText(R.id.tv_time, item.createTime)
                 }
                 AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT -> {
                     helper.setText(R.id.tv_text, item.dynamicContent)
@@ -236,8 +350,48 @@ class MainFragment : BaseLazyFragment() {
                 AppConstant.Constant.ITEM_MAIN_IDENTIFICATION -> {
 
                 }
+                AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO -> {
+                    var gsyVideoPlayer = helper.getView<StandardGSYVideoPlayer>(R.id.detailPlayer)
+
+                    gsyVideoPlayer.thumbImageView = ImageView(requireContext()).apply {
+                        scaleType = ImageView.ScaleType.CENTER_CROP
+                        setImageResource(R.drawable.iv_bear)
+                    }
+                    gsyVideoPlayer.setUpLazy(item.videoUrl, true, null, null, "这是title")
+                    gsyVideoPlayer.titleTextView.visibility = View.GONE
+                    gsyVideoPlayer.backButton.visibility = View.GONE
+                    gsyVideoPlayer.fullscreenButton
+                        .setOnClickListener {
+                            gsyVideoPlayer.startWindowFullscreen(
+                                context,
+                                false,
+                                true
+                            )
+                        }
+                    gsyVideoPlayer.playTag = TAG
+                    gsyVideoPlayer.playPosition = helper.adapterPosition
+                    gsyVideoPlayer.isAutoFullWithSize = true
+                    gsyVideoPlayer.isReleaseWhenLossAudio = false
+                    gsyVideoPlayer.isShowFullAnimation = true
+                    gsyVideoPlayer.setIsTouchWiget(false)
+                }
             }
         }
+    }
 
+
+    override fun onPause() {
+        super.onPause()
+        GSYVideoManager.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        GSYVideoManager.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        GSYVideoManager.releaseAllVideos()
     }
 }

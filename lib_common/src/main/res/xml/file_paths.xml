@@ -10,4 +10,13 @@
     <external-files-path
         name="external_files"
         path="." />
+    <external-path
+        name="external_path"
+        path="."/>
+    <external-cache-path
+        name="external_cache_path"
+        path="."/>
+    <external-media-path
+        name="external_media_path"
+        path="."/>
 </paths>

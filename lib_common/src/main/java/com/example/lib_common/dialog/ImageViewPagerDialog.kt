@@ -71,10 +71,13 @@ class ImageViewPagerDialog : FullScreenPopupView {
 
 
                 photoView.setOnLongClickListener {
-                    MultiMoreThreadDownload("${Environment.getExternalStorageDirectory()}/MFiles/picture",
-                        "${System.currentTimeMillis()}.jpg",
-                        data[position])
+                    MultiMoreThreadDownload.Builder(mContext)
+                        .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/picture")
+                        .filePath("${System.currentTimeMillis()}.jpg")
+                        .fileUrl(data[position])
+                        .build()
                         .start()
+
                     false
                 }
                 Glide.with(photoView).load(data[position]).into(photoView)

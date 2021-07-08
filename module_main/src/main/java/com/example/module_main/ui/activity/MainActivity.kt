@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.launcher.ARouter
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.help.buildARouter
 import com.example.lib_common.util.getScreenPx
 import com.example.lib_common.util.px2dip
 import com.example.module_main.R
@@ -46,19 +46,19 @@ class MainActivity : BaseActivity() {
     override fun initData() {
         fragments = mutableListOf<Fragment>().apply {
             add(
-                ARouter.getInstance().build(AppConstant.RoutePath.MAIN_FRAGMENT)
+                buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT)
                     .navigation() as Fragment
             )
             add(
-                ARouter.getInstance().build(AppConstant.RoutePath.VIDEO_FRAGMENT)
+                buildARouter(AppConstant.RoutePath.VIDEO_FRAGMENT)
                     .navigation() as Fragment
             )
             add(
-                ARouter.getInstance().build(AppConstant.RoutePath.PICTURE_FRAGMENT)
+                buildARouter(AppConstant.RoutePath.PICTURE_FRAGMENT)
                     .navigation() as Fragment
             )
             add(
-                ARouter.getInstance().build(AppConstant.RoutePath.MINE_FRAGMENT)
+                buildARouter(AppConstant.RoutePath.MINE_FRAGMENT)
                     .navigation() as Fragment
             )
         }
