@@ -19,7 +19,7 @@ class LeftFragment : BaseFragment() {
     override fun initViewModel() {
     }
 
-    override fun setStatusPadding(): Boolean {
-        return true
-    }
+//    override fun setStatusPadding(): Boolean {
+//        return true
+//    }
 }

@@ -69,5 +69,12 @@ interface AppConstant {
         const val ITEM_MAIN_CONTENT_IMAGE = 2
         const val ITEM_MAIN_IDENTIFICATION = 3
         const val ITEM_MAIN_CONTENT_VIDEO = 4
+
+        /**
+         * 主页视频布局类型
+         */
+        const val ITEM_VIDEO_RECOMMEND_TYPE = 0
+        const val ITEM_VIDEO_SMART_IMAGE = 1
+        const val ITEM_VIDEO_BIG_IMAGE = 2
     }
 }
