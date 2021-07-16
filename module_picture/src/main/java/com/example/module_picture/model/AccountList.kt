@@ -8,5 +8,6 @@ data class AccountList(
     val order: Int,
     val parentChapterId: Int,
     val userControlSetTop: Boolean,
-    val visible: Int
+    val visible: Int,
+    var url: String
 )

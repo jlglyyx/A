@@ -1,5 +1,7 @@
 package com.example.module_video.ui.fragment
 
+import android.graphics.Rect
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +13,7 @@ import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.dip2px
 import com.example.module_video.R
 import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
@@ -67,11 +70,10 @@ class VideoItemFragment : BaseLazyFragment() {
         }
         recyclerView.adapter = mAdapter
 
-
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val videoData = mAdapter.data[position]
-                return when(videoData.itemType)  {
+                return when (videoData.itemType) {
                     AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE -> 2
                     AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE -> 2
                     AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE -> 1
@@ -81,18 +83,27 @@ class VideoItemFragment : BaseLazyFragment() {
 
         }
 
-        recyclerView.addItemDecoration(object :RecyclerView.ItemDecoration(){
+        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                super.getItemOffsets(outRect, view, parent, state)
+                val itemPosition = parent.getChildLayoutPosition(view)
+                val videoData = mAdapter.data[itemPosition]
+                when (videoData.itemType) {
+                    AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE -> {
+                        if (itemPosition % 2 == 0) {
+                            outRect.right = 2f.dip2px(requireContext())
+                        } else {
+                            outRect.left = 2f.dip2px(requireContext())
+                        }
+                    }
+                }
+            }
 
-//            override fun getItemOffsets(outRect: Rect, itemPosition: Int, parent: RecyclerView) {
-//                super.getItemOffsets(outRect, itemPosition, parent)
-//                val videoData = mAdapter.data[itemPosition]
-//                when(videoData.itemType)  {
-//                    AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE -> 2
-//                    AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE -> 2
-//                    AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE -> 1
-//                    else -> 1
-//                }
-//            }
         })
 
 
@@ -102,18 +113,23 @@ class VideoItemFragment : BaseLazyFragment() {
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE))
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE).apply {
                     bigTitle = it.name
+                    bigImageUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                 })
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
                     smartTitle = it.name
+                    smartImageUrl = "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
                 })
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
                     smartTitle = it.name
+                    smartImageUrl = "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
                 })
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
                     smartTitle = it.name
+                    smartImageUrl = "https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"
                 })
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
                     smartTitle = it.name
+                    smartImageUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
                 })
             }
             mAdapter.replaceData(mutableListOf)
@@ -147,28 +163,19 @@ class VideoItemFragment : BaseLazyFragment() {
                     helper.setText(R.id.tv_title, item.bigTitle)
                     val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
                     Glide.with(sivImg)
-                        .load("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg")
+                        .load(item.bigImageUrl)
                         .into(sivImg)
                 }
                 AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE -> {
                     helper.setText(R.id.tv_title, item.smartTitle)
                     val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
                     Glide.with(sivImg)
-                        .load("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg")
+                        .load(item.smartImageUrl)
                         .into(sivImg)
 
                 }
 
             }
         }
-
-
-//        override fun convert(helper: BaseViewHolder, item: AccountList) {
-//            helper.setText(R.id.tv_title, item.id.toString())
-//            val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-//            Glide.with(sivImg)
-//                .load("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg")
-//                .into(sivImg)
-//        }
     }
 }

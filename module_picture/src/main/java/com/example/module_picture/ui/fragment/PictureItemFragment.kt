@@ -1,5 +1,6 @@
 package com.example.module_picture.ui.fragment
 
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -34,7 +35,7 @@ class PictureItemFragment : BaseLazyFragment() {
     }
 
     override fun initData() {
-        //pictureModule.getPictureRepository()
+        pictureModule.getPictureRepository()
     }
 
     override fun initView() {
@@ -62,6 +63,25 @@ class PictureItemFragment : BaseLazyFragment() {
         }
         recyclerView.adapter = mAdapter
         pictureModule.sMutableLiveData.observe(this, Observer {
+            for (index in it.indices) {
+                Log.i(TAG, "initRecyclerView: ${index % 6}")
+                when (index % 6) {
+                    0 -> it[index].url =
+                        "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
+                    1 -> it[index].url =
+                        "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
+                    2 -> it[index].url =
+                        "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
+                    3 -> it[index].url =
+                        "https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg"
+                    4 -> it[index].url =
+                        "https://img2.baidu.com/it/u=1336119765,2231343437&fm=26&fmt=auto&gp=0.jpg"
+                    5 -> it[index].url =
+                        "https://img1.baidu.com/it/u=2016633495,3907481171&fm=26&fmt=auto&gp=0.jpg"
+                    else -> it[index].url =
+                        "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
+                }
+            }
             mAdapter.replaceData(it)
         })
     }
@@ -72,7 +92,7 @@ class PictureItemFragment : BaseLazyFragment() {
             helper.setText(R.id.tv_title, item.id.toString())
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             Glide.with(sivImg)
-                .load("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg")
+                .load(item.url)
                 .into(sivImg)
         }
     }

@@ -7,6 +7,10 @@ class VideoData constructor(private val itemType: Int) : MultiItemEntity {
         return itemType
     }
 
+    var bigImageUrl:String? = null
+    var smartImageUrl:String? = null
+
     var bigTitle:String? = null
     var smartTitle:String? = null
+
 }
