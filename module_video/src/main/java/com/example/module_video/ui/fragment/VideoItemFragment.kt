@@ -65,7 +65,19 @@ class VideoItemFragment : BaseLazyFragment() {
         recyclerView.layoutManager = gridLayoutManager
         mAdapter = MAdapter(mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
-                buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).navigation()
+                val videoData = adapter.data[position] as VideoData
+                when (videoData.itemType) {
+                    AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE -> {
+
+                    }
+                    AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE -> {
+                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).navigation()
+                    }
+                    AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE -> {
+                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).navigation()
+                    }
+
+                }
             }
         }
         recyclerView.adapter = mAdapter
@@ -117,11 +129,13 @@ class VideoItemFragment : BaseLazyFragment() {
                 })
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
                     smartTitle = it.name
-                    smartImageUrl = "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
+                    smartImageUrl =
+                        "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
                 })
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
                     smartTitle = it.name
-                    smartImageUrl = "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
+                    smartImageUrl =
+                        "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
                 })
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
                     smartTitle = it.name

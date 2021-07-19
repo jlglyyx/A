@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -270,7 +271,28 @@ class MainFragment : BaseLazyFragment() {
                     "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
             })
         }
-        mAdapter = MAdapter(mutableListOf)
+        mAdapter = MAdapter(mutableListOf).apply {
+            setOnItemChildClickListener { adapter, view, position ->
+                when(view.id){
+                    R.id.iv_fabulous ->{
+                        val ivFabulous = adapter.getViewByPosition(recyclerView, position, R.id.iv_fabulous) as LottieAnimationView
+                        ivFabulous.playAnimation()
+                    }
+                    R.id.iv_comment ->{
+                        val ivComment = adapter.getViewByPosition(recyclerView, position, R.id.iv_comment) as LottieAnimationView
+                        ivComment.playAnimation()
+//                        val ll_comment = adapter.getViewByPosition(recyclerView,position,R.id.ll_comment) as LinearLayout
+//                        val inflate = LayoutInflater.from(mContext)
+//                            .inflate(R.layout.item_main_comment, ll_comment, false)
+//                        ll_comment.addView(inflate)
+                    }
+                    R.id.iv_forward ->{
+                        val ivForward = adapter.getViewByPosition(recyclerView, position, R.id.iv_forward) as LottieAnimationView
+                        ivForward.playAnimation()
+                    }
+                }
+            }
+        }
         recyclerView.adapter = mAdapter
 
 
@@ -348,6 +370,10 @@ class MainFragment : BaseLazyFragment() {
                     }
                 }
                 AppConstant.Constant.ITEM_MAIN_IDENTIFICATION -> {
+
+                    helper.addOnClickListener(R.id.iv_fabulous)
+                        .addOnClickListener(R.id.iv_comment)
+                        .addOnClickListener(R.id.iv_forward)
 
                 }
                 AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO -> {

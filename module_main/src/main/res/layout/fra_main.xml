@@ -13,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:rightImgVisible="true"
+            app:leftImgVisible="false"
             app:centerContent="首页" />
 
         <com.scwang.smart.refresh.layout.SmartRefreshLayout

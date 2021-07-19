@@ -147,6 +147,8 @@ dependencies {
 
     api 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5-jitpack'
 
+    api 'com.airbnb.android:lottie:3.7.2'
+
 //    api rootProject.ext.dependencies['BaseRecyclerViewAdapterHelper']
 //    api rootProject.ext.dependencies['dagger']
 //    kapt rootProject.ext.dependencies['dagger-compiler']
