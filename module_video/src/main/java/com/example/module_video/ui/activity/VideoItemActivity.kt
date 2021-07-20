@@ -2,16 +2,20 @@ package com.example.module_video.ui.activity
 
 import android.content.res.Configuration
 import android.os.Environment
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.dialog.EditBottomDialog
 import com.example.lib_common.down.thread.MultiMoreThreadDownload
+import com.example.lib_common.help.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.module_video.R
 import com.google.android.material.tabs.TabLayout
+import com.lxj.xpopup.XPopup
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
@@ -26,6 +30,7 @@ class VideoItemActivity : BaseActivity() {
 
 
     lateinit var orientationUtils: OrientationUtils
+    lateinit var commentAdapter: CommentAdapter
 
     private val url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
 
@@ -37,6 +42,7 @@ class VideoItemActivity : BaseActivity() {
     }
 
     override fun initData() {
+
     }
 
     override fun initView() {
@@ -58,7 +64,15 @@ class VideoItemActivity : BaseActivity() {
         }
 
         tv_send_comment.clicks().subscribe {
+            XPopup.Builder(this).autoOpenSoftInput(true).asCustom(EditBottomDialog(this).apply {
+                dialogCallBack = object : EditBottomDialog.DialogCallBack {
+                    override fun getComment(s: String) {
+                        commentAdapter.addData(0, s)
+                        nestedScrollView.fullScroll(View.FOCUS_UP)
+                    }
 
+                }
+            }).show()
         }
         tv_video_down.clicks().subscribe {
             MultiMoreThreadDownload.Builder(this)
@@ -78,29 +92,44 @@ class VideoItemActivity : BaseActivity() {
     private fun initRecyclerView() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = CommentAdapter(R.layout.item_video_comment,mutableListOf<String>().apply {
+        commentAdapter = CommentAdapter(R.layout.item_video_comment, mutableListOf<String>().apply {
             GlobalScope.launch(Dispatchers.IO) {
                 for (i in 1..20) {
-                    add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg")
+                    add(
+                        "这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看" +
+                                "这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看"
+                    )
                 }
             }
-        })
-
-        collectionRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
-        collectionRecyclerView.adapter = CollectionAdapter(R.layout.item_video_collection,mutableListOf<String>().apply {
-
-            GlobalScope.launch (Dispatchers.IO){
-                for (i in 1..200) {
-                    add("$i")
-                }
-            }
-
         }).apply {
-            setOnItemClickListener { adapter, view, position ->
-                initVideo()
-                detailPlayer.startPlayLogic()
+            setOnItemChildClickListener { adapter, view, position ->
+                when(view.id){
+                    R.id.siv_img -> {
+                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).navigation()
+                    }
+                }
+
             }
         }
+        recyclerView.adapter = commentAdapter
+
+        collectionRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        collectionRecyclerView.adapter =
+            CollectionAdapter(R.layout.item_video_collection, mutableListOf<String>().apply {
+
+                GlobalScope.launch(Dispatchers.IO) {
+                    for (i in 1..200) {
+                        add("$i")
+                    }
+                }
+
+            }).apply {
+                setOnItemClickListener { adapter, view, position ->
+                    initVideo()
+                    detailPlayer.startPlayLogic()
+                }
+            }
 //        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 //                super.onScrolled(recyclerView, dx, dy)
@@ -185,14 +214,17 @@ class VideoItemActivity : BaseActivity() {
     inner class CollectionAdapter(layoutResId: Int, data: MutableList<String>) :
         BaseQuickAdapter<String, BaseViewHolder>(layoutResId, data) {
         override fun convert(helper: BaseViewHolder, item: String) {
-            helper.setText(R.id.bt_collection,item)
+            helper.setText(R.id.bt_collection, item)
         }
 
     }
+
     inner class CommentAdapter(layoutResId: Int, data: MutableList<String>) :
         BaseQuickAdapter<String, BaseViewHolder>(layoutResId, data) {
         override fun convert(helper: BaseViewHolder, item: String) {
 
+            helper.addOnClickListener(R.id.siv_img)
+            helper.setText(R.id.tv_comment, item)
         }
 
     }
