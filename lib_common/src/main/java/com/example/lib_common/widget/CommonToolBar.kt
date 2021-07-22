@@ -62,6 +62,12 @@ class CommonToolBar : ConstraintLayout {
             obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_rightImgVisible, false)
         val rightContentVisible =
             obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_rightContentVisible, false)
+
+        val toolbarBg = obtainStyledAttributes.getResourceId(
+            R.styleable.CommonToolBar_toolbarBg, 0)
+        if (toolbarBg != 0){
+            clToolbar.setBackgroundResource(toolbarBg)
+        }
         tvCenterContent.text = centerContent
         tvLeftContent.text = leftContent
         tvRightContent.text = rightContent

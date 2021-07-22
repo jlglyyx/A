@@ -7,5 +7,6 @@
         <attr name="rightContent" format="string"/>
         <attr name="rightImgVisible" format="boolean"/>
         <attr name="rightContentVisible" format="boolean"/>
+        <attr name="toolbarBg" format="reference"/>
     </declare-styleable>
 </resources>

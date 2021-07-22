@@ -24,7 +24,7 @@ class SplashActivity : BaseActivity() {
 
     override fun initView() {
         val launch = lifecycleScope.launch {
-            for (i in 3 downTo 0) {
+            for (i in 1 downTo 0) {
                 tv_timer.text = "${i}s点击跳过"
                 delay(1000)
             }

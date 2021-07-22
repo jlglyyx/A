@@ -15,6 +15,7 @@ import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
+import com.example.lib_common.help.buildARouter
 import com.example.lib_common.widget.CommonToolBar
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
@@ -273,21 +274,36 @@ class MainFragment : BaseLazyFragment() {
         }
         mAdapter = MAdapter(mutableListOf).apply {
             setOnItemChildClickListener { adapter, view, position ->
-                when(view.id){
-                    R.id.iv_fabulous ->{
-                        val ivFabulous = adapter.getViewByPosition(recyclerView, position, R.id.iv_fabulous) as LottieAnimationView
+                when (view.id) {
+                    R.id.siv_img -> {
+                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).navigation()
+                    }
+                    R.id.iv_fabulous -> {
+                        val ivFabulous = adapter.getViewByPosition(
+                            recyclerView,
+                            position,
+                            R.id.iv_fabulous
+                        ) as LottieAnimationView
                         ivFabulous.playAnimation()
                     }
-                    R.id.iv_comment ->{
-                        val ivComment = adapter.getViewByPosition(recyclerView, position, R.id.iv_comment) as LottieAnimationView
+                    R.id.iv_comment -> {
+                        val ivComment = adapter.getViewByPosition(
+                            recyclerView,
+                            position,
+                            R.id.iv_comment
+                        ) as LottieAnimationView
                         ivComment.playAnimation()
 //                        val ll_comment = adapter.getViewByPosition(recyclerView,position,R.id.ll_comment) as LinearLayout
 //                        val inflate = LayoutInflater.from(mContext)
 //                            .inflate(R.layout.item_main_comment, ll_comment, false)
 //                        ll_comment.addView(inflate)
                     }
-                    R.id.iv_forward ->{
-                        val ivForward = adapter.getViewByPosition(recyclerView, position, R.id.iv_forward) as LottieAnimationView
+                    R.id.iv_forward -> {
+                        val ivForward = adapter.getViewByPosition(
+                            recyclerView,
+                            position,
+                            R.id.iv_forward
+                        ) as LottieAnimationView
                         ivForward.playAnimation()
                     }
                 }
@@ -350,7 +366,7 @@ class MainFragment : BaseLazyFragment() {
         override fun convert(helper: BaseViewHolder, item: MainData) {
             when (item.itemType) {
                 AppConstant.Constant.ITEM_MAIN_TITLE -> {
-
+                    helper.addOnClickListener(R.id.siv_img)
                     helper.setText(R.id.tv_time, item.createTime)
                 }
                 AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT -> {
