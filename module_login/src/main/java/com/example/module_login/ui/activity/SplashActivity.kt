@@ -9,7 +9,6 @@ import com.example.lib_common.util.clicks
 import com.example.module_login.R
 import kotlinx.android.synthetic.main.act_splash.*
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Route(path = AppConstant.RoutePath.SPLASH_ACTIVITY)
@@ -24,10 +23,6 @@ class SplashActivity : BaseActivity() {
 
     override fun initView() {
         val launch = lifecycleScope.launch {
-            for (i in 1 downTo 0) {
-                tv_timer.text = "${i}s点击跳过"
-                delay(1000)
-            }
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
             finish()
         }
