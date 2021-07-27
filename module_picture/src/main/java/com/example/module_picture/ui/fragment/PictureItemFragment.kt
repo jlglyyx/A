@@ -8,7 +8,6 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
-import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.help.buildARouter
 import com.example.module_picture.R
@@ -28,7 +27,7 @@ class PictureItemFragment : BaseLazyFragment() {
 
     private lateinit var pictureModule: PictureViewModel
 
-    lateinit var mAdapter: MAdapter
+    private lateinit var mAdapter: MAdapter
 
     override fun getLayout(): Int {
         return R.layout.fra_item_picture
@@ -42,9 +41,6 @@ class PictureItemFragment : BaseLazyFragment() {
         initRecyclerView()
     }
 
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return pictureModule.uC
-    }
 
     override fun initViewModel() {
         getPictureComponent().inject(this)
@@ -61,6 +57,7 @@ class PictureItemFragment : BaseLazyFragment() {
                 buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY).navigation()
             }
         }
+        mAdapter.openLoadAnimation()
         recyclerView.adapter = mAdapter
         pictureModule.sMutableLiveData.observe(this, Observer {
             for (index in it.indices) {

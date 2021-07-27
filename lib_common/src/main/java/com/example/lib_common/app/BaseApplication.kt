@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import com.alibaba.android.arouter.launcher.ARouter
+import com.bumptech.glide.Glide
 import com.example.lib_common.BuildConfig
 import com.example.lib_common.help.getRemoteComponent
 import com.tencent.bugly.crashreport.CrashReport
@@ -35,17 +36,18 @@ class BaseApplication : Application() {
     private fun initARouter(application: BaseApplication) {
         GlobalScope.launch(Dispatchers.Unconfined) {
             if (BuildConfig.DEBUG) {
-                ARouter.openLog();
-                ARouter.openDebug();
+                ARouter.openLog()
+                ARouter.openDebug()
             }
-            ARouter.init(application);
+            ARouter.init(application)
         }
     }
     private fun initCrashReport(application: BaseApplication) {
         GlobalScope.launch(Dispatchers.IO) {
+            delay(3000)
             CrashReport.initCrashReport(application, "4f807733a2", BuildConfig.DEBUG)
-            delay(1000)
             createNotificationChannel()
+            Glide.get(applicationContext)
         }
     }
 

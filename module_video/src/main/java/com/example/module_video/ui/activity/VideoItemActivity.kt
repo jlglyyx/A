@@ -5,6 +5,7 @@ import android.os.Environment
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.activity.BaseActivity
@@ -14,6 +15,7 @@ import com.example.lib_common.down.thread.MultiMoreThreadDownload
 import com.example.lib_common.help.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.module_video.R
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayout
 import com.lxj.xpopup.XPopup
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -225,6 +227,8 @@ class VideoItemActivity : BaseActivity() {
 
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_comment, item)
+            val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
+            Glide.with(sivImg).load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg").into(sivImg)
         }
 
     }

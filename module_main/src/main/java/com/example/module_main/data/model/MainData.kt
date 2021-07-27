@@ -13,6 +13,8 @@ class MainData constructor(private val itemType: Int) : MultiItemEntity {
     }
 
 
+    var userImage: String? = "https://img0.baidu.com/it/u=2743095369,633820497&fm=26&fmt=auto&gp=0.jpg"
+
     var imageList: MutableList<String>? = null
 
     var videoUrl: String? = null

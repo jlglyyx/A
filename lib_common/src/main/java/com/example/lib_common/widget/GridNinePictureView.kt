@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
@@ -112,10 +111,6 @@ class GridNinePictureView : LinearLayout {
                     countWidth + mImageViewWidth,
                     countHeight + mImageViewWidth
                 )
-                Log.i(
-                    "TAG",
-                    "layoutImage===$i: $countWidth, $countHeight, ${countWidth + mImageViewWidth}, ${countHeight + mImageViewWidth}"
-                )
             } else {
                 countWidth += mImageViewWidth
                 childAt.layout(
@@ -123,10 +118,6 @@ class GridNinePictureView : LinearLayout {
                     countHeight,
                     countWidth + mImageViewWidth,
                     countHeight + mImageViewWidth
-                )
-                Log.i(
-                    "TAG",
-                    "layoutImage===$i: $countWidth, $countHeight, ${countWidth + mImageViewWidth}, ${countHeight + mImageViewWidth}"
                 )
                 if (i == 8) {
                     rectF.set(

@@ -44,12 +44,18 @@ class VideoFragment : BaseLazyFragment() {
             add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
             add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
             add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
         }
         titles = mutableListOf<String>().apply {
-            add("首页")
-            add("首页")
-            add("首页")
-            add("首页")
+            add("推荐")
+            add("爱看")
+            add("电视剧")
+            add("电影")
+            add("综艺")
+            add("少儿")
+            add("动漫")
         }
         initViewPager()
         initTabLayout()
@@ -70,7 +76,7 @@ class VideoFragment : BaseLazyFragment() {
     private fun initViewPager() {
 
         viewPager.adapter = MFragmentViewPagerAdapter(this)
-
+        viewPager.offscreenPageLimit = fragments.size
     }
 
     private fun initTabLayout() {

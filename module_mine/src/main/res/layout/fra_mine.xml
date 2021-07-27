@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="@android:color/holo_purple">
+            app:contentScrim="@android:color/white">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 app:layout_collapseMode="parallax"
@@ -22,8 +22,6 @@
                     android:id="@+id/iv_bg"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_250"
-                    android:background="@color/colorAccent"
-                    android:src="@drawable/iv_bear"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
@@ -49,7 +47,6 @@
                             android:id="@+id/siv_img"
                             android:layout_width="@dimen/dp_80"
                             android:layout_height="@dimen/dp_80"
-                            android:src="@drawable/iv_love"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:shapeAppearance="@style/circleShapeImage" />
@@ -59,7 +56,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_10"
-                            android:text="法外狂徒张三"
+                            android:text="点击登录"
                             android:textSize="@dimen/sp_16"
                             app:layout_constraintBottom_toBottomOf="@+id/siv_img"
                             app:layout_constraintLeft_toRightOf="@+id/siv_img"
@@ -86,7 +83,7 @@
                                     android:gravity="center"
                                     android:maxLines="1"
                                     android:text="0"
-                                    android:textSize="@dimen/sp_18" />
+                                    android:textSize="@dimen/sp_16" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -94,7 +91,7 @@
                                     android:layout_marginTop="@dimen/dp_10"
                                     android:gravity="center"
                                     android:text="加入的圈子"
-                                    android:textSize="@dimen/sp_16" />
+                                    android:textSize="@dimen/sp_14" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -110,8 +107,8 @@
                                     android:ellipsize="end"
                                     android:gravity="center"
                                     android:maxLines="1"
-                                    android:text="2000"
-                                    android:textSize="@dimen/sp_18" />
+                                    android:text="0"
+                                    android:textSize="@dimen/sp_16" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -119,7 +116,7 @@
                                     android:layout_marginTop="@dimen/dp_10"
                                     android:gravity="center"
                                     android:text="关注"
-                                    android:textSize="@dimen/sp_16" />
+                                    android:textSize="@dimen/sp_14" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -135,8 +132,8 @@
                                     android:ellipsize="end"
                                     android:gravity="center"
                                     android:maxLines="1"
-                                    android:text="10000"
-                                    android:textSize="@dimen/sp_18" />
+                                    android:text="0"
+                                    android:textSize="@dimen/sp_16" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -144,7 +141,7 @@
                                     android:layout_marginTop="@dimen/dp_10"
                                     android:gravity="center"
                                     android:text="粉丝"
-                                    android:textSize="@dimen/sp_16" />
+                                    android:textSize="@dimen/sp_14" />
                             </LinearLayout>
 
 
@@ -166,7 +163,7 @@
                     android:layout_height="wrap_content"
                     app:toolbarBg="@android:color/transparent"
                     app:leftImgVisible="false"
-                    app:centerContent="法外狂徒张三"/>
+                    app:centerContent="点击登录"/>
 
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -183,8 +180,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="1000dp"
-            android:src="@drawable/iv_bear"/>
+            android:layout_height="1000dp" />
 
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

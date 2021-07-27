@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
-import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.help.buildARouter
 import com.example.lib_common.util.dip2px
@@ -45,9 +44,6 @@ class VideoItemFragment : BaseLazyFragment() {
         initRecyclerView()
     }
 
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return videoModule.uC
-    }
 
     override fun initViewModel() {
         getVideoComponent().inject(this)
@@ -58,10 +54,6 @@ class VideoItemFragment : BaseLazyFragment() {
 
     private fun initRecyclerView() {
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
-
-
-
-
         recyclerView.layoutManager = gridLayoutManager
         mAdapter = MAdapter(mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
@@ -80,6 +72,7 @@ class VideoItemFragment : BaseLazyFragment() {
                 }
             }
         }
+        mAdapter.openLoadAnimation()
         recyclerView.adapter = mAdapter
 
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {

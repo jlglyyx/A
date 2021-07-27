@@ -45,12 +45,19 @@ class PictureFragment : BaseLazyFragment() {
             add(buildARouter(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
             add(buildARouter(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
             add(buildARouter(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
+            add(buildARouter(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT).navigation() as Fragment)
         }
         titles = mutableListOf<String>().apply {
-            add("首页")
-            add("首页")
-            add("首页")
-            add("首页")
+            add("推荐")
+            add("风景")
+            add("动漫")
+            add("唯美")
+            add("伤感")
+            add("网络")
+            add("可爱")
+            add("二次元")
         }
         initViewPager()
         initTabLayout()
@@ -71,7 +78,7 @@ class PictureFragment : BaseLazyFragment() {
     private fun initViewPager() {
 
         viewPager.adapter = MFragmentViewPagerAdapter(this)
-
+        viewPager.offscreenPageLimit = fragments.size
     }
 
     private fun initTabLayout() {

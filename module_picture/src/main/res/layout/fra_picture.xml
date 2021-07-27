@@ -33,12 +33,15 @@
             android:background="@drawable/shape_search_bg"
             android:hint="搜索..."
             android:padding="@dimen/dp_8"
+            android:visibility="gone"
             android:textSize="@dimen/sp_14" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabMode="scrollable"
+            app:tabRippleColor="@android:color/transparent"
             android:background="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>

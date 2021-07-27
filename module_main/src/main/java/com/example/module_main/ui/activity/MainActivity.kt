@@ -16,6 +16,7 @@ import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.ui.fragment.LeftFragment
 import com.example.module_main.viewmodel.MainViewModel
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tbruyelle.rxpermissions3.RxPermissions
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,10 +26,6 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.MAIN_ACTIVITY)
 class MainActivity : BaseActivity() {
 
-    companion object {
-        private const val TAG = "MainActivity"
-    }
-
     @Inject
     lateinit var mainViewModelFactory: MainViewModelFactory
 
@@ -37,6 +34,15 @@ class MainActivity : BaseActivity() {
     lateinit var fragments: MutableList<Fragment>
 
     private lateinit var titles: MutableList<String>
+
+    private var icon =
+        arrayOf(R.drawable.iv_home, R.drawable.iv_video, R.drawable.iv_picture, R.drawable.iv_mine)
+    private var selectIcon = arrayOf(
+        R.drawable.iv_home_select,
+        R.drawable.iv_video_select,
+        R.drawable.iv_picture_select,
+        R.drawable.iv_mine_select
+    )
 
 
     override fun getLayout(): Int {
@@ -99,6 +105,7 @@ class MainActivity : BaseActivity() {
 
         viewPager.adapter = MFragmentViewPagerAdapter(this)
         viewPager.isUserInputEnabled = false
+        viewPager.offscreenPageLimit = fragments.size
 
     }
 
@@ -107,13 +114,36 @@ class MainActivity : BaseActivity() {
         TabLayoutMediator(
             tabLayout,
             viewPager,
+            true,
+            false,
             TabLayoutMediator.TabConfigurationStrategy { tab, position ->
                 tab.text = titles[position]
+                tab.setIcon(icon[position])
+                if (position == 0) {
+                    tab.setIcon(selectIcon[position])
+                } else {
+                    tab.setIcon(icon[position])
+                }
             }).attach()
 
         tabLayout.post {
             viewPager.setPadding(0, 0, 0, tabLayout.height + 10f.px2dip(this))
         }
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab) {
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                tab.setIcon(icon[tab.position])
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                tab.setIcon(selectIcon[tab.position])
+            }
+
+        })
 
     }
 
