@@ -32,8 +32,8 @@ class PictureViewModel @Inject constructor(
         }, {
             mImageData.postValue(it.data)
         },{
-            cancleLoadMore()
-            cancleRefresh()
+            cancelLoadMore()
+            cancelRefresh()
         })
     }
     fun getImageItemData(sid:String) {

@@ -35,7 +35,7 @@ class VideoFragment : BaseLazyFragment() {
 
     override fun initData() {
 
-        //pictureModule.getPictureRepository()
+        //videoModule.getVideoRepository()
     }
 
     override fun initView() {
@@ -105,7 +105,7 @@ class VideoFragment : BaseLazyFragment() {
                 add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg"))
                 add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg"))
                 add(BannerBean("https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"))
-            })).indicator = CircleIndicator(requireContext());
+            })).indicator = CircleIndicator(requireContext())
     }
 
     inner class MFragmentViewPagerAdapter(fragment: Fragment) :

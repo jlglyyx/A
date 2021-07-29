@@ -1,51 +1,84 @@
 package com.example.module_picture.ui.fragment
 
+import android.graphics.drawable.Drawable
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
+import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.help.buildARouter
 import com.example.module_picture.R
 import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
 import com.example.module_picture.model.AccountList
+import com.example.module_picture.model.ImageDataItem
 import com.example.module_picture.viewmodel.PictureViewModel
 import com.google.android.material.imageview.ShapeableImageView
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.tencent.mmkv.MMKV
+import com.wang.avi.AVLoadingIndicatorView
 import kotlinx.android.synthetic.main.fra_item_picture.*
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT)
-class PictureItemFragment : BaseLazyFragment() {
+class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     @Inject
     lateinit var pictureViewModelFactory: PictureViewModelFactory
 
     private lateinit var pictureModule: PictureViewModel
 
-    private lateinit var mAdapter: MAdapter
+    private var queryType: String? = null
+
+    private var pageNum = 1
+
+    private var tabHeight: Int = 0
+
+    lateinit var mAdapter: MAdapter
 
     override fun getLayout(): Int {
         return R.layout.fra_item_picture
     }
 
     override fun initData() {
-        pictureModule.getPictureRepository()
+        queryType = arguments?.getString(AppConstant.Constant.TYPE)
+        val defaultMMKV = MMKV.defaultMMKV()
+        tabHeight = defaultMMKV.decodeInt(AppConstant.Constant.TAB_HEIGHT)
+        smartRefreshLayout.setPadding(0, 0, 0, tabHeight)
+        smartRefreshLayout.autoRefresh()
     }
 
     override fun initView() {
         initRecyclerView()
+        initSmartRefreshLayout()
     }
 
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return pictureModule.uC
+    }
 
     override fun initViewModel() {
         getPictureComponent().inject(this)
         pictureModule = getViewModel(pictureViewModelFactory, PictureViewModel::class.java)
+        pictureModule.uC.refreshEvent.observe(this, Observer {
+            smartRefreshLayout.finishRefresh()
+        })
+        pictureModule.uC.loadMoreEvent.observe(this, Observer {
+            smartRefreshLayout.finishLoadMore()
+        })
+    }
 
+    private fun initSmartRefreshLayout() {
+        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
     }
 
 
@@ -54,43 +87,77 @@ class PictureItemFragment : BaseLazyFragment() {
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         mAdapter = MAdapter(R.layout.item_picture_image, mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
-                buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY).navigation()
+                val imageData = adapter.data[position] as ImageDataItem
+                buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
+                    .withString(AppConstant.Constant.ID, imageData.id)
+                    .navigation()
             }
         }
-        mAdapter.openLoadAnimation()
         recyclerView.adapter = mAdapter
-        pictureModule.sMutableLiveData.observe(this, Observer {
-            for (index in it.indices) {
-                Log.i(TAG, "initRecyclerView: ${index % 6}")
-                when (index % 6) {
-                    0 -> it[index].url =
-                        "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
-                    1 -> it[index].url =
-                        "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
-                    2 -> it[index].url =
-                        "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
-                    3 -> it[index].url =
-                        "https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg"
-                    4 -> it[index].url =
-                        "https://img2.baidu.com/it/u=1336119765,2231343437&fm=26&fmt=auto&gp=0.jpg"
-                    5 -> it[index].url =
-                        "https://img1.baidu.com/it/u=2016633495,3907481171&fm=26&fmt=auto&gp=0.jpg"
-                    else -> it[index].url =
-                        "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
+        pictureModule.mImageData.observe(this, Observer {
+
+            when {
+                smartRefreshLayout.isRefreshing -> {
+                    smartRefreshLayout.finishRefresh()
+                    mAdapter.replaceData(it.list)
+                }
+                smartRefreshLayout.isLoading -> {
+                    smartRefreshLayout.finishLoadMore()
+                    if (pageNum != 1 && it.list.isEmpty()) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(false)
+                        mAdapter.addData(it.list)
+                    }
+                }
+                else -> {
+                    mAdapter.replaceData(it.list)
                 }
             }
-            mAdapter.replaceData(it)
         })
+
+
     }
 
-    inner class MAdapter(layoutResId: Int, list: MutableList<AccountList>) :
-        BaseQuickAdapter<AccountList, BaseViewHolder>(layoutResId, list) {
-        override fun convert(helper: BaseViewHolder, item: AccountList) {
-            helper.setText(R.id.tv_title, item.id.toString())
+    inner class MAdapter(layoutResId: Int, list: MutableList<ImageDataItem>) :
+        BaseQuickAdapter<ImageDataItem, BaseViewHolder>(layoutResId, list) {
+        override fun convert(helper: BaseViewHolder, item: ImageDataItem) {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
+            val avi = helper.getView<AVLoadingIndicatorView>(R.id.avi)
+            helper.setTag(R.id.siv_img, item.id)
             Glide.with(sivImg)
-                .load(item.url)
-                .into(sivImg)
+                .load(item.imageUrl)
+                .into(object : CustomViewTarget<ShapeableImageView, Drawable>(sivImg) {
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        avi.visibility = View.VISIBLE
+                    }
+
+                    override fun onResourceCleared(placeholder: Drawable?) {
+                        sivImg.setImageDrawable(null)
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        transition: Transition<in Drawable>?
+                    ) {
+                        avi.visibility = View.GONE
+                        if (sivImg.tag == item.id) {
+                            sivImg.setImageDrawable(resource)
+                        }
+                    }
+
+                })
         }
+    }
+
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        pageNum++
+        pictureModule.getImageInfo(queryType ?: "", pageNum)
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        pageNum = 1
+        pictureModule.getImageInfo(queryType ?: "", pageNum)
     }
 }

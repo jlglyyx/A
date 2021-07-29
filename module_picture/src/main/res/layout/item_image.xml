@@ -10,8 +10,6 @@
         android:id="@+id/siv_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
         app:layout_constraintLeft_toLeftOf="parent"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"

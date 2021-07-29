@@ -24,7 +24,10 @@ class VideoViewModel @Inject constructor(
             videoRepository.getVideoRepository()
         }, {
             sMutableLiveData.postValue(it.data)
-        }, messages = *arrayOf("请求中...","请求成功...","请求失败..."))
+        }, {
+            cancelLoadMore()
+            cancelRefresh()
+        }, messages = *arrayOf("请求中...", "请求成功...", "请求失败..."))
     }
 
 }

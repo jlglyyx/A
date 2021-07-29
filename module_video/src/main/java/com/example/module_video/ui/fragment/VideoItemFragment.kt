@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
+import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.help.buildARouter
 import com.example.lib_common.util.dip2px
@@ -19,11 +20,13 @@ import com.example.module_video.helper.getVideoComponent
 import com.example.module_video.model.VideoData
 import com.example.module_video.viewmodel.VideoViewModel
 import com.google.android.material.imageview.ShapeableImageView
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import kotlinx.android.synthetic.main.fra_item_video.*
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
-class VideoItemFragment : BaseLazyFragment() {
+class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     @Inject
     lateinit var videoViewModelFactory: VideoViewModelFactory
@@ -32,25 +35,46 @@ class VideoItemFragment : BaseLazyFragment() {
 
     lateinit var mAdapter: MAdapter
 
+    private var queryType: String? = null
+
+    private var pageNum = 1
+
+    private var tabHeight: Int = 0
+
     override fun getLayout(): Int {
         return R.layout.fra_item_video
     }
 
     override fun initData() {
         videoModule.getVideoRepository()
+        smartRefreshLayout.setPadding(0, 0, 0, tabHeight)
+        smartRefreshLayout.autoRefresh()
     }
 
     override fun initView() {
         initRecyclerView()
+        initSmartRefreshLayout()
     }
 
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return videoModule.uC
+    }
 
     override fun initViewModel() {
         getVideoComponent().inject(this)
         videoModule = getViewModel(videoViewModelFactory, VideoViewModel::class.java)
-
+        videoModule.uC.refreshEvent.observe(this, Observer {
+            smartRefreshLayout.finishRefresh()
+        })
+        videoModule.uC.loadMoreEvent.observe(this, Observer {
+            smartRefreshLayout.finishLoadMore()
+        })
     }
 
+
+    private fun initSmartRefreshLayout() {
+        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+    }
 
     private fun initRecyclerView() {
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
@@ -113,6 +137,26 @@ class VideoItemFragment : BaseLazyFragment() {
 
 
         videoModule.sMutableLiveData.observe(this, Observer {
+            when {
+                smartRefreshLayout.isRefreshing -> {
+                    smartRefreshLayout.finishRefresh()
+                    //mAdapter.replaceData(it.list)
+                }
+                smartRefreshLayout.isLoading -> {
+                    smartRefreshLayout.finishLoadMore()
+//                    if (pageNum != 1 && it.list.isEmpty()) {
+//                        smartRefreshLayout.setNoMoreData(true)
+//                    } else {
+//                        smartRefreshLayout.setNoMoreData(false)
+//                        mAdapter.addData(it.list)
+//                    }
+                }
+                else -> {
+                    //mAdapter.replaceData(it.list)
+                }
+            }
+
+
             val mutableListOf = mutableListOf<VideoData>()
             it.forEach {
                 mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE))
@@ -184,5 +228,15 @@ class VideoItemFragment : BaseLazyFragment() {
 
             }
         }
+    }
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        pageNum++
+        videoModule.getVideoRepository()
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        pageNum = 1
+        videoModule.getVideoRepository()
     }
 }

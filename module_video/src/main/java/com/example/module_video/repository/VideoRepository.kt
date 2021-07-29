@@ -1,6 +1,6 @@
 package com.example.module_video.repository
 
-import com.example.lib_common.data.MResult
+import com.example.lib_common.remote.di.response.MResult
 import com.example.module_video.api.VideoApiService
 import com.example.module_video.model.AccountList
 import kotlinx.coroutines.Dispatchers

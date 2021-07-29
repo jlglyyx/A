@@ -47,7 +47,6 @@
                 android:layout_width="@dimen/dp_30"
                 android:layout_height="match_parent"
                 android:padding="@dimen/dp_3"
-                app:lottie_fileName="light.json"
                 android:src="@drawable/iv_fabulous" />
 
             <com.airbnb.lottie.LottieAnimationView
@@ -56,7 +55,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="@dimen/dp_8"
                 android:padding="@dimen/dp_3"
-                app:lottie_fileName="scan.json"
                 android:src="@drawable/iv_comment" />
 
             <com.airbnb.lottie.LottieAnimationView
@@ -64,7 +62,6 @@
                 android:layout_width="@dimen/dp_30"
                 android:layout_height="match_parent"
                 android:padding="@dimen/dp_3"
-                app:lottie_fileName="servishero_loading.json"
                 android:src="@drawable/iv_forward" />
         </LinearLayout>
     </LinearLayout>

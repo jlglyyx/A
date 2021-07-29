@@ -23,11 +23,11 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         uC.dismissDialogEvent.call()
     }
 
-    fun cancleRefresh() {
+    fun cancelRefresh() {
         uC.refreshEvent.call()
     }
 
-    fun cancleLoadMore() {
+    fun cancelLoadMore() {
         uC.loadMoreEvent.call()
     }
 
