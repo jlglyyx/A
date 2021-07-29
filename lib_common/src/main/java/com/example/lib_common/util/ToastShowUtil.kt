@@ -23,7 +23,7 @@ private val context: Context = BaseApplication.baseApplication
 @SuppressLint("ShowToast")
 fun showShort(msg: Any) {
     if (toast == null) {
-        toast = Toast.makeText(context, null, Toast.LENGTH_SHORT)
+        toast = Toast.makeText(context, "", Toast.LENGTH_SHORT)
         toast?.setText(msg.toString())
     } else {
         toast!!.setText(msg.toString())
@@ -35,7 +35,7 @@ fun showShort(msg: Any) {
 @SuppressLint("ShowToast")
 fun showLong(msg: Any) {
     if (toast == null) {
-        toast = Toast.makeText(context, null, Toast.LENGTH_LONG)
+        toast = Toast.makeText(context, "", Toast.LENGTH_LONG)
         toast?.setText(msg.toString())
     } else {
         toast!!.setText(msg.toString())

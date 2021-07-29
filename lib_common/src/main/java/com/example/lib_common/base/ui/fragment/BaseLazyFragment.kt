@@ -10,11 +10,14 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.lib_common.R
 import com.example.lib_common.base.viewmodel.BaseViewModel
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.util.getStatusBarHeight
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.impl.LoadingPopupView
 
 
 /**
@@ -36,7 +39,7 @@ abstract class BaseLazyFragment : Fragment() {
 
     private var uC: UIChangeLiveData? = null
 
-    private var dialog: AlertDialog? = null
+    private var loadingPopupView: LoadingPopupView? = null
 
     val TAG = this.javaClass.simpleName
 
@@ -96,20 +99,19 @@ abstract class BaseLazyFragment : Fragment() {
     private fun registerListener() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
-                if (dialog == null){
-                    dialog = AlertDialog.Builder(requireContext()).setTitle("标题").setMessage(it).setIcon(
-                        R.drawable.sample_footer_loading
-                    ).create()
-                }else{
-                    dialog?.setMessage(it)
+                if (loadingPopupView == null) {
+                    loadingPopupView = XPopup.Builder(requireContext())
+                        .asLoading(it)
+                } else {
+                    loadingPopupView?.setTitle(it)
                 }
-                if (!dialog?.isShowing!!){
-                    dialog?.show()
+                if (!loadingPopupView?.isShow!!) {
+                    loadingPopupView?.show()
                 }
             })
 
             uC.dismissDialogEvent.observe(this, Observer {
-                dialog?.dismiss()
+                loadingPopupView?.dismiss()
             })
         }
 
@@ -163,6 +165,8 @@ abstract class BaseLazyFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         unRegisterListener()
+        loadingPopupView?.dismiss()
+        loadingPopupView = null
         mView = null
     }
 

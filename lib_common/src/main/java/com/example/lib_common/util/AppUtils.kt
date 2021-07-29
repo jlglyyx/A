@@ -4,9 +4,9 @@ package com.example.lib_common.util
 
 import android.content.Context
 import android.view.View
+import com.example.lib_common.constant.AppConstant.Constant.CLICK_TIME
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
-import com.example.lib_common.constant.Constant.CLICK_TIME
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 

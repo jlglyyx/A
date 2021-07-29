@@ -10,6 +10,7 @@
 <!--        <item name="android:fitsSystemWindows">true</item>-->
 <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
+
     <style name="SplashActivityTheme" parent="AppTheme">
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/layer_list_splash</item>
@@ -20,6 +21,25 @@
     <style name="parentTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabRippleColor">@android:color/transparent</item>
         <item name="tabIndicatorColor">@android:color/transparent</item>
+    </style>
+
+    <style name="mainTabLayout" parent="parentTabLayout">
+<!--        <item name="tabTextAppearance">@style/mainTabTextAppearance</item>-->
+    </style>
+    <style name="mainTabTextAppearance">
+        <item name="tabSelectedTextColor">@color/black</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+    <style name="tabTabLayout" parent="Base.Widget.Design.TabLayout">
+<!--        <item name="tabTextAppearance">@style/itemTabTextAppearance</item>-->
+        <item name="tabSelectedTextColor">@color/colorAccent</item>
+    </style>
+    <style name="itemTabTextAppearance">
+        <item name="android:textSize">@dimen/sp_14</item>
+    </style>
+    <style name="mAVLoadingIndicatorView" parent="AVLoadingIndicatorView">
+        <item name="indicatorColor">@color/darkslategrey</item>
+        <item name="indicatorName">BallTrianglePathIndicator</item>
     </style>
 
     <style name="circleShapeImage">

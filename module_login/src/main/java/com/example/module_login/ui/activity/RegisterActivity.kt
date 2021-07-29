@@ -11,6 +11,7 @@ import com.example.lib_common.interceptor.UrlInterceptor
 import com.example.lib_common.util.clicks
 import com.example.lib_common.util.showShort
 import com.example.module_login.R
+import com.example.module_login.data.model.LoginData
 import com.example.module_login.di.factory.LoginViewModelFactory
 import com.example.module_login.helper.getLoginComponent
 import com.example.module_login.viewmodel.LoginViewModel
@@ -72,8 +73,19 @@ class RegisterActivity : BaseActivity() {
             showShort("两次密码不一致")
             return
         }
-        UrlInterceptor.url = "https://www.wanandroid.com/"
-        loginViewModel.register(et_user.text.toString(),et_password.text.toString(),et_confirm_password.text.toString())
+        val loginData = LoginData(
+            null,
+            null,
+            et_user.text.toString(),
+            et_user.text.toString(),
+            et_password.text.toString(),
+            null,
+            0,
+            null,
+            null,
+            null
+        )
+        loginViewModel.register(loginData)
         loginViewModel.mLoginData.observe(this, Observer {
             finish()
         })

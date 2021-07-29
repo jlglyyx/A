@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.lib_common.api.BaseApiService
 import com.example.lib_common.scope.RemoteScope
 import com.example.lib_common.interceptor.UrlInterceptor
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
@@ -40,7 +42,7 @@ class RemoteModule {
             .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()))
             .client(okHttpClient)
             .build()
     }
@@ -99,8 +101,8 @@ class RemoteModule {
     }
 
     companion object {
-        const val baseUrl = "https://wanandroid.com/"
-//        const val baseUrl = "http://jlgl.free.idcfengye.com/"
+//        const val baseUrl = "https://wanandroid.com/"
+        const val baseUrl = "http://jlgl.free.idcfengye.com/"
         private const val TAG = "RemoteModule"
         private const val TAG_LOG = "httpLog"
         private const val CONNECT_TIMEOUT: Long = 8000

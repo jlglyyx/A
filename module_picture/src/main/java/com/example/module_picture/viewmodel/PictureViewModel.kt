@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.example.lib_common.base.viewmodel.BaseViewModel
 import com.example.module_picture.model.AccountList
+import com.example.module_picture.model.ImageData
+import com.example.module_picture.model.ImageDataItem
+import com.example.module_picture.model.ImageTypeData
 import com.example.module_picture.repository.PictureRepository
 import javax.inject.Inject
 
@@ -17,14 +20,35 @@ class PictureViewModel @Inject constructor(
     private val pictureRepository: PictureRepository
 ) : BaseViewModel(application) {
 
-    var sMutableLiveData = MutableLiveData<MutableList<AccountList>>()
+    var mImageData = MutableLiveData<ImageData>()
 
-    fun getPictureRepository() {
+    var mImageItemData = MutableLiveData<MutableList<ImageDataItem>>()
+
+    var mImageTypeData = MutableLiveData<MutableList<ImageTypeData>>()
+
+    fun getImageInfo(type:String,pageNum:Int) {
         launch({
-            pictureRepository.getPictureRepository()
+            pictureRepository.getImageInfo(type,pageNum)
         }, {
-            sMutableLiveData.postValue(it.data)
-        }, messages = *arrayOf("请求中...","请求成功...","请求失败..."))
+            mImageData.postValue(it.data)
+        },{
+            cancleLoadMore()
+            cancleRefresh()
+        })
+    }
+    fun getImageItemData(sid:String) {
+        launch({
+            pictureRepository.getImageItemData(sid)
+        }, {
+            mImageItemData.postValue(it.data)
+        }, messages = *arrayOf("请求中...", "请求成功...", "请求失败..."))
+    }
+    fun getImageTypeData() {
+        launch({
+            pictureRepository.getImageTypeData()
+        }, {
+            mImageTypeData.postValue(it.data)
+        }, messages = *arrayOf("请求中...", "请求成功...", "请求失败..."))
     }
 
 }

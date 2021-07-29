@@ -69,7 +69,6 @@ class LoginActivity : BaseActivity() {
             showShort("请输入密码")
             return
         }
-        UrlInterceptor.url = "https://www.wanandroid.com/"
         loginViewModel.login(et_user.text.toString(),et_password.text.toString())
         loginViewModel.mLoginData.observe(this, Observer {
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
