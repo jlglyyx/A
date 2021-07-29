@@ -60,17 +60,20 @@ class MainFragment : BaseLazyFragment() {
                 }
                 val images = it.data?.getStringArrayListExtra("Data")
                 val content = it.data?.getStringExtra("content")
-//                if (images.isNullOrEmpty() || content.isNullOrEmpty()){
-//                    return@registerForActivityResult
-//                }
                 val mutableListOf = mutableListOf<MainData>().apply {
                     add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
-                        dynamicContent = content
-                    })
-                    add((MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                        imageList = images
-                    }))
+                    if (!content.isNullOrEmpty()) {
+                        add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
+                            dynamicContent = content
+                        })
+                    }
+                    if (!images.isNullOrEmpty()) {
+                        add((MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                            imageList = images
+                        }))
+                    }
+
+
                     add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
                 }
                 mAdapter.addData(0, mutableListOf)
@@ -107,7 +110,8 @@ class MainFragment : BaseLazyFragment() {
         val mutableListOf = mutableListOf<MainData>().apply {
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
                 dynamicContent = "今天天气真好"
@@ -129,7 +133,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
                 dynamicContent = "不知道吃什么就很烦 在线求解"
@@ -137,7 +142,8 @@ class MainFragment : BaseLazyFragment() {
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
                 imageList = mutableListOf<String>().apply {
@@ -153,7 +159,8 @@ class MainFragment : BaseLazyFragment() {
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -161,7 +168,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -169,7 +177,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -177,7 +186,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -185,7 +195,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -193,7 +204,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -201,7 +213,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -209,7 +222,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -217,7 +231,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -225,7 +240,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -237,7 +253,8 @@ class MainFragment : BaseLazyFragment() {
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
@@ -256,7 +273,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                 videoUrl =
@@ -264,7 +282,8 @@ class MainFragment : BaseLazyFragment() {
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
                 imageList = mutableListOf<String>().apply {
@@ -277,7 +296,8 @@ class MainFragment : BaseLazyFragment() {
             add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage = "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                userImage =
+                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
             })
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
             add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
@@ -358,10 +378,6 @@ class MainFragment : BaseLazyFragment() {
                             R.id.iv_comment
                         ) as LottieAnimationView
                         ivComment.playAnimation()
-//                        val ll_comment = adapter.getViewByPosition(recyclerView,position,R.id.ll_comment) as LinearLayout
-//                        val inflate = LayoutInflater.from(mContext)
-//                            .inflate(R.layout.item_main_comment, ll_comment, false)
-//                        ll_comment.addView(inflate)
                     }
                     R.id.iv_forward -> {
                         val ivForward = adapter.getViewByPosition(

@@ -149,6 +149,9 @@ dependencies {
 
     api 'com.airbnb.android:lottie:3.7.2'
 
+
+    api "androidx.recyclerview:recyclerview:1.2.1"
+
 //    api rootProject.ext.dependencies['BaseRecyclerViewAdapterHelper']
 //    api rootProject.ext.dependencies['dagger']
 //    kapt rootProject.ext.dependencies['dagger-compiler']

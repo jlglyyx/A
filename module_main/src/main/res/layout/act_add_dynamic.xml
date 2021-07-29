@@ -12,6 +12,7 @@
         app:centerContent="发表"
         android:id="@id/commonToolBar"
         app:rightContent="确定"
+        app:toolbarBg="@android:color/white"
         app:rightContentVisible="true"/>
 
     <EditText
@@ -22,14 +23,14 @@
         android:id="@+id/et_dynamic"
         android:background="@null"
         android:gravity="top"
-        android:layout_marginHorizontal="@dimen/dp_10"
+        android:padding="@dimen/dp_10"
         android:minLines="5"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@id/recyclerView"
         android:layout_width="match_parent"
         android:overScrollMode="never"
-        android:layout_marginHorizontal="@dimen/dp_10"
+        android:paddingHorizontal="@dimen/dp_10"
         android:layout_height="wrap_content" />
 
 </LinearLayout>
