@@ -27,7 +27,7 @@ class VideoViewModel @Inject constructor(
         }, {
             cancelLoadMore()
             cancelRefresh()
-        }, messages = *arrayOf("请求中...", "请求成功...", "请求失败..."))
+        })
     }
 
 }

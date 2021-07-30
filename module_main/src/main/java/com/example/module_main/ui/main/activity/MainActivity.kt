@@ -1,20 +1,21 @@
-package com.example.module_main.ui.activity
+package com.example.module_main.ui.main.activity
 
 import android.Manifest
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.example.lib_common.adapter.TabAndViewPagerAdapter
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.help.buildARouter
 import com.example.lib_common.util.getScreenPx
 import com.example.lib_common.util.px2dip
+import com.example.lib_common.util.showShort
 import com.example.module_main.R
 import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
-import com.example.module_main.ui.fragment.LeftFragment
+import com.example.module_main.ui.menu.fragment.LeftFragment
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -34,6 +35,8 @@ class MainActivity : BaseActivity() {
     lateinit var fragments: MutableList<Fragment>
 
     private lateinit var titles: MutableList<String>
+
+    private var firstClickTime = 0L
 
     private var icon =
         arrayOf(R.drawable.iv_home, R.drawable.iv_video, R.drawable.iv_picture, R.drawable.iv_mine)
@@ -103,7 +106,7 @@ class MainActivity : BaseActivity() {
 
     private fun initViewPager() {
 
-        viewPager.adapter = MFragmentViewPagerAdapter(this)
+        viewPager.adapter = TabAndViewPagerAdapter(this, fragments, titles)
         viewPager.isUserInputEnabled = false
         viewPager.offscreenPageLimit = fragments.size
 
@@ -176,15 +179,18 @@ class MainActivity : BaseActivity() {
     }
 
 
-    inner class MFragmentViewPagerAdapter(fragmentActivity: FragmentActivity) :
-        FragmentStateAdapter(fragmentActivity) {
-        override fun getItemCount(): Int {
-            return fragments.size
-        }
-
-        override fun createFragment(position: Int): Fragment {
-
-            return fragments[position]
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            var currentTimeMillis = System.currentTimeMillis()
+            if (currentTimeMillis - firstClickTime < 1000) {
+                firstClickTime = 0L
+                super.onBackPressed()
+            } else {
+                firstClickTime = currentTimeMillis
+                showShort("再按一次退出")
+            }
         }
     }
 

@@ -19,6 +19,14 @@ class CommonToolBar : ConstraintLayout {
 
     var tVRightCallBack: TVRightCallBack? = null
 
+    var centerContent: String? = null
+    set(value) {
+        field = value
+        tvCenterContent.text = field
+    }
+
+    private lateinit var tvCenterContent: TextView
+
     interface ImageBackCallBack {
         fun imageBackClickListener(view: View)
     }
@@ -45,17 +53,18 @@ class CommonToolBar : ConstraintLayout {
         val inflate = LayoutInflater.from(context).inflate(R.layout.view_common_toolbar, this)
         val clToolbar = inflate.findViewById<ConstraintLayout>(R.id.cl_toolbar)
         clToolbar.setPadding(0, getStatusBarHeight(context), 0, 0)
-        val tvCenterContent = inflate.findViewById<TextView>(R.id.tv_centerContent)
+        tvCenterContent = inflate.findViewById<TextView>(R.id.tv_centerContent)
         val tvLeftContent = inflate.findViewById<TextView>(R.id.tv_leftContent)
         val tvRightContent = inflate.findViewById<TextView>(R.id.tv_rightContent)
         val ivBack = inflate.findViewById<ImageView>(R.id.iv_back)
         val ivAdd = inflate.findViewById<ImageView>(R.id.iv_add)
         val obtainStyledAttributes =
             context.obtainStyledAttributes(attrs, R.styleable.CommonToolBar)
-        val centerContent =
+        centerContent =
             obtainStyledAttributes.getString(R.styleable.CommonToolBar_centerContent)
         val leftContent = obtainStyledAttributes.getString(R.styleable.CommonToolBar_leftContent)
-        val leftImgVisible = obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_leftImgVisible,true)
+        val leftImgVisible =
+            obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_leftImgVisible, true)
 
         val rightContent = obtainStyledAttributes.getString(R.styleable.CommonToolBar_rightContent)
         val rightImgVisible =
@@ -64,8 +73,9 @@ class CommonToolBar : ConstraintLayout {
             obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_rightContentVisible, false)
 
         val toolbarBg = obtainStyledAttributes.getResourceId(
-            R.styleable.CommonToolBar_toolbarBg, 0)
-        if (toolbarBg != 0){
+            R.styleable.CommonToolBar_toolbarBg, 0
+        )
+        if (toolbarBg != 0) {
             clToolbar.setBackgroundResource(toolbarBg)
         }
         tvCenterContent.text = centerContent

@@ -19,7 +19,6 @@ import com.example.lib_common.help.buildARouter
 import com.example.module_picture.R
 import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
-import com.example.module_picture.model.ImageData
 import com.example.module_picture.model.ImageDataItem
 import com.example.module_picture.viewmodel.PictureViewModel
 import com.google.android.material.imageview.ShapeableImageView
@@ -32,7 +31,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
 class PictureItemActivity : BaseActivity() {
 
-    lateinit var mAdapter: MAdapter
+    private lateinit var mAdapter: MAdapter
     private lateinit var mCommentAdapter: MCommentAdapter
     private val MILLISECONDS_PER_INCH = 0.03f
 

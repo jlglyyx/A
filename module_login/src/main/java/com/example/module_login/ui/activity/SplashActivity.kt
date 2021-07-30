@@ -24,7 +24,8 @@ class SplashActivity : BaseActivity() {
 
     override fun initView() {
         val launch = lifecycleScope.launch(Dispatchers.Main) {
-            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withTransition(R.anim.fade_in, R.anim.fade_out).navigation(this@SplashActivity)
+            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation(this@SplashActivity)
+//            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withTransition(R.anim.fade_in, R.anim.fade_out).navigation(this@SplashActivity)
             finish()
         }
         tv_timer.clicks().subscribe {

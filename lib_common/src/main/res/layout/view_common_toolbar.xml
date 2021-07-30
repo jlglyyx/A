@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:id="@+id/cl_toolbar"
-    android:background="@color/colorAccent">
+    android:background="@android:color/white">
 
     <TextView
         android:id="@+id/tv_centerContent"

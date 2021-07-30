@@ -1,9 +1,9 @@
 package com.example.module_video.ui.fragment
 
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.adapter.MBannerAdapter
+import com.example.lib_common.adapter.TabAndViewPagerFragmentAdapter
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
@@ -75,7 +75,7 @@ class VideoFragment : BaseLazyFragment() {
 
     private fun initViewPager() {
 
-        viewPager.adapter = MFragmentViewPagerAdapter(this)
+        viewPager.adapter = TabAndViewPagerFragmentAdapter(this,fragments,titles)
         viewPager.offscreenPageLimit = fragments.size
     }
 
@@ -108,17 +108,7 @@ class VideoFragment : BaseLazyFragment() {
             })).indicator = CircleIndicator(requireContext())
     }
 
-    inner class MFragmentViewPagerAdapter(fragment: Fragment) :
-        FragmentStateAdapter(fragment) {
-        override fun getItemCount(): Int {
-            return fragments.size
-        }
 
-        override fun createFragment(position: Int): Fragment {
-
-            return fragments[position]
-        }
-    }
 
 
 }

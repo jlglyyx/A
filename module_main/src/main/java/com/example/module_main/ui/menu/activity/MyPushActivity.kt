@@ -1,10 +1,7 @@
-package com.example.module_main.ui.fragment
+package com.example.module_main.ui.menu.activity
 
-import android.content.Intent
 import android.view.View
 import android.widget.ImageView
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -12,18 +9,16 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.example.lib_common.base.ui.fragment.BaseLazyFragment
+import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.help.buildARouter
-import com.example.lib_common.widget.CommonToolBar
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
 import com.example.module_main.data.model.MainData
 import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
-import com.example.module_main.ui.activity.AddDynamicActivity
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.imageview.ShapeableImageView
 import com.lxj.xpopup.XPopup
@@ -32,9 +27,8 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import kotlinx.android.synthetic.main.fra_main.*
 import javax.inject.Inject
 
-
-@Route(path = AppConstant.RoutePath.MAIN_FRAGMENT)
-class MainFragment : BaseLazyFragment() {
+@Route(path = AppConstant.RoutePath.MY_PUSH_ACTIVITY)
+class MyPushActivity : BaseActivity() {
 
     @Inject
     lateinit var mainViewModelFactory: MainViewModelFactory
@@ -44,7 +38,7 @@ class MainFragment : BaseLazyFragment() {
     private lateinit var mAdapter: MAdapter
 
     override fun getLayout(): Int {
-        return R.layout.fra_main
+        return R.layout.act_my_push
     }
 
     override fun initData() {
@@ -53,41 +47,6 @@ class MainFragment : BaseLazyFragment() {
 
     override fun initView() {
         initRecyclerView()
-        val registerForActivityResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode != AppCompatActivity.RESULT_OK) {
-                    return@registerForActivityResult
-                }
-                val images = it.data?.getStringArrayListExtra("Data")
-                val content = it.data?.getStringExtra("content")
-                val mutableListOf = mutableListOf<MainData>().apply {
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-                    if (!content.isNullOrEmpty()) {
-                        add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
-                            dynamicContent = content
-                        })
-                    }
-                    if (!images.isNullOrEmpty()) {
-                        add((MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                            imageList = images
-                        }))
-                    }
-
-
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                }
-                mAdapter.addData(0, mutableListOf)
-                recyclerView.scrollToPosition(0)
-            }
-        commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
-            override fun imageAddClickListener(view: View) {
-                registerForActivityResult.launch(
-                    Intent(requireContext(), AddDynamicActivity::class.java)
-                )
-            }
-        }
-
-
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -102,7 +61,7 @@ class MainFragment : BaseLazyFragment() {
 
 
     private fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(this)
 //        mainViewModel.sMutableLiveData.observe(this, Observer {
 //            recyclerView.adapter = MAdapter(R.layout.item_title, it)
 //        })
@@ -409,7 +368,7 @@ class MainFragment : BaseLazyFragment() {
                     if (GSYVideoManager.instance()
                             .playTag == TAG && (position < firstVisibleItem || position > lastVisibleItem)
                     ) {
-                        if (GSYVideoManager.isFullState(requireActivity())) {
+                        if (GSYVideoManager.isFullState(this@MyPushActivity)) {
                             return
                         }
                         //如果滑出去了上面和下面就是否，和今日头条一样
@@ -463,8 +422,8 @@ class MainFragment : BaseLazyFragment() {
                     gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback {
                         override fun imageClickListener(position: Int) {
                             val imageViewPagerDialog =
-                                ImageViewPagerDialog(requireContext(), item.imageList!!, position)
-                            XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
+                                ImageViewPagerDialog(this@MyPushActivity, item.imageList!!, position)
+                            XPopup.Builder(this@MyPushActivity).asCustom(imageViewPagerDialog).show()
                         }
                     }
                 }
@@ -478,7 +437,7 @@ class MainFragment : BaseLazyFragment() {
                 AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO -> {
                     var gsyVideoPlayer = helper.getView<StandardGSYVideoPlayer>(R.id.detailPlayer)
 
-                    gsyVideoPlayer.thumbImageView = ImageView(requireContext()).apply {
+                    gsyVideoPlayer.thumbImageView = ImageView(this@MyPushActivity).apply {
                         scaleType = ImageView.ScaleType.CENTER_CROP
                         setImageResource(R.drawable.iv_bear)
                     }
@@ -488,7 +447,7 @@ class MainFragment : BaseLazyFragment() {
                     gsyVideoPlayer.fullscreenButton
                         .setOnClickListener {
                             gsyVideoPlayer.startWindowFullscreen(
-                                context,
+                                this@MyPushActivity,
                                 false,
                                 true
                             )

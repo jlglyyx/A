@@ -4,20 +4,20 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkRequest
 import android.os.Build
-import android.os.Environment
 import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
-import com.example.lib_common.BuildConfig
 import com.example.lib_common.help.getRemoteComponent
+import com.example.lib_common.util.NetworkUtil
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
 
 
 class BaseApplication : Application() {
@@ -34,6 +34,7 @@ class BaseApplication : Application() {
         initARouter(baseApplication)
         initGlide(baseApplication)
         initMMKV()
+        initNetworkStatusListener(baseApplication)
     }
 
     companion object {
@@ -42,7 +43,7 @@ class BaseApplication : Application() {
 
     private fun initARouter(application: BaseApplication) {
         GlobalScope.launch(Dispatchers.Unconfined) {
-            if (BuildConfig.DEBUG) {
+            if (true) {
                 ARouter.openLog()
                 ARouter.openDebug()
             }
@@ -53,7 +54,7 @@ class BaseApplication : Application() {
     private fun initCrashReport(application: BaseApplication) {
         GlobalScope.launch(Dispatchers.IO) {
             delay(3000)
-            CrashReport.initCrashReport(application, "4f807733a2", BuildConfig.DEBUG)
+            CrashReport.initCrashReport(application, "4f807733a2", true)
             createNotificationChannel()
             Glide.get(applicationContext)
         }
@@ -80,5 +81,10 @@ class BaseApplication : Application() {
             delay(1000)
             Glide.get(application)
         }
+    }
+    private fun initNetworkStatusListener(application: BaseApplication) {
+        val connectivityManager =
+            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(),NetworkUtil.getNetworkStatus())
     }
 }

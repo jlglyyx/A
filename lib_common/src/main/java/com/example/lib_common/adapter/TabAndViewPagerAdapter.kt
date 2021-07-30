@@ -1,8 +1,8 @@
 package com.example.lib_common.adapter
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
 
 /**
@@ -14,17 +14,25 @@ import androidx.fragment.app.FragmentStatePagerAdapter
  *
  * @Date 2020/12/1 14:52
  */
-class TabAndViewPagerAdapter(fm: FragmentManager, behavior: Int,private val fragments:MutableList<Fragment>,private val titles:MutableList<String>) : FragmentStatePagerAdapter(fm, behavior) {
+class TabAndViewPagerAdapter(fragmentActivity: FragmentActivity,private val fragments:MutableList<Fragment>,private val titles:MutableList<String>) : FragmentStateAdapter(fragmentActivity) {
 
-    override fun getItem(position: Int): Fragment {
-        return fragments[position]
-    }
 
-    override fun getCount(): Int {
+    override fun getItemCount(): Int {
         return fragments.size
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return titles[position]
+    override fun createFragment(position: Int): Fragment {
+        return fragments[position]
+    }
+}
+class TabAndViewPagerFragmentAdapter(fragment: Fragment,private val fragments:MutableList<Fragment>,private val titles:MutableList<String>) : FragmentStateAdapter(fragment) {
+
+
+    override fun getItemCount(): Int {
+        return fragments.size
+    }
+
+    override fun createFragment(position: Int): Fragment {
+        return fragments[position]
     }
 }

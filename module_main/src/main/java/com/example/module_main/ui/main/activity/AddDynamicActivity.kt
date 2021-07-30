@@ -1,4 +1,4 @@
-package com.example.module_main.ui.activity
+package com.example.module_main.ui.main.activity
 
 import android.content.Intent
 import android.view.View
@@ -75,6 +75,7 @@ class AddDynamicActivity : BaseActivity() {
         val imageView = ImageView(this).apply {
             setImageResource(R.drawable.iv_add)
             scaleType = ImageView.ScaleType.CENTER_CROP
+            setBackgroundResource(android.R.color.darker_gray)
             setOnClickListener {
                 if (normalImageAdapter.data.size == 8) {
                     this.visibility = View.GONE
