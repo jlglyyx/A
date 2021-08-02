@@ -5,6 +5,8 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.clicks
 import com.example.module_mine.R
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fra_mine.*
@@ -27,6 +29,13 @@ class MineFragment : BaseLazyFragment() {
         Glide.with(this)
             .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
             .into(siv_toolbar_img)
+
+        tv_name.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+        }
+        tv_toolbar_name.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+        }
     }
 
     override fun initData() {

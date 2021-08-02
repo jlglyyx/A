@@ -389,6 +389,10 @@ class MainFragment : BaseLazyFragment() {
                     }
                 }
             }
+
+            setOnItemClickListener { adapter, view, position ->
+                buildARouter(AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY).navigation()
+            }
         }
         recyclerView.adapter = mAdapter
 
