@@ -2,6 +2,7 @@ package com.example.module_main.ui.main.activity
 
 import android.content.Intent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -11,6 +12,8 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.adapter.NormalImageAdapter
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.util.dip2px
+import com.example.lib_common.util.getScreenPx
 import com.example.lib_common.widget.CommonToolBar
 import com.example.module_main.R
 import kotlinx.android.synthetic.main.act_add_dynamic.*
@@ -72,10 +75,13 @@ class AddDynamicActivity : BaseActivity() {
                 normalImageAdapter.addData(map)
             }
 
+
         val imageView = ImageView(this).apply {
             setImageResource(R.drawable.iv_add)
             scaleType = ImageView.ScaleType.CENTER_CROP
             setBackgroundResource(android.R.color.darker_gray)
+            val i = (getScreenPx(this@AddDynamicActivity)[0] - 20f.dip2px(this@AddDynamicActivity)) / 3
+            layoutParams = ViewGroup.LayoutParams(i, i)
             setOnClickListener {
                 if (normalImageAdapter.data.size == 8) {
                     this.visibility = View.GONE
@@ -84,7 +90,6 @@ class AddDynamicActivity : BaseActivity() {
 
             }
         }
-
         normalImageAdapter.addFooterView(imageView)
         normalImageAdapter.setOnItemLongClickListener { adapter, view, position ->
             normalImageAdapter.remove(position)
