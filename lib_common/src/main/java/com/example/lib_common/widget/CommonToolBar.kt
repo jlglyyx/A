@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.lib_common.R
 import com.example.lib_common.util.getStatusBarHeight
+import com.google.android.material.imageview.ShapeableImageView
 
 class CommonToolBar : ConstraintLayout {
 
@@ -26,6 +27,8 @@ class CommonToolBar : ConstraintLayout {
     }
 
     private lateinit var tvCenterContent: TextView
+
+    lateinit var ivBack: ShapeableImageView
 
     interface ImageBackCallBack {
         fun imageBackClickListener(view: View)
@@ -53,10 +56,10 @@ class CommonToolBar : ConstraintLayout {
         val inflate = LayoutInflater.from(context).inflate(R.layout.view_common_toolbar, this)
         val clToolbar = inflate.findViewById<ConstraintLayout>(R.id.cl_toolbar)
         clToolbar.setPadding(0, getStatusBarHeight(context), 0, 0)
-        tvCenterContent = inflate.findViewById<TextView>(R.id.tv_centerContent)
+        tvCenterContent = inflate.findViewById(R.id.tv_centerContent)
         val tvLeftContent = inflate.findViewById<TextView>(R.id.tv_leftContent)
         val tvRightContent = inflate.findViewById<TextView>(R.id.tv_rightContent)
-        val ivBack = inflate.findViewById<ImageView>(R.id.iv_back)
+        ivBack = inflate.findViewById(R.id.iv_back)
         val ivAdd = inflate.findViewById<ImageView>(R.id.iv_add)
         val obtainStyledAttributes =
             context.obtainStyledAttributes(attrs, R.styleable.CommonToolBar)

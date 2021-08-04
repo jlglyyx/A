@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -17,6 +18,7 @@ import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.dip2px
 import com.example.lib_common.widget.CommonToolBar
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
@@ -24,11 +26,15 @@ import com.example.module_main.data.model.MainData
 import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.ui.main.activity.AddDynamicActivity
+import com.example.module_main.ui.main.activity.MainActivity
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.lxj.xpopup.XPopup
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
 import javax.inject.Inject
 
@@ -79,12 +85,37 @@ class MainFragment : BaseLazyFragment() {
                 mAdapter.addData(0, mutableListOf)
                 recyclerView.scrollToPosition(0)
             }
+        commonToolBar.ivBack.let {
+            it.setPadding(
+                6f.dip2px(requireContext()),
+                6f.dip2px(requireContext()),
+                6f.dip2px(requireContext()),
+                6f.dip2px(requireContext())
+            )
+            it.post {
+                it.shapeAppearanceModel = ShapeAppearanceModel.builder()
+                    .setAllCorners(
+                        CornerFamily.ROUNDED,
+                        (it.width + it.paddingLeft + it.paddingRight) / 4.toFloat()
+                    )
+                    .build()
+            }
+        }
+        Glide.with(this)
+            .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            .into(commonToolBar.ivBack)
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener(view: View) {
                 registerForActivityResult.launch(
                     Intent(requireContext(), AddDynamicActivity::class.java)
                 )
             }
+        }
+        commonToolBar.imageBackCallBack = object : CommonToolBar.ImageBackCallBack {
+            override fun imageBackClickListener(view: View) {
+                (activity as MainActivity).drawerLayout.openDrawer(GravityCompat.START)
+            }
+
         }
 
 
