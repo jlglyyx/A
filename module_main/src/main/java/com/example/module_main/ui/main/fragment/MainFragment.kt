@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -29,13 +30,15 @@ import com.example.module_main.ui.main.activity.AddDynamicActivity
 import com.example.module_main.ui.main.activity.MainActivity
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.lxj.xpopup.XPopup
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -49,12 +52,267 @@ class MainFragment : BaseLazyFragment() {
 
     private lateinit var mAdapter: MAdapter
 
+    var mutableListOf: MutableList<MainData> = mutableListOf()
+
     override fun getLayout(): Int {
         return R.layout.fra_main
     }
 
     override fun initData() {
         //mainViewModel.getMainRepository()
+        lifecycleScope.launch(Dispatchers.IO) {
+            mAdapter.setNewData(
+                mutableListOf<MainData>().apply {
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
+                        dynamicContent = "今天天气真好"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                        imageList = mutableListOf<String>().apply {
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+
+                        }
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
+                        dynamicContent = "不知道吃什么就很烦 在线求解"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                        imageList = mutableListOf<String>().apply {
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+
+                        }
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+
+
+
+
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                        imageList = mutableListOf<String>().apply {
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32189.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32188.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg")
+                        }
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                        imageList = mutableListOf<String>().apply {
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                        }
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                        userImage =
+                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                        imageList = mutableListOf<String>().apply {
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
+                        }
+                    })
+
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                        imageList = mutableListOf<String>().apply {
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
+                        }
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                        imageList = mutableListOf<String>().apply {
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32188.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
+                            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32189.jpg")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg")
+                        }
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
+                        videoUrl =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+                    })
+                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
+
+                })
+        }
     }
 
     override fun initView() {
@@ -94,10 +352,7 @@ class MainFragment : BaseLazyFragment() {
             )
             it.post {
                 it.shapeAppearanceModel = ShapeAppearanceModel.builder()
-                    .setAllCorners(
-                        CornerFamily.ROUNDED,
-                        (it.width + it.paddingLeft + it.paddingRight) / 4.toFloat()
-                    )
+                    .setAllCornerSizes(ShapeAppearanceModel.PILL)
                     .build()
             }
         }
@@ -138,256 +393,6 @@ class MainFragment : BaseLazyFragment() {
 //            recyclerView.adapter = MAdapter(R.layout.item_title, it)
 //        })
 
-        val mutableListOf = mutableListOf<MainData>().apply {
-
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
-                dynamicContent = "今天天气真好"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                imageList = mutableListOf<String>().apply {
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-
-                }
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
-                dynamicContent = "不知道吃什么就很烦 在线求解"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                imageList = mutableListOf<String>().apply {
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-
-                }
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-
-
-
-
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                imageList = mutableListOf<String>().apply {
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                    add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32189.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32188.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg")
-                }
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                imageList = mutableListOf<String>().apply {
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                }
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                userImage =
-                    "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                imageList = mutableListOf<String>().apply {
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                    add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-                }
-            })
-
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                imageList = mutableListOf<String>().apply {
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                    add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
-                }
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                imageList = mutableListOf<String>().apply {
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32188.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                    add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32189.jpg")
-                    add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg")
-                }
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
-            add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-            add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                videoUrl =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-        }
         mAdapter = MAdapter(mutableListOf).apply {
             setOnItemChildClickListener { adapter, view, position ->
                 when (view.id) {
@@ -553,5 +558,10 @@ class MainFragment : BaseLazyFragment() {
     override fun onDestroy() {
         super.onDestroy()
         GSYVideoManager.releaseAllVideos()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        lifecycleScope.cancel()
     }
 }

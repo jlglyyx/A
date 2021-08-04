@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="@dimen/dp_10"
-    android:background="@drawable/iv_meet"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditText
         android:id="@+id/et_user"

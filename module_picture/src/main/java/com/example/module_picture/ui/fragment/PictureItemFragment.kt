@@ -1,7 +1,6 @@
 package com.example.module_picture.ui.fragment
 
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -18,13 +17,11 @@ import com.example.lib_common.help.buildARouter
 import com.example.module_picture.R
 import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
-import com.example.module_picture.model.AccountList
 import com.example.module_picture.model.ImageDataItem
 import com.example.module_picture.viewmodel.PictureViewModel
 import com.google.android.material.imageview.ShapeableImageView
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
-import com.tencent.mmkv.MMKV
 import com.wang.avi.AVLoadingIndicatorView
 import kotlinx.android.synthetic.main.fra_item_picture.*
 import javax.inject.Inject
@@ -41,7 +38,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private var pageNum = 1
 
-    private var tabHeight: Int = 0
+//    private var tabHeight: Int = 0
 
     lateinit var mAdapter: MAdapter
 
@@ -51,9 +48,9 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initData() {
         queryType = arguments?.getString(AppConstant.Constant.TYPE)
-        val defaultMMKV = MMKV.defaultMMKV()
-        tabHeight = defaultMMKV.decodeInt(AppConstant.Constant.TAB_HEIGHT)
-        smartRefreshLayout.setPadding(0, 0, 0, tabHeight)
+//        val defaultMMKV = MMKV.defaultMMKV()
+//        tabHeight = defaultMMKV.decodeInt(AppConstant.Constant.TAB_HEIGHT)
+//        smartRefreshLayout.setPadding(0, 0, 0, tabHeight)
         smartRefreshLayout.autoRefresh()
     }
 

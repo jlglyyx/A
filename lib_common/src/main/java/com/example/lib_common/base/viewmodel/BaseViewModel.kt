@@ -1,10 +1,11 @@
 package com.example.lib_common.base.viewmodel
 
 import android.app.Application
+import android.text.TextUtils
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lib_common.bus.event.UIChangeLiveData
-import com.example.lib_common.help.HandleExceptionHelp
+import com.example.lib_common.handle.ErrorHandle
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -37,7 +38,14 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private suspend fun handleException(exception: Throwable, content: String = "") {
-        HandleExceptionHelp(this, exception).handle(content)
+        val handle = ErrorHandle(exception).handle()
+        if (TextUtils.isEmpty(content)) {
+            showDialog(handle)
+        } else {
+            showDialog(content)
+        }
+        delayShowDialog(1000)
+        dismissDialog()
     }
 
 
@@ -45,8 +53,8 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         onRequest: suspend () -> T,
         onSuccess: suspend (t: T) -> Unit = {},
         error: suspend (t: Throwable) -> Unit = {},
-        vararg messages: String = arrayOf()
-
+        vararg messages: String = arrayOf(),
+        errorDialog: Boolean = true
     ) {
         viewModelScope.launch {
             try {
@@ -63,12 +71,13 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                 dismissDialog()
             } catch (t: Throwable) {
                 error(t)
-                if (messages.isNotEmpty() && messages.size >= 3) {
-                    handleException(t, messages[2])
-                } else {
-                    handleException(t)
+                if (errorDialog) {
+                    if (messages.isNotEmpty() && messages.size >= 3) {
+                        handleException(t, messages[2])
+                    } else {
+                        handleException(t)
+                    }
                 }
-
             }
         }
     }

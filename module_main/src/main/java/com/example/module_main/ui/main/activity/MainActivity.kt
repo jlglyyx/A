@@ -4,6 +4,7 @@ import android.Manifest
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.adapter.TabAndViewPagerAdapter
 import com.example.lib_common.base.ui.activity.BaseActivity
@@ -21,6 +22,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tbruyelle.rxpermissions3.RxPermissions
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
@@ -32,7 +34,7 @@ class MainActivity : BaseActivity() {
 
     private lateinit var mainViewModel: MainViewModel
 
-    lateinit var fragments: MutableList<Fragment>
+    private lateinit var fragments: MutableList<Fragment>
 
     private lateinit var titles: MutableList<String>
 
@@ -53,29 +55,46 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initData() {
-        fragments = mutableListOf<Fragment>().apply {
-            add(
-                buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT)
-                    .navigation() as Fragment
-            )
-            add(
-                buildARouter(AppConstant.RoutePath.VIDEO_FRAGMENT)
-                    .navigation() as Fragment
-            )
-            add(
-                buildARouter(AppConstant.RoutePath.PICTURE_FRAGMENT)
-                    .navigation() as Fragment
-            )
-            add(
-                buildARouter(AppConstant.RoutePath.MINE_FRAGMENT)
-                    .navigation() as Fragment
-            )
-        }
-        titles = mutableListOf<String>().apply {
-            add("首页")
-            add("视频")
-            add("图片")
-            add("我的")
+
+        lifecycleScope.launch {
+            val async = async(Dispatchers.IO) {
+                fragments = mutableListOf<Fragment>().apply {
+                    add(
+                        buildARouter(AppConstant.RoutePath.MAIN_FRAGMENT)
+                            .navigation() as Fragment
+                    )
+                    add(
+                        buildARouter(AppConstant.RoutePath.VIDEO_FRAGMENT)
+                            .navigation() as Fragment
+                    )
+                    add(
+                        buildARouter(AppConstant.RoutePath.PICTURE_FRAGMENT)
+                            .navigation() as Fragment
+                    )
+                    add(
+                        buildARouter(AppConstant.RoutePath.MINE_FRAGMENT)
+                            .navigation() as Fragment
+                    )
+                }
+                titles = mutableListOf<String>().apply {
+                    add("首页")
+                    add("视频")
+                    add("图片")
+                    add("我的")
+                }
+                true
+            }
+            val await = async.await()
+            withContext(Dispatchers.Main) {
+                if (await) {
+                    initDrawerLayout()
+                    initViewPager()
+                    initTabLayout()
+                    initPermission()
+                    initLeftFragment()
+                }
+            }
+
         }
     }
 
@@ -86,11 +105,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initView() {
-        initDrawerLayout()
-        initViewPager()
-        initTabLayout()
-        initPermission()
-        initLeftFragment()
+
     }
 
     private fun initDrawerLayout() {
@@ -194,5 +209,8 @@ class MainActivity : BaseActivity() {
         }
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycleScope.cancel()
+    }
 }

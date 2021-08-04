@@ -39,7 +39,6 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private var pageNum = 1
 
-    private var tabHeight: Int = 0
 
     override fun getLayout(): Int {
         return R.layout.fra_item_video
@@ -47,7 +46,6 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initData() {
         videoModule.getVideoRepository()
-        smartRefreshLayout.setPadding(0, 0, 0, tabHeight)
         smartRefreshLayout.autoRefresh()
     }
 

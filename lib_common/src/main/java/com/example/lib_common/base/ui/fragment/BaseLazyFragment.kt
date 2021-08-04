@@ -7,12 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.lib_common.R
 import com.example.lib_common.base.viewmodel.BaseViewModel
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.util.getStatusBarHeight
@@ -75,7 +72,10 @@ abstract class BaseLazyFragment : Fragment() {
 
     abstract fun initViewModel()
 
-    open fun initUIChangeLiveData(): UIChangeLiveData? {//在ViewModel层操作ui
+    /**
+     * 在ViewModel层操作ui
+     */
+    open fun initUIChangeLiveData(): UIChangeLiveData? {
         return null
     }
 

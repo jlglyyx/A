@@ -10,6 +10,7 @@ import android.os.Build
 import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
+import com.example.lib_common.handle.CrashHandle
 import com.example.lib_common.help.getRemoteComponent
 import com.example.lib_common.util.NetworkUtil
 import com.tencent.bugly.crashreport.CrashReport
@@ -33,7 +34,7 @@ class BaseApplication : Application() {
         initCrashReport(baseApplication)
         initARouter(baseApplication)
         initGlide(baseApplication)
-        initMMKV()
+        initMMKV(baseApplication)
         initNetworkStatusListener(baseApplication)
     }
 
@@ -56,8 +57,8 @@ class BaseApplication : Application() {
             delay(3000)
             CrashReport.initCrashReport(application, "4f807733a2", true)
             createNotificationChannel()
-            Glide.get(applicationContext)
         }
+        Thread.setDefaultUncaughtExceptionHandler(CrashHandle.instance)
     }
 
     private fun createNotificationChannel(){
@@ -69,9 +70,10 @@ class BaseApplication : Application() {
         }
     }
 
-    private fun initMMKV() {
+    private fun initMMKV(application: BaseApplication) {
         GlobalScope.launch(Dispatchers.IO) {
-            val initialize = MMKV.initialize(this@BaseApplication)
+            delay(1000)
+            val initialize = MMKV.initialize(application)
             Log.i("TAG", "initMMKV: $initialize")
         }
     }
