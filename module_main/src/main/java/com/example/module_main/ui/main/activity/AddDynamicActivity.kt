@@ -1,13 +1,13 @@
 package com.example.module_main.ui.main.activity
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.adapter.NormalImageAdapter
 import com.example.lib_common.base.ui.activity.BaseActivity
@@ -22,8 +22,6 @@ import java.util.*
 @Route(path = AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY)
 class AddDynamicActivity : BaseActivity() {
 
-
-    private lateinit var recyclerView: RecyclerView
 
     private lateinit var normalImageAdapter:NormalImageAdapter<String>
 
@@ -62,7 +60,6 @@ class AddDynamicActivity : BaseActivity() {
 
 
     private fun initRecyclerView() {
-        recyclerView = findViewById(R.id.recyclerView)
         normalImageAdapter = NormalImageAdapter(data)
         recyclerView.adapter = normalImageAdapter
         recyclerView.layoutManager = GridLayoutManager(this, 3)
@@ -70,6 +67,7 @@ class AddDynamicActivity : BaseActivity() {
         val registerForActivityResult =
             registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { it ->
                 val map = it.map { item ->
+                    Log.i(TAG, "initRecyclerView: $item")
                     item.toString()
                 }
                 normalImageAdapter.addData(map)

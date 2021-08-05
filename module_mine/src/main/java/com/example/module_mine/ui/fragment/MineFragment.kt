@@ -1,8 +1,10 @@
 package com.example.module_mine.ui.fragment
 
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
+import com.example.lib_common.adapter.NormalImageAdapter
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.help.buildARouter
@@ -15,6 +17,8 @@ import kotlin.math.abs
 @Route(path = AppConstant.RoutePath.MINE_FRAGMENT)
 class MineFragment : BaseLazyFragment() {
 
+    private lateinit var normalImageAdapter: NormalImageAdapter<String>
+
     private var alphaPercent = 0f
 
     override fun getLayout(): Int {
@@ -23,6 +27,7 @@ class MineFragment : BaseLazyFragment() {
 
     override fun initView() {
         initAppBarLayout()
+        initRecyclerView()
         Glide.with(this)
             .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
             .into(siv_img)
@@ -43,6 +48,28 @@ class MineFragment : BaseLazyFragment() {
     }
 
     override fun initViewModel() {
+
+    }
+
+
+    private fun initRecyclerView() {
+        normalImageAdapter = NormalImageAdapter(mutableListOf<String>().apply {
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+        },R.layout.item_view_history_image)
+        recyclerView.adapter = normalImageAdapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL,false)
 
     }
 

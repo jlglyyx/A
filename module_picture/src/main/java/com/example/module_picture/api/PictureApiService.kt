@@ -1,9 +1,9 @@
 package com.example.module_picture.api
 
 import com.example.lib_common.remote.di.response.MResult
+import com.example.lib_common.room.entity.ImageTypeData
 import com.example.module_picture.model.ImageData
 import com.example.module_picture.model.ImageDataItem
-import com.example.module_picture.model.ImageTypeData
 import retrofit2.http.POST
 import retrofit2.http.Query
 

@@ -1,6 +1,7 @@
 package com.example.module_main.ui.main.fragment
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +20,8 @@ import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.help.buildARouter
+import com.example.lib_common.room.BaseMAppDatabase
+import com.example.lib_common.room.entity.ImageTypeData
 import com.example.lib_common.util.dip2px
 import com.example.lib_common.widget.CommonToolBar
 import com.example.lib_common.widget.GridNinePictureView
@@ -37,6 +40,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -361,6 +365,27 @@ class MainFragment : BaseLazyFragment() {
             .into(commonToolBar.ivBack)
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener(view: View) {
+
+                GlobalScope.launch(Dispatchers.IO) {
+                    BaseMAppDatabase.instance.imageTypeDao()
+                        .insertData(mutableListOf<ImageTypeData>().apply {
+                            add(ImageTypeData(null, "推荐", "1", ""))
+                            add(ImageTypeData(null, "动漫", "2", ""))
+                            add(ImageTypeData(null, "二次元", "3", ""))
+                            add(ImageTypeData(null, "伤感", "4", ""))
+                            add(ImageTypeData(null, "风景", "5", ""))
+                            add(ImageTypeData(null, "治愈", "6", ""))
+                            add(ImageTypeData(null, "小清新", "7", ""))
+                        })
+
+                    val allData = BaseMAppDatabase.instance.imageTypeDao().getAllData()
+                    for (i in allData){
+                        Log.i(TAG, "imageAddClickListener: ${i.toString()}")
+                    }
+                }
+
+
+
                 registerForActivityResult.launch(
                     Intent(requireContext(), AddDynamicActivity::class.java)
                 )

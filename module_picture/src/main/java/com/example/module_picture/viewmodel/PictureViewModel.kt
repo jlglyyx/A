@@ -3,9 +3,9 @@ package com.example.module_picture.viewmodel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.example.lib_common.base.viewmodel.BaseViewModel
+import com.example.lib_common.room.entity.ImageTypeData
 import com.example.module_picture.model.ImageData
 import com.example.module_picture.model.ImageDataItem
-import com.example.module_picture.model.ImageTypeData
 import com.example.module_picture.repository.PictureRepository
 import javax.inject.Inject
 
@@ -50,7 +50,14 @@ class PictureViewModel @Inject constructor(
         },{
             val mutableListOf = mutableListOf<ImageTypeData>()
             for (i in 1..10){
-                mutableListOf.add(ImageTypeData(1,"推荐","1",""))
+                mutableListOf.add(
+                    ImageTypeData(
+                        1,
+                        "推荐",
+                        "1",
+                        ""
+                    )
+                )
             }
             mImageTypeData.postValue(mutableListOf)
         })

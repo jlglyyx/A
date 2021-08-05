@@ -6,10 +6,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.R
 
-class NormalImageAdapter<T>(list: MutableList<T>) :
+class NormalImageAdapter<T>(list: MutableList<T>,layoutResId:Int = R.layout.item_normal_image) :
     BaseQuickAdapter<T, BaseViewHolder>(list) {
     init {
-        mLayoutResId = R.layout.item_normal_image
+        mLayoutResId = layoutResId
     }
 
     override fun convert(helper: BaseViewHolder, item: T) {
