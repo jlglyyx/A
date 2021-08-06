@@ -1,7 +1,7 @@
 package com.example.module_main.ui.main.activity
 
+import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -23,7 +23,7 @@ import java.util.*
 class AddDynamicActivity : BaseActivity() {
 
 
-    private lateinit var normalImageAdapter:NormalImageAdapter<String>
+    private lateinit var normalImageAdapter: NormalImageAdapter<String>
 
     private var data: MutableList<String> = mutableListOf()
 
@@ -38,13 +38,14 @@ class AddDynamicActivity : BaseActivity() {
     }
 
     override fun initView() {
-        commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
+        commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener(view: View) {
                 val intent = Intent()
-                intent.putStringArrayListExtra("Data",
+                intent.putStringArrayListExtra(
+                    "Data",
                     normalImageAdapter.data as ArrayList<String>?
                 )
-                intent.putExtra("content",et_dynamic.text.toString())
+                intent.putExtra("content", et_dynamic.text.toString())
                 setResult(RESULT_OK, intent)
                 finish()
             }
@@ -63,28 +64,35 @@ class AddDynamicActivity : BaseActivity() {
         normalImageAdapter = NormalImageAdapter(data)
         recyclerView.adapter = normalImageAdapter
         recyclerView.layoutManager = GridLayoutManager(this, 3)
-
         val registerForActivityResult =
-            registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { it ->
-                val map = it.map { item ->
-                    Log.i(TAG, "initRecyclerView: $item")
-                    item.toString()
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
+                if (it.resultCode == Activity.RESULT_OK){
+                    val stringArrayListExtra = it.data?.getStringArrayListExtra("Data")
+                    normalImageAdapter.addData(stringArrayListExtra!!)
                 }
-                normalImageAdapter.addData(map)
             }
+//        val registerForActivityResult =
+//            registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { it ->
+//                val map = it.map { item ->
+//                    Log.i(TAG, "initRecyclerView: $item")
+//                    item.toString()
+//                }
+//                normalImageAdapter.addData(map)
+//            }
 
 
         val imageView = ImageView(this).apply {
             setImageResource(R.drawable.iv_add)
             scaleType = ImageView.ScaleType.CENTER_CROP
             setBackgroundResource(android.R.color.darker_gray)
-            val i = (getScreenPx(this@AddDynamicActivity)[0] - 20f.dip2px(this@AddDynamicActivity)) / 3
+            val i =
+                (getScreenPx(this@AddDynamicActivity)[0] - 20f.dip2px(this@AddDynamicActivity)) / 3
             layoutParams = ViewGroup.LayoutParams(i, i)
             setOnClickListener {
                 if (normalImageAdapter.data.size == 8) {
                     this.visibility = View.GONE
                 }
-                registerForActivityResult.launch(arrayOf(addType))
+                registerForActivityResult.launch(Intent(this@AddDynamicActivity,PictureSelectActivity::class.java))
 
             }
         }

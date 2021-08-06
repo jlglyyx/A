@@ -10,15 +10,18 @@ import android.os.Build
 import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
+import com.example.lib_common.BuildConfig
 import com.example.lib_common.handle.CrashHandle
 import com.example.lib_common.help.getRemoteComponent
 import com.example.lib_common.util.NetworkUtil
+import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
 
 class BaseApplication : Application() {
@@ -36,6 +39,7 @@ class BaseApplication : Application() {
         initGlide(baseApplication)
         initMMKV(baseApplication)
         initNetworkStatusListener(baseApplication)
+        initVideo()
     }
 
     companion object {
@@ -44,7 +48,7 @@ class BaseApplication : Application() {
 
     private fun initARouter(application: BaseApplication) {
         GlobalScope.launch(Dispatchers.Unconfined) {
-            if (true) {
+            if (BuildConfig.DEBUG) {
                 ARouter.openLog()
                 ARouter.openDebug()
             }
@@ -55,7 +59,7 @@ class BaseApplication : Application() {
     private fun initCrashReport(application: BaseApplication) {
         GlobalScope.launch(Dispatchers.IO) {
             delay(3000)
-            CrashReport.initCrashReport(application, "4f807733a2", true)
+            CrashReport.initCrashReport(application, "4f807733a2", BuildConfig.DEBUG)
             createNotificationChannel()
         }
         Thread.setDefaultUncaughtExceptionHandler(CrashHandle.instance)
@@ -88,5 +92,13 @@ class BaseApplication : Application() {
         val connectivityManager =
             application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(),NetworkUtil.getNetworkStatus())
+    }
+
+    private fun initVideo(){
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(3000)
+            PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
+        }
+
     }
 }

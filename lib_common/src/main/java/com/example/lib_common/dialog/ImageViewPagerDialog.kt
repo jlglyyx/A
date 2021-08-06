@@ -6,7 +6,6 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -18,8 +17,10 @@ import com.example.lib_common.R
 import com.example.lib_common.down.thread.MultiMoreThreadDownload
 import com.lxj.xpopup.impl.FullScreenPopupView
 import com.lxj.xpopup.photoview.PhotoView
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.wang.avi.AVLoadingIndicatorView
 import kotlinx.android.synthetic.main.dialog_image_viewpager.view.*
+
 
 class ImageViewPagerDialog : FullScreenPopupView {
 
@@ -32,6 +33,8 @@ class ImageViewPagerDialog : FullScreenPopupView {
     private var mDialog: ImageViewPagerDialog
 
     private var position: Int = 0
+
+    private var gsyVideoPlayer: StandardGSYVideoPlayer? = null
 
     var imageViewPagerDialogCallBack: ImageViewPagerDialogCallBack? = null
 
@@ -83,48 +86,72 @@ class ImageViewPagerDialog : FullScreenPopupView {
 
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
                 val photoView = holder.itemView.findViewById<PhotoView>(R.id.photoView)
+                gsyVideoPlayer = holder.itemView.findViewById(R.id.detailPlayer)
                 val avi = holder.itemView.findViewById<AVLoadingIndicatorView>(R.id.avi)
-                photoView.setOnClickListener {
-                    imageViewPagerDialogCallBack?.getPosition(position)
-                    mDialog.dismiss()
+                val endsWith = data[position].endsWith(".mp4")
+                if (endsWith){
+                    avi.visibility = View.GONE
+                    photoView.visibility = View.GONE
+                    gsyVideoPlayer?.setUpLazy(data[position], true, null, null, "这是title")
+                    gsyVideoPlayer?.titleTextView?.visibility = View.GONE
+                    gsyVideoPlayer?.backButton?.visibility = View.GONE
+                    gsyVideoPlayer?.fullscreenButton?.visibility = View.GONE
+
+                    gsyVideoPlayer?.apply {
+                        setIsTouchWiget(true)
+                        isRotateViewAuto = false
+                        isLockLand = false
+                        isAutoFullWithSize = true
+                        isShowFullAnimation = false
+                        isNeedLockFull = true
+                    }
+
+
+
+                }else{
+                    gsyVideoPlayer?.visibility = View.GONE
+
+                    photoView.setOnClickListener {
+                        imageViewPagerDialogCallBack?.getPosition(position)
+                        mDialog.dismiss()
+                    }
+                    photoView.setOnLongClickListener {
+                        MultiMoreThreadDownload.Builder(mContext)
+                            .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/picture")
+                            .filePath("${System.currentTimeMillis()}.jpg")
+                            .fileUrl(data[position])
+                            .build()
+                            .start()
+
+                        false
+                    }
+                    Glide.with(photoView)
+                        .load(data[position])
+                        .fitCenter()
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                avi.visibility = View.GONE
+                                return false
+                            }
+
+                        })
+                        .into(photoView)
                 }
-
-                photoView.setOnLongClickListener {
-                    MultiMoreThreadDownload.Builder(mContext)
-                        .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/picture")
-                        .filePath("${System.currentTimeMillis()}.jpg")
-                        .fileUrl(data[position])
-                        .build()
-                        .start()
-
-                    false
-                }
-                Glide.with(photoView)
-                    .load(data[position])
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            avi.visibility = View.GONE
-                            return false
-                        }
-
-                    })
-                    .into(photoView)
-
 
             }
 
@@ -137,6 +164,7 @@ class ImageViewPagerDialog : FullScreenPopupView {
 
     override fun onDismiss() {
         imageViewPagerDialogCallBack?.getPosition(viewPager.currentItem)
+        gsyVideoPlayer?.currentPlayer?.release()
         super.onDismiss()
     }
 

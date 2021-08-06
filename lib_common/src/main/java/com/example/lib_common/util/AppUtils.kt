@@ -3,13 +3,18 @@
 package com.example.lib_common.util
 
 import android.content.Context
+import android.os.Environment
+import android.util.Log
 import android.view.View
 import com.example.lib_common.constant.AppConstant.Constant.CLICK_TIME
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import io.reactivex.rxjava3.core.Observable
+import java.io.File
 import java.util.concurrent.TimeUnit
 
+
+private const val TAG = "AppUtils"
 
 /*
 * @return 宽高集合
@@ -68,3 +73,19 @@ fun <T> fromJson(json: String, t: Class<T>): T {
     val gson = Gson()
     return gson.fromJson<T>(json, t)
 }
+
+fun getFilePath():MutableList<String>{
+    val mutableListOf = mutableListOf<String>()
+    val file = File("${Environment.getExternalStorageDirectory()}/DCIM/Camera")
+//    val file = File("${Environment.getExternalStorageDirectory()}/MFiles/picture")
+    if (file.isDirectory){
+        val listFiles = file.listFiles()
+        for (mFiles in listFiles){
+            Log.i(TAG, "getFilePath: ${mFiles.absolutePath}")
+            mutableListOf.add(mFiles.absolutePath)
+        }
+    }
+
+    return mutableListOf
+}
+

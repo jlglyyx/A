@@ -1,11 +1,11 @@
 package com.example.module_main.ui.main.fragment
 
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,8 +20,6 @@ import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.help.buildARouter
-import com.example.lib_common.room.BaseMAppDatabase
-import com.example.lib_common.room.entity.ImageTypeData
 import com.example.lib_common.util.dip2px
 import com.example.lib_common.widget.CommonToolBar
 import com.example.lib_common.widget.GridNinePictureView
@@ -40,7 +38,6 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -348,17 +345,18 @@ class MainFragment : BaseLazyFragment() {
                 recyclerView.scrollToPosition(0)
             }
         commonToolBar.ivBack.let {
+
+            val mLayoutParams = it.layoutParams as ConstraintLayout.LayoutParams
             it.setPadding(
-                6f.dip2px(requireContext()),
-                6f.dip2px(requireContext()),
-                6f.dip2px(requireContext()),
-                6f.dip2px(requireContext())
+                0f.dip2px(requireContext()),
+                0f.dip2px(requireContext()),
+                0f.dip2px(requireContext()),
+                0f.dip2px(requireContext())
             )
-            it.post {
-                it.shapeAppearanceModel = ShapeAppearanceModel.builder()
-                    .setAllCornerSizes(ShapeAppearanceModel.PILL)
-                    .build()
-            }
+            mLayoutParams.marginStart = 15f.dip2px(requireContext())
+            it.shapeAppearanceModel = ShapeAppearanceModel.builder()
+                .setAllCornerSizes(ShapeAppearanceModel.PILL)
+                .build()
         }
         Glide.with(this)
             .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
@@ -366,25 +364,23 @@ class MainFragment : BaseLazyFragment() {
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener(view: View) {
 
-                GlobalScope.launch(Dispatchers.IO) {
-                    BaseMAppDatabase.instance.imageTypeDao()
-                        .insertData(mutableListOf<ImageTypeData>().apply {
-                            add(ImageTypeData(null, "推荐", "1", ""))
-                            add(ImageTypeData(null, "动漫", "2", ""))
-                            add(ImageTypeData(null, "二次元", "3", ""))
-                            add(ImageTypeData(null, "伤感", "4", ""))
-                            add(ImageTypeData(null, "风景", "5", ""))
-                            add(ImageTypeData(null, "治愈", "6", ""))
-                            add(ImageTypeData(null, "小清新", "7", ""))
-                        })
-
-                    val allData = BaseMAppDatabase.instance.imageTypeDao().getAllData()
-                    for (i in allData){
-                        Log.i(TAG, "imageAddClickListener: ${i.toString()}")
-                    }
-                }
-
-
+//                GlobalScope.launch(Dispatchers.IO) {
+//                    BaseMAppDatabase.instance.imageTypeDao()
+//                        .insertData(mutableListOf<ImageTypeData>().apply {
+//                            add(ImageTypeData(null, "推荐", "1", ""))
+//                            add(ImageTypeData(null, "动漫", "2", ""))
+//                            add(ImageTypeData(null, "二次元", "3", ""))
+//                            add(ImageTypeData(null, "伤感", "4", ""))
+//                            add(ImageTypeData(null, "风景", "5", ""))
+//                            add(ImageTypeData(null, "治愈", "6", ""))
+//                            add(ImageTypeData(null, "小清新", "7", ""))
+//                        })
+//
+//                    val allData = BaseMAppDatabase.instance.imageTypeDao().getAllData()
+//                    for (i in allData){
+//                        Log.i(TAG, "imageAddClickListener: ${i.toString()}")
+//                    }
+//                }
 
                 registerForActivityResult.launch(
                     Intent(requireContext(), AddDynamicActivity::class.java)
