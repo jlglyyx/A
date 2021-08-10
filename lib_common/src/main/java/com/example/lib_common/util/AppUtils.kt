@@ -74,10 +74,10 @@ fun <T> fromJson(json: String, t: Class<T>): T {
     return gson.fromJson<T>(json, t)
 }
 
-fun getFilePath():MutableList<String>{
+fun getFilePath(path:String = "/MFiles/picture"):MutableList<String>{
     val mutableListOf = mutableListOf<String>()
-    val file = File("${Environment.getExternalStorageDirectory()}/DCIM/Camera")
-//    val file = File("${Environment.getExternalStorageDirectory()}/MFiles/picture")
+    //val file = File("${Environment.getExternalStorageDirectory()}/DCIM/Camera")
+    val file = File("${Environment.getExternalStorageDirectory()}$path")
     if (file.isDirectory){
         val listFiles = file.listFiles()
         for (mFiles in listFiles){

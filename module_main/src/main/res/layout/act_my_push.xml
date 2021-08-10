@@ -12,7 +12,6 @@
             android:id="@id/commonToolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:toolbarBg="@android:color/white"
             app:centerContent="我发布的" />
 
         <com.scwang.smart.refresh.layout.SmartRefreshLayout

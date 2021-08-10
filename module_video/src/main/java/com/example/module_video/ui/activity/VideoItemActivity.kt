@@ -1,8 +1,10 @@
 package com.example.module_video.ui.activity
 
 import android.content.res.Configuration
+import android.graphics.Rect
 import android.os.Environment
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -38,6 +40,8 @@ class VideoItemActivity : BaseActivity() {
 
     private var isPause = false
     private var isPlay = false
+
+    private var isScroll = false
 
     override fun getLayout(): Int {
         return R.layout.act_video_item
@@ -105,7 +109,7 @@ class VideoItemActivity : BaseActivity() {
             }
         }).apply {
             setOnItemChildClickListener { adapter, view, position ->
-                when(view.id){
+                when (view.id) {
                     R.id.siv_img -> {
                         buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).navigation()
                     }
@@ -132,38 +136,52 @@ class VideoItemActivity : BaseActivity() {
                     detailPlayer.startPlayLogic()
                 }
             }
-//        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
-//                val findFirstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-//                if (findFirstVisibleItemPosition >= 20) {
-//                    tabLayout.getTabAt(1)?.select()
-//                } else {
-//                    tabLayout.getTabAt(0)?.select()
-//                }
-//                Log.i(TAG, "onScrolled: $findFirstVisibleItemPosition")
-//            }
-//    })
+
+        nestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+            val rect = Rect()
+            cl_video.getHitRect(rect)
+            isScroll = true
+            if (cl_video.getLocalVisibleRect(rect)) {
+                tabLayout.getTabAt(0)?.select()
+            } else {
+                tabLayout.getTabAt(1)?.select()
+            }
+        }
+
 
     }
 
     private fun initTabLayout() {
-        tabLayout.addTab(tabLayout.newTab().setText("视频"))
-        tabLayout.addTab(tabLayout.newTab().setText("评论"))
+        tabLayout.addTab(tabLayout.newTab().apply {
+            view.setOnClickListener {
+                isScroll = false
+            }
+        }.setText("视频"))
+        tabLayout.addTab(tabLayout.newTab().apply {
+            view.setOnClickListener {
+                isScroll = false
+            }
+        }.setText("评论"))
+
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
 
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
+
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (tab?.position == 0) {
-                    recyclerView.smoothScrollToPosition(0)
-                } else {
-                    recyclerView.smoothScrollToPosition(20)
+                if (!isScroll) {
+                    if (tab?.position == 0) {
+                        nestedScrollView.fullScroll(View.FOCUS_UP)
+                    } else {
+                        cl_video.post {
+                            nestedScrollView.scrollY = cl_video.height
+                        }
+                    }
                 }
 
             }
@@ -228,7 +246,9 @@ class VideoItemActivity : BaseActivity() {
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_comment, item)
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            Glide.with(sivImg).load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg").into(sivImg)
+            Glide.with(sivImg)
+                .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+                .into(sivImg)
         }
 
     }

@@ -20,7 +20,7 @@ android {
                              "room.incremental":"true",
                              "room.expandProjection":"true",
                              AROUTER_MODULE_NAME  : project.getName()]
-                includeCompileClasspath = true
+                //includeCompileClasspath = false
             }
         }
 
@@ -57,8 +57,8 @@ dependencies {
     api 'androidx.test.espresso:espresso-core:3.2.0'
     //api rootProject.ext.dependencies['material']
     api "com.google.android.material:material:1.2.1"
-    api 'com.alibaba:arouter-api:1.5.1'
-    kapt 'com.alibaba:arouter-compiler:1.5.1'
+    api 'com.alibaba:arouter-api:1.5.2'
+    kapt 'com.alibaba:arouter-compiler:1.5.2'
 
     def lifecycle_version = "2.3.0"
     def room_version = "2.3.0"

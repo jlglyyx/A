@@ -4,11 +4,13 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseFragment
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.getFilePath
 import com.example.module_main.R
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 
@@ -39,50 +41,21 @@ class MyCollectionVideoFragment : BaseFragment() {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        mAdapter = MAdapter(R.layout.item_menu_my_collection_picture, mutableListOf<String>().apply {
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-        }).apply {
+        mAdapter = MAdapter(R.layout.item_menu_my_collection_picture, mutableListOf()).apply {
             setOnItemClickListener { adapter, view, position ->
                 buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).navigation()
             }
         }
         recyclerView.adapter = mAdapter
+        val filePath = getFilePath("/MFiles/video")
+        mAdapter.replaceData(filePath)
     }
 
     inner class MAdapter(layoutResId: Int, list: MutableList<String>) :
         BaseQuickAdapter<String, BaseViewHolder>(layoutResId, list) {
         override fun convert(helper: BaseViewHolder, item: String) {
             val ivImage = helper.getView<ImageView>(R.id.iv_image)
-
-            Glide.with(ivImage).load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg").into(ivImage)
+            Glide.with(ivImage).setDefaultRequestOptions(RequestOptions().frame(1000).fitCenter()).load(item).into(ivImage)
         }
     }
 }

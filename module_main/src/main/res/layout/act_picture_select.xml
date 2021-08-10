@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         app:centerContent="选择"
         app:rightContent="确定"
-        app:rightContentVisible="true"
-        app:toolbarBg="@android:color/white" />
+        app:rightContentVisible="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@id/recyclerView"

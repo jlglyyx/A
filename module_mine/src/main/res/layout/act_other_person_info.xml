@@ -163,7 +163,6 @@
                 <com.example.lib_common.widget.CommonToolBar
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:toolbarBg="@android:color/white"
                     android:id="@+id/commonToolBar"
                     app:centerContent="法外狂徒张三"/>
             </androidx.appcompat.widget.Toolbar>

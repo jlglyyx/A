@@ -25,7 +25,7 @@ android {
                              "room.incremental":"true",
                              "room.expandProjection":"true",
                              AROUTER_MODULE_NAME  : project.getName()]
-                includeCompileClasspath = true
+                //includeCompileClasspath = false
             }
         }
     }
@@ -60,7 +60,7 @@ android {
 
     dependencies {
         kapt 'com.google.dagger:dagger-compiler:2.2'
-        kapt 'com.alibaba:arouter-compiler:1.5.1'
+        kapt 'com.alibaba:arouter-compiler:1.5.2'
         kapt "androidx.room:room-compiler:$room_version"
     }
 }

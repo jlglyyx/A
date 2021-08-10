@@ -38,7 +38,6 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private var pageNum = 1
 
-//    private var tabHeight: Int = 0
 
     lateinit var mAdapter: MAdapter
 
@@ -48,9 +47,6 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initData() {
         queryType = arguments?.getString(AppConstant.Constant.TYPE)
-//        val defaultMMKV = MMKV.defaultMMKV()
-//        tabHeight = defaultMMKV.decodeInt(AppConstant.Constant.TAB_HEIGHT)
-//        smartRefreshLayout.setPadding(0, 0, 0, tabHeight)
         smartRefreshLayout.autoRefresh()
     }
 

@@ -163,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_80"
                     android:paddingTop="@dimen/dp_30"
-                    android:background="@android:color/white"
+                    android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
                     <com.google.android.material.imageview.ShapeableImageView
