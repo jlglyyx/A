@@ -5,6 +5,7 @@ import com.example.lib_common.scope.ActivityScope
 import com.example.module_login.di.module.LoginModule
 import com.example.module_login.ui.activity.LoginActivity
 import com.example.module_login.ui.activity.RegisterActivity
+import com.example.module_login.ui.activity.SplashActivity
 import dagger.Component
 
 
@@ -13,4 +14,5 @@ import dagger.Component
 interface LoginComponent {
     fun inject(loginActivity: LoginActivity)
     fun inject(registerActivity: RegisterActivity)
+    fun inject(splashActivity: SplashActivity)
 }

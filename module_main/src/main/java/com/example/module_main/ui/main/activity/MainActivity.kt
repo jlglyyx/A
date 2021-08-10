@@ -198,8 +198,8 @@ class MainActivity : BaseActivity() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            var currentTimeMillis = System.currentTimeMillis()
-            if (currentTimeMillis - firstClickTime < 1000) {
+            val currentTimeMillis = System.currentTimeMillis()
+            if (currentTimeMillis - firstClickTime < 1500) {
                 firstClickTime = 0L
                 super.onBackPressed()
             } else {

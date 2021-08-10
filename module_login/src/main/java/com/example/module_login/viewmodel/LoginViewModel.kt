@@ -3,7 +3,7 @@ package com.example.module_login.viewmodel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.example.lib_common.base.viewmodel.BaseViewModel
-import com.example.module_login.data.model.LoginData
+import com.example.lib_common.data.LoginData
 import com.example.module_login.repository.LoginRepository
 import javax.inject.Inject
 

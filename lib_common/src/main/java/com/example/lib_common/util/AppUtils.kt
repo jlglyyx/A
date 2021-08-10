@@ -6,9 +6,13 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import android.view.View
+import com.airbnb.lottie.LottieCompositionFactory.fromJson
+import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.constant.AppConstant.Constant.CLICK_TIME
+import com.example.lib_common.data.LoginData
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
+import com.tencent.mmkv.MMKV
 import io.reactivex.rxjava3.core.Observable
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -55,12 +59,12 @@ fun Float.dip2px(context: Context): Int {
 /**
  * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
  */
-fun Float.px2dip(context: Context): Int{
+fun Float.px2dip(context: Context): Int {
     val scale = context.resources.displayMetrics.density
     return (this / scale + 0.5f).toInt()
 }
 
-fun View.clicks() :Observable<Unit> {
+fun View.clicks(): Observable<Unit> {
     return this.clicks().throttleFirst(CLICK_TIME, TimeUnit.MILLISECONDS)
 }
 
@@ -74,18 +78,33 @@ fun <T> fromJson(json: String, t: Class<T>): T {
     return gson.fromJson<T>(json, t)
 }
 
-fun getFilePath(path:String = "/MFiles/picture"):MutableList<String>{
+fun getFilePath(path: String = "/MFiles/picture"): MutableList<String> {
     val mutableListOf = mutableListOf<String>()
     //val file = File("${Environment.getExternalStorageDirectory()}/DCIM/Camera")
     val file = File("${Environment.getExternalStorageDirectory()}$path")
-    if (file.isDirectory){
+    if (file.isDirectory) {
         val listFiles = file.listFiles()
-        for (mFiles in listFiles){
+        for (mFiles in listFiles) {
             Log.i(TAG, "getFilePath: ${mFiles.absolutePath}")
             mutableListOf.add(mFiles.absolutePath)
         }
     }
 
     return mutableListOf
+}
+
+/**
+ * 获取getDefaultMMKV
+ */
+fun getDefaultMMKV(): MMKV {
+    return MMKV.defaultMMKV()
+}
+
+fun getUserInfo(): LoginData? {
+    val userInfo = getDefaultMMKV().decodeString(AppConstant.Constant.USER_INFO, "")
+    if (!userInfo.isNullOrEmpty()) {
+        return Gson().fromJson<LoginData>(userInfo, LoginData::class.java)
+    }
+    return null
 }
 

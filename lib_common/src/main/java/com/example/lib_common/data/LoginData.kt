@@ -1,4 +1,4 @@
-package com.example.module_login.data.model
+package com.example.lib_common.data
 
 import java.util.*
 
@@ -9,6 +9,7 @@ data class LoginData(
     val userAccount: String,
     val userPassword: String,
     val userPhone: String?,
+    val userImage: String?,
     val userLevel: Int?,
     val updateTime: Date?,
     val createTime: Date?,

@@ -1,10 +1,9 @@
 package com.example.module_login.repository
 
 import com.example.lib_common.base.repository.BaseRepository
+import com.example.lib_common.data.LoginData
 import com.example.lib_common.remote.di.response.MResult
-import com.example.lib_common.remote.di.response.MSBResult
 import com.example.module_login.api.LoginApiService
-import com.example.module_login.data.model.LoginData
 import javax.inject.Inject
 
 class LoginRepository @Inject constructor(private val loginApiService: LoginApiService) : BaseRepository() {

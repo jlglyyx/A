@@ -42,7 +42,7 @@ class ErrorHandle(private val t: Throwable) {
             }
             is SocketTimeoutException -> {
 
-                IHttpException.OtherException.NETWORK_ERROR.message
+                IHttpException.OtherException.SOCKET_TIME_OUT_ERROR.message
             }
             is JsonSyntaxException -> {
 

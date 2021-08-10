@@ -7,11 +7,10 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.interceptor.UrlInterceptor
+import com.example.lib_common.data.LoginData
 import com.example.lib_common.util.clicks
 import com.example.lib_common.util.showShort
 import com.example.module_login.R
-import com.example.module_login.data.model.LoginData
 import com.example.module_login.di.factory.LoginViewModelFactory
 import com.example.module_login.helper.getLoginComponent
 import com.example.module_login.viewmodel.LoginViewModel
@@ -79,6 +78,7 @@ class RegisterActivity : BaseActivity() {
             et_user.text.toString(),
             et_user.text.toString(),
             et_password.text.toString(),
+            null,
             null,
             0,
             null,
