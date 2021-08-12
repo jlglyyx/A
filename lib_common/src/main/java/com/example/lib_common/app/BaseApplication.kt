@@ -12,7 +12,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
 import com.example.lib_common.BuildConfig
 import com.example.lib_common.handle.CrashHandle
-import com.example.lib_common.help.getRemoteComponent
+import com.example.lib_common.helper.getRemoteComponent
 import com.example.lib_common.util.NetworkUtil
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.tencent.bugly.crashreport.CrashReport

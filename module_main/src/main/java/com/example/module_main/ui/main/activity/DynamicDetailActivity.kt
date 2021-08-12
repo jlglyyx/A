@@ -8,7 +8,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.EditBottomDialog
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.module_main.R
 import com.google.android.material.imageview.ShapeableImageView
@@ -73,7 +73,8 @@ class DynamicDetailActivity:BaseActivity() {
             setOnItemChildClickListener { adapter, view, position ->
                 when(view.id){
                     R.id.siv_img -> {
-                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).navigation()
+                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
+                            .navigation()
                     }
                 }
 

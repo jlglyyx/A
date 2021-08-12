@@ -30,16 +30,16 @@ class NetworkUtil {
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
 
                             //wifi
-                            if (status != 1) {
-                                showShort("wifi")
+//                            if (status != 1) {
+//                                showShort("wifi")
                                 status = 1
-                            }
+//                            }
 
                         }
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
                             //蜂窝
                             if (status != 2) {
-                                showShort("蜂窝")
+                                showShort("当前为流量上网，请注意流量消耗")
                                 status = 2
                             }
                         }

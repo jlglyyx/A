@@ -19,7 +19,7 @@ import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.dip2px
 import com.example.lib_common.widget.CommonToolBar
 import com.example.lib_common.widget.GridNinePictureView
@@ -418,7 +418,8 @@ class MainFragment : BaseLazyFragment() {
             setOnItemChildClickListener { adapter, view, position ->
                 when (view.id) {
                     R.id.siv_img -> {
-                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).navigation()
+                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
+                            .navigation()
                     }
                     R.id.iv_fabulous -> {
                         val ivFabulous = adapter.getViewByPosition(
@@ -448,7 +449,8 @@ class MainFragment : BaseLazyFragment() {
             }
 
             setOnItemClickListener { adapter, view, position ->
-                buildARouter(AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY).navigation()
+                buildARouter(AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY)
+                    .navigation()
             }
         }
         recyclerView.adapter = mAdapter

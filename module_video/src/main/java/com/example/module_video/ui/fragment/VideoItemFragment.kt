@@ -12,7 +12,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.dip2px
 import com.example.module_video.R
 import com.example.module_video.di.factory.VideoViewModelFactory
@@ -85,10 +85,12 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
                     }
                     AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE -> {
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).navigation()
+                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
+                            .navigation()
                     }
                     AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE -> {
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).navigation()
+                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
+                            .navigation()
                     }
 
                 }

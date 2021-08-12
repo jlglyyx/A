@@ -5,7 +5,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.adapter.TabAndViewPagerAdapter
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.module_main.R
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.act_my_collection.*
@@ -33,10 +33,12 @@ class MyCollectionActivity : BaseActivity() {
 
         fragments = mutableListOf<Fragment>().apply {
             add(
-                buildARouter(AppConstant.RoutePath.MY_COLLECTION_PICTURE_FRAGMENT).navigation() as Fragment
+                buildARouter(AppConstant.RoutePath.MY_COLLECTION_PICTURE_FRAGMENT)
+                    .navigation() as Fragment
             )
             add(
-                buildARouter(AppConstant.RoutePath.MY_COLLECTION_VIDEO_FRAGMENT).navigation() as Fragment
+                buildARouter(AppConstant.RoutePath.MY_COLLECTION_VIDEO_FRAGMENT)
+                    .navigation() as Fragment
             )
         }
         titles = mutableListOf<String>().apply {

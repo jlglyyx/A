@@ -8,6 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.lib_common.base.viewmodel.BaseViewModel
 import com.example.lib_common.bus.event.UIChangeLiveData
+import com.example.lib_common.util.addActivity
+import com.example.lib_common.util.removeActivity
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.impl.LoadingPopupView
 
@@ -32,6 +34,7 @@ abstract class BaseActivity : AppCompatActivity() {
         initData()
         initView()
         registerListener()
+        addActivity(this)
     }
 
     abstract fun getLayout(): Int
@@ -93,5 +96,6 @@ abstract class BaseActivity : AppCompatActivity() {
         loadingPopupView?.dismiss()
         loadingPopupView = null
         unRegisterListener()
+        removeActivity(this)
     }
 }

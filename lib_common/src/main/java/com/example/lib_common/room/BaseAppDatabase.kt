@@ -12,7 +12,7 @@ import com.example.lib_common.room.dao.ImageTypeDao
  * @Description
  * @Date 2021/8/5 14:22
  */
-//@Database(entities = [ImageTypeData::class],version = 1,exportSchema = false)
+//@Database(entities = [ImageTypeData::class],version = 1,exportSchema = true)
 abstract class BaseAppDatabase : RoomDatabase() {
 
     abstract fun imageTypeDao(): ImageTypeDao

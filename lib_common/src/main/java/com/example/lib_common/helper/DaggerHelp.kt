@@ -1,6 +1,6 @@
 @file:JvmName("DaggerHelp")
 
-package com.example.lib_common.help
+package com.example.lib_common.helper
 
 import com.example.lib_common.app.BaseApplication
 import com.example.lib_common.base.di.component.BaseComponent

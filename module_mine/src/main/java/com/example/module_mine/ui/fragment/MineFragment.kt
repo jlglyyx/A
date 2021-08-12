@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.example.lib_common.adapter.NormalImageAdapter
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.module_mine.R
 import com.google.android.material.appbar.AppBarLayout
@@ -36,10 +36,12 @@ class MineFragment : BaseLazyFragment() {
             .into(siv_toolbar_img)
 
         tv_name.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                .navigation()
         }
         tv_toolbar_name.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                .navigation()
         }
     }
 

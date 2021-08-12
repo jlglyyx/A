@@ -13,7 +13,7 @@ import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
 import com.example.module_main.data.model.MainData
@@ -320,7 +320,8 @@ class MyPushActivity : BaseActivity() {
             setOnItemChildClickListener { adapter, view, position ->
                 when (view.id) {
                     R.id.siv_img -> {
-                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).navigation()
+                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
+                            .navigation()
                     }
                     R.id.iv_fabulous -> {
                         val ivFabulous = adapter.getViewByPosition(

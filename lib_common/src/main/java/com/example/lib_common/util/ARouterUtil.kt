@@ -1,5 +1,5 @@
 @file:JvmName("ARouterUtil")
-package com.example.lib_common.help
+package com.example.lib_common.util
 
 import com.alibaba.android.arouter.facade.Postcard
 import com.alibaba.android.arouter.launcher.ARouter

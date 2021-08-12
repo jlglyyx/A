@@ -15,7 +15,7 @@ import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.module_picture.R
 import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
@@ -100,7 +100,9 @@ class PictureItemActivity : BaseActivity() {
                 it.setOnItemChildClickListener { adapter, view, position ->
                     when(view.id){
                         R.id.siv_img -> {
-                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).navigation()
+                            buildARouter(
+                                AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY
+                            ).navigation()
                         }
                     }
                 }

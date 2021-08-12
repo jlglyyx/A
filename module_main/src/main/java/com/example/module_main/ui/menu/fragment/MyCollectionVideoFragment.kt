@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseFragment
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.getFilePath
 import com.example.module_main.R
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
@@ -43,7 +43,8 @@ class MyCollectionVideoFragment : BaseFragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = MAdapter(R.layout.item_menu_my_collection_picture, mutableListOf()).apply {
             setOnItemClickListener { adapter, view, position ->
-                buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).navigation()
+                buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
+                    .navigation()
             }
         }
         recyclerView.adapter = mAdapter
