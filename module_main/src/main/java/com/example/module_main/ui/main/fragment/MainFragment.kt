@@ -21,6 +21,7 @@ import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.dip2px
+import com.example.lib_common.util.getUserInfo
 import com.example.lib_common.widget.CommonToolBar
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
@@ -358,8 +359,10 @@ class MainFragment : BaseLazyFragment() {
                 .setAllCornerSizes(ShapeAppearanceModel.PILL)
                 .build()
         }
+
+        val userInfo = getUserInfo()
         Glide.with(this)
-            .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            .load(userInfo?.userImage)
             .into(commonToolBar.ivBack)
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener(view: View) {

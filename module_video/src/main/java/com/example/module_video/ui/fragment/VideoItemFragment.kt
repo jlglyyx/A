@@ -1,6 +1,7 @@
 package com.example.module_video.ui.fragment
 
 import android.graphics.Rect
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,14 +13,16 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.util.buildARouter
+import com.example.lib_common.help.buildARouter
 import com.example.lib_common.util.dip2px
 import com.example.module_video.R
 import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
 import com.example.module_video.model.VideoData
+import com.example.module_video.model.VideoDataItem
 import com.example.module_video.viewmodel.VideoViewModel
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.gson.Gson
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import kotlinx.android.synthetic.main.fra_item_video.*
@@ -45,7 +48,7 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     override fun initData() {
-        videoModule.getVideoRepository()
+        queryType = arguments?.getString(AppConstant.Constant.TYPE)
         smartRefreshLayout.autoRefresh()
     }
 
@@ -79,18 +82,16 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         recyclerView.layoutManager = gridLayoutManager
         mAdapter = MAdapter(mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
-                val videoData = adapter.data[position] as VideoData
-                when (videoData.itemType) {
+                val videoDataItem = adapter.data[position] as VideoDataItem
+                when (videoDataItem.itemType) {
                     AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE -> {
 
                     }
                     AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE -> {
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
-                            .navigation()
+                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).withString(AppConstant.Constant.ID,videoDataItem.id                ).navigation()
                     }
                     AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE -> {
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
-                            .navigation()
+                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).navigation()
                     }
 
                 }
@@ -136,59 +137,60 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         })
 
 
-        videoModule.sMutableLiveData.observe(this, Observer {
+        videoModule.mVideoData.observe(this, Observer {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    //mAdapter.replaceData(it.list)
+                    mAdapter.replaceData(it.list!!)
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-//                    if (pageNum != 1 && it.list.isEmpty()) {
-//                        smartRefreshLayout.setNoMoreData(true)
-//                    } else {
-//                        smartRefreshLayout.setNoMoreData(false)
-//                        mAdapter.addData(it.list)
-//                    }
+                    if (pageNum != 1 && it.list?.isEmpty()!!) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(false)
+                        mAdapter.addData(it.list!!)
+                    }
                 }
                 else -> {
-                    //mAdapter.replaceData(it.list)
+                    mAdapter.replaceData(it.list!!)
                 }
             }
 
 
-            val mutableListOf = mutableListOf<VideoData>()
-            it.forEach {
-                mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE))
-                mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE).apply {
-                    bigTitle = it.name
-                    bigImageUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
-                })
-                mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
-                    smartTitle = it.name
-                    smartImageUrl =
-                        "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
-                })
-                mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
-                    smartTitle = it.name
-                    smartImageUrl =
-                        "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
-                })
-                mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
-                    smartTitle = it.name
-                    smartImageUrl = "https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"
-                })
-                mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
-                    smartTitle = it.name
-                    smartImageUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
-                })
-            }
-            mAdapter.replaceData(mutableListOf)
+//            val mutableListOf = mutableListOf<VideoData>()
+//                for (i in 0..5){
+//                    mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE))
+//                    mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE).apply {
+//                        videoTitle = "1=="
+//                        videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+//                    })
+//                    mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
+//                        videoTitle = "1=="
+//                        videoUrl =
+//                            "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
+//                    })
+//                    mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
+//                        videoTitle = "1=="
+//                        videoUrl =
+//                            "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
+//                    })
+//                    mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
+//                        videoTitle = "1=="
+//                        videoUrl = "https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"
+//                    })
+//                    mutableListOf.add(VideoData(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
+//                        videoTitle = "1=="
+//                        videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
+//                    })
+//                }
+//            Log.i(TAG, "initRecyclerView: ${Gson().toJson(mutableListOf)}")
+//            mAdapter.replaceData(mutableListOf)
         })
     }
 
-    inner class MAdapter(list: MutableList<VideoData>) :
-        BaseMultiItemQuickAdapter<VideoData, BaseViewHolder>(list) {
+    inner class MAdapter(list: MutableList<VideoDataItem>) :
+        BaseMultiItemQuickAdapter<VideoDataItem, BaseViewHolder>(list) {
 
         init {
             addItemType(
@@ -205,23 +207,24 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             )
         }
 
-        override fun convert(helper: BaseViewHolder, item: VideoData) {
+        override fun convert(helper: BaseViewHolder, item: VideoDataItem) {
             when (item.itemType) {
                 AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE -> {
 
+                    //helper.setText(R.id.tv_type,item.videoTitle)
                 }
                 AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE -> {
-                    helper.setText(R.id.tv_title, item.bigTitle)
+                    helper.setText(R.id.tv_title, item.videoTitle)
                     val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
                     Glide.with(sivImg)
-                        .load(item.bigImageUrl)
+                        .load(item.videoUrl)
                         .into(sivImg)
                 }
                 AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE -> {
-                    helper.setText(R.id.tv_title, item.smartTitle)
+                    helper.setText(R.id.tv_title, item.videoTitle)
                     val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
                     Glide.with(sivImg)
-                        .load(item.smartImageUrl)
+                        .load(item.videoUrl)
                         .into(sivImg)
 
                 }
@@ -232,11 +235,11 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
-        videoModule.getVideoRepository()
+        videoModule.getVideoInfo(queryType ?: "", pageNum)
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
-        videoModule.getVideoRepository()
+        videoModule.getVideoInfo(queryType ?: "", pageNum)
     }
 }

@@ -1,9 +1,11 @@
 package com.example.lib_common.room
 
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.lib_common.app.BaseApplication
 import com.example.lib_common.room.dao.ImageTypeDao
+import com.example.lib_common.room.entity.ImageTypeData
 
 
 /**

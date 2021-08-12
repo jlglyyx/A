@@ -76,7 +76,6 @@ class BaseApplication : Application() {
 
     private fun initMMKV(application: BaseApplication) {
         GlobalScope.launch(Dispatchers.IO) {
-            delay(1000)
             val initialize = MMKV.initialize(application)
             Log.i("TAG", "initMMKV: $initialize")
         }

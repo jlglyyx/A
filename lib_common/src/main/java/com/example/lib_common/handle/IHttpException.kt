@@ -22,6 +22,8 @@ interface IHttpException {
     }
     enum class OtherException(var message: String){
 
+        SOCKET_TIME_OUT_ERROR("连接超时,稍后重试"),
+
         NETWORK_ERROR("网络异常,稍后重试"),
 
         NO_NETWORK_ERROR("网络未连接"),

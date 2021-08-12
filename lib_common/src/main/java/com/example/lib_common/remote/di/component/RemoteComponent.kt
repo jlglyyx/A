@@ -22,4 +22,6 @@ interface RemoteComponent {
     fun provideRetrofit(): Retrofit
     //fun provideBaseViewModelFactory(): BaseViewModelFactory
     fun provideApplication(): Application
+
+    fun provideGson(): Gson
 }

@@ -7,8 +7,12 @@ import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.lib_common.util.removeAllActivity
+import com.example.lib_common.util.getDefaultMMKV
+import com.example.lib_common.util.getUserInfo
 import com.example.module_main.R
 import kotlinx.android.synthetic.main.fra_left.*
+import kotlinx.android.synthetic.main.fra_main.*
+
 @Route(path = AppConstant.RoutePath.LEFT_FRAGMENT)
 class LeftFragment : BaseFragment() {
     override fun getLayout(): Int {
@@ -19,18 +23,17 @@ class LeftFragment : BaseFragment() {
     }
 
     override fun initView() {
-        Glide.with(this).load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg").into(siv_head)
+        val userInfo = getUserInfo()
+        Glide.with(this).load(userInfo?.userImage).into(siv_head)
+        tv_name.text = userInfo?.userName
         siv_head.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
-                .navigation()
+            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).navigation()
         }
         tv_my_push.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MY_PUSH_ACTIVITY)
-                .navigation()
+            buildARouter(AppConstant.RoutePath.MY_PUSH_ACTIVITY).navigation()
         }
         tv_my_collection.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY)
-                .withString("name","我的收藏").navigation()
+            buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY).withString("name","我的收藏").navigation()
         }
         tv_my_down.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY)
@@ -39,6 +42,10 @@ class LeftFragment : BaseFragment() {
         tv_setting.clicks().subscribe {
             removeAllActivity()
             buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+        }
+
+        tv_login_out.clicks().subscribe {
+            getDefaultMMKV().clearAll()
         }
     }
 

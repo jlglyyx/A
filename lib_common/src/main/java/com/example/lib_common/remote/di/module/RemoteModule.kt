@@ -105,9 +105,9 @@ class RemoteModule {
         const val baseUrl = "http://jlgl.free.idcfengye.com/"
         private const val TAG = "RemoteModule"
         private const val TAG_LOG = "httpLog"
-        private const val CONNECT_TIMEOUT: Long = 8000
-        private const val READ_TIMEOUT: Long = 8000
-        private const val WRITE_TIMEOUT: Long = 8000
+        private const val CONNECT_TIMEOUT: Long = 18000
+        private const val READ_TIMEOUT: Long = 18000
+        private const val WRITE_TIMEOUT: Long = 18000
     }
 
     private fun getBody(request: Request):String{

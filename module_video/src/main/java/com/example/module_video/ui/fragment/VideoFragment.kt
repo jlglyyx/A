@@ -1,6 +1,7 @@
 package com.example.module_video.ui.fragment
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.adapter.MBannerAdapter
@@ -9,7 +10,7 @@ import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.data.BannerBean
-import com.example.lib_common.util.buildARouter
+import com.example.lib_common.help.buildARouter
 import com.example.module_video.R
 import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
@@ -37,55 +38,60 @@ class VideoFragment : BaseLazyFragment() {
 
     override fun initData() {
 
+        videoModule.getVideoTypeData()
+        titles = mutableListOf()
+        fragments = mutableListOf()
+        videoModule.mVideoTypeData.observe(this, Observer {
+
+            it.forEach { videoTypeData ->
+                titles.add(videoTypeData.name)
+                fragments.add(
+                    buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
+                        .withString(AppConstant.Constant.TYPE,videoTypeData.type)
+                        .navigation() as Fragment
+                )
+            }
+            initViewPager()
+            initTabLayout()
+
+        })
         //videoModule.getVideoRepository()
     }
 
     override fun initView() {
-        lifecycleScope.launch {
-            val async = async(Dispatchers.IO) {
-                fragments = mutableListOf<Fragment>().apply {
-                    add(
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
-                            .navigation() as Fragment)
-                    add(
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
-                            .navigation() as Fragment)
-                    add(
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
-                            .navigation() as Fragment)
-                    add(
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
-                            .navigation() as Fragment)
-                    add(
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
-                            .navigation() as Fragment)
-                    add(
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
-                            .navigation() as Fragment)
-                    add(
-                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
-                            .navigation() as Fragment)
-                }
-                titles = mutableListOf<String>().apply {
-                    add("推荐")
-                    add("爱看")
-                    add("电视剧")
-                    add("电影")
-                    add("综艺")
-                    add("少儿")
-                    add("动漫")
-                }
-                true
-            }
-            val await = async.await()
-            withContext(Dispatchers.Main) {
-                if (await) {
-                    initViewPager()
-                    initTabLayout()
-                    initBanner()
-                }
-            }
-        }
+//        lifecycleScope.launch {
+//            val async = async(Dispatchers.IO) {
+//                fragments = mutableListOf<Fragment>().apply {
+//                    add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+//                    add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+//                    add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+//                    add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+//                    add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+//                    add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+//                    add(buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT).navigation() as Fragment)
+//                }
+//                titles = mutableListOf<String>().apply {
+//                    add("推荐")
+//                    add("爱看")
+//                    add("电视剧")
+//                    add("电影")
+//                    add("综艺")
+//                    add("少儿")
+//                    add("动漫")
+//                }
+//                true
+//            }
+//            val await = async.await()
+//            withContext(Dispatchers.Main) {
+//                if (await) {
+//                    initViewPager()
+//                    initTabLayout()
+//                    initBanner()
+//                }
+//            }
+//        }
+
+        initBanner()
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {

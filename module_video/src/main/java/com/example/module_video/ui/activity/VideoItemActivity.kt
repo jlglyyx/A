@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Environment
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -17,6 +18,10 @@ import com.example.lib_common.down.thread.MultiMoreThreadDownload
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.module_video.R
+import com.example.module_video.di.factory.VideoViewModelFactory
+import com.example.module_video.helper.getVideoComponent
+import com.example.module_video.model.VideoDataItem
+import com.example.module_video.viewmodel.VideoViewModel
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayout
 import com.lxj.xpopup.XPopup
@@ -25,18 +30,26 @@ import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import kotlinx.android.synthetic.main.act_video_item.*
+import kotlinx.android.synthetic.main.act_video_item.recyclerView
+import kotlinx.android.synthetic.main.fra_item_video.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
 class VideoItemActivity : BaseActivity() {
 
+    @Inject
+    lateinit var videoViewModelFactory: VideoViewModelFactory
 
+    private lateinit var videoModule: VideoViewModel
     lateinit var orientationUtils: OrientationUtils
     lateinit var commentAdapter: CommentAdapter
 
-    private val url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+    lateinit var collectionAdapter: CollectionAdapter
+
+    private var url = ""
 
     private var isPause = false
     private var isPlay = false
@@ -48,11 +61,13 @@ class VideoItemActivity : BaseActivity() {
     }
 
     override fun initData() {
-
+        val intent = intent
+        val sid = intent.getStringExtra(AppConstant.Constant.ID)
+        videoModule.getVideoItemData(sid!!)
     }
 
     override fun initView() {
-        initVideo()
+
         initRecyclerView()
         initTabLayout()
 
@@ -85,6 +100,7 @@ class VideoItemActivity : BaseActivity() {
                 .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
                 .filePath("${System.currentTimeMillis()}.mp4")
                 .fileUrl(url)
+                .threadNum(50)
                 .build()
                 .start()
         }
@@ -93,6 +109,16 @@ class VideoItemActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
+        getVideoComponent().inject(this)
+        videoModule = getViewModel(videoViewModelFactory, VideoViewModel::class.java)
+        videoModule.mVideoItemData.observe(this, Observer {
+            for ((index,videoDataItem) in it.withIndex()){
+                videoDataItem.position = index+1
+            }
+            url = it[0].videoUrl.toString()
+            initVideo()
+            collectionAdapter.replaceData(it)
+        })
     }
 
     private fun initRecyclerView() {
@@ -122,22 +148,16 @@ class VideoItemActivity : BaseActivity() {
 
         collectionRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        collectionRecyclerView.adapter =
-            CollectionAdapter(R.layout.item_video_collection, mutableListOf<String>().apply {
-
-                GlobalScope.launch(Dispatchers.IO) {
-                    for (i in 1..200) {
-                        add("$i")
-                    }
-                }
-
-            }).apply {
+        collectionAdapter =
+            CollectionAdapter(R.layout.item_video_collection, mutableListOf()).apply {
                 setOnItemClickListener { adapter, view, position ->
+                    val item = adapter.getItem(position) as VideoDataItem
+                    url = item.videoUrl.toString()
                     initVideo()
                     detailPlayer.startPlayLogic()
                 }
             }
-
+        collectionRecyclerView.adapter = collectionAdapter
         nestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
             val rect = Rect()
             cl_video.getHitRect(rect)
@@ -218,24 +238,20 @@ class VideoItemActivity : BaseActivity() {
                     vararg objects: Any
                 ) {
                     super.onQuitFullscreen(url, *objects)
-                    if (orientationUtils != null) {
-                        orientationUtils.backToProtVideo()
-                    }
+                    orientationUtils.backToProtVideo()
                 }
             }).setLockClickListener { view, lock ->
-                if (orientationUtils != null) {
-                    orientationUtils.isEnable = !lock
-                }
+                orientationUtils.isEnable = !lock
             }.build(detailPlayer)
 
 
     }
 
 
-    inner class CollectionAdapter(layoutResId: Int, data: MutableList<String>) :
-        BaseQuickAdapter<String, BaseViewHolder>(layoutResId, data) {
-        override fun convert(helper: BaseViewHolder, item: String) {
-            helper.setText(R.id.bt_collection, item)
+    inner class CollectionAdapter(layoutResId: Int, data: MutableList<VideoDataItem>) :
+        BaseQuickAdapter<VideoDataItem, BaseViewHolder>(layoutResId, data) {
+        override fun convert(helper: BaseViewHolder, item: VideoDataItem) {
+            helper.setText(R.id.bt_collection,item.position.toString())
         }
 
     }
@@ -256,9 +272,7 @@ class VideoItemActivity : BaseActivity() {
 
 
     override fun onBackPressed() {
-        if (orientationUtils != null) {
-            orientationUtils.backToProtVideo()
-        }
+        orientationUtils.backToProtVideo()
         if (GSYVideoManager.backFromWindowFull(this)) {
             return
         }
@@ -283,7 +297,7 @@ class VideoItemActivity : BaseActivity() {
         if (isPlay) {
             detailPlayer.currentPlayer.release()
         }
-        if (orientationUtils != null) orientationUtils.releaseListener()
+        orientationUtils.releaseListener()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

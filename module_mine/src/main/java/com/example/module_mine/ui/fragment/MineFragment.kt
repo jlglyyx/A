@@ -9,6 +9,7 @@ import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
+import com.example.lib_common.util.getUserInfo
 import com.example.module_mine.R
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fra_mine.*
@@ -28,11 +29,17 @@ class MineFragment : BaseLazyFragment() {
     override fun initView() {
         initAppBarLayout()
         initRecyclerView()
+
+        val userInfo = getUserInfo()
+
+        tv_toolbar_name.text = userInfo?.userName
+        tv_name.text = userInfo?.userName
+
         Glide.with(this)
-            .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            .load(userInfo?.userImage)
             .into(siv_img)
         Glide.with(this)
-            .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            .load(userInfo?.userImage)
             .into(siv_toolbar_img)
 
         tv_name.clicks().subscribe {

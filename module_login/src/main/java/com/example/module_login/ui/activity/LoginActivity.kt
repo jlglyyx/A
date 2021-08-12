@@ -7,13 +7,16 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.util.buildARouter
+import com.example.lib_common.help.buildARouter
+import com.example.lib_common.interceptor.UrlInterceptor
 import com.example.lib_common.util.clicks
+import com.example.lib_common.util.getDefaultMMKV
 import com.example.lib_common.util.showShort
 import com.example.module_login.R
 import com.example.module_login.di.factory.LoginViewModelFactory
 import com.example.module_login.helper.getLoginComponent
 import com.example.module_login.viewmodel.LoginViewModel
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.act_login.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -25,6 +28,8 @@ class LoginActivity : BaseActivity() {
 
     @Inject
     lateinit var loginViewModelFactory: LoginViewModelFactory
+    @Inject
+    lateinit var gson: Gson
 
     private lateinit var loginViewModel: LoginViewModel
 
@@ -38,17 +43,15 @@ class LoginActivity : BaseActivity() {
     override fun initView() {
 
         bt_login.clicks().subscribe {
-            //checkForm()
-            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY)
-                .navigation()
+            checkForm()
+            //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
 
         tv_verification_code.clicks().subscribe {
             initTimer()
         }
         tv_to_register.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.REGISTER_ACTIVITY)
-                .navigation()
+            buildARouter(AppConstant.RoutePath.REGISTER_ACTIVITY).navigation()
         }
     }
 
@@ -72,8 +75,8 @@ class LoginActivity : BaseActivity() {
         }
         loginViewModel.login(et_user.text.toString(),et_password.text.toString())
         loginViewModel.mLoginData.observe(this, Observer {
-            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY)
-                .navigation()
+            getDefaultMMKV().encode(AppConstant.Constant.USER_INFO,gson.toJson(it))
+            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         })
     }
 
