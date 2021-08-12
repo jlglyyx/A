@@ -49,7 +49,7 @@ class SplashActivity : BaseActivity() {
                 buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withTransition(
                     R.anim.fade_in,
                     R.anim.fade_out
-                ).navigation()
+                ).navigation(this@SplashActivity)
                 finish()
             }
 

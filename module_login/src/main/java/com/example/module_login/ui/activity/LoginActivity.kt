@@ -45,6 +45,9 @@ class LoginActivity : BaseActivity() {
             checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
+        tv_not_login.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
+        }
 
         tv_verification_code.clicks().subscribe {
             initTimer()

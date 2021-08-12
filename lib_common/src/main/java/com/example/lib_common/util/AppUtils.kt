@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import android.view.View
-import com.airbnb.lottie.LottieCompositionFactory.fromJson
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.constant.AppConstant.Constant.CLICK_TIME
 import com.example.lib_common.data.LoginData
@@ -69,13 +68,11 @@ fun View.clicks(): Observable<Unit> {
 }
 
 fun toJson(src: Any): String {
-    val gson = Gson()
-    return gson.toJson(src)
+    return Gson().toJson(src)
 }
 
 fun <T> fromJson(json: String, t: Class<T>): T {
-    val gson = Gson()
-    return gson.fromJson<T>(json, t)
+    return Gson().fromJson<T>(json, t)
 }
 
 fun getFilePath(path: String = "/MFiles/picture"): MutableList<String> {

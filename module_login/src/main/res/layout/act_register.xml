@@ -98,7 +98,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
-        android:text="register"
+        android:text="注册"
         android:layout_marginTop="@dimen/dp_10"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

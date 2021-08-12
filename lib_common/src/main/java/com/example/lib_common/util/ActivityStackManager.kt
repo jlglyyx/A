@@ -1,4 +1,4 @@
-@file:JvmName("ActivityManager")
+@file:JvmName("ActivityStackManager")
 
 package com.example.lib_common.util
 
@@ -25,9 +25,10 @@ fun removeActivity(activity: AppCompatActivity) {
 
 
 fun removeAllActivity() {
-    activityStack.forEach {
-        it.finish()
-        activityStack.remove(it)
+    activityStack.let {
+        for (activity in it) {
+            activity.finish()
+        }
     }
 }
 

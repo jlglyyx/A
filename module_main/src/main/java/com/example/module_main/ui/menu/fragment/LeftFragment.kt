@@ -41,7 +41,10 @@ class LeftFragment : BaseFragment() {
         tv_login_out.clicks().subscribe {
             getDefaultMMKV().clearAll()
             removeAllActivity()
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withTransition(
+                R.anim.fade_in,
+                R.anim.fade_out
+            ).navigation(requireActivity())
         }
     }
 
