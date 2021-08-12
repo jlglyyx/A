@@ -1,7 +1,6 @@
 package com.example.module_video.ui.fragment
 
 import android.graphics.Rect
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,16 +12,14 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.dip2px
 import com.example.module_video.R
 import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
-import com.example.module_video.model.VideoData
 import com.example.module_video.model.VideoDataItem
 import com.example.module_video.viewmodel.VideoViewModel
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.gson.Gson
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import kotlinx.android.synthetic.main.fra_item_video.*

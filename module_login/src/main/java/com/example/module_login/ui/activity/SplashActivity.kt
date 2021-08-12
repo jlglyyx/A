@@ -5,7 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.lib_common.util.getDefaultMMKV
 import com.example.lib_common.util.getUserInfo
@@ -14,9 +14,7 @@ import com.example.module_login.di.factory.LoginViewModelFactory
 import com.example.module_login.helper.getLoginComponent
 import com.example.module_login.viewmodel.LoginViewModel
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.act_login.*
 import kotlinx.android.synthetic.main.act_splash.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -4,14 +4,9 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.example.lib_common.base.ui.fragment.BaseFragment
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.util.buildARouter
-import com.example.lib_common.util.clicks
-import com.example.lib_common.util.removeAllActivity
-import com.example.lib_common.util.getDefaultMMKV
-import com.example.lib_common.util.getUserInfo
+import com.example.lib_common.util.*
 import com.example.module_main.R
 import kotlinx.android.synthetic.main.fra_left.*
-import kotlinx.android.synthetic.main.fra_main.*
 
 @Route(path = AppConstant.RoutePath.LEFT_FRAGMENT)
 class LeftFragment : BaseFragment() {
@@ -40,12 +35,13 @@ class LeftFragment : BaseFragment() {
                 .withString("name","我的下载").navigation()
         }
         tv_setting.clicks().subscribe {
-            removeAllActivity()
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+
         }
 
         tv_login_out.clicks().subscribe {
             getDefaultMMKV().clearAll()
+            removeAllActivity()
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
         }
     }
 

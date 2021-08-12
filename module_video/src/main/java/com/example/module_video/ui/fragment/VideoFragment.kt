@@ -10,7 +10,7 @@ import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.data.BannerBean
-import com.example.lib_common.help.buildARouter
+import com.example.lib_common.util.buildARouter
 import com.example.module_video.R
 import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
@@ -18,7 +18,7 @@ import com.example.module_video.viewmodel.VideoViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.fra_video.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.cancel
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.VIDEO_FRAGMENT)

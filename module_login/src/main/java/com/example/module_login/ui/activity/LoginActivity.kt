@@ -7,8 +7,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
-import com.example.lib_common.help.buildARouter
-import com.example.lib_common.interceptor.UrlInterceptor
+import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.lib_common.util.getDefaultMMKV
 import com.example.lib_common.util.showShort

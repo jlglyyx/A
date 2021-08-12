@@ -30,10 +30,7 @@ class NetworkUtil {
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
 
                             //wifi
-//                            if (status != 1) {
-//                                showShort("wifi")
-                                status = 1
-//                            }
+                            status = 1
 
                         }
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
@@ -49,12 +46,13 @@ class NetworkUtil {
 
                 override fun onLost(network: Network) {
                     super.onLost(network)
-                    showShort("网络断开")
+                    status = -1
+                    showShort("当前网络无连接，请检查网络配置")
                 }
 
                 override fun onAvailable(network: Network) {
+                    status = 0
                     super.onAvailable(network)
-                    showShort("网络连接")
                 }
             }
     }
