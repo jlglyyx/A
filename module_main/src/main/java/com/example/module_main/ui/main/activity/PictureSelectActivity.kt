@@ -87,6 +87,7 @@ class PictureSelectActivity : BaseActivity() {
                         element.isSelect = true
                         data.add(element)
                     }
+                    adapter.notifyItemChanged(position,false)
                 }
             }
 

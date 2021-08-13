@@ -4,8 +4,8 @@ import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Environment
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -30,8 +30,6 @@ import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import kotlinx.android.synthetic.main.act_video_item.*
-import kotlinx.android.synthetic.main.act_video_item.recyclerView
-import kotlinx.android.synthetic.main.fra_item_video.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,10 +42,10 @@ class VideoItemActivity : BaseActivity() {
     lateinit var videoViewModelFactory: VideoViewModelFactory
 
     private lateinit var videoModule: VideoViewModel
-    lateinit var orientationUtils: OrientationUtils
-    lateinit var commentAdapter: CommentAdapter
+    private lateinit var orientationUtils: OrientationUtils
+    private lateinit var commentAdapter: CommentAdapter
 
-    lateinit var collectionAdapter: CollectionAdapter
+    private lateinit var collectionAdapter: CollectionAdapter
 
     private var url = ""
 

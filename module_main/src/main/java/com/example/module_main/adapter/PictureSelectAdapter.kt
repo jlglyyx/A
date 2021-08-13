@@ -36,6 +36,12 @@ class PictureSelectAdapter(layoutResId: Int, data: MutableList<MediaInfoBean>) :
                 .into(ivImg)
             helper.setVisible(R.id.tv_time, false)
         }
+//        if (item.isSelect){
+//            cbImage.setBackgroundResource(R.drawable.shape_select_picture)
+//        }else{
+//            cbImage.setBackgroundResource(R.drawable.shape_no_select_picture)
+//        }
+        cbImage.isChecked = item.isSelect
         helper.addOnClickListener(R.id.cb_image)
     }
 

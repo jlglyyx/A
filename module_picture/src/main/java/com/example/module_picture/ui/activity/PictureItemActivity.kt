@@ -18,8 +18,10 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.dialog.EditBottomDialog
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.util.buildARouter
+import com.example.lib_common.util.clicks
 import com.example.module_picture.R
 import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
@@ -60,6 +62,18 @@ class PictureItemActivity : BaseActivity() {
     override fun initView() {
         initRecyclerView()
         initGalleryRecyclerView()
+
+        tv_send_comment.clicks().subscribe {
+            XPopup.Builder(this).autoOpenSoftInput(true).asCustom(EditBottomDialog(this).apply {
+                dialogCallBack = object : EditBottomDialog.DialogCallBack {
+                    override fun getComment(s: String) {
+                        mCommentAdapter.addData(0, s)
+                        recyclerView.smoothScrollToPosition(0)
+                    }
+
+                }
+            }).show()
+        }
     }
 
     override fun initViewModel() {
@@ -103,6 +117,10 @@ class PictureItemActivity : BaseActivity() {
                 this.add("今天天气很好啊")
                 this.add("好看好看")
                 this.add("这技术绝了")
+                this.add("哈哈哈哈哈")
+                this.add("哈哈哈哈哈")
+                this.add("哈哈哈哈哈")
+                this.add("哈哈哈哈哈")
                 this.add("哈哈哈哈哈")
             }).also {
                 it.setOnItemChildClickListener { adapter, view, position ->
@@ -158,7 +176,6 @@ class PictureItemActivity : BaseActivity() {
                         currentPosition = position
                         val offset: Int = mCurrentItemOffset - currentPosition * view.width
                         val percent = max(abs(offset) * 1.0 / view.width, 0.0001).toFloat()
-                        Log.i(TAG, "percent:#$currentPosition  $percent")
                         var leftView: View? = null
                         var rightView: View? = null
                         if (currentPosition >= 1) {
