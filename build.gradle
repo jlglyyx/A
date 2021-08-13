@@ -21,6 +21,7 @@ allprojects {
         //maven { url "http://192.168.0.18:8081/repository/maven2/"}
         maven { url 'http://developer.huawei.com/repo/'}
         maven { url 'https://jitpack.io' }
+        mavenCentral()
         google()
         jcenter()
     }

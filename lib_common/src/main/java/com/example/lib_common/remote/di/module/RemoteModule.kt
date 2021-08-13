@@ -2,16 +2,15 @@ package com.example.lib_common.remote.di.module
 
 import android.util.Log
 import com.example.lib_common.api.BaseApiService
-import com.example.lib_common.scope.RemoteScope
 import com.example.lib_common.interceptor.UrlInterceptor
-import com.google.gson.Gson
+import com.example.lib_common.scope.RemoteScope
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
 import okio.Buffer
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
@@ -40,7 +39,7 @@ class RemoteModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()))
             .client(okHttpClient)
