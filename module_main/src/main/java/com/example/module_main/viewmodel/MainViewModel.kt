@@ -1,10 +1,10 @@
 package com.example.module_main.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.lib_common.base.viewmodel.BaseViewModel
 import com.example.module_main.data.model.AccountList
+import com.example.module_main.data.model.MainData
 import com.example.module_main.repository.MainRepository
 import javax.inject.Inject
 
@@ -27,6 +27,15 @@ class MainViewModel @Inject constructor(
             sMutableLiveData.postValue(it.data)
         })
     }
+
+    fun addDynamic(mainData: MainData) {
+        launch({
+            mainRepository.addDynamic(mainData)
+        }, {
+            showDialog("添加成功")
+        })
+    }
+
 
 }
 

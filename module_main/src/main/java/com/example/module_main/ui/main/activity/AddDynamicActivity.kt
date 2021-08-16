@@ -71,16 +71,6 @@ class AddDynamicActivity : BaseActivity() {
                     normalImageAdapter.addData(stringArrayListExtra!!)
                 }
             }
-//        val registerForActivityResult =
-//            registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { it ->
-//                val map = it.map { item ->
-//                    Log.i(TAG, "initRecyclerView: $item")
-//                    item.toString()
-//                }
-//                normalImageAdapter.addData(map)
-//            }
-
-
         val imageView = ImageView(this).apply {
             setImageResource(R.drawable.iv_add)
             scaleType = ImageView.ScaleType.CENTER_CROP
