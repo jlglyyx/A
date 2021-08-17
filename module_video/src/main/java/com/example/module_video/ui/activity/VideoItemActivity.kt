@@ -4,8 +4,8 @@ import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Environment
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -18,7 +18,6 @@ import com.example.lib_common.down.thread.MultiMoreThreadDownload
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.module_video.R
-import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
 import com.example.module_video.model.VideoDataItem
 import com.example.module_video.viewmodel.VideoViewModel
@@ -30,8 +29,6 @@ import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import kotlinx.android.synthetic.main.act_video_item.*
-import kotlinx.android.synthetic.main.act_video_item.recyclerView
-import kotlinx.android.synthetic.main.fra_item_video.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -41,13 +38,11 @@ import javax.inject.Inject
 class VideoItemActivity : BaseActivity() {
 
     @Inject
-    lateinit var videoViewModelFactory: VideoViewModelFactory
+    lateinit var videoModule: VideoViewModel
+    private lateinit var orientationUtils: OrientationUtils
+    private lateinit var commentAdapter: CommentAdapter
 
-    private lateinit var videoModule: VideoViewModel
-    lateinit var orientationUtils: OrientationUtils
-    lateinit var commentAdapter: CommentAdapter
-
-    lateinit var collectionAdapter: CollectionAdapter
+    private lateinit var collectionAdapter: CollectionAdapter
 
     private var url = ""
 
@@ -109,8 +104,7 @@ class VideoItemActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getVideoComponent().inject(this)
-        videoModule = getViewModel(videoViewModelFactory, VideoViewModel::class.java)
+        getVideoComponent(this).inject(this)
         videoModule.mVideoItemData.observe(this, Observer {
             for ((index,videoDataItem) in it.withIndex()){
                 videoDataItem.position = index+1

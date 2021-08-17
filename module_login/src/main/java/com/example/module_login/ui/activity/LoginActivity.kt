@@ -12,7 +12,6 @@ import com.example.lib_common.util.clicks
 import com.example.lib_common.util.getDefaultMMKV
 import com.example.lib_common.util.showShort
 import com.example.module_login.R
-import com.example.module_login.di.factory.LoginViewModelFactory
 import com.example.module_login.helper.getLoginComponent
 import com.example.module_login.viewmodel.LoginViewModel
 import com.google.gson.Gson
@@ -26,11 +25,9 @@ import javax.inject.Inject
 class LoginActivity : BaseActivity() {
 
     @Inject
-    lateinit var loginViewModelFactory: LoginViewModelFactory
-    @Inject
     lateinit var gson: Gson
-
-    private lateinit var loginViewModel: LoginViewModel
+    @Inject
+    lateinit var loginViewModel: LoginViewModel
 
     override fun getLayout(): Int {
         return R.layout.act_login
@@ -40,7 +37,7 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initView() {
-
+        buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         bt_login.clicks().subscribe {
             checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
@@ -58,8 +55,7 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getLoginComponent().inject(this)
-        loginViewModel = getViewModel(loginViewModelFactory,LoginViewModel::class.java)
+        getLoginComponent(this).inject(this)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {

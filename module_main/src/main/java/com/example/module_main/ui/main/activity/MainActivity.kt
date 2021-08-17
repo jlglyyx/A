@@ -9,12 +9,12 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.adapter.TabAndViewPagerAdapter
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.scope.ModelWithFactory
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.getScreenPx
 import com.example.lib_common.util.px2dip
 import com.example.lib_common.util.showShort
 import com.example.module_main.R
-import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.ui.menu.fragment.LeftFragment
 import com.example.module_main.viewmodel.MainViewModel
@@ -30,9 +30,8 @@ import javax.inject.Inject
 class MainActivity : BaseActivity() {
 
     @Inject
-    lateinit var mainViewModelFactory: MainViewModelFactory
-
-    private lateinit var mainViewModel: MainViewModel
+    @ModelWithFactory
+    lateinit var mainViewModel: MainViewModel
 
     private lateinit var fragments: MutableList<Fragment>
 
@@ -99,8 +98,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getMainComponent().inject(this)
-        mainViewModel = getViewModel(mainViewModelFactory, MainViewModel::class.java)
+        getMainComponent(this).inject(this)
 
     }
 

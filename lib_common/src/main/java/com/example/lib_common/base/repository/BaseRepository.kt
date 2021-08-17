@@ -1,7 +1,6 @@
 package com.example.lib_common.base.repository
 
 import com.example.lib_common.remote.di.response.MResult
-import com.example.lib_common.remote.di.response.MSBResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -11,7 +11,6 @@ import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.data.BannerBean
 import com.example.lib_common.util.buildARouter
 import com.example.module_picture.R
-import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
 import com.example.module_picture.viewmodel.PictureViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -23,9 +22,7 @@ import javax.inject.Inject
 class PictureFragment : BaseLazyFragment() {
 
     @Inject
-    lateinit var pictureViewModelFactory: PictureViewModelFactory
-
-    private lateinit var pictureModule: PictureViewModel
+    lateinit var pictureModule: PictureViewModel
 
     lateinit var fragments: MutableList<Fragment>
 
@@ -66,9 +63,7 @@ class PictureFragment : BaseLazyFragment() {
     }
 
     override fun initViewModel() {
-        getPictureComponent().inject(this)
-        pictureModule = getViewModel(pictureViewModelFactory, PictureViewModel::class.java)
-
+        getPictureComponent(this).inject(this)
     }
 
 
@@ -90,6 +85,13 @@ class PictureFragment : BaseLazyFragment() {
     }
 
     private fun initBanner() {
+//        banner.setPageTransformer(AlphaPageTransformer())
+//        banner.addPageTransformer(DepthPageTransformer())
+//        banner.addPageTransformer(RotateDownPageTransformer())
+//        banner.addPageTransformer(RotateUpPageTransformer())
+//        banner.addPageTransformer(RotateYTransformer())
+//        banner.addPageTransformer(ScaleInTransformer())
+//        banner.addPageTransformer(ZoomOutPageTransformer())
         banner.addBannerLifecycleObserver(this)//添加生命周期观察者
             .setAdapter(MBannerAdapter(mutableListOf<BannerBean>().apply {
                 add(BannerBean("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg"))

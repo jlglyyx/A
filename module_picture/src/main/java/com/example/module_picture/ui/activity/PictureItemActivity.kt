@@ -1,6 +1,8 @@
 package com.example.module_picture.ui.activity
 
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
@@ -16,10 +18,11 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.dialog.EditBottomDialog
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.util.buildARouter
+import com.example.lib_common.util.clicks
 import com.example.module_picture.R
-import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
 import com.example.module_picture.model.ImageDataItem
 import com.example.module_picture.viewmodel.PictureViewModel
@@ -29,6 +32,8 @@ import com.wang.avi.AVLoadingIndicatorView
 import kotlinx.android.synthetic.main.act_picture_item.*
 import kotlinx.android.synthetic.main.fra_item_picture.recyclerView
 import javax.inject.Inject
+import kotlin.math.abs
+import kotlin.math.max
 
 
 @Route(path = AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
@@ -36,12 +41,9 @@ class PictureItemActivity : BaseActivity() {
 
     private lateinit var mAdapter: MAdapter
     private lateinit var mCommentAdapter: MCommentAdapter
-    private val MILLISECONDS_PER_INCH = 0.03f
 
     @Inject
-    lateinit var pictureViewModelFactory: PictureViewModelFactory
-
-    private lateinit var pictureModule: PictureViewModel
+    lateinit var pictureModule: PictureViewModel
 
     override fun getLayout(): Int {
         return R.layout.act_picture_item
@@ -50,17 +52,28 @@ class PictureItemActivity : BaseActivity() {
     override fun initData() {
         val intent = intent
         val sid = intent.getStringExtra(AppConstant.Constant.ID)
-        pictureModule.getImageItemData(sid!!)
+        pictureModule.getImageItemData(sid ?: "")
     }
 
     override fun initView() {
         initRecyclerView()
         initGalleryRecyclerView()
+
+        tv_send_comment.clicks().subscribe {
+            XPopup.Builder(this).autoOpenSoftInput(true).asCustom(EditBottomDialog(this).apply {
+                dialogCallBack = object : EditBottomDialog.DialogCallBack {
+                    override fun getComment(s: String) {
+                        mCommentAdapter.addData(0, s)
+                        recyclerView.smoothScrollToPosition(0)
+                    }
+
+                }
+            }).show()
+        }
     }
 
     override fun initViewModel() {
-        getPictureComponent().inject(this)
-        pictureModule = getViewModel(pictureViewModelFactory, PictureViewModel::class.java)
+        getPictureComponent(this).inject(this)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -100,6 +113,10 @@ class PictureItemActivity : BaseActivity() {
                 this.add("好看好看")
                 this.add("这技术绝了")
                 this.add("哈哈哈哈哈")
+                this.add("哈哈哈哈哈")
+                this.add("哈哈哈哈哈")
+                this.add("哈哈哈哈哈")
+                this.add("哈哈哈哈哈")
             }).also {
                 it.setOnItemChildClickListener { adapter, view, position ->
                     when (view.id) {
@@ -120,13 +137,13 @@ class PictureItemActivity : BaseActivity() {
 
     }
 
-
+    var currentPosition = 0
+    var mCurrentItemOffset = 0
     private fun initGalleryRecyclerView() {
         galleryRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val linearSnapHelper = LinearSnapHelper()
-        var currentPosition = 0
-        var mCurrentItemOffset = 0
+
         linearSnapHelper.attachToRecyclerView(galleryRecyclerView)
 
         val mGalleryAdapter = MGalleryAdapter(R.layout.item_image, mutableListOf<String>().apply {
@@ -145,36 +162,37 @@ class PictureItemActivity : BaseActivity() {
         galleryRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-//                mCurrentItemOffset += dx
-//                recyclerView.layoutManager?.let {
-//
-//                    val view = linearSnapHelper.findSnapView(it)
-//                    if (view != null) {
-//                        val position = recyclerView.getChildAdapterPosition(view)
-//                        if (currentPosition != position) {
-//                            currentPosition = position
-//
-//                            val offset: Int = mCurrentItemOffset - currentPosition * view.width
-//                            val percent = max(abs(offset) * 1.0 / view.width, 0.0001).toFloat()
-//
-//                            var leftView: View? = null
-//                            var rightView: View? = null
-//                            if (currentPosition >= 1){
-//                                leftView = it.findViewByPosition(currentPosition - 1)
-//                            }
-//                            if (currentPosition <= 1){
-//                                rightView = it.findViewByPosition(mGalleryAdapter.data.size - 1)
-//                            }
-//                            var currentView: View? = it.findViewByPosition(currentPosition)
-//
-//                            leftView?.scaleY = ((1 - 0.5) * percent + 0.5).toFloat()
-//                            rightView?.scaleY = ((1 - 0.5) * percent + 0.5).toFloat()
-//                            currentView?.scaleY = ((0.5 -1) * percent + 1).toFloat()
-//
-//                        }
-//                    }
-//
-//                }
+                Log.i(TAG, "onScrolled: $dx")
+                mCurrentItemOffset += dx
+                recyclerView.layoutManager?.let {
+                    val view = linearSnapHelper.findSnapView(it)
+                    if (view != null) {
+                        val position = recyclerView.getChildAdapterPosition(view)
+                        currentPosition = position
+                        val offset: Int = mCurrentItemOffset - currentPosition * view.width
+                        val percent = max(abs(offset) * 1.0 / view.width, 0.0001).toFloat()
+                        var leftView: View? = null
+                        var rightView: View? = null
+                        if (currentPosition >= 1) {
+                            leftView = it.findViewByPosition(currentPosition - 1)
+                        }
+                        if (currentPosition <= 1) {
+                            rightView = it.findViewByPosition(mGalleryAdapter.data.size - 1)
+                        }
+                        var currentView: View? = it.findViewByPosition(currentPosition)
+
+                        leftView?.scaleY = ((1 - 0.5) * percent + 0.5).toFloat()
+                        rightView?.scaleY = ((1 - 0.5) * percent + 0.5).toFloat()
+                        currentView?.scaleY = ((0.5 - 1) * percent + 1).toFloat()
+
+                        val rect = Rect()
+                        val localVisibleRect = view.getLocalVisibleRect(rect)
+                        if (!localVisibleRect) {
+                            view.scaleY = 1.0f
+                        }
+
+                    }
+                }
 
 
             }

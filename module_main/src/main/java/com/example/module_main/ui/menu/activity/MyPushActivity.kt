@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieAnimationView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
@@ -13,36 +12,40 @@ import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
+import com.example.lib_common.scope.ModelWithFactory
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
 import com.example.module_main.data.model.MainData
-import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.imageview.ShapeableImageView
 import com.lxj.xpopup.XPopup
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
-import kotlinx.android.synthetic.main.fra_main.*
+import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.MY_PUSH_ACTIVITY)
-class MyPushActivity : BaseActivity() {
+class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     @Inject
-    lateinit var mainViewModelFactory: MainViewModelFactory
-
-    private lateinit var mainViewModel: MainViewModel
+    @ModelWithFactory
+    lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter
+
+    private var pageNum = 1
 
     override fun getLayout(): Int {
         return R.layout.act_my_push
     }
 
     override fun initData() {
-        //mainViewModel.getMainRepository()
+        smartRefreshLayout.autoRefresh()
+
     }
 
     override fun initView() {
@@ -54,18 +57,13 @@ class MyPushActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getMainComponent().inject(this)
-        mainViewModel = getViewModel(mainViewModelFactory, MainViewModel::class.java)
+        getMainComponent(this).inject(this)
 
     }
 
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-//        mainViewModel.sMutableLiveData.observe(this, Observer {
-//            recyclerView.adapter = MAdapter(R.layout.item_title, it)
-//        })
-
         val mutableListOf = mutableListOf<MainData>().apply {
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
@@ -323,30 +321,7 @@ class MyPushActivity : BaseActivity() {
                         buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
                             .navigation()
                     }
-                    R.id.iv_fabulous -> {
-                        val ivFabulous = adapter.getViewByPosition(
-                            recyclerView,
-                            position,
-                            R.id.iv_fabulous
-                        ) as LottieAnimationView
-                        ivFabulous.playAnimation()
-                    }
-                    R.id.iv_comment -> {
-                        val ivComment = adapter.getViewByPosition(
-                            recyclerView,
-                            position,
-                            R.id.iv_comment
-                        ) as LottieAnimationView
-                        ivComment.playAnimation()
-                    }
-                    R.id.iv_forward -> {
-                        val ivForward = adapter.getViewByPosition(
-                            recyclerView,
-                            position,
-                            R.id.iv_forward
-                        ) as LottieAnimationView
-                        ivForward.playAnimation()
-                    }
+
                 }
             }
         }
@@ -430,9 +405,7 @@ class MyPushActivity : BaseActivity() {
                 }
                 AppConstant.Constant.ITEM_MAIN_IDENTIFICATION -> {
 
-                    helper.addOnClickListener(R.id.iv_fabulous)
-                        .addOnClickListener(R.id.iv_comment)
-                        .addOnClickListener(R.id.iv_forward)
+
 
                 }
                 AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO -> {
@@ -463,7 +436,15 @@ class MyPushActivity : BaseActivity() {
             }
         }
     }
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        pageNum++
+        mainViewModel.getDynamicList( "", pageNum)
+    }
 
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        pageNum = 1
+        mainViewModel.getDynamicList( "", pageNum)
+    }
 
     override fun onPause() {
         super.onPause()

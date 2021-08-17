@@ -12,16 +12,24 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.adapter.NormalImageAdapter
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
+import com.example.lib_common.scope.ModelWithFactory
 import com.example.lib_common.util.dip2px
 import com.example.lib_common.util.getScreenPx
 import com.example.lib_common.widget.CommonToolBar
 import com.example.module_main.R
+import com.example.module_main.data.model.MainData
+import com.example.module_main.helper.getMainComponent
+import com.example.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_add_dynamic.*
 import java.util.*
+import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY)
 class AddDynamicActivity : BaseActivity() {
 
+    @Inject
+    @ModelWithFactory
+    lateinit var mainViewModel: MainViewModel
 
     private lateinit var normalImageAdapter: NormalImageAdapter<String>
 
@@ -40,6 +48,7 @@ class AddDynamicActivity : BaseActivity() {
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener(view: View) {
+                mainViewModel.addDynamic(MainData(0))
                 val intent = Intent()
                 intent.putStringArrayListExtra(
                     "Data",
@@ -56,7 +65,7 @@ class AddDynamicActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-
+        getMainComponent(this).inject(this)
     }
 
 
@@ -71,16 +80,6 @@ class AddDynamicActivity : BaseActivity() {
                     normalImageAdapter.addData(stringArrayListExtra!!)
                 }
             }
-//        val registerForActivityResult =
-//            registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { it ->
-//                val map = it.map { item ->
-//                    Log.i(TAG, "initRecyclerView: $item")
-//                    item.toString()
-//                }
-//                normalImageAdapter.addData(map)
-//            }
-
-
         val imageView = ImageView(this).apply {
             setImageResource(R.drawable.iv_add)
             scaleType = ImageView.ScaleType.CENTER_CROP

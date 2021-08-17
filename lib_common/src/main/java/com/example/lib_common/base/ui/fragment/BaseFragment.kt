@@ -70,7 +70,7 @@ abstract class BaseFragment : Fragment() {
 
     fun <T : BaseViewModel> getViewModel(@NonNull clazz: Class<T>): T {
 
-        return ViewModelProvider(this).get(clazz)
+        return ViewModelProvider(requireActivity()).get(clazz)
     }
 
     fun <T : BaseViewModel> getViewModel(
@@ -78,7 +78,7 @@ abstract class BaseFragment : Fragment() {
         @NonNull clazz: Class<T>
     ): T {
 
-        return ViewModelProvider(this, factory).get(clazz)
+        return ViewModelProvider(requireActivity(), factory).get(clazz)
     }
 
     private fun registerListener() {

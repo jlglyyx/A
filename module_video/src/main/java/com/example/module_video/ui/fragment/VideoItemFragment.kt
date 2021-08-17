@@ -15,7 +15,6 @@ import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.dip2px
 import com.example.module_video.R
-import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
 import com.example.module_video.model.VideoDataItem
 import com.example.module_video.viewmodel.VideoViewModel
@@ -29,9 +28,7 @@ import javax.inject.Inject
 class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     @Inject
-    lateinit var videoViewModelFactory: VideoViewModelFactory
-
-    private lateinit var videoModule: VideoViewModel
+    lateinit var videoModule: VideoViewModel
 
     lateinit var mAdapter: MAdapter
 
@@ -59,8 +56,7 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     override fun initViewModel() {
-        getVideoComponent().inject(this)
-        videoModule = getViewModel(videoViewModelFactory, VideoViewModel::class.java)
+        getVideoComponent(this).inject(this)
         videoModule.uC.refreshEvent.observe(this, Observer {
             smartRefreshLayout.finishRefresh()
         })
