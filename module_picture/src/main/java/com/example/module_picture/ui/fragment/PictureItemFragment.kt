@@ -15,7 +15,6 @@ import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.util.buildARouter
 import com.example.module_picture.R
-import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
 import com.example.module_picture.model.ImageDataItem
 import com.example.module_picture.viewmodel.PictureViewModel
@@ -30,9 +29,7 @@ import javax.inject.Inject
 class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     @Inject
-    lateinit var pictureViewModelFactory: PictureViewModelFactory
-
-    private lateinit var pictureModule: PictureViewModel
+    lateinit var pictureModule: PictureViewModel
 
     private var queryType: String? = null
 
@@ -60,8 +57,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     override fun initViewModel() {
-        getPictureComponent().inject(this)
-        pictureModule = getViewModel(pictureViewModelFactory, PictureViewModel::class.java)
+        getPictureComponent(this).inject(this)
         pictureModule.uC.refreshEvent.observe(this, Observer {
             smartRefreshLayout.finishRefresh()
         })

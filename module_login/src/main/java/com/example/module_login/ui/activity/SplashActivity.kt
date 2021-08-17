@@ -10,7 +10,6 @@ import com.example.lib_common.util.clicks
 import com.example.lib_common.util.getDefaultMMKV
 import com.example.lib_common.util.getUserInfo
 import com.example.module_login.R
-import com.example.module_login.di.factory.LoginViewModelFactory
 import com.example.module_login.helper.getLoginComponent
 import com.example.module_login.viewmodel.LoginViewModel
 import com.google.gson.Gson
@@ -26,9 +25,7 @@ class SplashActivity : BaseActivity() {
     lateinit var gson: Gson
 
     @Inject
-    lateinit var loginViewModelFactory: LoginViewModelFactory
-
-    private lateinit var loginViewModel: LoginViewModel
+    lateinit var loginViewModel: LoginViewModel
 
     override fun getLayout(): Int {
         return R.layout.act_splash
@@ -80,8 +77,7 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getLoginComponent().inject(this)
-        loginViewModel = getViewModel(loginViewModelFactory, LoginViewModel::class.java)
+        getLoginComponent(this).inject(this)
     }
 
     override fun onDestroy() {

@@ -13,11 +13,11 @@ import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
+import com.example.lib_common.scope.ModelWithFactory
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
 import com.example.module_main.data.model.MainData
-import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.imageview.ShapeableImageView
@@ -31,9 +31,8 @@ import javax.inject.Inject
 class MyPushActivity : BaseActivity() {
 
     @Inject
-    lateinit var mainViewModelFactory: MainViewModelFactory
-
-    private lateinit var mainViewModel: MainViewModel
+    @ModelWithFactory
+    lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter
 
@@ -54,8 +53,7 @@ class MyPushActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getMainComponent().inject(this)
-        mainViewModel = getViewModel(mainViewModelFactory, MainViewModel::class.java)
+        getMainComponent(this).inject(this)
 
     }
 

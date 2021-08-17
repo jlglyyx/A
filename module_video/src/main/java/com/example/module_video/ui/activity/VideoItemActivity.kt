@@ -18,7 +18,6 @@ import com.example.lib_common.down.thread.MultiMoreThreadDownload
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.module_video.R
-import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
 import com.example.module_video.model.VideoDataItem
 import com.example.module_video.viewmodel.VideoViewModel
@@ -39,9 +38,7 @@ import javax.inject.Inject
 class VideoItemActivity : BaseActivity() {
 
     @Inject
-    lateinit var videoViewModelFactory: VideoViewModelFactory
-
-    private lateinit var videoModule: VideoViewModel
+    lateinit var videoModule: VideoViewModel
     private lateinit var orientationUtils: OrientationUtils
     private lateinit var commentAdapter: CommentAdapter
 
@@ -107,8 +104,7 @@ class VideoItemActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getVideoComponent().inject(this)
-        videoModule = getViewModel(videoViewModelFactory, VideoViewModel::class.java)
+        getVideoComponent(this).inject(this)
         videoModule.mVideoItemData.observe(this, Observer {
             for ((index,videoDataItem) in it.withIndex()){
                 videoDataItem.position = index+1

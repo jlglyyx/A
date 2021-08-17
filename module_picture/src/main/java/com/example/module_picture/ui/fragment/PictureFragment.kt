@@ -11,7 +11,6 @@ import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.data.BannerBean
 import com.example.lib_common.util.buildARouter
 import com.example.module_picture.R
-import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
 import com.example.module_picture.viewmodel.PictureViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -23,9 +22,7 @@ import javax.inject.Inject
 class PictureFragment : BaseLazyFragment() {
 
     @Inject
-    lateinit var pictureViewModelFactory: PictureViewModelFactory
-
-    private lateinit var pictureModule: PictureViewModel
+    lateinit var pictureModule: PictureViewModel
 
     lateinit var fragments: MutableList<Fragment>
 
@@ -66,9 +63,7 @@ class PictureFragment : BaseLazyFragment() {
     }
 
     override fun initViewModel() {
-        getPictureComponent().inject(this)
-        pictureModule = getViewModel(pictureViewModelFactory, PictureViewModel::class.java)
-
+        getPictureComponent(this).inject(this)
     }
 
 

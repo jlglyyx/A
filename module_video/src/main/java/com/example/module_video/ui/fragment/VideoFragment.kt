@@ -12,7 +12,6 @@ import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.data.BannerBean
 import com.example.lib_common.util.buildARouter
 import com.example.module_video.R
-import com.example.module_video.di.factory.VideoViewModelFactory
 import com.example.module_video.helper.getVideoComponent
 import com.example.module_video.viewmodel.VideoViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -24,9 +23,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.VIDEO_FRAGMENT)
 class VideoFragment : BaseLazyFragment() {
     @Inject
-    lateinit var videoViewModelFactory: VideoViewModelFactory
-
-    private lateinit var videoModule: VideoViewModel
+    lateinit var videoModule: VideoViewModel
 
     private lateinit var fragments: MutableList<Fragment>
 
@@ -99,8 +96,7 @@ class VideoFragment : BaseLazyFragment() {
     }
 
     override fun initViewModel() {
-        getVideoComponent().inject(this)
-        videoModule = getViewModel(videoViewModelFactory, VideoViewModel::class.java)
+        getVideoComponent(this).inject(this)
 
     }
 

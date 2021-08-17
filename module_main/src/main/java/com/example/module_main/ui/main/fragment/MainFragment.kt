@@ -1,6 +1,7 @@
 package com.example.module_main.ui.main.fragment
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +20,7 @@ import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
+import com.example.lib_common.scope.ModelWithFactory
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.dip2px
 import com.example.lib_common.util.getUserInfo
@@ -26,13 +28,13 @@ import com.example.lib_common.widget.CommonToolBar
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
 import com.example.module_main.data.model.MainData
-import com.example.module_main.di.factory.MainViewModelFactory
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.ui.main.activity.AddDynamicActivity
 import com.example.module_main.ui.main.activity.MainActivity
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.gson.Gson
 import com.lxj.xpopup.XPopup
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
@@ -48,9 +50,10 @@ import javax.inject.Inject
 class MainFragment : BaseLazyFragment() {
 
     @Inject
-    lateinit var mainViewModelFactory: MainViewModelFactory
-
-    private lateinit var mainViewModel: MainViewModel
+    lateinit var gson: Gson
+    @Inject
+    @ModelWithFactory
+    lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter
 
@@ -312,8 +315,10 @@ class MainFragment : BaseLazyFragment() {
                             "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
                     add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
+                    val toJson = gson.toJson(this)
+                    Log.i(TAG, "initData====: $toJson")
                 })
+
         }
     }
 
@@ -405,8 +410,7 @@ class MainFragment : BaseLazyFragment() {
     }
 
     override fun initViewModel() {
-        getMainComponent().inject(this)
-        mainViewModel = getViewModel(mainViewModelFactory, MainViewModel::class.java)
+        getMainComponent(this).inject(this)
 
     }
 

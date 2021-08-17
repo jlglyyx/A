@@ -23,7 +23,6 @@ import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.module_picture.R
-import com.example.module_picture.di.factory.PictureViewModelFactory
 import com.example.module_picture.helper.getPictureComponent
 import com.example.module_picture.model.ImageDataItem
 import com.example.module_picture.viewmodel.PictureViewModel
@@ -42,12 +41,9 @@ class PictureItemActivity : BaseActivity() {
 
     private lateinit var mAdapter: MAdapter
     private lateinit var mCommentAdapter: MCommentAdapter
-    private val MILLISECONDS_PER_INCH = 0.03f
 
     @Inject
-    lateinit var pictureViewModelFactory: PictureViewModelFactory
-
-    private lateinit var pictureModule: PictureViewModel
+    lateinit var pictureModule: PictureViewModel
 
     override fun getLayout(): Int {
         return R.layout.act_picture_item
@@ -77,8 +73,7 @@ class PictureItemActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getPictureComponent().inject(this)
-        pictureModule = getViewModel(pictureViewModelFactory, PictureViewModel::class.java)
+        getPictureComponent(this).inject(this)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
