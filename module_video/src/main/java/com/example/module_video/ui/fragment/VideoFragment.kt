@@ -119,6 +119,13 @@ class VideoFragment : BaseLazyFragment() {
     }
 
     private fun initBanner() {
+//        banner.setPageTransformer(AlphaPageTransformer())
+//        banner.addPageTransformer(DepthPageTransformer())
+//        banner.addPageTransformer(RotateDownPageTransformer())
+//        banner.addPageTransformer(RotateUpPageTransformer())
+//        banner.addPageTransformer(RotateYTransformer())
+//        banner.addPageTransformer(ScaleInTransformer())
+//        banner.addPageTransformer(ZoomOutPageTransformer())
         banner.addBannerLifecycleObserver(this)//添加生命周期观察者
             .setAdapter(MBannerAdapter(mutableListOf<BannerBean>().apply {
                 add(BannerBean("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg"))

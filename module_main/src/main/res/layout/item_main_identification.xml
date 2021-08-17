@@ -42,27 +42,7 @@
             android:visibility="invisible"
             android:orientation="horizontal">
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/iv_fabulous"
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="match_parent"
-                android:padding="@dimen/dp_3"
-                android:src="@drawable/iv_fabulous" />
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/iv_comment"
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/dp_8"
-                android:padding="@dimen/dp_3"
-                android:src="@drawable/iv_comment" />
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/iv_forward"
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="match_parent"
-                android:padding="@dimen/dp_3"
-                android:src="@drawable/iv_forward" />
         </LinearLayout>
     </LinearLayout>
 

@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieAnimationView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
@@ -22,13 +21,15 @@ import com.example.module_main.helper.getMainComponent
 import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.imageview.ShapeableImageView
 import com.lxj.xpopup.XPopup
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
-import kotlinx.android.synthetic.main.fra_main.*
+import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.MY_PUSH_ACTIVITY)
-class MyPushActivity : BaseActivity() {
+class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     @Inject
     @ModelWithFactory
@@ -36,12 +37,15 @@ class MyPushActivity : BaseActivity() {
 
     private lateinit var mAdapter: MAdapter
 
+    private var pageNum = 1
+
     override fun getLayout(): Int {
         return R.layout.act_my_push
     }
 
     override fun initData() {
-        //mainViewModel.getMainRepository()
+        smartRefreshLayout.autoRefresh()
+
     }
 
     override fun initView() {
@@ -60,10 +64,6 @@ class MyPushActivity : BaseActivity() {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-//        mainViewModel.sMutableLiveData.observe(this, Observer {
-//            recyclerView.adapter = MAdapter(R.layout.item_title, it)
-//        })
-
         val mutableListOf = mutableListOf<MainData>().apply {
 
             add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
@@ -321,30 +321,7 @@ class MyPushActivity : BaseActivity() {
                         buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
                             .navigation()
                     }
-                    R.id.iv_fabulous -> {
-                        val ivFabulous = adapter.getViewByPosition(
-                            recyclerView,
-                            position,
-                            R.id.iv_fabulous
-                        ) as LottieAnimationView
-                        ivFabulous.playAnimation()
-                    }
-                    R.id.iv_comment -> {
-                        val ivComment = adapter.getViewByPosition(
-                            recyclerView,
-                            position,
-                            R.id.iv_comment
-                        ) as LottieAnimationView
-                        ivComment.playAnimation()
-                    }
-                    R.id.iv_forward -> {
-                        val ivForward = adapter.getViewByPosition(
-                            recyclerView,
-                            position,
-                            R.id.iv_forward
-                        ) as LottieAnimationView
-                        ivForward.playAnimation()
-                    }
+
                 }
             }
         }
@@ -428,9 +405,7 @@ class MyPushActivity : BaseActivity() {
                 }
                 AppConstant.Constant.ITEM_MAIN_IDENTIFICATION -> {
 
-                    helper.addOnClickListener(R.id.iv_fabulous)
-                        .addOnClickListener(R.id.iv_comment)
-                        .addOnClickListener(R.id.iv_forward)
+
 
                 }
                 AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO -> {
@@ -461,7 +436,15 @@ class MyPushActivity : BaseActivity() {
             }
         }
     }
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        pageNum++
+        mainViewModel.getDynamicList( "", pageNum)
+    }
 
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        pageNum = 1
+        mainViewModel.getDynamicList( "", pageNum)
+    }
 
     override fun onPause() {
         super.onPause()

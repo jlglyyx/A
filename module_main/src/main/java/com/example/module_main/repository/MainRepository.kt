@@ -20,6 +20,16 @@ class MainRepository @Inject constructor(private val mainApiService: MainApiServ
             mainApiService.addDynamic(mainData)
         }
     }
+    suspend fun getDynamicList(id:String,pageNum:Int): MResult<MutableList<AccountList>> {
+        return withContext(Dispatchers.IO) {
+            mainApiService.getDynamicList(id,pageNum)
+        }
+    }
+    suspend fun getDynamicDetail(id:String): MResult<AccountList> {
+        return withContext(Dispatchers.IO) {
+            mainApiService.getDynamicDetail(id)
+        }
+    }
 
 
 }

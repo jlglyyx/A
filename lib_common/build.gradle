@@ -16,10 +16,10 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString(),
-                             "room.incremental":"true",
-                             "room.expandProjection":"true",
-                             AROUTER_MODULE_NAME  : project.getName()]
+                arguments = ["room.schemaLocation"  : "$projectDir/schemas".toString(),
+                             "room.incremental"     : "true",
+                             "room.expandProjection": "true",
+                             AROUTER_MODULE_NAME    : project.getName()]
                 //includeCompileClasspath = false
             }
         }
@@ -51,7 +51,7 @@ dependencies {
     api 'junit:junit:4.12'
     api 'androidx.test.espresso:espresso-core:3.2.0'
     //api rootProject.ext.dependencies['material']
-    api "com.google.android.material:material:1.2.1"
+    api "com.google.android.material:material:1.4.0"
     api 'com.alibaba:arouter-api:1.5.2'
     kapt 'com.alibaba:arouter-compiler:1.5.2'
 
@@ -62,7 +62,7 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     api "androidx.room:room-ktx:$room_version"
     // optional - Test helpers
-    kapt  "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
 
     // ViewModel
@@ -80,8 +80,7 @@ dependencies {
 
     // Annotation processor
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
-
-
+    api "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
 
     api 'com.google.dagger:dagger:2.2'
@@ -89,7 +88,7 @@ dependencies {
 
     api 'com.squareup.retrofit2:retrofit:2.9.0'
     api 'com.squareup.retrofit2:converter-gson:2.9.0'
-    api'com.squareup.retrofit2:converter-scalars:2.9.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.9.0'
     api 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
     api 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
@@ -98,15 +97,15 @@ dependencies {
     api 'com.github.tbruyelle:rxpermissions:0.12'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
-    api 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
+    api 'com.tencent.bugly:crashreport:latest.release'
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
 
 
-    api 'androidx.appcompat:appcompat:1.2.0'                 //必须 1.0.0 以上
-    api  'com.scwang.smart:refresh-layout-kernel:2.0.1'      //核心必须依赖
-    api  'com.scwang.smart:refresh-header-classics:2.0.1'    //经典刷新头
-    api  'com.scwang.smart:refresh-header-material:2.0.1'    //谷歌刷新头
-    api  'com.scwang.smart:refresh-header-two-level:2.0.1'   //二级刷新头
-    api  'com.scwang.smart:refresh-footer-classics:2.0.1'    //经典加载
+    api 'com.scwang.smart:refresh-layout-kernel:2.0.1'      //核心必须依赖
+    api 'com.scwang.smart:refresh-header-classics:2.0.1'    //经典刷新头
+    api 'com.scwang.smart:refresh-header-material:2.0.1'    //谷歌刷新头
+    api 'com.scwang.smart:refresh-header-two-level:2.0.1'   //二级刷新头
+    api 'com.scwang.smart:refresh-footer-classics:2.0.1'    //经典加载
     api 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     api 'com.youth.banner:banner:2.1.0'
@@ -124,7 +123,6 @@ dependencies {
     api 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     api 'androidx.navigation:navigation-ui-ktx:2.1.0'
     api 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5-jitpack'
-    api 'com.airbnb.android:lottie:3.7.2'
     api "androidx.recyclerview:recyclerview:1.2.1"
 
 //    api rootProject.ext.dependencies['BaseRecyclerViewAdapterHelper']

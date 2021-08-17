@@ -37,7 +37,7 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initView() {
-        buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY).navigation()
+        buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         bt_login.clicks().subscribe {
             checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
