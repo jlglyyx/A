@@ -1,5 +1,6 @@
 package com.example.lib_common.room.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -11,9 +12,12 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "image_type")
 data class ImageTypeData(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int ?= 0,
+    @PrimaryKey
+    var id: Int,
+    @ColumnInfo(name = "name")
     var name: String,
+    @ColumnInfo(name = "type")
     var type: String,
+    @ColumnInfo(name = "extra_i0nfo")
     var extraInfo: String
 )

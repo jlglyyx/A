@@ -14,12 +14,12 @@ import com.example.lib_common.room.entity.ImageTypeData
 @Dao
 interface ImageTypeDao {
 
-    @Query("SELECT  * FROM image_type")
-    fun getAllData():MutableList<ImageTypeData>
+//    @Query("SELECT  * FROM image_type")
+//    fun getAllData():MutableList<ImageTypeData>
 
     @Insert
     fun insertData(imageTypeData:ImageTypeData)
 
-    @Insert
-    fun insertData(imageTypeData:MutableList<ImageTypeData>)
+//    @Insert
+//    fun insertData(imageTypeData:MutableList<ImageTypeData>)
 }
