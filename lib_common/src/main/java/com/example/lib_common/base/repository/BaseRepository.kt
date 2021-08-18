@@ -6,22 +6,16 @@ import kotlinx.coroutines.withContext
 
 open class BaseRepository {
 
-//    suspend fun <T : Any> withContextIO(mResult:suspend () -> MSBResult<T>): MSBResult<T> {
-//        return withContext(Dispatchers.IO) {
-//                mResult().apply {
-//                    if (errorCode == -1) {
-//                        throw Exception(errorMsg)
-//                    }
-//                }
-//            }
-//        }
-    suspend fun <T : Any> withContextIO(mResult:suspend () -> MResult<T>): MResult<T> {
+    suspend fun <T : Any> withContextIO(mResult: suspend () -> MResult<T>): MResult<T> {
         return withContext(Dispatchers.IO) {
-                mResult().apply {
-                    if (!success) {
-                        throw Exception(message)
-                    }
-                }
-            }
+            mResult().isSuccess()
         }
+    }
+
+    private inline fun <T : MResult<*>> T.isSuccess(): T {
+        if (!this.success) {
+            throw Exception(this.message)
+        }
+        return this
+    }
 }

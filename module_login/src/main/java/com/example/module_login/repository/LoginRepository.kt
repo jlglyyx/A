@@ -10,13 +10,17 @@ class LoginRepository @Inject constructor(private val loginApiService: LoginApiS
 
     suspend fun login(userAccount: String, password: String): MResult<LoginData> {
 
-        return withContextIO{loginApiService.login(userAccount, password)}
+        return withContextIO{
+            loginApiService.login(userAccount, password)
+        }
 
     }
 
     suspend fun register(loginData: LoginData): MResult<LoginData> {
 
-        return withContextIO{loginApiService.register(loginData)}
+        return withContextIO{
+            loginApiService.register(loginData)
+        }
 
     }
 

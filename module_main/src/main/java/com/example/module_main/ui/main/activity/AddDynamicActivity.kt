@@ -17,7 +17,6 @@ import com.example.lib_common.util.dip2px
 import com.example.lib_common.util.getScreenPx
 import com.example.lib_common.widget.CommonToolBar
 import com.example.module_main.R
-import com.example.module_main.data.model.MainData
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_add_dynamic.*
@@ -48,7 +47,6 @@ class AddDynamicActivity : BaseActivity() {
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener(view: View) {
-                mainViewModel.addDynamic(MainData(0))
                 val intent = Intent()
                 intent.putStringArrayListExtra(
                     "Data",

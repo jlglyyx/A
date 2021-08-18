@@ -1,7 +1,6 @@
 package com.example.module_main.ui.main.fragment
 
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.fragment.BaseLazyFragment
 import com.example.lib_common.bus.event.UIChangeLiveData
@@ -59,7 +58,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private lateinit var mAdapter: MAdapter
 
-    var mutableListOf: MutableList<MainData> = mutableListOf()
+    private var mutableListOf: MutableList<MainData> = mutableListOf()
 
     private var pageNum = 1
 
@@ -72,14 +71,10 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         lifecycleScope.launch(Dispatchers.IO) {
             mAdapter.setNewData(
                 mutableListOf<MainData>().apply {
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                    add(MainData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
                         dynamicContent = "今天天气真好"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
                         imageList = mutableListOf<String>().apply {
                             add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
@@ -89,26 +84,12 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
 
                         }
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                         videoUrl =
                             "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                    add(MainData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
-                        dynamicContent = "不知道吃什么就很烦 在线求解"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
                         imageList = mutableListOf<String>().apply {
                             add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
@@ -118,210 +99,20 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
 
                         }
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    val toJson = gson.toJson(this)
-                    Log.i(TAG, "initData====: $toJson")
-
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                         videoUrl =
                             "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                    add(MainData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
                         videoUrl =
                             "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
+                    add(MainData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
                     })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-
-
-
-
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                        imageList = mutableListOf<String>().apply {
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32189.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32188.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg")
-                        }
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                        imageList = mutableListOf<String>().apply {
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                        }
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE).apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                        imageList = mutableListOf<String>().apply {
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-                        }
-                    })
-
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                        imageList = mutableListOf<String>().apply {
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
-                        }
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
-                        imageList = mutableListOf<String>().apply {
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32188.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                            add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336119765,2231343437&fm=26&gp=0.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32189.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg")
-                        }
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO).apply {
-                        videoUrl =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
-
+                    add(MainData())
                 })
 
         }
@@ -337,20 +128,16 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 val images = it.data?.getStringArrayListExtra("Data")
                 val content = it.data?.getStringExtra("content")
                 val mutableListOf = mutableListOf<MainData>().apply {
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_TITLE))
                     if (!content.isNullOrEmpty()) {
-                        add(MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT).apply {
+                        add(MainData().apply {
                             dynamicContent = content
                         })
                     }
                     if (!images.isNullOrEmpty()) {
-                        add((MainData(AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE).apply {
+                        add((MainData().apply {
                             imageList = images
                         }))
                     }
-
-
-                    add(MainData(AppConstant.Constant.ITEM_MAIN_IDENTIFICATION))
                 }
                 mAdapter.addData(0, mutableListOf)
                 recyclerView.scrollToPosition(0)
@@ -454,83 +241,87 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     inner class MAdapter(list: MutableList<MainData>) :
-        BaseMultiItemQuickAdapter<MainData, BaseViewHolder>(list) {
+        BaseQuickAdapter<MainData, BaseViewHolder>(list) {
 
         init {
-            addItemType(AppConstant.Constant.ITEM_MAIN_TITLE, R.layout.item_main_title)
-            addItemType(
-                AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT,
-                R.layout.item_main_content_text
-            )
-            addItemType(
-                AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE,
-                R.layout.item_main_content_image
-            )
-            addItemType(
-                AppConstant.Constant.ITEM_MAIN_IDENTIFICATION,
-                R.layout.item_main_identification
-            )
-            addItemType(
-                AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO,
-                R.layout.item_main_content_video
-            )
+            mLayoutResId = R.layout.view_dynamic_item
         }
 
         override fun convert(helper: BaseViewHolder, item: MainData) {
-            when (item.itemType) {
-                AppConstant.Constant.ITEM_MAIN_TITLE -> {
-                    val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-                    helper.addOnClickListener(R.id.siv_img)
-                    helper.setText(R.id.tv_time, item.createTime)
-                    Glide.with(sivImg).load(item.userImage).into(sivImg)
-                }
-                AppConstant.Constant.ITEM_MAIN_CONTENT_TEXT -> {
-                    helper.setText(R.id.tv_text, item.dynamicContent)
-                }
-                AppConstant.Constant.ITEM_MAIN_CONTENT_IMAGE -> {
+            initItemMainTitle(helper,item)
 
-                    val gridNinePictureView =
-                        helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
-                    gridNinePictureView.data = item.imageList!!
-                    gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback {
-                        override fun imageClickListener(position: Int) {
-                            val imageViewPagerDialog =
-                                ImageViewPagerDialog(requireContext(), item.imageList!!, position)
-                            XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
-                        }
-                    }
-                }
-                AppConstant.Constant.ITEM_MAIN_IDENTIFICATION -> {
+            if (item.dynamicContent.isNullOrEmpty()){
+                helper.setGone(R.id.item_main_content_text,false)
+            }else{
+                helper.setGone(R.id.item_main_content_text,true)
+                initItemMainContentText(helper,item)
+            }
 
+            if (item.imageList == null || item.imageList?.size == 0){
+                helper.setGone(R.id.item_main_content_image,false)
+            }else{
+                helper.setGone(R.id.item_main_content_image,true)
+                initItemMainContentImage(helper,item)
+            }
 
+            if (item.videoUrl.isNullOrEmpty()){
+                helper.setGone(R.id.item_main_content_video,false)
+            }else{
+                helper.setGone(R.id.item_main_content_video,true)
+                initItemMainContentVideo(helper,item)
+            }
 
-                }
-                AppConstant.Constant.ITEM_MAIN_CONTENT_VIDEO -> {
-                    var gsyVideoPlayer = helper.getView<StandardGSYVideoPlayer>(R.id.detailPlayer)
+            initItemMainIdentification(helper,item)
+        }
 
-                    gsyVideoPlayer.thumbImageView = ImageView(requireContext()).apply {
-                        scaleType = ImageView.ScaleType.CENTER_CROP
-                        setImageResource(R.drawable.iv_bear)
-                    }
-                    gsyVideoPlayer.setUpLazy(item.videoUrl, true, null, null, "这是title")
-                    gsyVideoPlayer.titleTextView.visibility = View.GONE
-                    gsyVideoPlayer.backButton.visibility = View.GONE
-                    gsyVideoPlayer.fullscreenButton
-                        .setOnClickListener {
-                            gsyVideoPlayer.startWindowFullscreen(
-                                context,
-                                false,
-                                true
-                            )
-                        }
-                    gsyVideoPlayer.playTag = TAG
-                    gsyVideoPlayer.playPosition = helper.adapterPosition
-                    gsyVideoPlayer.isAutoFullWithSize = true
-                    gsyVideoPlayer.isReleaseWhenLossAudio = false
-                    gsyVideoPlayer.isShowFullAnimation = true
-                    gsyVideoPlayer.setIsTouchWiget(false)
+        private fun initItemMainTitle(helper: BaseViewHolder,item: MainData){
+            val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
+            helper.addOnClickListener(R.id.siv_img)
+            helper.setText(R.id.tv_time, item.createTime)
+            Glide.with(sivImg).load(item.userImage).into(sivImg)
+        }
+        private fun initItemMainContentText(helper: BaseViewHolder,item: MainData){
+            helper.setText(R.id.tv_text, item.dynamicContent)
+        }
+        private fun initItemMainContentImage(helper: BaseViewHolder,item: MainData){
+            val gridNinePictureView =
+                helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
+            gridNinePictureView.data = item.imageList!!
+            gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback {
+                override fun imageClickListener(position: Int) {
+                    val imageViewPagerDialog =
+                        ImageViewPagerDialog(requireContext(), item.imageList!!, position)
+                    XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
                 }
             }
+        }
+        private fun initItemMainContentVideo(helper: BaseViewHolder,item: MainData){
+            var gsyVideoPlayer = helper.getView<StandardGSYVideoPlayer>(R.id.detailPlayer)
+
+            gsyVideoPlayer.thumbImageView = ImageView(requireContext()).apply {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                setImageResource(R.drawable.iv_bear)
+            }
+            gsyVideoPlayer.setUpLazy(item.videoUrl, true, null, null, "这是title")
+            gsyVideoPlayer.titleTextView.visibility = View.GONE
+            gsyVideoPlayer.backButton.visibility = View.GONE
+            gsyVideoPlayer.fullscreenButton
+                .setOnClickListener {
+                    gsyVideoPlayer.startWindowFullscreen(
+                        context,
+                        false,
+                        true
+                    )
+                }
+            gsyVideoPlayer.playTag = TAG
+            gsyVideoPlayer.playPosition = helper.adapterPosition
+            gsyVideoPlayer.isAutoFullWithSize = true
+            gsyVideoPlayer.isReleaseWhenLossAudio = false
+            gsyVideoPlayer.isShowFullAnimation = true
+            gsyVideoPlayer.setIsTouchWiget(false)
+        }
+        private fun initItemMainIdentification(helper: BaseViewHolder,item: MainData){
+
         }
     }
 

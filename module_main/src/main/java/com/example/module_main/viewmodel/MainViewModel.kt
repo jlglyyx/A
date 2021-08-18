@@ -48,15 +48,21 @@ class MainViewModel @Inject constructor(
         })
     }
 
-    fun getDynamicDetail(id:String) {
+    fun getDynamicDetail(params:Map<String,Any>) {
         launch({
-            mainRepository.getDynamicDetail(id)
+            mainRepository.getDynamicDetail(params)
         }, {
             dynamicDetailLiveData.postValue(it.data)
             showDialog("添加成功")
         })
     }
 
-
+//    val mutableMapOf = mutableMapOf<String, RequestBody>()
+//    list.forEach {
+//        val file = File(it)
+//        val encode = URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+//        val create = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+//        mutableMapOf["file\";filename=\"$encode"] = create
+//    }
 }
 
