@@ -11,16 +11,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.adapter.NormalImageAdapter
 import com.example.lib_common.base.ui.activity.BaseActivity
+import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.scope.ModelWithFactory
 import com.example.lib_common.util.dip2px
 import com.example.lib_common.util.getScreenPx
+import com.example.lib_common.util.getUserInfo
 import com.example.lib_common.widget.CommonToolBar
 import com.example.module_main.R
+import com.example.module_main.data.model.MainData
 import com.example.module_main.helper.getMainComponent
 import com.example.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_add_dynamic.*
-import java.util.*
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY)
@@ -46,15 +48,16 @@ class AddDynamicActivity : BaseActivity() {
 
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
-            override fun tvRightClickListener(view: View) {
-                val intent = Intent()
-                intent.putStringArrayListExtra(
-                    "Data",
-                    normalImageAdapter.data as ArrayList<String>?
-                )
-                intent.putExtra("content", et_dynamic.text.toString())
-                setResult(RESULT_OK, intent)
-                finish()
+            override fun tvRightClickListener() {
+                addDynamics()
+//                val intent = Intent()
+//                intent.putStringArrayListExtra(
+//                    "Data",
+//                    normalImageAdapter.data as ArrayList<String>?
+//                )
+//                intent.putExtra("content", et_dynamic.text.toString())
+//                setResult(RESULT_OK, intent)
+//                finish()
             }
 
         }
@@ -62,8 +65,21 @@ class AddDynamicActivity : BaseActivity() {
 
     }
 
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return mainViewModel.uC
+    }
+
     override fun initViewModel() {
         getMainComponent(this).inject(this)
+    }
+
+    private fun addDynamics(){
+        val mainData = MainData()
+        mainData.userId = getUserInfo()?.id
+        mainData.dynamicContent = et_dynamic.text.toString()
+        mainData.imageUrls = ""
+        //mainData.videoUrls = ""
+        mainViewModel.addDynamic(mainData)
     }
 
 

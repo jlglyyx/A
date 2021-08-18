@@ -100,8 +100,8 @@ class RemoteModule {
     }
 
     companion object {
-//        const val baseUrl = "https://wanandroid.com/"
-        const val baseUrl = "http://10.16.242.28:20000/"
+        const val baseUrl = "https://wanandroid.com/"
+ //       const val baseUrl = "http://10.16.242.28:20000/"
 //        const val baseUrl = "http://jlgl.free.idcfengye.com/"
         private const val TAG = "RemoteModule"
         private const val TAG_LOG = "httpLog"

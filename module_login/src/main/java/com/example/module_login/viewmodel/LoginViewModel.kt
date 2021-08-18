@@ -3,7 +3,7 @@ package com.example.module_login.viewmodel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.example.lib_common.base.viewmodel.BaseViewModel
-import com.example.lib_common.data.LoginData
+import com.example.lib_common.data.UserInfoData
 import com.example.module_login.repository.LoginRepository
 import javax.inject.Inject
 
@@ -17,24 +17,24 @@ class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository
 ) : BaseViewModel(application) {
 
-    var mLoginData = MutableLiveData<LoginData>()
+    var mUserInfoData = MutableLiveData<UserInfoData>()
 
     fun login(userAccount: String, password: String) {
         launch({
             loginRepository.login(userAccount, password)
         }, {
-            mLoginData.postValue(it.data)
+            mUserInfoData.postValue(it.data)
             showDialog(it.message)
             delayShowDialog()
             dismissDialog()
         }, messages = *arrayOf("请求中..."))
     }
 
-    fun register(loginData: LoginData) {
+    fun register(userInfoData: UserInfoData) {
         launch({
-            loginRepository.register(loginData)
+            loginRepository.register(userInfoData)
         }, {
-            mLoginData.postValue(it.data)
+            mUserInfoData.postValue(it.data)
             showDialog(it.message)
             delayShowDialog()
             dismissDialog()

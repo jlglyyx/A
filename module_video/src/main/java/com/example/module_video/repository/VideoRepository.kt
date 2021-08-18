@@ -21,7 +21,7 @@ class VideoRepository @Inject constructor(private val videoApiService: VideoApiS
 
     suspend fun getVideoInfo(type:String,pageNum:Int): MResult<VideoData> {
         return withContextIO {
-            videoApiService.getVideoInfo(type,pageNum, AppConstant.Constant.PAGE_SIZE)
+            videoApiService.getVideoInfo(type,pageNum, AppConstant.Constant.PAGE_SIZE_COUNT)
         }
     }
     suspend fun getVideoItemData(sid:String): MResult<MutableList<VideoDataItem>> {

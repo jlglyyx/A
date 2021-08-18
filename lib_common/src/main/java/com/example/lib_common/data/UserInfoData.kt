@@ -2,7 +2,7 @@ package com.example.lib_common.data
 
 import java.util.*
 
-data class LoginData(
+data class UserInfoData(
     val id: String?,
     val token: String?,
     val userName: String,

@@ -32,6 +32,21 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         uC.loadMoreEvent.call()
     }
 
+    fun cancelRefreshLoadMore(){
+        uC.refreshEvent.call()
+        uC.loadMoreEvent.call()
+    }
+
+    fun requestSuccess(){
+        uC.requestSuccessEvent.call()
+    }
+    fun requestFail(){
+        uC.requestFailEvent.call()
+    }
+    fun finishActivity(){
+        uC.finishActivityEvent.call()
+    }
+
 
     suspend fun delayShowDialog(timeMillis: Long = 1000) {
         delay(timeMillis)

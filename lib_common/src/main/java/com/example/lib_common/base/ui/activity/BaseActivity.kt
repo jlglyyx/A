@@ -12,6 +12,7 @@ import com.example.lib_common.util.addActivity
 import com.example.lib_common.util.removeActivity
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.impl.LoadingPopupView
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -48,6 +49,15 @@ abstract class BaseActivity : AppCompatActivity() {
     open fun initUIChangeLiveData(): UIChangeLiveData? {//在ViewModel层操作ui
         return null
     }
+
+    fun finishRefreshLoadMore(smartRefreshLayout: SmartRefreshLayout){
+        uC?.refreshEvent?.observe(this, Observer {
+            smartRefreshLayout.finishRefresh()
+        })
+        uC?.loadMoreEvent?.observe(this, Observer {
+            smartRefreshLayout.finishLoadMore()
+        })
+    }
     
     fun <T:BaseViewModel> getViewModel(@NonNull clazz: Class<T>):T{
 
@@ -79,6 +89,9 @@ abstract class BaseActivity : AppCompatActivity() {
             uC.dismissDialogEvent.observe(this, Observer {
                 loadingPopupView?.dismiss()
             })
+            uC.finishActivityEvent.observe(this, Observer {
+                finish()
+            })
         }
 
     }
@@ -87,6 +100,7 @@ abstract class BaseActivity : AppCompatActivity() {
         uC?.let { uC ->
             uC.showLoadingEvent.removeObservers(this)
             uC.dismissDialogEvent.removeObservers(this)
+            uC.finishActivityEvent.removeObservers(this)
         }
     }
 

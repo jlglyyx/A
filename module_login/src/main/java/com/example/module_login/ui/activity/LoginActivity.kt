@@ -72,7 +72,7 @@ class LoginActivity : BaseActivity() {
             return
         }
         loginViewModel.login(et_user.text.toString(),et_password.text.toString())
-        loginViewModel.mLoginData.observe(this, Observer {
+        loginViewModel.mUserInfoData.observe(this, Observer {
             getDefaultMMKV().encode(AppConstant.Constant.USER_INFO,gson.toJson(it))
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         })

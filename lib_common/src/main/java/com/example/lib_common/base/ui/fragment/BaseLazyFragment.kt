@@ -15,6 +15,7 @@ import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.util.getStatusBarHeight
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.impl.LoadingPopupView
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 
 
 /**
@@ -96,6 +97,20 @@ abstract class BaseLazyFragment : Fragment() {
         return ViewModelProvider(requireActivity(), factory).get(clazz)
     }
 
+    fun finishRefreshLoadMore(smartRefreshLayout:SmartRefreshLayout){
+        uC?.let { uC ->
+            uC.refreshEvent.observe(this, Observer {
+                smartRefreshLayout.finishRefresh()
+            })
+            uC.loadMoreEvent.observe(this, Observer {
+                smartRefreshLayout.finishLoadMore()
+            })
+        }
+
+    }
+
+
+
     private fun registerListener() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
@@ -123,6 +138,8 @@ abstract class BaseLazyFragment : Fragment() {
             uC.dismissDialogEvent.removeObservers(this)
         }
     }
+
+
 
     override fun onResume() {
         super.onResume()

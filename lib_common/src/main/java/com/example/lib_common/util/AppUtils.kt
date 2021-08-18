@@ -8,16 +8,19 @@ import android.util.Log
 import android.view.View
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.constant.AppConstant.Constant.CLICK_TIME
-import com.example.lib_common.data.LoginData
+import com.example.lib_common.data.UserInfoData
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.tencent.mmkv.MMKV
 import io.reactivex.rxjava3.core.Observable
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 
 
 private const val TAG = "AppUtils"
+
+val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd hh:mm:ss")
 
 /*
 * @return 宽高集合
@@ -97,11 +100,31 @@ fun getDefaultMMKV(): MMKV {
     return MMKV.defaultMMKV()
 }
 
-fun getUserInfo(): LoginData? {
+fun getUserInfo(): UserInfoData? {
     val userInfo = getDefaultMMKV().decodeString(AppConstant.Constant.USER_INFO, "")
     if (!userInfo.isNullOrEmpty()) {
-        return Gson().fromJson<LoginData>(userInfo, LoginData::class.java)
+        return Gson().fromJson<UserInfoData>(userInfo, UserInfoData::class.java)
     }
     return null
 }
+
+fun MutableList<String>.formatWithComma(): String {
+    val stringBuilder = StringBuilder()
+    this.forEachIndexed { index, s ->
+        if (index == this.size - 1) {
+            stringBuilder.append(s)
+        } else {
+            stringBuilder.append(s).append(",")
+        }
+    }
+    return stringBuilder.toString()
+}
+
+fun String.commaToList(): MutableList<String> {
+    val mutableListOf = mutableListOf<String>()
+    val split = this.split(",")
+    mutableListOf.addAll(split)
+    return mutableListOf
+}
+
 

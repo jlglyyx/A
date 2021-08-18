@@ -50,6 +50,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     override fun initView() {
         initRecyclerView()
         initSmartRefreshLayout()
+
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -58,16 +59,12 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initViewModel() {
         getPictureComponent(this).inject(this)
-        pictureModule.uC.refreshEvent.observe(this, Observer {
-            smartRefreshLayout.finishRefresh()
-        })
-        pictureModule.uC.loadMoreEvent.observe(this, Observer {
-            smartRefreshLayout.finishLoadMore()
-        })
+
     }
 
     private fun initSmartRefreshLayout() {
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+        finishRefreshLoadMore(smartRefreshLayout)
     }
 
 

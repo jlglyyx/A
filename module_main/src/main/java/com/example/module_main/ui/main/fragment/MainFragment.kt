@@ -19,9 +19,7 @@ import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.scope.ModelWithFactory
-import com.example.lib_common.util.buildARouter
-import com.example.lib_common.util.dip2px
-import com.example.lib_common.util.getUserInfo
+import com.example.lib_common.util.*
 import com.example.lib_common.widget.CommonToolBar
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
@@ -68,6 +66,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initData() {
         smartRefreshLayout.autoRefresh()
+        initSmartRefreshLayout()
         lifecycleScope.launch(Dispatchers.IO) {
             mAdapter.setNewData(
                 mutableListOf<MainData>().apply {
@@ -75,7 +74,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
                         dynamicContent = "今天天气真好"
-                        imageList = mutableListOf<String>().apply {
+                        imageUrls = mutableListOf<String>().apply {
                             add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
@@ -83,14 +82,14 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
 
-                        }
-                        videoUrl =
+                        }.formatWithComma()
+                        videoUrls =
                             "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
                     add(MainData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                        imageList = mutableListOf<String>().apply {
+                        imageUrls = mutableListOf<String>().apply {
                             add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
@@ -98,14 +97,14 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
 
-                        }
-                        videoUrl =
+                        }.formatWithComma()
+                        videoUrls =
                             "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
                     add(MainData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                        videoUrl =
+                        videoUrls =
                             "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
                     add(MainData().apply {
@@ -120,6 +119,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initView() {
         initRecyclerView()
+
         val registerForActivityResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode != AppCompatActivity.RESULT_OK) {
@@ -135,7 +135,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     }
                     if (!images.isNullOrEmpty()) {
                         add((MainData().apply {
-                            imageList = images
+                            imageUrls = images.formatWithComma()
                         }))
                     }
                 }
@@ -162,20 +162,25 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             .load(userInfo?.userImage)
             .into(commonToolBar.ivBack)
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
-            override fun imageAddClickListener(view: View) {
+            override fun imageAddClickListener() {
                 registerForActivityResult.launch(
                     Intent(requireContext(), AddDynamicActivity::class.java)
                 )
             }
         }
         commonToolBar.imageBackCallBack = object : CommonToolBar.ImageBackCallBack {
-            override fun imageBackClickListener(view: View) {
+            override fun imageBackClickListener() {
                 (activity as MainActivity).drawerLayout.openDrawer(GravityCompat.START)
             }
 
         }
 
 
+    }
+
+    private fun initSmartRefreshLayout() {
+        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+        finishRefreshLoadMore(smartRefreshLayout)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -257,14 +262,14 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 initItemMainContentText(helper,item)
             }
 
-            if (item.imageList == null || item.imageList?.size == 0){
+            if (item.imageUrls.isNullOrEmpty()){
                 helper.setGone(R.id.item_main_content_image,false)
             }else{
                 helper.setGone(R.id.item_main_content_image,true)
                 initItemMainContentImage(helper,item)
             }
 
-            if (item.videoUrl.isNullOrEmpty()){
+            if (item.videoUrls.isNullOrEmpty()){
                 helper.setGone(R.id.item_main_content_video,false)
             }else{
                 helper.setGone(R.id.item_main_content_video,true)
@@ -286,11 +291,11 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         private fun initItemMainContentImage(helper: BaseViewHolder,item: MainData){
             val gridNinePictureView =
                 helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
-            gridNinePictureView.data = item.imageList!!
+            gridNinePictureView.data = item.imageUrls?.commaToList()!!
             gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback {
                 override fun imageClickListener(position: Int) {
                     val imageViewPagerDialog =
-                        ImageViewPagerDialog(requireContext(), item.imageList!!, position)
+                        ImageViewPagerDialog(requireContext(), item.imageUrls?.commaToList()!!, position)
                     XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
                 }
             }
@@ -302,7 +307,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 scaleType = ImageView.ScaleType.CENTER_CROP
                 setImageResource(R.drawable.iv_bear)
             }
-            gsyVideoPlayer.setUpLazy(item.videoUrl, true, null, null, "这是title")
+            gsyVideoPlayer.setUpLazy(item.videoUrls, true, null, null, "这是title")
             gsyVideoPlayer.titleTextView.visibility = View.GONE
             gsyVideoPlayer.backButton.visibility = View.GONE
             gsyVideoPlayer.fullscreenButton
@@ -325,14 +330,21 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         }
     }
 
+    private fun getDynamicList(){
+        val mutableMapOf = mutableMapOf<String, String>()
+        mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum.toString()
+        mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT.toString()
+        mainViewModel.getDynamicList(mutableMapOf)
+    }
+
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
-        mainViewModel.getDynamicList( "", pageNum)
+        getDynamicList()
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
-        mainViewModel.getDynamicList( "", pageNum)
+        getDynamicList()
     }
 
 

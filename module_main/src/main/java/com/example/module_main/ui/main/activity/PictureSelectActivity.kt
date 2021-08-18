@@ -3,10 +3,11 @@ package com.example.module_main.ui.main.activity
 import android.content.Intent
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.lib_common.base.ui.activity.BaseActivity
+import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.data.MediaInfoBean
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.widget.CommonToolBar
@@ -25,6 +26,7 @@ import java.util.*
  * @Description
  * @Date 2021/8/6 11:08
  */
+@Route(path = AppConstant.RoutePath.PICTURE_SELECT_ACTIVITY)
 class PictureSelectActivity : BaseActivity() {
 
     private lateinit var pictureSelectAdapter: PictureSelectAdapter
@@ -40,7 +42,7 @@ class PictureSelectActivity : BaseActivity() {
 
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
-            override fun tvRightClickListener(view: View) {
+            override fun tvRightClickListener() {
                 val intent = Intent()
                 intent.putStringArrayListExtra(
                     "Data",

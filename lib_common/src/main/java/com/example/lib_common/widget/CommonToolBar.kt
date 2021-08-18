@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.lib_common.R
+import com.example.lib_common.util.clicks
 import com.example.lib_common.util.getStatusBarHeight
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -31,15 +32,15 @@ class CommonToolBar : ConstraintLayout {
     lateinit var ivBack: ShapeableImageView
 
     interface ImageBackCallBack {
-        fun imageBackClickListener(view: View)
+        fun imageBackClickListener()
     }
 
     interface ImageAddCallBack {
-        fun imageAddClickListener(view: View)
+        fun imageAddClickListener()
     }
 
     interface TVRightCallBack {
-        fun tvRightClickListener(view: View)
+        fun tvRightClickListener()
     }
 
     constructor(context: Context) : this(context, null)
@@ -99,19 +100,20 @@ class CommonToolBar : ConstraintLayout {
         } else {
             tvRightContent.visibility = View.GONE
         }
-        ivAdd.setOnClickListener {
-            imageAddCallBack?.imageAddClickListener(it)
-        }
-        ivBack.setOnClickListener {
+        ivBack.clicks().subscribe{
             if (null != imageBackCallBack) {
-                imageBackCallBack?.imageBackClickListener(it)
+                imageBackCallBack?.imageBackClickListener()
             } else {
                 (context as Activity).finish()
             }
         }
-        tvRightContent.setOnClickListener {
-            tVRightCallBack?.tvRightClickListener(it)
+        tvRightContent.clicks().subscribe{
+            tVRightCallBack?.tvRightClickListener()
         }
+        ivAdd.clicks().subscribe{
+            imageAddCallBack?.imageAddClickListener()
+        }
+
         obtainStyledAttributes.recycle()
     }
 

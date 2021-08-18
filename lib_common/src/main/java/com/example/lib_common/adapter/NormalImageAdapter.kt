@@ -16,6 +16,7 @@ class NormalImageAdapter<T>(list: MutableList<T>,layoutResId:Int = R.layout.item
         val ivImg = helper.getView<ImageView>(R.id.iv_image)
         Glide.with(ivImg)
             .load(item)
+            .centerCrop()
             .into(ivImg)
     }
 }

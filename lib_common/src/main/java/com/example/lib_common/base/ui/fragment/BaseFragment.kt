@@ -14,6 +14,7 @@ import com.example.lib_common.bus.event.UIChangeLiveData
 import com.example.lib_common.util.getStatusBarHeight
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.impl.LoadingPopupView
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 
 abstract class BaseFragment : Fragment() {
 
@@ -67,6 +68,15 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun initViewModel()
 
+
+    fun finishRefreshLoadMore(smartRefreshLayout: SmartRefreshLayout){
+        uC?.refreshEvent?.observe(this, Observer {
+            smartRefreshLayout.finishRefresh()
+        })
+        uC?.loadMoreEvent?.observe(this, Observer {
+            smartRefreshLayout.finishLoadMore()
+        })
+    }
 
     fun <T : BaseViewModel> getViewModel(@NonNull clazz: Class<T>): T {
 

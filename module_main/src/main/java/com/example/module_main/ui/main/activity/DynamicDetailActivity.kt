@@ -8,15 +8,19 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.example.lib_common.base.ui.activity.BaseActivity
 import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.EditBottomDialog
+import com.example.lib_common.scope.ModelWithFactory
 import com.example.lib_common.util.buildARouter
 import com.example.lib_common.util.clicks
 import com.example.module_main.R
+import com.example.module_main.helper.getMainComponent
+import com.example.module_main.viewmodel.MainViewModel
 import com.google.android.material.imageview.ShapeableImageView
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.act_dynamic_detail.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -27,6 +31,10 @@ import kotlinx.coroutines.launch
 @Route(path = AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY)
 class DynamicDetailActivity:BaseActivity() {
 
+    @Inject
+    @ModelWithFactory
+    lateinit var mainViewModel: MainViewModel
+
     private lateinit var commentAdapter: CommentAdapter
 
     override fun getLayout(): Int {
@@ -35,7 +43,7 @@ class DynamicDetailActivity:BaseActivity() {
     }
 
     override fun initData() {
-
+        getDynamicList()
     }
 
     override fun initView() {
@@ -54,8 +62,16 @@ class DynamicDetailActivity:BaseActivity() {
     }
 
     override fun initViewModel() {
-
+        getMainComponent(this).inject(this)
     }
+
+
+    private fun getDynamicList(){
+        val mutableMapOf = mutableMapOf<String, String>()
+        mutableMapOf[AppConstant.Constant.ID] = ""
+        mainViewModel.getDynamicList(mutableMapOf)
+    }
+
 
     private fun initRecyclerView() {
 

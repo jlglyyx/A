@@ -14,6 +14,8 @@ import com.example.lib_common.constant.AppConstant
 import com.example.lib_common.dialog.ImageViewPagerDialog
 import com.example.lib_common.scope.ModelWithFactory
 import com.example.lib_common.util.buildARouter
+import com.example.lib_common.util.commaToList
+import com.example.lib_common.util.formatWithComma
 import com.example.lib_common.widget.GridNinePictureView
 import com.example.module_main.R
 import com.example.module_main.data.model.MainData
@@ -45,11 +47,13 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     override fun initData() {
         smartRefreshLayout.autoRefresh()
+        initSmartRefreshLayout()
 
     }
 
     override fun initView() {
         initRecyclerView()
+        finishRefreshLoadMore(smartRefreshLayout)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -59,8 +63,11 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
     override fun initViewModel() {
         getMainComponent(this).inject(this)
 
-    }
 
+    }
+    private fun initSmartRefreshLayout() {
+        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+    }
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -69,7 +76,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                     userImage =
                         "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
                     dynamicContent = "今天天气真好"
-                    imageList = mutableListOf<String>().apply {
+                    imageUrls = mutableListOf<String>().apply {
                         add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
                         add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
                         add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
@@ -77,14 +84,14 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                         add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
                         add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
 
-                    }
-                    videoUrl =
+                    }.formatWithComma()
+                    videoUrls =
                         "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                 })
                 add(MainData().apply {
                     userImage =
                         "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    imageList = mutableListOf<String>().apply {
+                    imageUrls = mutableListOf<String>().apply {
                         add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
                         add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
                         add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
@@ -92,14 +99,14 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                         add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
                         add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
 
-                    }
-                    videoUrl =
+                    }.formatWithComma()
+                    videoUrls =
                         "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                 })
                 add(MainData().apply {
                     userImage =
                         "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    videoUrl =
+                    videoUrls =
                         "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                 })
                 add(MainData().apply {
@@ -168,14 +175,14 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                 initItemMainContentText(helper,item)
             }
 
-            if (item.imageList.isNullOrEmpty()){
+            if (item.imageUrls.isNullOrEmpty()){
                 helper.setVisible(R.id.item_main_content_image,false)
             }else{
                 helper.setVisible(R.id.item_main_content_image,true)
                 initItemMainContentImage(helper,item)
             }
 
-            if (item.videoUrl.isNullOrEmpty()){
+            if (item.videoUrls.isNullOrEmpty()){
                 helper.setVisible(R.id.item_main_content_video,false)
             }else{
                 helper.setVisible(R.id.item_main_content_video,true)
@@ -197,11 +204,11 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
         private fun initItemMainContentImage(helper: BaseViewHolder,item: MainData){
             val gridNinePictureView =
                 helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
-            gridNinePictureView.data = item.imageList!!
+            gridNinePictureView.data = item.imageUrls?.commaToList()!!
             gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback {
                 override fun imageClickListener(position: Int) {
                     val imageViewPagerDialog =
-                        ImageViewPagerDialog(mContext, item.imageList!!, position)
+                        ImageViewPagerDialog(mContext, item.imageUrls?.commaToList()!!, position)
                     XPopup.Builder(mContext).asCustom(imageViewPagerDialog).show()
                 }
             }
@@ -213,7 +220,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                 scaleType = ImageView.ScaleType.CENTER_CROP
                 setImageResource(R.drawable.iv_bear)
             }
-            gsyVideoPlayer.setUpLazy(item.videoUrl, true, null, null, "这是title")
+            gsyVideoPlayer.setUpLazy(item.videoUrls, true, null, null, "这是title")
             gsyVideoPlayer.titleTextView.visibility = View.GONE
             gsyVideoPlayer.backButton.visibility = View.GONE
             gsyVideoPlayer.fullscreenButton
@@ -235,14 +242,23 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
         }
     }
+
+    private fun getDynamicList(){
+        val mutableMapOf = mutableMapOf<String, String>()
+        mutableMapOf[AppConstant.Constant.USER_ID] = ""
+        mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum.toString()
+        mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT.toString()
+        mainViewModel.getDynamicList(mutableMapOf)
+    }
+
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
-        mainViewModel.getDynamicList( "", pageNum)
+        getDynamicList()
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
-        mainViewModel.getDynamicList( "", pageNum)
+        getDynamicList()
     }
 
     override fun onPause() {

@@ -9,4 +9,10 @@ class UIChangeLiveData {
     val refreshEvent:SingleLiveEvent<Boolean> = SingleLiveEvent()
 
     val loadMoreEvent:SingleLiveEvent<Boolean> = SingleLiveEvent()
+
+    val finishActivityEvent:SingleLiveEvent<Boolean> = SingleLiveEvent()
+
+    val requestSuccessEvent:SingleLiveEvent<Boolean> = SingleLiveEvent()
+
+    val requestFailEvent:SingleLiveEvent<Boolean> = SingleLiveEvent()
 }

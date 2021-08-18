@@ -31,8 +31,7 @@ class PictureViewModel @Inject constructor(
         }, {
             mImageData.postValue(it.data)
         },{
-            cancelLoadMore()
-            cancelRefresh()
+            cancelRefreshLoadMore()
         })
     }
     fun getImageItemData(sid:String) {
@@ -60,7 +59,7 @@ class PictureViewModel @Inject constructor(
                 )
             }
             mImageTypeData.postValue(mutableListOf)
-        })
+        }, "加载中...")
     }
 //    fun getImageItemData(sid:String) {
 //        launch({

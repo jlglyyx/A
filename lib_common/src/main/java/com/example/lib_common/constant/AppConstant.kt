@@ -24,6 +24,7 @@ interface AppConstant {
         const val MY_COLLECTION_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/MyCollectionActivity"
         const val MY_PUSH_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/MyPushActivity"
         const val DYNAMIC_DETAIL_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/DynamicDetailActivity"
+        const val PICTURE_SELECT_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/PictureSelectActivity"
 
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
@@ -86,11 +87,17 @@ interface AppConstant {
 
         const val TYPE = "type"
 
-        const val PAGE_SIZE = 10
+        const val PAGE_SIZE_COUNT = 10
 
         const val TAB_HEIGHT = "TAB_HEIGHT"
 
         const val USER_INFO = "user_info"
+
+        const val USER_ID = "user_id"
+
+        const val PAGE_SIZE = "pageSize"
+
+        const val PAGE_NUMBER = "pageNum"
 
         const val ITEM_MAIN_TITLE = 0
         const val ITEM_MAIN_CONTENT_TEXT = 1

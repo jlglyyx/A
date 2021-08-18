@@ -13,7 +13,7 @@ class PictureRepository @Inject constructor(private val pictureApiService: Pictu
 
     suspend fun getImageInfo(type:String,pageNum:Int): MResult<ImageData> {
         return withContextIO {
-            pictureApiService.getImageInfo(type,pageNum,AppConstant.Constant.PAGE_SIZE)
+            pictureApiService.getImageInfo(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT)
         }
     }
     suspend fun getImageItemData(sid:String): MResult<MutableList<ImageDataItem>> {

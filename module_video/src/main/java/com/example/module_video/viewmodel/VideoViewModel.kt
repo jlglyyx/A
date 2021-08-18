@@ -34,8 +34,7 @@ class VideoViewModel @Inject constructor(
         }, {
             sMutableLiveData.postValue(it.data)
         }, {
-            cancelLoadMore()
-            cancelRefresh()
+            cancelRefreshLoadMore()
         })
     }
 
@@ -46,8 +45,7 @@ class VideoViewModel @Inject constructor(
         }, {
             mVideoData.postValue(it.data)
         },{
-            cancelLoadMore()
-            cancelRefresh()
+            cancelRefreshLoadMore()
         })
     }
     fun getVideoItemData(sid:String) {
@@ -75,7 +73,7 @@ class VideoViewModel @Inject constructor(
                 )
             }
             mVideoTypeData.postValue(mutableListOf)
-        })
+        }, "加载中...")
     }
 
 }

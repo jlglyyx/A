@@ -94,7 +94,6 @@ class PictureFragment : BaseLazyFragment() {
  //       banner.addPageTransformer(ZoomOutPageTransformer())
         banner.addBannerLifecycleObserver(this)//添加生命周期观察者
             .setAdapter(MBannerAdapter(mutableListOf<BannerBean>().apply {
-                add(BannerBean("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3859417927,1640776349&fm=11&gp=0.jpg"))
                 add(BannerBean("https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"))
                 add(BannerBean("https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"))
                 add(BannerBean("https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"))

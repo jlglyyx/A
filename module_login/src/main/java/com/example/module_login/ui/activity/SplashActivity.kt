@@ -62,7 +62,7 @@ class SplashActivity : BaseActivity() {
         }else{
 
             loginViewModel.login(userInfo.userAccount,userInfo.userPassword)
-            loginViewModel.mLoginData.observe(this, Observer {
+            loginViewModel.mUserInfoData.observe(this, Observer {
                 getDefaultMMKV().encode(AppConstant.Constant.USER_INFO,gson.toJson(it))
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
                 finish()

@@ -57,17 +57,13 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initViewModel() {
         getVideoComponent(this).inject(this)
-        videoModule.uC.refreshEvent.observe(this, Observer {
-            smartRefreshLayout.finishRefresh()
-        })
-        videoModule.uC.loadMoreEvent.observe(this, Observer {
-            smartRefreshLayout.finishLoadMore()
-        })
+
     }
 
 
     private fun initSmartRefreshLayout() {
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+        finishRefreshLoadMore(smartRefreshLayout)
     }
 
     private fun initRecyclerView() {
