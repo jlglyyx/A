@@ -26,6 +26,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+//        ndk {
+//            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+//            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","arm64-v8a","x86_64"
+//        }
     }
 
     kotlinOptions {
@@ -124,6 +129,8 @@ dependencies {
     api 'androidx.navigation:navigation-ui-ktx:2.1.0'
     api 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5-jitpack'
     api "androidx.recyclerview:recyclerview:1.2.1"
+
+    api 'com.amap.api:location:latest.integration'
 
 //    api rootProject.ext.dependencies['BaseRecyclerViewAdapterHelper']
 //    api rootProject.ext.dependencies['dagger']

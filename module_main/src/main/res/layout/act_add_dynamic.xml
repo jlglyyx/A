@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.example.lib_common.widget.CommonToolBar
+    <com.yang.lib_common.widget.CommonToolBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:centerContent="发表"

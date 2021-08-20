@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.example.lib_common.widget.GridNinePictureView
+    <com.yang.lib_common.widget.GridNinePictureView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
