@@ -3,7 +3,9 @@ package com.yang.module_login.viewmodel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
+import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoData
+import com.yang.lib_common.util.buildARouter
 import com.yang.module_login.repository.LoginRepository
 import javax.inject.Inject
 
@@ -27,6 +29,8 @@ class LoginViewModel @Inject constructor(
             showDialog(it.message)
             delayShowDialog()
             dismissDialog()
+        },{
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
         }, messages = *arrayOf("请求中..."))
     }
 

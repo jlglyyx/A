@@ -23,6 +23,7 @@
                     android:id="@+id/iv_bg"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_250"
+                    android:src="@color/orchid"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
@@ -63,90 +64,7 @@
                             app:layout_constraintLeft_toRightOf="@+id/siv_img"
                             app:layout_constraintTop_toTopOf="@+id/siv_img" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:orientation="horizontal"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/siv_img">
 
-                            <LinearLayout
-                                android:layout_width="@dimen/dp_0"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:text="0"
-                                    android:textSize="@dimen/sp_16" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/dp_10"
-                                    android:gravity="center"
-                                    android:text="加入的圈子"
-                                    android:textSize="@dimen/sp_14" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="@dimen/dp_0"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:text="0"
-                                    android:textSize="@dimen/sp_16" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/dp_10"
-                                    android:gravity="center"
-                                    android:text="关注"
-                                    android:textSize="@dimen/sp_14" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="@dimen/dp_0"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:text="0"
-                                    android:textSize="@dimen/sp_16" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/dp_10"
-                                    android:gravity="center"
-                                    android:text="粉丝"
-                                    android:textSize="@dimen/sp_14" />
-                            </LinearLayout>
-
-
-                        </LinearLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>

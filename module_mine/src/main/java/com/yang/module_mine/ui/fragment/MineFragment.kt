@@ -1,9 +1,9 @@
 package com.yang.module_mine.ui.fragment
 
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
+import com.google.android.material.appbar.AppBarLayout
 import com.yang.lib_common.adapter.NormalImageAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.constant.AppConstant
@@ -11,7 +11,6 @@ import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
 import com.yang.module_mine.R
-import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fra_mine.*
 import kotlin.math.abs
 
@@ -90,10 +89,6 @@ class MineFragment : BaseLazyFragment() {
             //滑动状态
             alphaPercent =
                 abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange.toFloat()
-            Log.i(
-                TAG,
-                "onOffsetChanged: $verticalOffset   ${appBarLayout.totalScrollRange}  $alphaPercent"
-            )
             if (alphaPercent <= 0.2f) {
                 alphaPercent = 0f
             }

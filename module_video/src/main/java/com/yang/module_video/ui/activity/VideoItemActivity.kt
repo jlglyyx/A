@@ -11,6 +11,13 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.tabs.TabLayout
+import com.lxj.xpopup.XPopup
+import com.shuyu.gsyvideoplayer.GSYVideoManager
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.dialog.EditBottomDialog
@@ -21,13 +28,6 @@ import com.yang.module_video.R
 import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.model.VideoDataItem
 import com.yang.module_video.viewmodel.VideoViewModel
-import com.google.android.material.imageview.ShapeableImageView
-import com.google.android.material.tabs.TabLayout
-import com.lxj.xpopup.XPopup
-import com.shuyu.gsyvideoplayer.GSYVideoManager
-import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
-import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import kotlinx.android.synthetic.main.act_video_item.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -58,7 +58,10 @@ class VideoItemActivity : BaseActivity() {
     override fun initData() {
         val intent = intent
         val sid = intent.getStringExtra(AppConstant.Constant.ID)
-        videoModule.getVideoItemData(sid!!)
+        sid?.let {
+            videoModule.getVideoItemData(it)
+        }
+
     }
 
     override fun initView() {

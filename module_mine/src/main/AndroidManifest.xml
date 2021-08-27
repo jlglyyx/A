@@ -3,8 +3,8 @@
     package="com.yang.module_mine">
 
     <application>
-        <activity android:name="com.yang.module_mine.MainActivity" />
         <activity android:name="com.yang.module_mine.ui.activity.OtherPersonInfoActivity"/>
+        <activity android:name="com.yang.module_mine.ui.activity.ChangeUserInfoActivity"/>
     </application>
 
 </manifest>

@@ -3,15 +3,17 @@
 package com.yang.lib_common.util
 
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
-import com.yang.lib_common.data.UserInfoData
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.tencent.mmkv.MMKV
+import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
+import com.yang.lib_common.data.UserInfoData
 import io.reactivex.rxjava3.core.Observable
 import java.io.File
 import java.text.SimpleDateFormat
@@ -127,4 +129,22 @@ fun String.commaToList(): MutableList<String> {
     return mutableListOf
 }
 
+fun uri2path(context: Context, uri: Uri): String {
+    var path = ""
+    val contentResolver = context.contentResolver
+    val projection = arrayOf(MediaStore.Images.Media.DATA)
+    val query = contentResolver.query(uri, projection, null, null, null)
+    try {
+        query?.let {
+            val columnIndex = query.getColumnIndex(MediaStore.Images.Media.DATA)
+            it.moveToFirst()
+            path = query.getString(columnIndex)
+            query.close()
+        }
+    } catch (e: Exception) {
+        Log.i(TAG, "uri2path: ${e.message}")
+    }
+
+    return path
+}
 

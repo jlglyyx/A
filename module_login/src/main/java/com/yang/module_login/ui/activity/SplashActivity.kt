@@ -3,6 +3,7 @@ package com.yang.module_login.ui.activity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
@@ -12,7 +13,6 @@ import com.yang.lib_common.util.getUserInfo
 import com.yang.module_login.R
 import com.yang.module_login.helper.getLoginComponent
 import com.yang.module_login.viewmodel.LoginViewModel
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.act_splash.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -72,7 +72,7 @@ class SplashActivity : BaseActivity() {
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withTransition(R.anim.fade_in, 0)
                     .navigation(this@SplashActivity)
                 finish()
-            }
+           }
         }
     }
 

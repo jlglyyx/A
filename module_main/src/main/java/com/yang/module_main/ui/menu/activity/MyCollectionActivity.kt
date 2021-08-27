@@ -2,12 +2,12 @@ package com.yang.module_main.ui.menu.activity
 
 import androidx.fragment.app.Fragment
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.google.android.material.tabs.TabLayoutMediator
 import com.yang.lib_common.adapter.TabAndViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_main.R
-import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.act_my_collection.*
 import kotlinx.android.synthetic.main.activity_main.tabLayout
 import kotlinx.android.synthetic.main.activity_main.viewPager
@@ -48,7 +48,7 @@ class MyCollectionActivity : BaseActivity() {
     }
 
     override fun initView() {
-        val stringExtra = intent.getStringExtra("name")
+        val stringExtra = intent.getStringExtra(AppConstant.Constant.NAME)
         commonToolBar.centerContent = stringExtra
         initViewPager()
         initTabLayout()

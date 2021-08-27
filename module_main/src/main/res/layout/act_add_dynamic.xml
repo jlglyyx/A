@@ -1,34 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.yang.lib_common.widget.CommonToolBar
+        android:id="@id/commonToolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:centerContent="发表"
-        android:id="@id/commonToolBar"
         app:rightContent="确定"
-        app:rightContentVisible="true"/>
+        app:rightContentVisible="true" />
 
-    <EditText
+    <com.yang.lib_common.widget.DampScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="发表些什么..."
-        android:textSize="@dimen/sp_14"
-        android:id="@+id/et_dynamic"
-        android:background="@null"
-        android:gravity="top"
-        android:padding="@dimen/dp_10"
-        android:minLines="5"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@id/recyclerView"
-        android:layout_width="match_parent"
-        android:overScrollMode="never"
-        android:paddingHorizontal="@dimen/dp_10"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_dynamic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="发表些什么..."
+                android:minLines="5"
+                android:padding="@dimen/dp_10"
+                android:textSize="@dimen/sp_14" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:paddingHorizontal="@dimen/dp_10" />
+        </LinearLayout>
+
+
+    </com.yang.lib_common.widget.DampScrollView>
 
 </LinearLayout>
