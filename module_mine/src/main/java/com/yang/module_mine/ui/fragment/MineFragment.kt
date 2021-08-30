@@ -3,10 +3,12 @@ package com.yang.module_mine.ui.fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.appbar.AppBarLayout
 import com.yang.lib_common.adapter.NormalImageAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.transform.BlurTransformation
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
@@ -28,19 +30,19 @@ class MineFragment : BaseLazyFragment() {
     override fun initView() {
         initAppBarLayout()
         initRecyclerView()
-
         val userInfo = getUserInfo()
-
         tv_toolbar_name.text = userInfo?.userName
         tv_name.text = userInfo?.userName
-
         Glide.with(this)
             .load(userInfo?.userImage)
             .into(siv_img)
         Glide.with(this)
             .load(userInfo?.userImage)
             .into(siv_toolbar_img)
-
+        Glide.with(this)
+            .load("https://img1.baidu.com/it/u=584562345,1740343441&fm=26&fmt=auto&gp=0.jpg")
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(requireContext())))
+            .into(iv_bg)
         tv_name.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
                 .navigation()

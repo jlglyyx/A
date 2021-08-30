@@ -24,6 +24,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_250"
                     android:src="@color/orchid"
+                    android:scaleType="centerCrop"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
