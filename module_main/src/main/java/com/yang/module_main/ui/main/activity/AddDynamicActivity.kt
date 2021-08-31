@@ -90,7 +90,7 @@ class AddDynamicActivity : BaseActivity() {
         val registerForActivityResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
                 if (it.resultCode == Activity.RESULT_OK){
-                    val stringArrayListExtra = it.data?.getStringArrayListExtra("Data")
+                    val stringArrayListExtra = it.data?.getStringArrayListExtra(AppConstant.Constant.DATA)
                     normalImageAdapter.addData(stringArrayListExtra!!)
                 }
             }

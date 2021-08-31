@@ -3,15 +3,15 @@ package com.yang.module_mine.ui.activity
 import android.widget.TextView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.AppBarLayout
+import com.bumptech.glide.request.RequestOptions
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.transform.BlurTransformation
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getUserInfo
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
 import kotlinx.android.synthetic.main.act_other_person_info.*
-import kotlin.math.abs
 
 @Route(path = AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
 class OtherPersonInfoActivity : BaseActivity() {
@@ -34,13 +34,20 @@ class OtherPersonInfoActivity : BaseActivity() {
 
     override fun initView() {
         tvCenterContent = commonToolBar.findViewById(R.id.tv_centerContent)
-        initAppBarLayout()
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
             override fun tvRightClickListener() {
                 buildARouter(AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY).navigation()
             }
 
         }
+
+        Glide.with(this)
+            .load("https://img1.baidu.com/it/u=584562345,1740343441&fm=26&fmt=auto&gp=0.jpg")
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(this)))
+            .into(iv_bg)
+        Glide.with(this)
+            .load("https://img1.baidu.com/it/u=584562345,1740343441&fm=26&fmt=auto&gp=0.jpg")
+            .into(siv_img)
     }
 
     override fun initViewModel() {
@@ -48,22 +55,6 @@ class OtherPersonInfoActivity : BaseActivity() {
     }
 
 
-    private fun initAppBarLayout() {
-        tvCenterContent.alpha = alphaPercent
-        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-
-            //滑动状态
-            alphaPercent =
-                abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange.toFloat()
-            if (alphaPercent <= 0.2f) {
-                alphaPercent = 0f
-            }
-            if (alphaPercent >= 0.8f) {
-                alphaPercent = 1f
-            }
-            tvCenterContent.alpha = alphaPercent
-        })
-    }
 
 
 

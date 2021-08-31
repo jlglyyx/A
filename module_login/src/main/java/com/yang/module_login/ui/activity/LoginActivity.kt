@@ -1,9 +1,13 @@
 package com.yang.module_login.ui.activity
 
+import android.net.Uri
 import android.text.TextUtils
+import android.view.View
+import android.widget.MediaController
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -14,11 +18,8 @@ import com.yang.lib_common.util.showShort
 import com.yang.module_login.R
 import com.yang.module_login.helper.getLoginComponent
 import com.yang.module_login.viewmodel.LoginViewModel
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.act_login.*
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.LOGIN_ACTIVITY)
@@ -26,6 +27,7 @@ class LoginActivity : BaseActivity() {
 
     @Inject
     lateinit var gson: Gson
+
     @Inject
     lateinit var loginViewModel: LoginViewModel
 
@@ -37,7 +39,7 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initView() {
-        buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
+        //initVideoView()
         bt_login.clicks().subscribe {
             checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
@@ -62,32 +64,50 @@ class LoginActivity : BaseActivity() {
         return loginViewModel.uC
     }
 
-    private fun checkForm(){
-        if (TextUtils.isEmpty(et_user.text.toString())){
+    private fun checkForm() {
+        if (TextUtils.isEmpty(et_user.text.toString())) {
             showShort("请输入账号")
             return
         }
-        if (TextUtils.isEmpty(et_password.text.toString())){
+        if (TextUtils.isEmpty(et_password.text.toString())) {
             showShort("请输入密码")
             return
         }
-        loginViewModel.login(et_user.text.toString(),et_password.text.toString())
+        loginViewModel.login(et_user.text.toString(), et_password.text.toString())
         loginViewModel.mUserInfoData.observe(this, Observer {
-            getDefaultMMKV().encode(AppConstant.Constant.USER_INFO,gson.toJson(it))
+            getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         })
     }
 
-    private fun initTimer(){
+    private fun initTimer() {
         lifecycleScope.launch {
             tv_verification_code.isClickable = false
-            for (i in 60 downTo 0){
+            for (i in 60 downTo 0) {
                 tv_verification_code.text = "${i}秒后获取验证码"
                 delay(1000)
             }
             tv_verification_code.isClickable = true
             tv_verification_code.text = "重新获取验证码"
         }
+    }
+
+    private fun initVideoView() {
+        val mediaController = MediaController(this)
+        //videoView.setMediaController(mediaController)
+        videoView.setOnPreparedListener {
+            GlobalScope.launch(Dispatchers.Main) {
+                delay(1000)
+                iv_image.visibility = View.GONE
+            }
+        }
+        videoView.setVideoURI(Uri.parse("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"))
+//        iv_image.visibility = View.VISIBLE
+//        Glide.with(this).setDefaultRequestOptions(
+//            RequestOptions().frame(1000).centerCrop()
+//        ).load("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4").into (iv_image)
+        videoView.start()
+
     }
 
     override fun onDestroy() {

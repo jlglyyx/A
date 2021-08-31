@@ -14,6 +14,14 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.gson.Gson
+import com.lxj.xpopup.XPopup
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.shuyu.gsyvideoplayer.GSYVideoManager
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -28,14 +36,6 @@ import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.ui.main.activity.AddDynamicActivity
 import com.yang.module_main.ui.main.activity.MainActivity
 import com.yang.module_main.viewmodel.MainViewModel
-import com.google.android.material.imageview.ShapeableImageView
-import com.google.android.material.shape.ShapeAppearanceModel
-import com.google.gson.Gson
-import com.lxj.xpopup.XPopup
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
-import com.shuyu.gsyvideoplayer.GSYVideoManager
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
@@ -125,8 +125,8 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 if (it.resultCode != AppCompatActivity.RESULT_OK) {
                     return@registerForActivityResult
                 }
-                val images = it.data?.getStringArrayListExtra("Data")
-                val content = it.data?.getStringExtra("content")
+                val images = it.data?.getStringArrayListExtra(AppConstant.Constant.DATA)
+                val content = it.data?.getStringExtra(AppConstant.Constant.CONTENT)
                 val mutableListOf = mutableListOf<MainData>().apply {
                     if (!content.isNullOrEmpty()) {
                         add(MainData().apply {

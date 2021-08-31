@@ -18,7 +18,6 @@ import com.yang.module_mine.ui.adapter.ActivityInfoAdapter
 import com.yang.module_mine.ui.data.ActivityInfoData
 import kotlinx.android.synthetic.main.act_change_user_info.*
 import kotlinx.android.synthetic.main.act_other_person_info.commonToolBar
-import kotlinx.android.synthetic.main.act_other_person_info.recyclerView
 
 
 /**

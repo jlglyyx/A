@@ -3,7 +3,6 @@
     package="com.yang.module_video">
 
     <application>
-        <activity android:name="com.yang.module_video.MainActivity" />
         <activity
             android:name="com.yang.module_video.ui.activity.VideoItemActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

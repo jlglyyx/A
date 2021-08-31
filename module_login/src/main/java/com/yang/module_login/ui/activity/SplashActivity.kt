@@ -43,19 +43,17 @@ class SplashActivity : BaseActivity() {
 //                tv_timer.text = "${i}s点击跳过"
 //                delay(1000)
 //            }
-                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withTransition(
-                    R.anim.fade_in,
-                    R.anim.fade_out
-                ).navigation(this@SplashActivity)
+                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation(this@SplashActivity)
+//                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withTransition(
+//                    R.anim.fade_in,
+//                    R.anim.fade_out
+//                ).navigation(this@SplashActivity)
                 finish()
             }
 
             tv_timer.clicks().subscribe {
                 launch.cancel()
-                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withTransition(
-                    R.anim.fade_in,
-                    R.anim.fade_out
-                ).navigation(this@SplashActivity)
+                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation(this@SplashActivity)
                 finish()
             }
 

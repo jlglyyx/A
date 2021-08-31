@@ -10,12 +10,12 @@ import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.yang.lib_common.base.viewmodel.BaseViewModel
-import com.yang.lib_common.bus.event.UIChangeLiveData
-import com.yang.lib_common.util.getStatusBarHeight
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.impl.LoadingPopupView
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.yang.lib_common.base.viewmodel.BaseViewModel
+import com.yang.lib_common.bus.event.UIChangeLiveData
+import com.yang.lib_common.util.getStatusBarHeight
 
 
 /**
@@ -136,6 +136,8 @@ abstract class BaseLazyFragment : Fragment() {
         uC?.let { uC ->
             uC.showLoadingEvent.removeObservers(this)
             uC.dismissDialogEvent.removeObservers(this)
+            uC.refreshEvent.removeObservers(this)
+            uC.loadMoreEvent.removeObservers(this)
         }
     }
 

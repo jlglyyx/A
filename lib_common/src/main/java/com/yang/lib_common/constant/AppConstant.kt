@@ -69,6 +69,11 @@ interface AppConstant {
 
         const val CHANGE_USER_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ChangeUserInfoActivity"
 
+        const val VIEW_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ViewHistoryActivity"
+
+
+
+
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
     }
@@ -92,6 +97,8 @@ interface AppConstant {
         const val DATA = "data"
 
         const val NAME = "name"
+
+        const val CONTENT = "content"
 
         const val PAGE_SIZE_COUNT = 10
 

@@ -45,7 +45,7 @@ class PictureSelectActivity : BaseActivity() {
             override fun tvRightClickListener() {
                 val intent = Intent()
                 intent.putStringArrayListExtra(
-                    "Data",
+                    AppConstant.Constant.DATA,
                     data.map {
                         it.filePath
                     } as ArrayList<String>?

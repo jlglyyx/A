@@ -51,6 +51,11 @@ class MineFragment : BaseLazyFragment() {
             buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
                 .navigation()
         }
+        ll_view_history.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)
+                .navigation()
+        }
+
     }
 
     override fun initData() {

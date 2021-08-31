@@ -5,6 +5,7 @@
     <application>
         <activity android:name="com.yang.module_mine.ui.activity.OtherPersonInfoActivity"/>
         <activity android:name="com.yang.module_mine.ui.activity.ChangeUserInfoActivity"/>
+        <activity android:name="com.yang.module_mine.ui.activity.ViewHistoryActivity"/>
     </application>
 
 </manifest>
