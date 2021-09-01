@@ -16,8 +16,6 @@ class MainData {
 
     var imageUrls: String? = null
 
-    var videoUrls: String? = null
-
     var dynamicContent: String? = null
 
     var createTime: String = simpleDateFormat.format(Date())

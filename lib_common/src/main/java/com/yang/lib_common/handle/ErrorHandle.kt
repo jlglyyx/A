@@ -30,6 +30,10 @@ class ErrorHandle(private val t: Throwable) {
 
                         IHttpException.HttpException.NO_FIND.message
                     }
+                    IHttpException.HttpException.NO_JURISDICTION.code -> {
+
+                        IHttpException.HttpException.NO_JURISDICTION.message
+                    }
                     else -> {
 
                         IHttpException.OtherException.NETWORK_ERROR.message

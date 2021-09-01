@@ -6,14 +6,20 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.yang.lib_common.R
 import com.yang.lib_common.util.dip2px
 import kotlin.math.abs
 import kotlin.math.ceil
 
-class GridNinePictureView : LinearLayout {
+class GridNinePictureView : RelativeLayout {
 
     private var mContext: Context
     private var mWidth: Int = 0
@@ -26,6 +32,7 @@ class GridNinePictureView : LinearLayout {
     private var mPaint = Paint()
     private var mTextPaint = Paint()
     var imageCallback: ImageCallback? = null
+    private var isFirst = true
 
     interface ImageCallback {
         fun imageClickListener(position: Int)
@@ -42,17 +49,30 @@ class GridNinePictureView : LinearLayout {
                 } else {
                     dataSize
                 }) {
-                    val imageView = ImageView(mContext)
-                    imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                    imageView.setOnClickListener {
+                    val inflate = LayoutInflater.from(mContext)
+                        .inflate(R.layout.view_item_grid_nine_picture, null, false)
+                    val ivNineImage = inflate.findViewById<ImageView>(R.id.iv_nine_image)
+                    val ivPlay = inflate.findViewById<ImageView>(R.id.iv_play)
+                    ivNineImage.setOnClickListener {
                         imageCallback?.imageClickListener(i)
                     }
-                    Glide.with(mContext)
-                        .load(
-                            data[i]
-                        )
-                        .into(imageView)
-                    addView(imageView)
+                    if (data[i].endsWith(".mp4")){
+                        ivPlay.visibility = View.VISIBLE
+                        Glide.with(mContext)
+                            .setDefaultRequestOptions(RequestOptions().frame(1000))
+                            .load(
+                                data[i]
+                            )
+                            .into(ivNineImage)
+                    }else{
+                        ivPlay.visibility = View.GONE
+                        Glide.with(mContext)
+                            .load(
+                                data[i]
+                            )
+                            .into(ivNineImage)
+                    }
+                    addView(inflate)
                 }
             }
         }
@@ -66,6 +86,15 @@ class GridNinePictureView : LinearLayout {
         defStyleAttr
     ) {
         this.mContext = context
+
+//        val findViewById = childAt.findViewById<ImageView>(R.id.iv_nine_image)
+//        val layoutParams = findViewById.layoutParams
+//        layoutParams.width = 200
+//        layoutParams.height = 200
+//        findViewById.layoutParams = layoutParams
+//
+//        Log.i("TAG", "layoutImage: "+findViewById)
+        Log.i("TAG", ": " + mImageViewWidth)
         init()
     }
 
@@ -148,6 +177,7 @@ class GridNinePictureView : LinearLayout {
             ).toInt()
         )
 
+
     }
 
     override fun dispatchDraw(canvas: Canvas) {
@@ -173,6 +203,20 @@ class GridNinePictureView : LinearLayout {
             )
             canvas.restoreToCount(textLayer)
         }
+
+        if (isFirst) {
+            for (i in 0 until childCount) {
+                val childAt = getChildAt(i) as ConstraintLayout
+                val ivNineImage = childAt.findViewById<ImageView>(R.id.iv_nine_image)
+                val layoutParams = ivNineImage.layoutParams as ConstraintLayout.LayoutParams
+                layoutParams.width = mImageViewWidth
+                layoutParams.height = mImageViewWidth
+                Log.i("TAG", ": mImageViewWidth$mImageViewWidth")
+                ivNineImage.layoutParams = layoutParams
+            }
+            isFirst = false
+        }
+
     }
 
 

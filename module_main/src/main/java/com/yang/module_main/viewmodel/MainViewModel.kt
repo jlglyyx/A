@@ -33,7 +33,7 @@ class MainViewModel @Inject constructor(
             dynamicListLiveData.postValue(it.data)
         },{
             cancelRefreshLoadMore()
-        })
+        },errorDialog = false)
     }
 
 

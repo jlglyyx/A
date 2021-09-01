@@ -1,13 +1,15 @@
 package com.yang.module_main.ui.menu.activity
 
-import android.view.View
-import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.google.android.material.imageview.ShapeableImageView
+import com.lxj.xpopup.XPopup
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -21,12 +23,6 @@ import com.yang.module_main.R
 import com.yang.module_main.data.model.MainData
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
-import com.google.android.material.imageview.ShapeableImageView
-import com.lxj.xpopup.XPopup
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
-import com.shuyu.gsyvideoplayer.GSYVideoManager
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import javax.inject.Inject
 
@@ -85,8 +81,6 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                         add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
 
                     }.formatWithComma()
-                    videoUrls =
-                        "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                 })
                 add(MainData().apply {
                     userImage =
@@ -100,14 +94,10 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                         add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
 
                     }.formatWithComma()
-                    videoUrls =
-                        "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                 })
                 add(MainData().apply {
                     userImage =
                         "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    videoUrls =
-                        "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                 })
                 add(MainData().apply {
                     userImage =
@@ -129,32 +119,6 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
         recyclerView.adapter = mAdapter
 
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val firstVisibleItem =
-                    linearLayoutManager.findFirstVisibleItemPosition()
-                val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
-                //大于0说明有播放
-                if (GSYVideoManager.instance().playPosition >= 0) {
-                    //当前播放的位置
-                    val position = GSYVideoManager.instance().playPosition
-                    //对应的播放列表TAG
-                    if (GSYVideoManager.instance()
-                            .playTag == TAG && (position < firstVisibleItem || position > lastVisibleItem)
-                    ) {
-                        if (GSYVideoManager.isFullState(this@MyPushActivity)) {
-                            return
-                        }
-                        //如果滑出去了上面和下面就是否，和今日头条一样
-                        GSYVideoManager.releaseAllVideos()
-                        mAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
-        })
     }
 
     inner class MAdapter(list: MutableList<MainData>) :
@@ -181,14 +145,6 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                 helper.setVisible(R.id.item_main_content_image,true)
                 initItemMainContentImage(helper,item)
             }
-
-            if (item.videoUrls.isNullOrEmpty()){
-                helper.setVisible(R.id.item_main_content_video,false)
-            }else{
-                helper.setVisible(R.id.item_main_content_video,true)
-                initItemMainContentVideo(helper,item)
-            }
-
             initItemMainIdentification(helper,item)
         }
 
@@ -212,31 +168,6 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                     XPopup.Builder(mContext).asCustom(imageViewPagerDialog).show()
                 }
             }
-        }
-        private fun initItemMainContentVideo(helper: BaseViewHolder,item: MainData){
-            var gsyVideoPlayer = helper.getView<StandardGSYVideoPlayer>(R.id.detailPlayer)
-
-            gsyVideoPlayer.thumbImageView = ImageView(mContext).apply {
-                scaleType = ImageView.ScaleType.CENTER_CROP
-                setImageResource(R.drawable.iv_bear)
-            }
-            gsyVideoPlayer.setUpLazy(item.videoUrls, true, null, null, "这是title")
-            gsyVideoPlayer.titleTextView.visibility = View.GONE
-            gsyVideoPlayer.backButton.visibility = View.GONE
-            gsyVideoPlayer.fullscreenButton
-                .setOnClickListener {
-                    gsyVideoPlayer.startWindowFullscreen(
-                        mContext,
-                        false,
-                        true
-                    )
-                }
-            gsyVideoPlayer.playTag = TAG
-            gsyVideoPlayer.playPosition = helper.adapterPosition
-            gsyVideoPlayer.isAutoFullWithSize = true
-            gsyVideoPlayer.isReleaseWhenLossAudio = false
-            gsyVideoPlayer.isShowFullAnimation = true
-            gsyVideoPlayer.setIsTouchWiget(false)
         }
         private fun initItemMainIdentification(helper: BaseViewHolder,item: MainData){
 

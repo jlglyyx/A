@@ -9,8 +9,6 @@
         android:id="@+id/item_main_content_text"/>
     <include layout="@layout/item_main_content_image"
         android:id="@+id/item_main_content_image"/>
-    <include layout="@layout/item_main_content_video"
-        android:id="@+id/item_main_content_video"/>
     <include layout="@layout/item_main_identification"
         android:id="@+id/item_main_identification"/>
 </LinearLayout>
