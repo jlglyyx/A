@@ -18,6 +18,6 @@ data class ImageTypeData(
     var name: String,
     @ColumnInfo(name = "type")
     var type: String,
-    @ColumnInfo(name = "extra_i0nfo")
+    @ColumnInfo(name = "extra_info")
     var extraInfo: String
 )

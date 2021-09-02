@@ -9,20 +9,24 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.yang.lib_common.adapter.NormalImageAdapter
+import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.MediaInfoBean
+import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.dip2px
 import com.yang.lib_common.util.getScreenPx
 import com.yang.lib_common.util.getUserInfo
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_main.R
+import com.yang.module_main.adapter.PictureSelectAdapter
 import com.yang.module_main.data.model.MainData
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_add_dynamic.*
+import java.util.*
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY)
@@ -32,11 +36,11 @@ class AddDynamicActivity : BaseActivity() {
     @ModelWithFactory
     lateinit var mainViewModel: MainViewModel
 
-    private lateinit var normalImageAdapter: NormalImageAdapter<String>
+    private lateinit var pictureSelectAdapter: PictureSelectAdapter
 
-    private var data: MutableList<String> = mutableListOf()
+    private var data: MutableList<MediaInfoBean> = mutableListOf()
 
-    private var addType = "image/*"
+    private lateinit var imageView:ImageView
 
 
     override fun getLayout(): Int {
@@ -50,19 +54,9 @@ class AddDynamicActivity : BaseActivity() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
                 addDynamics()
-//                val intent = Intent()
-//                intent.putStringArrayListExtra(
-//                    "Data",
-//                    normalImageAdapter.data as ArrayList<String>?
-//                )
-//                intent.putExtra("content", et_dynamic.text.toString())
-//                setResult(RESULT_OK, intent)
-//                finish()
             }
-
         }
         initRecyclerView()
-
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -78,23 +72,27 @@ class AddDynamicActivity : BaseActivity() {
         mainData.userId = getUserInfo()?.id
         mainData.dynamicContent = et_dynamic.text.toString()
         mainData.imageUrls = ""
-        //mainData.videoUrls = ""
         mainViewModel.addDynamic(mainData)
     }
 
 
     private fun initRecyclerView() {
-        normalImageAdapter = NormalImageAdapter(data)
-        recyclerView.adapter = normalImageAdapter
+        pictureSelectAdapter = PictureSelectAdapter(R.layout.item_picture_select,data,false)
+        recyclerView.adapter = pictureSelectAdapter
         recyclerView.layoutManager = GridLayoutManager(this, 3)
         val registerForActivityResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK){
-                    val stringArrayListExtra = it.data?.getStringArrayListExtra(AppConstant.Constant.DATA)
-                    normalImageAdapter.addData(stringArrayListExtra!!)
+                    val mediaInfoBeans = it.data?.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
+                    if (mediaInfoBeans?.size!! >= 9){
+                            imageView.visibility = View.GONE
+                    }else{
+                        imageView.visibility = View.VISIBLE
+                    }
+                    pictureSelectAdapter.setNewData(mediaInfoBeans)
                 }
             }
-        val imageView = ImageView(this).apply {
+        imageView = ImageView(this).apply {
             setImageResource(R.drawable.iv_add)
             scaleType = ImageView.ScaleType.CENTER_CROP
             setBackgroundResource(android.R.color.darker_gray)
@@ -102,20 +100,27 @@ class AddDynamicActivity : BaseActivity() {
                 (getScreenPx(this@AddDynamicActivity)[0] - 20f.dip2px(this@AddDynamicActivity)) / 3
             layoutParams = ViewGroup.LayoutParams(i, i)
             setOnClickListener {
-                if (normalImageAdapter.data.size == 8) {
-                    this.visibility = View.GONE
-                }
-                registerForActivityResult.launch(Intent(this@AddDynamicActivity,PictureSelectActivity::class.java))
+                registerForActivityResult.launch(Intent(this@AddDynamicActivity,PictureSelectActivity::class.java)
+                    .putParcelableArrayListExtra(AppConstant.Constant.DATA, pictureSelectAdapter.data as ArrayList
+                ))
 
             }
         }
-        normalImageAdapter.addFooterView(imageView)
-        normalImageAdapter.setOnItemLongClickListener { adapter, view, position ->
-            normalImageAdapter.remove(position)
+        pictureSelectAdapter.addFooterView(imageView)
+        pictureSelectAdapter.setOnItemLongClickListener { adapter, view, position ->
+            pictureSelectAdapter.remove(position)
             if (!imageView.isVisible) {
                 imageView.visibility = View.VISIBLE
             }
             return@setOnItemLongClickListener false
+        }
+        pictureSelectAdapter.setOnItemClickListener { adapter, view, position ->
+            var imageList =(adapter.data as MutableList<MediaInfoBean>).map {
+                it.filePath
+            } as MutableList<String>
+            val imageViewPagerDialog =
+                ImageViewPagerDialog(this, imageList , position)
+            XPopup.Builder(this).asCustom(imageViewPagerDialog).show()
         }
     }
 

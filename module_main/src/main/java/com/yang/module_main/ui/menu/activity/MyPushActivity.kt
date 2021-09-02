@@ -9,7 +9,6 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.lxj.xpopup.XPopup
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
-import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -192,18 +191,4 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
         getDynamicList()
     }
 
-    override fun onPause() {
-        super.onPause()
-        GSYVideoManager.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        GSYVideoManager.onResume()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        GSYVideoManager.releaseAllVideos()
-    }
 }

@@ -21,10 +21,10 @@ android {
             storePassword '123456'
             keyPassword '123456'
             keyAlias 'key0'
-            storeFile file('E:\\MTest\\MyTestApplication\\collection.jks')
+            storeFile file('../collection.jks')
         }
         release {
-            storeFile file('E:\\MTest\\MyTestApplication\\collection.jks')
+            storeFile file('../collection.jks')
             storePassword '123456'
             keyPassword '123456'
             keyAlias 'key0'

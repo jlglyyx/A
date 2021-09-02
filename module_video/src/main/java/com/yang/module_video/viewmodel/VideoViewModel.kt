@@ -35,7 +35,7 @@ class VideoViewModel @Inject constructor(
             sMutableLiveData.postValue(it.data)
         }, {
             cancelRefreshLoadMore()
-        })
+        },errorDialog = false)
     }
 
 
@@ -46,14 +46,14 @@ class VideoViewModel @Inject constructor(
             mVideoData.postValue(it.data)
         },{
             cancelRefreshLoadMore()
-        })
+        },errorDialog = false)
     }
     fun getVideoItemData(sid:String) {
         launch({
             videoRepository.getVideoItemData(sid)
         }, {
             mVideoItemData.postValue(it.data)
-        })
+        },errorDialog = false)
     }
     fun getVideoTypeData() {
         launch({

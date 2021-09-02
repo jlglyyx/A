@@ -6,7 +6,6 @@ if (isModule.toBoolean()) {
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-def room_version = "2.2.6"
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
@@ -19,28 +18,14 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                arguments = [AROUTER_MODULE_NAME    : project.getName(), "room.schemaLocation": "$projectDir/schemas".toString(),
-//                             "room.incremental"     : "true",
-//                             "room.expandProjection": "true"]
-//                //includeCompileClasspath = false
-//
-//            }
-//        }
-
-        kapt {
-            arguments{
-                arg("AROUTER_MODULE_NAME",project.getName())
-                arg("AROUTER_GENERATE_DOC","enable")
-                arg("room.schemaLocation", "$projectDir/schemasa".toString())
-                arg("room.incremental"     , "true")
-                arg("room.expandProjection", "true")
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation"  : "$projectDir/schemas".toString(),
+                             "room.incremental"     : "true",
+                             "room.expandProjection": "true",
+                             "AROUTER_MODULE_NAME"    : project.getName()]
+                includeCompileClasspath = false
             }
-//                arg = [AROUTER_MODULE_NAME    : project.getName(), "room.schemaLocation": "$projectDir/schemasa".toString(),
-//                             "room.incremental"     : "true",
-//                             "room.expandProjection": "true"]
-//                //includeCompileClasspath = false
         }
     }
 
@@ -73,9 +58,9 @@ android {
     }
 
     dependencies {
-        kapt 'com.google.dagger:dagger-compiler:2.2'
-        kapt 'com.alibaba:arouter-compiler:1.5.2'
-        kapt "androidx.room:room-compiler:$room_version"
+        kapt rootProject.ext.dependencies['dagger-compiler']
+        kapt rootProject.ext.dependencies['arouter-compiler']
+        kapt rootProject.ext.dependencies['room-compiler']
     }
 }
 

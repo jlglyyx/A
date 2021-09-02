@@ -32,14 +32,14 @@ class PictureViewModel @Inject constructor(
             mImageData.postValue(it.data)
         },{
             cancelRefreshLoadMore()
-        })
+        },errorDialog = false)
     }
     fun getImageItemData(sid:String) {
         launch({
             pictureRepository.getImageItemData(sid)
         }, {
             mImageItemData.postValue(it.data)
-        })
+        },errorDialog = false)
     }
     fun getImageTypeData() {
         launch({
@@ -61,26 +61,6 @@ class PictureViewModel @Inject constructor(
             mImageTypeData.postValue(mutableListOf)
         }, "加载中...")
     }
-//    fun getImageItemData(sid:String) {
-//        launch({
-//            pictureRepository.getImageItemData(sid)
-//        }, {
-//            mImageItemData.postValue(it.data)
-//        }, messages = *arrayOf("请求中...", "请求成功...", "请求失败..."))
-//    }
-//    fun getImageTypeData() {
-//        launch({
-//            pictureRepository.getImageTypeData()
-//        }, {
-//            mImageTypeData.postValue(it.data)
-//        },{
-//            val mutableListOf = mutableListOf<ImageTypeData>()
-//            for (i in 1..10){
-//                mutableListOf.add(ImageTypeData(1,"推荐","1",""))
-//            }
-//            mImageTypeData.postValue(mutableListOf)
-//        }, messages = *arrayOf("请求中...", "请求成功...", "请求失败..."))
-//    }
 
 }
 

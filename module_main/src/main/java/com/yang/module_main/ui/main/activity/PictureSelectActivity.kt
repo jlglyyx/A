@@ -2,18 +2,20 @@ package com.yang.module_main.ui.main.activity
 
 import android.content.Intent
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.dialog.ImageViewPagerDialog
+import com.yang.lib_common.util.showShort
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_main.R
 import com.yang.module_main.adapter.PictureSelectAdapter
-import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.act_add_dynamic.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,25 +40,23 @@ class PictureSelectActivity : BaseActivity() {
     }
 
     override fun initData() {
+        val selectData = intent.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
+        selectData?.let {
+            data.addAll(it)
+        }
     }
 
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
                 val intent = Intent()
-                intent.putStringArrayListExtra(
-                    AppConstant.Constant.DATA,
-                    data.map {
-                        it.filePath
-                    } as ArrayList<String>?
-                )
+                intent.putParcelableArrayListExtra(AppConstant.Constant.DATA, data as ArrayList)
                 setResult(RESULT_OK, intent)
                 finish()
             }
 
         }
         initRecyclerView()
-        Log.i(TAG, "initView: ${61/60} ${61%60}")
     }
 
     override fun initViewModel() {
@@ -69,7 +69,6 @@ class PictureSelectActivity : BaseActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 3)
 
         pictureSelectAdapter.setOnItemClickListener { adapter, view, position ->
-            val element = adapter.data[position] as MediaInfoBean
             var imageList =(adapter.data as MutableList<MediaInfoBean>).map {
                 it.filePath
             } as MutableList<String>
@@ -80,14 +79,19 @@ class PictureSelectActivity : BaseActivity() {
 
         pictureSelectAdapter.setOnItemChildClickListener { adapter, view, position ->
             when(view.id){
-                R.id.cb_image ->{
+                R.id.cl_cb ->{
                     val element = adapter.data[position] as MediaInfoBean
                     if (element.isSelect){
                         element.isSelect = false
                         data.remove(element)
                     }else{
-                        element.isSelect = true
-                        data.add(element)
+                        if (data.size < 9){
+                            element.isSelect = true
+                            element.selectPosition = data.size+1
+                            data.add(element)
+                        }else{
+                            showShort("已达到最大数量")
+                        }
                     }
                     adapter.notifyItemChanged(position,false)
                 }
@@ -100,6 +104,15 @@ class PictureSelectActivity : BaseActivity() {
             val allVideo = getAllVideo()
             val sortedByDescending = (allPictureAndVideo + allVideo).sortedByDescending {
                 it.fileCreateTime
+            }.apply {
+                for (i in data) {
+                    this.findLast {
+                        TextUtils.equals(i.filePath, it.filePath)
+                    }.apply {
+                        this?.isSelect  = true
+                        this?.selectPosition  = i.selectPosition
+                    }
+                }
             }
             withContext(Dispatchers.Main){
                 pictureSelectAdapter.setNewData(sortedByDescending)
