@@ -58,7 +58,7 @@ android {
     }
 
     dependencies {
-        kapt rootProject.ext.dependencies['dagger-compiler']
+        compileOnly rootProject.ext.dependencies['dagger-compiler']
         kapt rootProject.ext.dependencies['arouter-compiler']
         kapt rootProject.ext.dependencies['room-compiler']
     }

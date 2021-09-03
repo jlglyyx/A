@@ -61,7 +61,7 @@ dependencies {
     api rootProject.ext.androidx['recyclerview']
     api rootProject.ext.dependencies['BaseRecyclerViewAdapterHelper']
     api rootProject.ext.dependencies['dagger']
-    kapt rootProject.ext.dependencies['dagger-compiler']
+    compileOnly rootProject.ext.dependencies['dagger-compiler']
     api rootProject.ext.dependencies['retrofit2']
     api rootProject.ext.dependencies['converter-gson']
     api rootProject.ext.dependencies['converter-scalars']

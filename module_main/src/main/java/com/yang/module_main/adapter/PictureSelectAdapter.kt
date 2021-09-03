@@ -1,5 +1,7 @@
 package com.yang.module_main.adapter
 
+import android.view.MotionEvent
+import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -21,9 +23,15 @@ class PictureSelectAdapter(
 ) :
     BaseQuickAdapter<MediaInfoBean, BaseViewHolder>(layoutResId, data) {
 
+    var viewOnTouchListener:ViewOnTouchListener? = null
+    interface ViewOnTouchListener{
+        fun setOnTouchListener(v: View, event: MotionEvent,adapter: BaseQuickAdapter<MediaInfoBean, BaseViewHolder>,position:Int):Boolean
+    }
+
     override fun convert(helper: BaseViewHolder, item: MediaInfoBean) {
         val ivImg = helper.getView<ImageView>(R.id.iv_image)
         if (showSelect) {
+
             helper.addOnClickListener(R.id.cl_cb)
             if (item.fileType == 1) {
                 Glide.with(ivImg)

@@ -4,8 +4,11 @@ import android.content.Intent
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
@@ -21,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import kotlin.math.abs
 
 /**
  * @Author Administrator
@@ -40,7 +44,8 @@ class PictureSelectActivity : BaseActivity() {
     }
 
     override fun initData() {
-        val selectData = intent.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
+        val selectData =
+            intent.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
         selectData?.let {
             data.addAll(it)
         }
@@ -64,42 +69,116 @@ class PictureSelectActivity : BaseActivity() {
     }
 
     private fun initRecyclerView() {
-        pictureSelectAdapter = PictureSelectAdapter(R.layout.item_picture_select,mutableListOf())
+        pictureSelectAdapter = PictureSelectAdapter(R.layout.item_picture_select, mutableListOf())
         recyclerView.adapter = pictureSelectAdapter
         recyclerView.layoutManager = GridLayoutManager(this, 3)
 
         pictureSelectAdapter.setOnItemClickListener { adapter, view, position ->
-            var imageList =(adapter.data as MutableList<MediaInfoBean>).map {
+            var imageList = (adapter.data as MutableList<MediaInfoBean>).map {
                 it.filePath
             } as MutableList<String>
             val imageViewPagerDialog =
-                ImageViewPagerDialog(this, imageList , position)
+                ImageViewPagerDialog(this, imageList, position)
             XPopup.Builder(this).asCustom(imageViewPagerDialog).show()
         }
+        var lastPosition = -1
+        var downX = 0
+        var downY = 0
+        recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                 when (e.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        downX = e.x.toInt()
+                        downY = e.x.toInt()
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val childViewUnder: View? = rv.findChildViewUnder(e.x, e.y)
+                        childViewUnder?.let {
+                            val position = rv.getChildLayoutPosition(it)
+                            Log.i(TAG, "onInterceptTouchEvent: $position------$lastPosition")
+                            val moveX = e.x
+                            var moveY = e.y
+                            val abs = abs(moveX - downX)
+                            val abs1 = abs(moveY - downY)
+                            Log.i(TAG, "onInterceptTouchEvent: $abs   $abs1")
+                            if (position == lastPosition||(abs < 50 && abs1 < 50)) {
+                                return false
+                            }
+                            val element = pictureSelectAdapter.data[position] as MediaInfoBean
+                            if (element.isSelect) {
+                                element.isSelect = false
+                                data.remove(element)
+                            } else {
+                                if (data.size < 9) {
+                                    element.isSelect = true
+                                    element.selectPosition = data.size + 1
+                                    data.add(element)
+                                } else {
+                                    showShort("已达到最大数量")
+                                }
+                            }
+                            lastPosition = position
+                            pictureSelectAdapter.notifyItemChanged(position, false)
+                        }
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        lastPosition = -1
+                    }
+                }
+                return false
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+
+            }
+
+        })
 
         pictureSelectAdapter.setOnItemChildClickListener { adapter, view, position ->
-            when(view.id){
-                R.id.cl_cb ->{
+            when (view.id) {
+                R.id.cl_cb -> {
                     val element = adapter.data[position] as MediaInfoBean
-                    if (element.isSelect){
+                    if (element.isSelect) {
                         element.isSelect = false
                         data.remove(element)
-                    }else{
-                        if (data.size < 9){
+                    } else {
+                        if (data.size < 9) {
                             element.isSelect = true
-                            element.selectPosition = data.size+1
+                            element.selectPosition = data.size + 1
                             data.add(element)
-                        }else{
+                        } else {
                             showShort("已达到最大数量")
                         }
                     }
-                    adapter.notifyItemChanged(position,false)
+                    adapter.notifyItemChanged(position, false)
                 }
             }
 
         }
 
-        lifecycleScope.launch (Dispatchers.IO){
+//        pictureSelectAdapter.setOnItemLongClickListener { adapter, view, position ->
+//            val element = adapter.data[position] as MediaInfoBean
+//            if (element.isSelect){
+//                element.isSelect = false
+//                data.remove(element)
+//            }else{
+//                if (data.size < 9){
+//                    element.isSelect = true
+//                    element.selectPosition = data.size+1
+//                    data.add(element)
+//                }else{
+//                    showShort("已达到最大数量")
+//                }
+//            }
+//            adapter.notifyItemChanged(position,false)
+//            return@setOnItemLongClickListener true
+//        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
             val allPictureAndVideo = getAllPictureAndVideo()
             val allVideo = getAllVideo()
             val sortedByDescending = (allPictureAndVideo + allVideo).sortedByDescending {
@@ -109,12 +188,12 @@ class PictureSelectActivity : BaseActivity() {
                     this.findLast {
                         TextUtils.equals(i.filePath, it.filePath)
                     }.apply {
-                        this?.isSelect  = true
-                        this?.selectPosition  = i.selectPosition
+                        this?.isSelect = true
+                        this?.selectPosition = i.selectPosition
                     }
                 }
             }
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 pictureSelectAdapter.setNewData(sortedByDescending)
             }
         }
@@ -129,7 +208,7 @@ class PictureSelectActivity : BaseActivity() {
             null,
             MediaStore.Images.Media.DATE_ADDED + " DESC "
         )
-        var i=0
+        var i = 0
         while (query?.moveToNext()!!) {
             val mediaInfoBean = MediaInfoBean()
             var path = query.getString(query.getColumnIndex(MediaStore.Images.Media.DATA))
