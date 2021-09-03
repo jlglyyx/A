@@ -1,6 +1,5 @@
 package com.yang.module_login.ui.activity
 
-import android.net.Uri
 import android.text.TextUtils
 import android.view.View
 import android.widget.MediaController
@@ -77,6 +76,7 @@ class LoginActivity : BaseActivity() {
         loginViewModel.mUserInfoData.observe(this, Observer {
             getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
+            finish()
         })
     }
 
@@ -92,23 +92,6 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun initVideoView() {
-        val mediaController = MediaController(this)
-        //videoView.setMediaController(mediaController)
-        videoView.setOnPreparedListener {
-            GlobalScope.launch(Dispatchers.Main) {
-                delay(1000)
-                iv_image.visibility = View.GONE
-            }
-        }
-        videoView.setVideoURI(Uri.parse("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"))
-//        iv_image.visibility = View.VISIBLE
-//        Glide.with(this).setDefaultRequestOptions(
-//            RequestOptions().frame(1000).centerCrop()
-//        ).load("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4").into (iv_image)
-        videoView.start()
-
-    }
 
     override fun onDestroy() {
         super.onDestroy()

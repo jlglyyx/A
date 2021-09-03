@@ -100,8 +100,8 @@ class RemoteModule {
     }
 
     companion object {
-        const val baseUrl = "https://wanandroid.com/"
- //       const val baseUrl = "http://10.16.242.28:20000/"
+//        const val baseUrl = "https://wanandroid.com/"
+        const val baseUrl = "http://10.16.242.28:20000/"
 //        const val baseUrl = "http://jlgl.free.idcfengye.com/"
         private const val TAG = "RemoteModule"
         private const val TAG_LOG = "httpLog"
@@ -114,9 +114,9 @@ class RemoteModule {
         try {
             val buffer = Buffer()
             val body = request.body()
-            if (body?.contentLength()!! >=1000000){
-                return "请求体太大了，打印OOM"
-            }
+//            if (body?.contentLength()!! >=1000000){
+//                return "请求体太大了，打印OOM"
+//            }
             body?.writeTo(buffer)
             val contentType = body?.contentType()
             val charset = contentType?.charset(Charsets.UTF_8)

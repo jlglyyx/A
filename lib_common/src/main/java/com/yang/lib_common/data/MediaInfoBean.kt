@@ -9,7 +9,7 @@ import android.os.Parcelable
  * @Description
  * @Date 2021/8/6 14:14
  */
-class MediaInfoBean() : Parcelable{
+class MediaInfoBean() :Parcelable {
     var fileName: String? = null
     var filePath: String? = null
     var fileCreateTime: Long? = null

@@ -106,7 +106,7 @@ interface AppConstant {
 
         const val USER_INFO = "user_info"
 
-        const val USER_ID = "user_id"
+        const val USER_ID = "userId"
 
         const val PAGE_SIZE = "pageSize"
 

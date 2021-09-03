@@ -23,6 +23,7 @@ class ErrorHandle(private val t: Throwable) {
     }
 
     fun handle(): String {
+        Log.i(TAG, "handle: ${t.message.toString()}")
         return when (t) {
             is HttpException -> {
                 return when (t.code()) {
@@ -53,11 +54,11 @@ class ErrorHandle(private val t: Throwable) {
                 IHttpException.OtherException.JSON_SYNTAX_ERROR.message
             }
             else -> {
-                Log.i(TAG, "handle: ${t.message.toString()}")
                 IHttpException.OtherException.UN_KNOWN_ERROR.message
 
             }
         }
+
     }
 
 

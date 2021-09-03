@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -26,7 +27,7 @@ import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.lib_common.widget.GridNinePictureView
 import com.yang.module_main.R
-import com.yang.module_main.data.model.MainData
+import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.ui.main.activity.AddDynamicActivity
 import com.yang.module_main.ui.main.activity.MainActivity
@@ -51,7 +52,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private lateinit var mAdapter: MAdapter
 
-    private var mutableListOf: MutableList<MainData> = mutableListOf()
+    private var mutableListOf: MutableList<DynamicData> = mutableListOf()
 
     private var pageNum = 1
 
@@ -64,23 +65,24 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         initSmartRefreshLayout()
         lifecycleScope.launch(Dispatchers.IO) {
             mAdapter.setNewData(
-                mutableListOf<MainData>().apply {
-                    add(MainData().apply {
+                mutableListOf<DynamicData>().apply {
+                    add(DynamicData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                        dynamicContent = "今天天气真好"
+                        content = "今天天气真好"
                         imageUrls = mutableListOf<String>().apply {
                             add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                            add("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4")
+                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                            add("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4")
 
                         }.formatWithComma()
+                        videoUrls =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
-                    add(MainData().apply {
+                    add(DynamicData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
                         imageUrls = mutableListOf<String>().apply {
@@ -92,20 +94,20 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                             add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
 
                         }.formatWithComma()
+                        videoUrls =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
-                    add(MainData().apply {
+                    add(DynamicData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                        imageUrls = mutableListOf<String>().apply {
-                            add("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4")
-
-                        }.formatWithComma()
+                        videoUrls =
+                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
                     })
-                    add(MainData().apply {
+                    add(DynamicData().apply {
                         userImage =
                             "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
                     })
-                    add(MainData())
+                    add(DynamicData())
                 })
 
         }
@@ -121,14 +123,14 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 }
                 val images = it.data?.getStringArrayListExtra(AppConstant.Constant.DATA)
                 val content = it.data?.getStringExtra(AppConstant.Constant.CONTENT)
-                val mutableListOf = mutableListOf<MainData>().apply {
+                val mutableListOf = mutableListOf<DynamicData>().apply {
                     if (!content.isNullOrEmpty()) {
-                        add(MainData().apply {
-                            dynamicContent = content
+                        add(DynamicData().apply {
+                            this.content = content
                         })
                     }
                     if (!images.isNullOrEmpty()) {
-                        add((MainData().apply {
+                        add((DynamicData().apply {
                             imageUrls = images.formatWithComma()
                         }))
                     }
@@ -169,6 +171,27 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
         }
 
+        mainViewModel.dynamicListLiveData.observe(this, Observer {
+            when {
+                smartRefreshLayout.isRefreshing -> {
+                    smartRefreshLayout.finishRefresh()
+                    mAdapter.replaceData(it)
+                }
+                smartRefreshLayout.isLoading -> {
+                    smartRefreshLayout.finishLoadMore()
+                    if (pageNum != 1 && it.isNotEmpty()) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(false)
+                        mAdapter.addData(it)
+                    }
+                }
+                else -> {
+                    mAdapter.replaceData(it)
+                }
+            }
+        })
+
 
     }
 
@@ -189,10 +212,6 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-//        mainViewModel.sMutableLiveData.observe(this, Observer {
-//            recyclerView.adapter = MAdapter(R.layout.item_title, it)
-//        })
-
         mAdapter = MAdapter(mutableListOf).apply {
             setOnItemChildClickListener { adapter, view, position ->
                 when (view.id) {
@@ -212,17 +231,17 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     }
 
-    inner class MAdapter(list: MutableList<MainData>) :
-        BaseQuickAdapter<MainData, BaseViewHolder>(list) {
+    inner class MAdapter(list: MutableList<DynamicData>) :
+        BaseQuickAdapter<DynamicData, BaseViewHolder>(list) {
 
         init {
             mLayoutResId = R.layout.view_dynamic_item
         }
 
-        override fun convert(helper: BaseViewHolder, item: MainData) {
+        override fun convert(helper: BaseViewHolder, item: DynamicData) {
             initItemMainTitle(helper,item)
 
-            if (item.dynamicContent.isNullOrEmpty()){
+            if (item.content.isNullOrEmpty()){
                 helper.setGone(R.id.item_main_content_text,false)
             }else{
                 helper.setGone(R.id.item_main_content_text,true)
@@ -239,16 +258,16 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             initItemMainIdentification(helper,item)
         }
 
-        private fun initItemMainTitle(helper: BaseViewHolder,item: MainData){
+        private fun initItemMainTitle(helper: BaseViewHolder,item: DynamicData){
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_time, item.createTime)
             Glide.with(sivImg).load(item.userImage).into(sivImg)
         }
-        private fun initItemMainContentText(helper: BaseViewHolder,item: MainData){
-            helper.setText(R.id.tv_text, item.dynamicContent)
+        private fun initItemMainContentText(helper: BaseViewHolder,item: DynamicData){
+            helper.setText(R.id.tv_text, item.content)
         }
-        private fun initItemMainContentImage(helper: BaseViewHolder,item: MainData){
+        private fun initItemMainContentImage(helper: BaseViewHolder,item: DynamicData){
             val gridNinePictureView =
                 helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
             gridNinePictureView.data = item.imageUrls?.commaToList()!!
@@ -260,7 +279,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 }
             }
         }
-        private fun initItemMainIdentification(helper: BaseViewHolder,item: MainData){
+        private fun initItemMainIdentification(helper: BaseViewHolder,item: DynamicData){
 
         }
     }

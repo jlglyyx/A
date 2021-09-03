@@ -1,6 +1,7 @@
 package com.yang.module_picture.ui.fragment
 
 import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -36,7 +37,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private var pageNum = 1
 
 
-    lateinit var mAdapter: MAdapter
+    private lateinit var mAdapter: MAdapter
 
     override fun getLayout(): Int {
         return R.layout.fra_item_picture
@@ -111,6 +112,10 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             val avi = helper.getView<AVLoadingIndicatorView>(R.id.avi)
             helper.setTag(R.id.siv_img, item.id)
+                .setText(R.id.tv_title,item.imageTitle)
+                .setText(R.id.tv_desc,item.imageDesc)
+//                .setGone(R.id.tv_title,!TextUtils.isEmpty(item.imageTitle))
+//                .setGone(R.id.tv_desc,!TextUtils.isEmpty(item.imageDesc))
             Glide.with(sivImg)
                 .load(item.imageUrl)
                 .into(object : CustomViewTarget<ShapeableImageView, Drawable>(sivImg) {

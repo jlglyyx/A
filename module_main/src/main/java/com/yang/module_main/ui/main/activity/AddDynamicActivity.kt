@@ -17,12 +17,13 @@ import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.dip2px
+import com.yang.lib_common.util.formatWithComma
 import com.yang.lib_common.util.getScreenPx
 import com.yang.lib_common.util.getUserInfo
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_main.R
 import com.yang.module_main.adapter.PictureSelectAdapter
-import com.yang.module_main.data.model.MainData
+import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_add_dynamic.*
@@ -53,10 +54,25 @@ class AddDynamicActivity : BaseActivity() {
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
-                addDynamics()
+                addDynamic()
             }
         }
         initRecyclerView()
+    }
+
+    private fun addDynamic() {
+        val dynamicData = DynamicData()
+        dynamicData.userId = getUserInfo()?.id
+        dynamicData.content = et_dynamic.text.toString()
+        dynamicData.imageUrls = (pictureSelectAdapter.data.map {
+            it.filePath
+        } as MutableList<String>).formatWithComma()
+        //mainData.videoUrls = ""
+        mainViewModel.addDynamic(dynamicData)
+    }
+
+    private fun uploadFile(data: MutableList<MediaInfoBean>) {
+        mainViewModel.uploadFile(data)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -67,13 +83,6 @@ class AddDynamicActivity : BaseActivity() {
         getMainComponent(this).inject(this)
     }
 
-    private fun addDynamics(){
-        val mainData = MainData()
-        mainData.userId = getUserInfo()?.id
-        mainData.dynamicContent = et_dynamic.text.toString()
-        mainData.imageUrls = ""
-        mainViewModel.addDynamic(mainData)
-    }
 
 
     private fun initRecyclerView() {

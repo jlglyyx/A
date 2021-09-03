@@ -20,5 +20,8 @@ data class ImageDataItem(
     val imageName: String,
     val imageType: String,
     val imageUrl: String,
+    val imageDesc: String,
+    val imageTitle: String,
+    val imageExtraInfo: String,
     val updateTime: String
 )

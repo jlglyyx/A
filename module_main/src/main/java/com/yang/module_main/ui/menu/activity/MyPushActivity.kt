@@ -1,5 +1,8 @@
 package com.yang.module_main.ui.menu.activity
 
+import android.view.View
+import android.widget.ImageView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -17,10 +20,11 @@ import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.commaToList
 import com.yang.lib_common.util.formatWithComma
+import com.yang.lib_common.util.getUserInfo
+import com.yang.module_main.data.model.DynamicData
+import com.yang.module_main.helper.getMainComponent
 import com.yang.lib_common.widget.GridNinePictureView
 import com.yang.module_main.R
-import com.yang.module_main.data.model.MainData
-import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import javax.inject.Inject
@@ -49,6 +53,26 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
     override fun initView() {
         initRecyclerView()
         finishRefreshLoadMore(smartRefreshLayout)
+        mainViewModel.dynamicListLiveData.observe(this, Observer {
+            when {
+                smartRefreshLayout.isRefreshing -> {
+                    smartRefreshLayout.finishRefresh()
+                    mAdapter.replaceData(it)
+                }
+                smartRefreshLayout.isLoading -> {
+                    smartRefreshLayout.finishLoadMore()
+                    if (pageNum != 1 && it.isNotEmpty()) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(false)
+                        mAdapter.addData(it)
+                    }
+                }
+                else -> {
+                    mAdapter.replaceData(it)
+                }
+            }
+        })
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -66,11 +90,11 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val mutableListOf = mutableListOf<MainData>().apply {
-                add(MainData().apply {
+        val mutableListOf = mutableListOf<DynamicData>().apply {
+                add(DynamicData().apply {
                     userImage =
                         "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    dynamicContent = "今天天气真好"
+                    content = "今天天气真好"
                     imageUrls = mutableListOf<String>().apply {
                         add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
                         add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
@@ -81,7 +105,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
                     }.formatWithComma()
                 })
-                add(MainData().apply {
+                add(DynamicData().apply {
                     userImage =
                         "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
                     imageUrls = mutableListOf<String>().apply {
@@ -94,15 +118,15 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
                     }.formatWithComma()
                 })
-                add(MainData().apply {
+                add(DynamicData().apply {
                     userImage =
                         "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
                 })
-                add(MainData().apply {
+                add(DynamicData().apply {
                     userImage =
                         "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
                 })
-                add(MainData())
+                add(DynamicData())
         }
         mAdapter = MAdapter(mutableListOf).apply {
             setOnItemChildClickListener { adapter, view, position ->
@@ -120,43 +144,43 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     }
 
-    inner class MAdapter(list: MutableList<MainData>) :
-        BaseQuickAdapter<MainData, BaseViewHolder>(list) {
+    inner class MAdapter(list: MutableList<DynamicData>) :
+        BaseQuickAdapter<DynamicData, BaseViewHolder>(list) {
 
         init {
             mLayoutResId = R.layout.view_dynamic_item
         }
 
-        override fun convert(helper: BaseViewHolder, item: MainData) {
+        override fun convert(helper: BaseViewHolder, item: DynamicData) {
 
             initItemMainTitle(helper,item)
 
-            if (item.dynamicContent.isNullOrEmpty()){
-                helper.setVisible(R.id.item_main_content_text,false)
+            if (item.content.isNullOrEmpty()){
+                helper.setGone(R.id.item_main_content_text,false)
             }else{
-                helper.setVisible(R.id.item_main_content_text,true)
+                helper.setGone(R.id.item_main_content_text,true)
                 initItemMainContentText(helper,item)
             }
 
             if (item.imageUrls.isNullOrEmpty()){
-                helper.setVisible(R.id.item_main_content_image,false)
+                helper.setGone(R.id.item_main_content_image,false)
             }else{
-                helper.setVisible(R.id.item_main_content_image,true)
+                helper.setGone(R.id.item_main_content_image,true)
                 initItemMainContentImage(helper,item)
             }
             initItemMainIdentification(helper,item)
         }
 
-        private fun initItemMainTitle(helper: BaseViewHolder,item: MainData){
+        private fun initItemMainTitle(helper: BaseViewHolder,item: DynamicData){
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_time, item.createTime)
             Glide.with(sivImg).load(item.userImage).into(sivImg)
         }
-        private fun initItemMainContentText(helper: BaseViewHolder,item: MainData){
-            helper.setText(R.id.tv_text, item.dynamicContent)
+        private fun initItemMainContentText(helper: BaseViewHolder,item: DynamicData){
+            helper.setText(R.id.tv_text, item.content)
         }
-        private fun initItemMainContentImage(helper: BaseViewHolder,item: MainData){
+        private fun initItemMainContentImage(helper: BaseViewHolder,item: DynamicData){
             val gridNinePictureView =
                 helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
             gridNinePictureView.data = item.imageUrls?.commaToList()!!
@@ -168,14 +192,14 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                 }
             }
         }
-        private fun initItemMainIdentification(helper: BaseViewHolder,item: MainData){
+        private fun initItemMainIdentification(helper: BaseViewHolder,item: DynamicData){
 
         }
     }
 
     private fun getDynamicList(){
         val mutableMapOf = mutableMapOf<String, String>()
-        mutableMapOf[AppConstant.Constant.USER_ID] = ""
+        mutableMapOf[AppConstant.Constant.USER_ID] = getUserInfo()?.id.toString()
         mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum.toString()
         mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT.toString()
         mainViewModel.getDynamicList(mutableMapOf)

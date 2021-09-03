@@ -130,19 +130,19 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it.list!!)
+                    mAdapter.replaceData(it.list)
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.list?.isEmpty()!!) {
+                    if (pageNum != 1 && it.list.isEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
-                        mAdapter.addData(it.list!!)
+                        mAdapter.addData(it.list)
                     }
                 }
                 else -> {
-                    mAdapter.replaceData(it.list!!)
+                    mAdapter.replaceData(it.list)
                 }
             }
 

@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Environment
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -110,6 +111,9 @@ class VideoItemActivity : BaseActivity() {
         getVideoComponent(this).inject(this)
         videoModule.mVideoItemData.observe(this, Observer {
             for ((index,videoDataItem) in it.withIndex()){
+                if (index == 0){
+                    videoDataItem.select = true
+                }
                 videoDataItem.position = index+1
             }
             url = it[0].videoUrl.toString()
@@ -150,8 +154,21 @@ class VideoItemActivity : BaseActivity() {
                 setOnItemClickListener { adapter, view, position ->
                     val item = adapter.getItem(position) as VideoDataItem
                     url = item.videoUrl.toString()
+                    if (item.select){
+                        item.select = false
+                        adapter.notifyItemChanged(position)
+                    }else{
+                        adapter.data.forEach {
+                            if ((it as VideoDataItem).select){
+                                it.select = false
+                            }
+                        }
+                        item.select = true
+                        adapter.notifyDataSetChanged()
+                    }
                     initVideo()
                     detailPlayer.startPlayLogic()
+
                 }
             }
         collectionRecyclerView.adapter = collectionAdapter
@@ -249,6 +266,12 @@ class VideoItemActivity : BaseActivity() {
         BaseQuickAdapter<VideoDataItem, BaseViewHolder>(layoutResId, data) {
         override fun convert(helper: BaseViewHolder, item: VideoDataItem) {
             helper.setText(R.id.bt_collection,item.position.toString())
+            if (item.select){
+                helper.setTextColor(R.id.bt_collection,
+                    ContextCompat.getColor(mContext,R.color.mediumslateblue))
+            }else{
+                helper.setTextColor(R.id.bt_collection,ContextCompat.getColor(mContext,R.color.black))
+            }
         }
 
     }

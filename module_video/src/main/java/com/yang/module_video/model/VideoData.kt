@@ -15,7 +15,7 @@ data class VideoDataItem constructor(private val itemType: Int) : MultiItemEntit
     override fun getItemType(): Int {
         return itemType
     }
-
+    var select = false
     var position = 0
     val createTime: String? = null
     val id: String? = null

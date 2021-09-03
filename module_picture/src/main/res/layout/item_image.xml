@@ -9,8 +9,6 @@
         android:id="@+id/siv_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/dp_50"
-        android:layout_marginVertical="@dimen/dp_10"
         app:layout_constraintLeft_toLeftOf="parent"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"

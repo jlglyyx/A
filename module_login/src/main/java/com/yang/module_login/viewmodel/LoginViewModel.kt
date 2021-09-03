@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
             delayShowDialog()
             dismissDialog()
         },{
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            //buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
         }, messages = *arrayOf("请求中..."))
     }
 
