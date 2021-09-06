@@ -1,13 +1,16 @@
 package com.yang.module_main.ui.main.fragment
 
 import android.content.Intent
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -25,12 +28,12 @@ import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
-import com.yang.lib_common.widget.GridNinePictureView
 import com.yang.module_main.R
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.ui.main.activity.AddDynamicActivity
 import com.yang.module_main.ui.main.activity.MainActivity
+import com.yang.module_main.ui.main.adapter.DynamicAdapter
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
@@ -46,6 +49,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     @Inject
     lateinit var gson: Gson
+
     @Inject
     @ModelWithFactory
     lateinit var mainViewModel: MainViewModel
@@ -63,54 +67,6 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     override fun initData() {
         smartRefreshLayout.autoRefresh()
         initSmartRefreshLayout()
-        lifecycleScope.launch(Dispatchers.IO) {
-            mAdapter.setNewData(
-                mutableListOf<DynamicData>().apply {
-                    add(DynamicData().apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                        content = "今天天气真好"
-                        imageUrls = mutableListOf<String>().apply {
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-
-                        }.formatWithComma()
-                        videoUrls =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(DynamicData().apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                        imageUrls = mutableListOf<String>().apply {
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                            add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-
-                        }.formatWithComma()
-                        videoUrls =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(DynamicData().apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                        videoUrls =
-                            "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-                    })
-                    add(DynamicData().apply {
-                        userImage =
-                            "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    })
-                    add(DynamicData())
-                })
-
-        }
     }
 
     override fun initView() {
@@ -206,7 +162,6 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initViewModel() {
         getMainComponent(this).inject(this)
-
     }
 
 
@@ -239,55 +194,65 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         }
 
         override fun convert(helper: BaseViewHolder, item: DynamicData) {
-            initItemMainTitle(helper,item)
+            initItemMainTitle(helper, item)
 
-            if (item.content.isNullOrEmpty()){
-                helper.setGone(R.id.item_main_content_text,false)
-            }else{
-                helper.setGone(R.id.item_main_content_text,true)
-                initItemMainContentText(helper,item)
+            if (item.content.isNullOrEmpty()) {
+                helper.setGone(R.id.item_main_content_text, false)
+            } else {
+                helper.setGone(R.id.item_main_content_text, true)
+                initItemMainContentText(helper, item)
             }
 
-            if (item.imageUrls.isNullOrEmpty()){
-                helper.setGone(R.id.item_main_content_image,false)
-            }else{
-                helper.setGone(R.id.item_main_content_image,true)
-                initItemMainContentImage(helper,item)
+            if (item.imageUrls.isNullOrEmpty()) {
+                helper.setGone(R.id.mRecyclerView, false)
+            } else {
+                helper.setGone(R.id.mRecyclerView, true)
+                initItemMainContentImage(helper, item)
             }
 
-            initItemMainIdentification(helper,item)
+            initItemMainIdentification(helper, item)
         }
 
-        private fun initItemMainTitle(helper: BaseViewHolder,item: DynamicData){
+        private fun initItemMainTitle(helper: BaseViewHolder, item: DynamicData) {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_time, item.createTime)
             Glide.with(sivImg).load(item.userImage).into(sivImg)
         }
-        private fun initItemMainContentText(helper: BaseViewHolder,item: DynamicData){
+
+        private fun initItemMainContentText(helper: BaseViewHolder, item: DynamicData) {
             helper.setText(R.id.tv_text, item.content)
         }
-        private fun initItemMainContentImage(helper: BaseViewHolder,item: DynamicData){
-            val gridNinePictureView =
-                helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
-            gridNinePictureView.data = item.imageUrls?.commaToList()!!
-            gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback {
-                override fun imageClickListener(position: Int) {
-                    val imageViewPagerDialog =
-                        ImageViewPagerDialog(requireContext(), item.imageUrls?.commaToList()!!, position)
-                    XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
-                }
+
+        private fun initItemMainContentImage(helper: BaseViewHolder, item: DynamicData) {
+            val mRecyclerView = helper.getView<RecyclerView>(R.id.mRecyclerView)
+            mRecyclerView.layoutManager = GridLayoutManager(mContext, 3)
+            val dynamicAdapter = DynamicAdapter(
+                R.layout.view_item_grid_nine_picture,
+                item.imageUrls?.commaToList()!!
+            )
+            mRecyclerView.adapter = dynamicAdapter
+            dynamicAdapter.setOnItemClickListener { adapter, view, position ->
+                val imageViewPagerDialog =
+                    ImageViewPagerDialog(
+                        requireContext(),
+                        item.imageUrls?.commaToList()!!,
+                        position
+                    )
+                XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
             }
         }
-        private fun initItemMainIdentification(helper: BaseViewHolder,item: DynamicData){
+
+        private fun initItemMainIdentification(helper: BaseViewHolder, item: DynamicData) {
 
         }
     }
 
-    private fun getDynamicList(){
+    private fun getDynamicList() {
         val mutableMapOf = mutableMapOf<String, String>()
         mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum.toString()
-        mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT.toString()
+        mutableMapOf[AppConstant.Constant.PAGE_SIZE] =
+            AppConstant.Constant.PAGE_SIZE_COUNT.toString()
         mainViewModel.getDynamicList(mutableMapOf)
     }
 

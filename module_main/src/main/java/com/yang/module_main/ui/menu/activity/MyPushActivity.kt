@@ -3,7 +3,9 @@ package com.yang.module_main.ui.menu.activity
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -23,8 +25,8 @@ import com.yang.lib_common.util.formatWithComma
 import com.yang.lib_common.util.getUserInfo
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
-import com.yang.lib_common.widget.GridNinePictureView
 import com.yang.module_main.R
+import com.yang.module_main.ui.main.adapter.DynamicAdapter
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import javax.inject.Inject
@@ -75,7 +77,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
         })
     }
 
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
+    override fun initUIChangeLiveData(): UIChangeLiveData {
         return mainViewModel.uC
     }
 
@@ -90,45 +92,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val mutableListOf = mutableListOf<DynamicData>().apply {
-                add(DynamicData().apply {
-                    userImage =
-                        "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    content = "今天天气真好"
-                    imageUrls = mutableListOf<String>().apply {
-                        add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-
-                    }.formatWithComma()
-                })
-                add(DynamicData().apply {
-                    userImage =
-                        "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                    imageUrls = mutableListOf<String>().apply {
-                        add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33102.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32309.jpg")
-                        add("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg")
-
-                    }.formatWithComma()
-                })
-                add(DynamicData().apply {
-                    userImage =
-                        "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                })
-                add(DynamicData().apply {
-                    userImage =
-                        "https://img2.baidu.com/it/u=1801164193,3602394305&fm=26&fmt=auto&gp=0.jpg"
-                })
-                add(DynamicData())
-        }
-        mAdapter = MAdapter(mutableListOf).apply {
+        mAdapter = MAdapter(mutableListOf()).apply {
             setOnItemChildClickListener { adapter, view, position ->
                 when (view.id) {
                     R.id.siv_img -> {
@@ -163,9 +127,9 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
             }
 
             if (item.imageUrls.isNullOrEmpty()){
-                helper.setGone(R.id.item_main_content_image,false)
+                helper.setGone(R.id.mRecyclerView,false)
             }else{
-                helper.setGone(R.id.item_main_content_image,true)
+                helper.setGone(R.id.mRecyclerView,true)
                 initItemMainContentImage(helper,item)
             }
             initItemMainIdentification(helper,item)
@@ -181,15 +145,17 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
             helper.setText(R.id.tv_text, item.content)
         }
         private fun initItemMainContentImage(helper: BaseViewHolder,item: DynamicData){
-            val gridNinePictureView =
-                helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
-            gridNinePictureView.data = item.imageUrls?.commaToList()!!
-            gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback {
-                override fun imageClickListener(position: Int) {
-                    val imageViewPagerDialog =
-                        ImageViewPagerDialog(mContext, item.imageUrls?.commaToList()!!, position)
-                    XPopup.Builder(mContext).asCustom(imageViewPagerDialog).show()
-                }
+            val mRecyclerView = helper.getView<RecyclerView>(R.id.mRecyclerView)
+            mRecyclerView.layoutManager = GridLayoutManager(mContext,3)
+            val dynamicAdapter = DynamicAdapter(
+                R.layout.view_item_grid_nine_picture,
+                item.imageUrls?.commaToList()!!
+            )
+            mRecyclerView.adapter = dynamicAdapter
+            dynamicAdapter.setOnItemClickListener { adapter, view, position ->
+                val imageViewPagerDialog =
+                    ImageViewPagerDialog(this@MyPushActivity, item.imageUrls?.commaToList()!!, position)
+                XPopup.Builder(this@MyPushActivity).asCustom(imageViewPagerDialog).show()
             }
         }
         private fun initItemMainIdentification(helper: BaseViewHolder,item: DynamicData){

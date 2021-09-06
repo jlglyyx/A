@@ -52,6 +52,7 @@ class GridNinePictureView : RelativeLayout {
                     val inflate = LayoutInflater.from(mContext)
                         .inflate(R.layout.view_item_grid_nine_picture, null, false)
                     val ivNineImage = inflate.findViewById<ImageView>(R.id.iv_nine_image)
+                    Log.i("TAG", "============: $ivNineImage")
                     val ivPlay = inflate.findViewById<ImageView>(R.id.iv_play)
                     ivNineImage.setOnClickListener {
                         imageCallback?.imageClickListener(i)
@@ -63,13 +64,14 @@ class GridNinePictureView : RelativeLayout {
                             .load(
                                 data[i]
                             )
+                            .fitCenter()
                             .into(ivNineImage)
                     }else{
                         ivPlay.visibility = View.GONE
                         Glide.with(mContext)
                             .load(
                                 data[i]
-                            )
+                            ).fitCenter()
                             .into(ivNineImage)
                     }
                     addView(inflate)

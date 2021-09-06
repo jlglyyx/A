@@ -79,7 +79,7 @@ class PictureItemActivity : BaseActivity() {
                 val images = mutableListOf<String>().apply {
                     data.forEach { imageData ->
                         imageData as ImageDataItem
-                        add(imageData.imageUrl)
+                        imageData.imageUrl?.let { it1 -> add(it1) }
                     }
                 }
                 val imageViewPagerDialog =

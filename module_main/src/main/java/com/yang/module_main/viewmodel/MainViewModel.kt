@@ -24,39 +24,42 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel(application) {
 
     var dynamicListLiveData = MutableLiveData<MutableList<DynamicData>>()
+    var pictureListLiveData = MutableLiveData<MutableList<String>>()
+
 
     fun addDynamic(dynamicData: DynamicData) {
         launch({
             mainRepository.addDynamic(dynamicData)
         }, {
             finishActivity()
-        },messages = *arrayOf("正在努力发表中...","发表成功"))
+        }, messages = *arrayOf("正在努力发表中...", "发表成功"))
     }
+
     fun getDynamicList(params: Map<String, String>) {
         launch({
             mainRepository.getDynamicList(params)
         }, {
             dynamicListLiveData.postValue(it.data)
-        },{
+        }, {
             cancelRefreshLoadMore()
-        },errorDialog = false)
+        }, errorDialog = false)
     }
+
     fun uploadFile(filePaths: MutableList<MediaInfoBean>) {
         launch({
             val mutableMapOf = mutableMapOf<String, RequestBody>()
             filePaths.forEach {
                 val file = File(it.filePath.toString())
                 val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-                val encode = URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+                val encode =
+                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
                 mutableMapOf["file\";filename=\"$encode"] = requestBody
             }
             mainRepository.uploadFile(mutableMapOf)
         }, {
-            //dynamicDetailLiveData.postValue(it.data)
-            showDialog("添加成功")
-        })
+            pictureListLiveData.postValue(it.data)
+        }, messages = *arrayOf("上传中","添加成功"))
     }
-
 
 
 }

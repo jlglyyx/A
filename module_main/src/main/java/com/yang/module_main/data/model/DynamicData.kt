@@ -11,8 +11,6 @@ class DynamicData {
 
     var imageUrls: String? = null
 
-    var videoUrls: String? = null
-
     var content: String? = null
     var createTime: String? = null
     var location: String? = null

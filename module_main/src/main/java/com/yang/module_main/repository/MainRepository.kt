@@ -24,7 +24,7 @@ class MainRepository @Inject constructor(private val mainApiService: MainApiServ
             mainApiService.getDynamicList(params)
         }
     }
-    suspend fun uploadFile(filePaths: MutableMap<String, RequestBody>): MResult<String> {
+    suspend fun uploadFile(filePaths: MutableMap<String, RequestBody>): MResult<MutableList<String>> {
         return withContext(Dispatchers.IO) {
             mainApiService.uploadFile(filePaths)
         }

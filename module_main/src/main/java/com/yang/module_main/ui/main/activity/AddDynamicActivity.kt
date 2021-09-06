@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lxj.xpopup.XPopup
+import androidx.lifecycle.Observer
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -54,7 +55,11 @@ class AddDynamicActivity : BaseActivity() {
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
-                addDynamic()
+                if (pictureSelectAdapter.data.isEmpty()){
+                    mainViewModel.requestSuccess()
+                    return
+                }
+                uploadFile(pictureSelectAdapter.data)
             }
         }
         initRecyclerView()
@@ -64,10 +69,7 @@ class AddDynamicActivity : BaseActivity() {
         val dynamicData = DynamicData()
         dynamicData.userId = getUserInfo()?.id
         dynamicData.content = et_dynamic.text.toString()
-        dynamicData.imageUrls = (pictureSelectAdapter.data.map {
-            it.filePath
-        } as MutableList<String>).formatWithComma()
-        //mainData.videoUrls = ""
+        dynamicData.imageUrls = mainViewModel.pictureListLiveData.value?.formatWithComma()
         mainViewModel.addDynamic(dynamicData)
     }
 
@@ -75,12 +77,15 @@ class AddDynamicActivity : BaseActivity() {
         mainViewModel.uploadFile(data)
     }
 
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
+    override fun initUIChangeLiveData(): UIChangeLiveData {
         return mainViewModel.uC
     }
 
     override fun initViewModel() {
         getMainComponent(this).inject(this)
+        mainViewModel.pictureListLiveData.observe(this, Observer {
+            addDynamic()
+        })
     }
 
 
