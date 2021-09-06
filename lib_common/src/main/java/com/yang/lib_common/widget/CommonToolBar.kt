@@ -8,10 +8,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.imageview.ShapeableImageView
 import com.yang.lib_common.R
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getStatusBarHeight
-import com.google.android.material.imageview.ShapeableImageView
 
 class CommonToolBar : ConstraintLayout {
 
@@ -69,13 +69,16 @@ class CommonToolBar : ConstraintLayout {
         val leftContent = obtainStyledAttributes.getString(R.styleable.CommonToolBar_leftContent)
         val leftImgVisible =
             obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_leftImgVisible, true)
+        val leftImgSrc =
+            obtainStyledAttributes.getResourceId(R.styleable.CommonToolBar_leftImgSrc, 0)
 
         val rightContent = obtainStyledAttributes.getString(R.styleable.CommonToolBar_rightContent)
         val rightImgVisible =
             obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_rightImgVisible, false)
         val rightContentVisible =
             obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_rightContentVisible, false)
-
+        val rightImgSrc =
+            obtainStyledAttributes.getResourceId(R.styleable.CommonToolBar_rightImgSrc, 0)
         val toolbarBg = obtainStyledAttributes.getResourceId(
             R.styleable.CommonToolBar_toolbarBg, 0
         )
@@ -90,11 +93,19 @@ class CommonToolBar : ConstraintLayout {
         } else {
             ivBack.visibility = View.GONE
         }
+
+        if (leftImgSrc != 0){
+            ivBack.setImageResource(leftImgSrc)
+        }
         if (rightImgVisible) {
             ivAdd.visibility = View.VISIBLE
         } else {
             ivAdd.visibility = View.GONE
         }
+        if (rightImgSrc != 0){
+            ivAdd.setImageResource(rightImgSrc)
+        }
+
         if (rightContentVisible) {
             tvRightContent.visibility = View.VISIBLE
         } else {

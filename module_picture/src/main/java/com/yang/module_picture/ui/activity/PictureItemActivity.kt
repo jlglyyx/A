@@ -1,7 +1,6 @@
 package com.yang.module_picture.ui.activity
 
 import android.graphics.Rect
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
@@ -11,10 +10,10 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomViewTarget
-import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.google.android.material.imageview.ShapeableImageView
+import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -26,9 +25,6 @@ import com.yang.module_picture.R
 import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.model.ImageDataItem
 import com.yang.module_picture.viewmodel.PictureViewModel
-import com.google.android.material.imageview.ShapeableImageView
-import com.lxj.xpopup.XPopup
-import com.wang.avi.AVLoadingIndicatorView
 import kotlinx.android.synthetic.main.act_picture_item.*
 import kotlinx.android.synthetic.main.fra_item_picture.recyclerView
 import javax.inject.Inject
@@ -204,29 +200,10 @@ class PictureItemActivity : BaseActivity() {
         BaseQuickAdapter<ImageDataItem, BaseViewHolder>(layoutResId, list) {
         override fun convert(helper: BaseViewHolder, item: ImageDataItem) {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            val avi = helper.getView<AVLoadingIndicatorView>(R.id.avi)
             helper.setTag(R.id.siv_img, item.id)
             Glide.with(sivImg)
                 .load(item.imageUrl)
-                .into(object : CustomViewTarget<ShapeableImageView, Drawable>(sivImg) {
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        avi.visibility = View.VISIBLE
-                    }
-
-                    override fun onResourceCleared(placeholder: Drawable?) {
-                        sivImg.setImageDrawable(null)
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        transition: Transition<in Drawable>?
-                    ) {
-                        avi.visibility = View.GONE
-                        if (sivImg.tag == item.id) {
-                            sivImg.setImageDrawable(resource)
-                        }
-                    }
-                })
+                .into(sivImg)
         }
     }
 
@@ -246,8 +223,6 @@ class PictureItemActivity : BaseActivity() {
         BaseQuickAdapter<String, BaseViewHolder>(layoutResId, list) {
         override fun convert(helper: BaseViewHolder, item: String) {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            val avi = helper.getView<AVLoadingIndicatorView>(R.id.avi)
-            avi.visibility = View.GONE
             Glide.with(sivImg)
                 .load(item)
                 .into(sivImg)

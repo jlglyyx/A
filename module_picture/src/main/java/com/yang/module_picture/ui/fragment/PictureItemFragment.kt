@@ -1,27 +1,25 @@
 package com.yang.module_picture.ui.fragment
 
-import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomViewTarget
-import com.bumptech.glide.request.transition.Transition
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.google.android.material.imageview.ShapeableImageView
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_picture.R
 import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.model.ImageDataItem
 import com.yang.module_picture.viewmodel.PictureViewModel
-import com.google.android.material.imageview.ShapeableImageView
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
-import com.wang.avi.AVLoadingIndicatorView
+import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.fra_item_picture.*
 import javax.inject.Inject
 
@@ -44,11 +42,16 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initData() {
         queryType = arguments?.getString(AppConstant.Constant.TYPE)
-        smartRefreshLayout.autoRefresh()
+        val mutableListOf = mutableListOf<ImageDataItem>()
+        for (i in 0..9){
+            mutableListOf.add(ImageDataItem(null,null,"","","https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg",""))
+        }
+        mAdapter.replaceData(mutableListOf)
     }
 
     override fun initView() {
         initRecyclerView()
+        initBanner()
         initSmartRefreshLayout()
 
     }
@@ -64,6 +67,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private fun initSmartRefreshLayout() {
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+        smartRefreshLayout.autoRefresh()
         finishRefreshLoadMore(smartRefreshLayout)
     }
 
@@ -105,34 +109,39 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     }
 
+    private fun initBanner() {
+//        banner.setPageTransformer(AlphaPageTransformer())
+        //       banner.addPageTransformer(DepthPageTransformer())
+//        banner.addPageTransformer(RotateDownPageTransformer())
+//        banner.addPageTransformer(RotateUpPageTransformer())
+//        banner.addPageTransformer(RotateYTransformer())
+//        banner.addPageTransformer(ScaleInTransformer())
+        //       banner.addPageTransformer(ZoomOutPageTransformer())
+        banner.addBannerLifecycleObserver(this)//添加生命周期观察者
+            .setAdapter(MBannerAdapter(mutableListOf<BannerBean>().apply {
+                add(BannerBean("https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"))
+                add(BannerBean("https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"))
+                add(BannerBean("https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"))
+                add(BannerBean("https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"))
+                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg"))
+                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg"))
+                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg"))
+                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg"))
+                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg"))
+                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg"))
+                add(BannerBean("https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"))
+            }))
+            .indicator = CircleIndicator(requireContext())
+    }
+
     inner class MAdapter(layoutResId: Int, list: MutableList<ImageDataItem>) :
         BaseQuickAdapter<ImageDataItem, BaseViewHolder>(layoutResId, list) {
         override fun convert(helper: BaseViewHolder, item: ImageDataItem) {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            val avi = helper.getView<AVLoadingIndicatorView>(R.id.avi)
             helper.setTag(R.id.siv_img, item.id)
             Glide.with(sivImg)
                 .load(item.imageUrl)
-                .into(object : CustomViewTarget<ShapeableImageView, Drawable>(sivImg) {
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        avi.visibility = View.VISIBLE
-                    }
-
-                    override fun onResourceCleared(placeholder: Drawable?) {
-                        sivImg.setImageDrawable(null)
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        transition: Transition<in Drawable>?
-                    ) {
-                        avi.visibility = View.GONE
-                        if (sivImg.tag == item.id) {
-                            sivImg.setImageDrawable(resource)
-                        }
-                    }
-
-                })
+                .into(sivImg)
         }
     }
 

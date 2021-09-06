@@ -15,10 +15,10 @@ data class ImageData(
 )
 
 data class ImageDataItem(
-    val createTime: String,
-    val id: String,
-    val imageName: String,
-    val imageType: String,
-    val imageUrl: String,
-    val updateTime: String
+    var createTime: String?,
+    var id: String?,
+    var imageName: String,
+    var imageType: String,
+    var imageUrl: String,
+    var updateTime: String?
 )

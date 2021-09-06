@@ -17,13 +17,13 @@ data class VideoDataItem constructor(private val itemType: Int) : MultiItemEntit
     }
 
     var position = 0
-    val createTime: String? = null
-    val id: String? = null
-    val videoName: String? = null
-    val videoType: String? = null
-    val videoUrl: String? = null
-    val videoTitle: String? = null
-    val updateTime: String? = null
+    var createTime: String? = null
+    var id: String? = null
+    var videoName: String? = null
+    var videoType: String? = null
+    var videoUrl: String? = null
+    var videoTitle: String? = null
+    var updateTime: String? = null
 
 }
 
