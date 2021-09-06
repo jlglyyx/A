@@ -3,18 +3,15 @@ package com.yang.module_picture.ui.fragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.yang.lib_common.adapter.MBannerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import com.yang.lib_common.adapter.TabAndViewPagerFragmentAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_picture.R
 import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.viewmodel.PictureViewModel
-import com.google.android.material.tabs.TabLayoutMediator
-import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.fra_picture.*
 import javax.inject.Inject
 
@@ -53,9 +50,6 @@ class PictureFragment : BaseLazyFragment() {
     override fun initView() {
         titles = mutableListOf()
         fragments = mutableListOf()
-        initBanner()
-
-
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -84,30 +78,7 @@ class PictureFragment : BaseLazyFragment() {
 
     }
 
-    private fun initBanner() {
-//        banner.setPageTransformer(AlphaPageTransformer())
- //       banner.addPageTransformer(DepthPageTransformer())
-//        banner.addPageTransformer(RotateDownPageTransformer())
-//        banner.addPageTransformer(RotateUpPageTransformer())
-//        banner.addPageTransformer(RotateYTransformer())
-//        banner.addPageTransformer(ScaleInTransformer())
- //       banner.addPageTransformer(ZoomOutPageTransformer())
-        banner.addBannerLifecycleObserver(this)//添加生命周期观察者
-            .setAdapter(MBannerAdapter(mutableListOf<BannerBean>().apply {
-                add(BannerBean("https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"))
-                add(BannerBean("https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"))
-                add(BannerBean("https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"))
-                add(BannerBean("https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"))
-                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg"))
-                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32184.jpg"))
-                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32185.jpg"))
-                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202106/apic33150.jpg"))
-                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32187.jpg"))
-                add(BannerBean("https://scpic.chinaz.net/files/pic/pic9/202104/apic32186.jpg"))
-                add(BannerBean("https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"))
-            }))
-            .indicator = CircleIndicator(requireContext());
-    }
+
 
 
 }

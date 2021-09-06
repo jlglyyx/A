@@ -4,8 +4,10 @@
         <attr name="centerContent" format="string"/>
         <attr name="leftContent" format="string"/>
         <attr name="leftImgVisible" format="boolean"/>
+        <attr name="leftImgSrc" format="reference"/>
         <attr name="rightContent" format="string"/>
         <attr name="rightImgVisible" format="boolean"/>
+        <attr name="rightImgSrc" format="reference"/>
         <attr name="rightContentVisible" format="boolean"/>
         <attr name="toolbarBg" format="reference"/>
     </declare-styleable>

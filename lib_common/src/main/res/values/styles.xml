@@ -45,10 +45,6 @@
         <item name="android:textSize">@dimen/sp_14</item>
         <item name="tabSelectedTextColor">@color/colorAccent</item>
     </style>
-    <style name="mAVLoadingIndicatorView" parent="AVLoadingIndicatorView">
-        <item name="indicatorColor">@color/darkslategrey</item>
-        <item name="indicatorName">BallTrianglePathIndicator</item>
-    </style>
 
     <style name="circleShapeImage">
         <item name="cornerFamily">rounded</item>

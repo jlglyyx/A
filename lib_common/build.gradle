@@ -71,7 +71,6 @@ dependencies {
     api rootProject.ext.dependencies['lifecycle-livedata-ktx']
     api rootProject.ext.dependencies['lifecycle-viewmodel-compose']
     api rootProject.ext.dependencies['startup-runtime']
-    api rootProject.ext.dependencies['avi']
     api rootProject.ext.dependencies['arouter-api']
     kapt rootProject.ext.dependencies['arouter-compiler']
     api rootProject.ext.dependencies['material']

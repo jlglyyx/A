@@ -113,7 +113,6 @@ class ImageViewPagerDialog : FullScreenPopupView {
                 val photoView = holder.itemView.findViewById<PhotoView>(R.id.photoView)
                 val gsyVideoPlayer =
                     holder.itemView.findViewById<StandardGSYVideoPlayer>(R.id.detailPlayer)
-                //val avi = holder.itemView.findViewById<AVLoadingIndicatorView>(R.id.avi)
                 val endsWith = data[position].endsWith(".mp4")
                 if (endsWith) {
                     //avi.visibility = View.GONE

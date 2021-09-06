@@ -11,12 +11,12 @@ import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
+import com.tencent.bugly.crashreport.CrashReport
+import com.tencent.mmkv.MMKV
 import com.yang.lib_common.BuildConfig
 import com.yang.lib_common.handle.CrashHandle
 import com.yang.lib_common.helper.getRemoteComponent
 import com.yang.lib_common.util.NetworkUtil
-import com.tencent.bugly.crashreport.CrashReport
-import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -99,5 +99,15 @@ class BaseApplication : Application() {
             PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         }
 
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        Glide.get(this).onTrimMemory(level)
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        Glide.get(this).onLowMemory()
     }
 }
