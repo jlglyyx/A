@@ -139,7 +139,8 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_time, item.createTime)
-            Glide.with(sivImg).load(item.userImage).into(sivImg)
+            Glide.with(sivImg).load(item.userImage).error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder).into(sivImg)
         }
         private fun initItemMainContentText(helper: BaseViewHolder,item: DynamicData){
             helper.setText(R.id.tv_text, item.content)

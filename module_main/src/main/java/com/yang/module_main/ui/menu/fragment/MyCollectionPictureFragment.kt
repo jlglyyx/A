@@ -55,7 +55,8 @@ class MyCollectionPictureFragment : BaseFragment() {
         BaseQuickAdapter<String, BaseViewHolder>(layoutResId, list) {
         override fun convert(helper: BaseViewHolder, item: String) {
             val ivImage = helper.getView<ImageView>(R.id.iv_image)
-            Glide.with(ivImage).load(item).into(ivImage)
+            Glide.with(ivImage).load(item).error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder).into(ivImage)
         }
     }
 

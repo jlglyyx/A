@@ -2,14 +2,14 @@ package com.yang.module_main.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.data.MediaInfoBean
 import com.yang.module_main.data.model.DynamicData
+import com.yang.module_main.repository.MainRepository
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import java.io.File
 import java.net.URLEncoder
-import com.yang.lib_common.base.viewmodel.BaseViewModel
-import com.yang.module_main.repository.MainRepository
 import javax.inject.Inject
 
 
@@ -41,6 +41,7 @@ class MainViewModel @Inject constructor(
         }, {
             dynamicListLiveData.postValue(it.data)
         }, {
+            showRecyclerViewErrorEvent()
             cancelRefreshLoadMore()
         }, errorDialog = false)
     }

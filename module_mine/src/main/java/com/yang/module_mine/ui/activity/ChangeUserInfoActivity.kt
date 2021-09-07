@@ -66,7 +66,8 @@ class ChangeUserInfoActivity : BaseActivity() {
                     it.data?.data?.let { uri ->
                         imageUrl = uri2path(this, uri)
                     }
-                    Glide.with(this).load(imageUrl).centerCrop().into(siv_image)
+                    Glide.with(this).load(imageUrl).centerCrop().error(R.drawable.iv_image_error)
+                        .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
                 }
             }
         ll_image.clicks().subscribe {

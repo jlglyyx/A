@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
+import com.yang.lib_common.R
 import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.util.showShort
-import com.google.android.material.imageview.ShapeableImageView
 import com.youth.banner.adapter.BannerAdapter
 
 
@@ -43,7 +44,10 @@ class MBannerAdapter(mData: MutableList<BannerBean>) : BannerAdapter<BannerBean,
         holder.shapeAbleImageView.setOnClickListener {
             showShort("$position ${data.url}")
         }
-        Glide.with(holder.shapeAbleImageView).load(data.url).into(holder.shapeAbleImageView)
+        Glide.with(holder.shapeAbleImageView).load(data.url)
+            .error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder)
+            .into(holder.shapeAbleImageView)
     }
 
 

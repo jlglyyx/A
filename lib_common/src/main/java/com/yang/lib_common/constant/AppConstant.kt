@@ -2,7 +2,7 @@ package com.yang.lib_common.constant
 
 interface AppConstant {
 
-    object RoutePath{
+    object RoutePath {
         private const val ACTIVITY = "activity"
         private const val FRAGMENT = "fragment"
         private const val SERVICE = "service"
@@ -29,7 +29,8 @@ interface AppConstant {
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
         const val LEFT_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/LeftFragment"
-        const val MY_COLLECTION_PICTURE_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionPictureFragment"
+        const val MY_COLLECTION_PICTURE_FRAGMENT =
+            "/$MODULE_MAIN/$FRAGMENT/MyCollectionPictureFragment"
         const val MY_COLLECTION_VIDEO_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionVideoFragment"
 
 
@@ -55,7 +56,8 @@ interface AppConstant {
         const val VIDEO_ITEM_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/VideoItemFragment"
 
 
-        const val ADVERTISEMENT_VIDEO_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
+        const val ADVERTISEMENT_VIDEO_ACTIVITY =
+            "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
         const val VIDEO_MAIN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/MainActivity"
 
         const val VIDEO_ITEM_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoItemActivity"
@@ -72,18 +74,16 @@ interface AppConstant {
         const val VIEW_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ViewHistoryActivity"
 
 
-
-
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
     }
 
-    object Constant{
+    object Constant {
 
         /**
          * 主页布局类型
          */
-        const val CLICK_TIME:Long = 1000
+        const val CLICK_TIME: Long = 1000
 
         const val SPLASH_VIDEO_URL = "http://192.168.31.60:8080/AdobePhotoshopCS6.rar"
         const val SPLASH_VIDEO_URLS = "http://192.168.31.60:8080/ps2020pjb.rar"
@@ -124,5 +124,13 @@ interface AppConstant {
         const val ITEM_VIDEO_RECOMMEND_TYPE = 0
         const val ITEM_VIDEO_SMART_IMAGE = 1
         const val ITEM_VIDEO_BIG_IMAGE = 2
+    }
+
+
+    object LoadingViewEnum {
+
+        const val EMPTY_VIEW = 0
+
+        const val ERROR_VIEW = 1
     }
 }

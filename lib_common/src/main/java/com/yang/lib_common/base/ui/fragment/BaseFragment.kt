@@ -9,16 +9,21 @@ import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.yang.lib_common.base.viewmodel.BaseViewModel
-import com.yang.lib_common.bus.event.UIChangeLiveData
-import com.yang.lib_common.util.getStatusBarHeight
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.impl.LoadingPopupView
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.yang.lib_common.R
+import com.yang.lib_common.base.viewmodel.BaseViewModel
+import com.yang.lib_common.bus.event.UIChangeLiveData
+import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.util.getStatusBarHeight
 
 abstract class BaseFragment : Fragment() {
 
     private var mView: View? = null
+
+    private var emptyView: View? = null
 
     lateinit var mContext: Context
 
@@ -69,14 +74,6 @@ abstract class BaseFragment : Fragment() {
     abstract fun initViewModel()
 
 
-    fun finishRefreshLoadMore(smartRefreshLayout: SmartRefreshLayout){
-        uC?.refreshEvent?.observe(this, Observer {
-            smartRefreshLayout.finishRefresh()
-        })
-        uC?.loadMoreEvent?.observe(this, Observer {
-            smartRefreshLayout.finishLoadMore()
-        })
-    }
 
     fun <T : BaseViewModel> getViewModel(@NonNull clazz: Class<T>): T {
 
@@ -89,6 +86,51 @@ abstract class BaseFragment : Fragment() {
     ): T {
 
         return ViewModelProvider(requireActivity(), factory).get(clazz)
+    }
+
+    fun finishRefreshLoadMore(smartRefreshLayout:SmartRefreshLayout){
+        uC?.let { uC ->
+            uC.refreshEvent.observe(this, Observer {
+                smartRefreshLayout.finishRefresh()
+            })
+            uC.loadMoreEvent.observe(this, Observer {
+                smartRefreshLayout.finishLoadMore()
+            })
+        }
+    }
+    fun showRecyclerViewEvent(adapter:BaseQuickAdapter<*,*>){
+        uC?.let { uC ->
+            uC.showRecyclerViewEvent.observe(this, Observer {
+                if (null == emptyView){
+                    if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
+                        emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_error_data, null, false)
+                    }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
+                        emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_empty_data, null, false)
+                    }
+                }
+                adapter.emptyView = emptyView
+            })
+        }
+    }
+    fun registerRefreshAndRecyclerView(smartRefreshLayout:SmartRefreshLayout,adapter:BaseQuickAdapter<*,*>){
+        uC?.let { uC ->
+            uC.refreshEvent.observe(this, Observer {
+                smartRefreshLayout.finishRefresh()
+            })
+            uC.loadMoreEvent.observe(this, Observer {
+                smartRefreshLayout.finishLoadMore()
+            })
+            uC.showRecyclerViewEvent.observe(this, Observer {
+                if (null == emptyView){
+                    if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
+                        emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_error_data, null, false)
+                    }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
+                        emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_empty_data, null, false)
+                    }
+                }
+                adapter.emptyView = emptyView
+            })
+        }
     }
 
     private fun registerListener() {
@@ -116,6 +158,12 @@ abstract class BaseFragment : Fragment() {
         uC?.let { uC ->
             uC.showLoadingEvent.removeObservers(this)
             uC.dismissDialogEvent.removeObservers(this)
+            uC.refreshEvent.removeObservers(this)
+            uC.loadMoreEvent.removeObservers(this)
+            uC.finishActivityEvent.removeObservers(this)
+            uC.requestSuccessEvent.removeObservers(this)
+            uC.requestFailEvent.removeObservers(this)
+            uC.showRecyclerViewEvent.removeObservers(this)
         }
     }
 

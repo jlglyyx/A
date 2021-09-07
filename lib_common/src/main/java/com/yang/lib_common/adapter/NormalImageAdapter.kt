@@ -17,6 +17,8 @@ class NormalImageAdapter<T>(list: MutableList<T>,layoutResId:Int = R.layout.item
         Glide.with(ivImg)
             .load(item)
             .centerCrop()
+            .error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder)
             .into(ivImg)
     }
 }

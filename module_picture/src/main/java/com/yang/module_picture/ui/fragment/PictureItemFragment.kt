@@ -148,6 +148,8 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 //                .setGone(R.id.tv_desc,!TextUtils.isEmpty(item.imageDesc))
             Glide.with(sivImg)
                 .load(item.imageUrl)
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder)
                 .into(sivImg)
         }
     }

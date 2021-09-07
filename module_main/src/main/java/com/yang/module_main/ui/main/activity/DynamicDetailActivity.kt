@@ -107,7 +107,10 @@ class DynamicDetailActivity:BaseActivity() {
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_comment, item)
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            Glide.with(sivImg).load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg").into(sivImg)
+            Glide.with(sivImg).load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder)
+                .into(sivImg)
         }
 
     }

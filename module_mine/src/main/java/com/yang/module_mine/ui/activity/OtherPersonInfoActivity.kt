@@ -29,7 +29,8 @@ class OtherPersonInfoActivity : BaseActivity() {
     override fun initData() {
         val id = intent.getStringExtra(AppConstant.Constant.ID)
         val userInfo = getUserInfo()
-        Glide.with(this).load(userInfo?.userImage).into(siv_img)
+        Glide.with(this).load(userInfo?.userImage).error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder).into(siv_img)
     }
 
     override fun initView() {
@@ -44,9 +45,13 @@ class OtherPersonInfoActivity : BaseActivity() {
         Glide.with(this)
             .load("https://img1.baidu.com/it/u=584562345,1740343441&fm=26&fmt=auto&gp=0.jpg")
             .apply(RequestOptions.bitmapTransform(BlurTransformation(this)))
+            .error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder)
             .into(iv_bg)
         Glide.with(this)
             .load("https://img1.baidu.com/it/u=584562345,1740343441&fm=26&fmt=auto&gp=0.jpg")
+            .error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder)
             .into(siv_img)
     }
 

@@ -3,6 +3,7 @@ package com.yang.lib_common.app
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ComponentCallbacks2
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkRequest
@@ -65,11 +66,12 @@ class BaseApplication : Application() {
         Thread.setDefaultUncaughtExceptionHandler(CrashHandle.instance)
     }
 
-    private fun createNotificationChannel(){
+    private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel =
                 NotificationChannel("download", "下载通知", NotificationManager.IMPORTANCE_HIGH)
-            val systemService = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val systemService =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             systemService.createNotificationChannel(notificationChannel)
         }
     }
@@ -87,13 +89,17 @@ class BaseApplication : Application() {
             Glide.get(application)
         }
     }
+
     private fun initNetworkStatusListener(application: BaseApplication) {
         val connectivityManager =
             application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(),NetworkUtil.getNetworkStatus())
+        connectivityManager.registerNetworkCallback(
+            NetworkRequest.Builder().build(),
+            NetworkUtil.getNetworkStatus()
+        )
     }
 
-    private fun initVideo(){
+    private fun initVideo() {
         GlobalScope.launch(Dispatchers.IO) {
             delay(3000)
             PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
@@ -103,6 +109,9 @@ class BaseApplication : Application() {
 
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+            Glide.get(this).onLowMemory()
+        }
         Glide.get(this).onTrimMemory(level)
     }
 

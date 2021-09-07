@@ -1,18 +1,22 @@
 package com.yang.lib_common.base.ui.activity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.yang.lib_common.base.viewmodel.BaseViewModel
-import com.yang.lib_common.bus.event.UIChangeLiveData
-import com.yang.lib_common.util.addActivity
-import com.yang.lib_common.util.removeActivity
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.impl.LoadingPopupView
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.yang.lib_common.R
+import com.yang.lib_common.base.viewmodel.BaseViewModel
+import com.yang.lib_common.bus.event.UIChangeLiveData
+import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.util.addActivity
+import com.yang.lib_common.util.removeActivity
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -23,6 +27,8 @@ abstract class BaseActivity : AppCompatActivity() {
     private var uC: UIChangeLiveData? = null
 
     private var loadingPopupView: LoadingPopupView? = null
+
+    private var emptyView: View? = null
 
     val TAG = this.javaClass.simpleName
 
@@ -50,15 +56,7 @@ abstract class BaseActivity : AppCompatActivity() {
         return null
     }
 
-    fun finishRefreshLoadMore(smartRefreshLayout: SmartRefreshLayout){
-        uC?.refreshEvent?.observe(this, Observer {
-            smartRefreshLayout.finishRefresh()
-        })
-        uC?.loadMoreEvent?.observe(this, Observer {
-            smartRefreshLayout.finishLoadMore()
-        })
-    }
-    
+
     fun <T:BaseViewModel> getViewModel(@NonNull clazz: Class<T>):T{
 
         return ViewModelProvider(this).get(clazz)
@@ -69,7 +67,50 @@ abstract class BaseActivity : AppCompatActivity() {
         return ViewModelProvider(this, factory).get(clazz)
     }
 
-
+    fun finishRefreshLoadMore(smartRefreshLayout:SmartRefreshLayout){
+        uC?.let { uC ->
+            uC.refreshEvent.observe(this, Observer {
+                smartRefreshLayout.finishRefresh()
+            })
+            uC.loadMoreEvent.observe(this, Observer {
+                smartRefreshLayout.finishLoadMore()
+            })
+        }
+    }
+    fun showRecyclerViewEvent(adapter:BaseQuickAdapter<*,*>){
+        uC?.let { uC ->
+            uC.showRecyclerViewEvent.observe(this, Observer {
+                if (null == emptyView){
+                    if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
+                        emptyView = LayoutInflater.from(this).inflate(R.layout.view_error_data, null, false)
+                    }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
+                        emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_data, null, false)
+                    }
+                }
+                adapter.emptyView = emptyView
+            })
+        }
+    }
+    fun registerRefreshAndRecyclerView(smartRefreshLayout:SmartRefreshLayout,adapter:BaseQuickAdapter<*,*>){
+        uC?.let { uC ->
+            uC.refreshEvent.observe(this, Observer {
+                smartRefreshLayout.finishRefresh()
+            })
+            uC.loadMoreEvent.observe(this, Observer {
+                smartRefreshLayout.finishLoadMore()
+            })
+            uC.showRecyclerViewEvent.observe(this, Observer {
+                if (null == emptyView){
+                    if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
+                        emptyView = LayoutInflater.from(this).inflate(R.layout.view_error_data, null, false)
+                    }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
+                        emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_data, null, false)
+                    }
+                }
+                adapter.emptyView = emptyView
+            })
+        }
+    }
 
 
     private fun registerListener() {
@@ -100,7 +141,12 @@ abstract class BaseActivity : AppCompatActivity() {
         uC?.let { uC ->
             uC.showLoadingEvent.removeObservers(this)
             uC.dismissDialogEvent.removeObservers(this)
+            uC.refreshEvent.removeObservers(this)
+            uC.loadMoreEvent.removeObservers(this)
             uC.finishActivityEvent.removeObservers(this)
+            uC.requestSuccessEvent.removeObservers(this)
+            uC.requestFailEvent.removeObservers(this)
+            uC.showRecyclerViewEvent.removeObservers(this)
         }
     }
 

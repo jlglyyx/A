@@ -5,6 +5,7 @@ import android.text.TextUtils
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.yang.lib_common.bus.event.UIChangeLiveData
+import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.handle.ErrorHandle
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
@@ -47,6 +48,15 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         uC.finishActivityEvent.call()
     }
 
+    fun showRecyclerViewEvent(type:Int){
+        uC.showRecyclerViewEvent.postValue(type)
+    }
+    fun showRecyclerViewErrorEvent(){
+        uC.showRecyclerViewEvent.postValue(AppConstant.LoadingViewEnum.ERROR_VIEW)
+    }
+    fun showRecyclerViewEmptyEvent(){
+        uC.showRecyclerViewEvent.postValue(AppConstant.LoadingViewEnum.EMPTY_VIEW)
+    }
 
     suspend fun delayShowDialog(timeMillis: Long = 1000) {
         delay(timeMillis)

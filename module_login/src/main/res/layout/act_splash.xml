@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="@dimen/dp_10"
+        android:visibility="gone"
         android:layout_marginEnd="@dimen/dp_5"
         app:layout_constraintRight_toRightOf="parent">
         <TextView

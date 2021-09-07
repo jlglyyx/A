@@ -23,11 +23,15 @@ class DynamicAdapter(layoutResId: Int, data: MutableList<String>?) : BaseQuickAd
                 .setDefaultRequestOptions(RequestOptions().frame(1000))
                 .load(item)
                 .centerCrop()
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder)
                 .into(imageView)
         }else{
             Glide.with(mContext)
                 .load(item)
                 .centerCrop()
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder)
                 .into(imageView)
         }
     }

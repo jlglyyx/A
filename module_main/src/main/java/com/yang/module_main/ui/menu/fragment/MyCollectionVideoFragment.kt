@@ -56,7 +56,8 @@ class MyCollectionVideoFragment : BaseFragment() {
         BaseQuickAdapter<String, BaseViewHolder>(layoutResId, list) {
         override fun convert(helper: BaseViewHolder, item: String) {
             val ivImage = helper.getView<ImageView>(R.id.iv_image)
-            Glide.with(ivImage).setDefaultRequestOptions(RequestOptions().frame(1000).fitCenter()).load(item).into(ivImage)
+            Glide.with(ivImage).setDefaultRequestOptions(RequestOptions().frame(1000).fitCenter()).load(item).error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder).into(ivImage)
         }
     }
 }

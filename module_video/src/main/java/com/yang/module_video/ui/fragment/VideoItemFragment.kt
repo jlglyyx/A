@@ -241,6 +241,8 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
                     Glide.with(sivImg)
                         .load(item.videoUrl)
+                        .error(R.drawable.iv_image_error)
+                        .placeholder(R.drawable.iv_image_placeholder)
                         .into(sivImg)
                 }
                 AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE -> {
@@ -248,6 +250,8 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
                     Glide.with(sivImg)
                         .load(item.videoUrl)
+                        .error(R.drawable.iv_image_error)
+                        .placeholder(R.drawable.iv_image_placeholder)
                         .into(sivImg)
 
                 }

@@ -1,7 +1,6 @@
 package com.yang.module_main.ui.main.fragment
 
 import android.content.Intent
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -38,9 +37,7 @@ import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -112,6 +109,8 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         val userInfo = getUserInfo()
         Glide.with(this)
             .load(userInfo?.userImage)
+            .error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder)
             .into(commonToolBar.ivBack)
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener() {
@@ -131,7 +130,11 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it)
+                    if (it.size == 0) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
@@ -143,7 +146,11 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     }
                 }
                 else -> {
-                    mAdapter.replaceData(it)
+                    if (it.size == 0) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
                 }
             }
         })
@@ -153,7 +160,6 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private fun initSmartRefreshLayout() {
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
-        finishRefreshLoadMore(smartRefreshLayout)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -183,7 +189,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             }
         }
         recyclerView.adapter = mAdapter
-
+        registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
     }
 
     inner class MAdapter(list: MutableList<DynamicData>) :
@@ -217,7 +223,9 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_time, item.createTime)
-            Glide.with(sivImg).load(item.userImage).into(sivImg)
+            Glide.with(sivImg).load(item.userImage)
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder).into(sivImg)
         }
 
         private fun initItemMainContentText(helper: BaseViewHolder, item: DynamicData) {

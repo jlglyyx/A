@@ -1,12 +1,9 @@
 package com.yang.module_picture.ui.activity
 
-import android.graphics.Rect
-import android.util.Log
-import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -50,6 +47,7 @@ class PictureItemActivity : BaseActivity() {
 
     override fun initView() {
         initRecyclerView()
+        initGalleryRecyclerView()
         tv_send_comment.clicks().subscribe {
             XPopup.Builder(this).autoOpenSoftInput(true).asCustom(EditBottomDialog(this).apply {
                 dialogCallBack = object : EditBottomDialog.DialogCallBack {
@@ -128,7 +126,75 @@ class PictureItemActivity : BaseActivity() {
 
     }
 
+    private fun initGalleryRecyclerView() {
+        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        galleryRecyclerView.layoutManager = linearLayoutManager
+        val linearSnapHelper = LinearSnapHelper()
 
+        linearSnapHelper.attachToRecyclerView(galleryRecyclerView)
+
+        val mGalleryAdapter = MGalleryAdapter(R.layout.item_image, mutableListOf<String>().apply {
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+            add("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+        }).also {
+            it.setOnItemClickListener { adapter, view, position ->
+                val data = adapter.data
+                val imageViewPagerDialog =
+                    ImageViewPagerDialog(this, data as MutableList<String>, position)
+                XPopup.Builder(this).asCustom(imageViewPagerDialog).show()
+
+            }
+        }
+        galleryRecyclerView.adapter = mGalleryAdapter
+        var currentPosition = 0
+        var mCurrentItemOffset = 0
+//        galleryRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//                //Log.i(TAG, "onScrolled: $dx  $dy  ${recyclerView.getChildAt(0).width}")
+//                mCurrentItemOffset += dx
+//                val view = linearSnapHelper.findSnapView(linearLayoutManager)
+//                if (view != null) {
+//                    val position = recyclerView.getChildAdapterPosition(view)
+//                    currentPosition = position
+//                    Log.i(TAG, "onScrolled: $position   $mCurrentItemOffset")
+//                    val offset: Int = mCurrentItemOffset - currentPosition * view.width
+//                    val percent = max(abs(offset) * 1.0 / view.width, 0.0001).toFloat()
+//                    var leftView: View? = null
+//                    var rightView: View? = null
+//                    if (currentPosition >= 1) {
+//                        leftView = linearLayoutManager.findViewByPosition(currentPosition - 1)
+//                    }
+//                    if (currentPosition <= 1) {
+//                        rightView =
+//                            linearLayoutManager.findViewByPosition(mGalleryAdapter.data.size - 1)
+//                    }
+//                    var currentView: View? = linearLayoutManager.findViewByPosition(currentPosition)
+//
+//                    leftView?.scaleY = percent
+//                    rightView?.scaleY = percent
+//                    currentView?.scaleY = percent
+////                    currentView?.scaleY = ((0.5 - 1) * percent + 1).toFloat()
+//
+////                    val rect = Rect()
+////                    val localVisibleRect = view.getLocalVisibleRect(rect)
+////                    if (!localVisibleRect) {
+////                        view.scaleY = 1.0f
+////                    }
+//
+//                }
+//
+//
+//            }
+//        })
+    }
 
 
     inner class MAdapter(layoutResId: Int, list: MutableList<ImageDataItem>) :
@@ -138,6 +204,8 @@ class PictureItemActivity : BaseActivity() {
             helper.setTag(R.id.siv_img, item.id)
             Glide.with(sivImg)
                 .load(item.imageUrl)
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder)
                 .into(sivImg)
         }
     }
@@ -150,6 +218,8 @@ class PictureItemActivity : BaseActivity() {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             Glide.with(sivImg)
                 .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder)
                 .into(sivImg)
         }
     }
@@ -160,6 +230,8 @@ class PictureItemActivity : BaseActivity() {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             Glide.with(sivImg)
                 .load(item)
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder)
                 .into(sivImg)
         }
     }

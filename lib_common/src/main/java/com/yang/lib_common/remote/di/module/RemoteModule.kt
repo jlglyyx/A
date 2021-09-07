@@ -1,10 +1,10 @@
 package com.yang.lib_common.remote.di.module
 
 import android.util.Log
+import com.google.gson.GsonBuilder
 import com.yang.lib_common.api.BaseApiService
 import com.yang.lib_common.interceptor.UrlInterceptor
 import com.yang.lib_common.scope.RemoteScope
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.*
@@ -41,7 +41,7 @@ class RemoteModule {
             .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()))
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd HH:mm:ss").create()))
             .client(okHttpClient)
             .build()
     }
@@ -105,7 +105,7 @@ class RemoteModule {
 //        const val baseUrl = "http://jlgl.free.idcfengye.com/"
         private const val TAG = "RemoteModule"
         private const val TAG_LOG = "httpLog"
-        private const val CONNECT_TIMEOUT: Long = 18000
+        private const val CONNECT_TIMEOUT: Long = 1800
         private const val READ_TIMEOUT: Long = 18000
         private const val WRITE_TIMEOUT: Long = 18000
     }

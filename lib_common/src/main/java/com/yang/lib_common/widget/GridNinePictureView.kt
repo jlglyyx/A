@@ -65,6 +65,8 @@ class GridNinePictureView : RelativeLayout {
                                 data[i]
                             )
                             .fitCenter()
+                            .error(R.drawable.iv_image_error)
+                            .placeholder(R.drawable.iv_image_placeholder)
                             .into(ivNineImage)
                     }else{
                         ivPlay.visibility = View.GONE
@@ -72,6 +74,8 @@ class GridNinePictureView : RelativeLayout {
                             .load(
                                 data[i]
                             ).fitCenter()
+                            .error(R.drawable.iv_image_error)
+                            .placeholder(R.drawable.iv_image_placeholder)
                             .into(ivNineImage)
                     }
                     addView(inflate)

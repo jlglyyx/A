@@ -19,7 +19,8 @@ class LeftFragment : BaseFragment() {
 
     override fun initView() {
         val userInfo = getUserInfo()
-        Glide.with(this).load(userInfo?.userImage).into(siv_head)
+        Glide.with(this).load(userInfo?.userImage).error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder).into(siv_head)
         tv_name.text = userInfo?.userName
         siv_head.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,userInfo?.id).navigation()
