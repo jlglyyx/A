@@ -99,7 +99,6 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private fun initSmartRefreshLayout() {
         smartRefreshLayout.autoRefresh()
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
-        finishRefreshLoadMore(smartRefreshLayout)
     }
 
     private fun initRecyclerView() {
@@ -163,7 +162,7 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             }
 
         })
-
+        registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
 
         videoModule.mVideoData.observe(this, Observer {
             when {

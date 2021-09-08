@@ -1,7 +1,5 @@
 package com.yang.module_main.ui.menu.activity
 
-import android.view.View
-import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,11 +19,10 @@ import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.commaToList
-import com.yang.lib_common.util.formatWithComma
 import com.yang.lib_common.util.getUserInfo
+import com.yang.module_main.R
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
-import com.yang.module_main.R
 import com.yang.module_main.ui.main.adapter.DynamicAdapter
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
@@ -54,7 +51,6 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     override fun initView() {
         initRecyclerView()
-        finishRefreshLoadMore(smartRefreshLayout)
         mainViewModel.dynamicListLiveData.observe(this, Observer {
             when {
                 smartRefreshLayout.isRefreshing -> {
@@ -104,8 +100,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
             }
         }
         recyclerView.adapter = mAdapter
-
-
+        registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
     }
 
     inner class MAdapter(list: MutableList<DynamicData>) :

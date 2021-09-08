@@ -5,7 +5,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.room.dao.ImageTypeDao
+import com.yang.lib_common.room.dao.SearchHistoryDao
 import com.yang.lib_common.room.entity.ImageTypeData
+import com.yang.lib_common.room.entity.SearchData
 
 
 /**
@@ -14,10 +16,12 @@ import com.yang.lib_common.room.entity.ImageTypeData
  * @Description
  * @Date 2021/8/5 14:22
  */
-@Database(entities = [ImageTypeData::class],version = 1,exportSchema = true)
+@Database(entities = [ImageTypeData::class,SearchData::class],version = 1,exportSchema = true)
 abstract class BaseAppDatabase : RoomDatabase() {
 
     abstract fun imageTypeDao(): ImageTypeDao
+
+    abstract fun searchHistoryDao(): SearchHistoryDao
 
     companion object {
         val instance: BaseAppDatabase by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {

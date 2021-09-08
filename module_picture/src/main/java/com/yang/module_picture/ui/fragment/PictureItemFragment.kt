@@ -1,8 +1,5 @@
 package com.yang.module_picture.ui.fragment
 
-import android.graphics.drawable.Drawable
-import android.text.TextUtils
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -71,7 +68,6 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private fun initSmartRefreshLayout() {
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
         smartRefreshLayout.autoRefresh()
-        finishRefreshLoadMore(smartRefreshLayout)
     }
 
 
@@ -109,7 +105,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             }
         })
 
-
+        registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
     }
 
     private fun initBanner() {

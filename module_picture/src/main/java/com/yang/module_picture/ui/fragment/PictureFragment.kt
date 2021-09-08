@@ -9,6 +9,7 @@ import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_picture.R
 import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.viewmodel.PictureViewModel
@@ -45,6 +46,12 @@ class PictureFragment : BaseLazyFragment() {
             initViewPager()
             initTabLayout()
         })
+        commonToolBar.imageAddCallBack = object :CommonToolBar.ImageAddCallBack{
+            override fun imageAddClickListener() {
+                buildARouter(AppConstant.RoutePath.SEARCH_ACTIVITY).navigation()
+            }
+        }
+
     }
 
     override fun initView() {
@@ -71,10 +78,10 @@ class PictureFragment : BaseLazyFragment() {
 
         TabLayoutMediator(
             tabLayout,
-            viewPager,
-            TabLayoutMediator.TabConfigurationStrategy { tab, position ->
-                tab.text = titles[position]
-            }).attach()
+            viewPager
+        ) { tab, position ->
+            tab.text = titles[position]
+        }.attach()
 
     }
 

@@ -3,8 +3,8 @@
     package="com.yang.module_picture">
 
     <application>
-        <activity android:name=".MainActivity"/>
         <activity android:name="com.yang.module_picture.ui.activity.PictureItemActivity"/>
+        <activity android:name="com.yang.module_picture.ui.activity.SearchActivity"/>
     </application>
 
 </manifest>

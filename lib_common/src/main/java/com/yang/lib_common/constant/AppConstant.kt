@@ -38,6 +38,7 @@ interface AppConstant {
          * picture
          */
         const val PICTURE_ITEM_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/PictureItemActivity"
+        const val SEARCH_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/SearchActivity"
 
         const val PICTURE_FRAGMENT = "/$MODULE_PICTURE/$FRAGMENT/PictureFragment"
         const val PICTURE_ITEM_FRAGMENT = "/$MODULE_PICTURE/$FRAGMENT/PictureItemFragment"
