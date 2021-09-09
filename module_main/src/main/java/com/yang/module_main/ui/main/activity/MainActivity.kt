@@ -13,7 +13,10 @@ import com.yang.lib_common.adapter.TabAndViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.scope.ModelWithFactory
-import com.yang.lib_common.util.*
+import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.getScreenPx
+import com.yang.lib_common.util.px2dip
+import com.yang.lib_common.util.showShort
 import com.yang.module_main.R
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.ui.menu.fragment.LeftFragment
@@ -171,9 +174,7 @@ class MainActivity : BaseActivity() {
             .subscribe {
                 when {
                     it.granted -> {
-                        LocationUtil().apply {
-                            lifecycle.addObserver(this)
-                        }.startLocation()
+
                     }
 
                     it.shouldShowRequestPermissionRationale -> {

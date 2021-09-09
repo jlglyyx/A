@@ -7,17 +7,24 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.appbar.AppBarLayout
 import com.yang.lib_common.adapter.NormalImageAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.transform.BlurTransformation
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
 import com.yang.module_mine.R
+import com.yang.module_mine.helper.getMineComponent
+import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.fra_mine.*
+import javax.inject.Inject
 import kotlin.math.abs
 
 @Route(path = AppConstant.RoutePath.MINE_FRAGMENT)
 class MineFragment : BaseLazyFragment() {
+
+    @Inject
+    lateinit var mineViewModel: MineViewModel
 
     private lateinit var normalImageAdapter: NormalImageAdapter<String>
 
@@ -68,8 +75,12 @@ class MineFragment : BaseLazyFragment() {
 
     }
 
-    override fun initViewModel() {
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return mineViewModel.uC
+    }
 
+    override fun initViewModel() {
+        getMineComponent(this).inject(this)
     }
 
 

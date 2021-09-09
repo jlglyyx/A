@@ -15,7 +15,7 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
-
+        resConfigs "zh"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -23,7 +23,7 @@ android {
                 arguments = ["room.schemaLocation"  : "$projectDir/schemas".toString(),
                              "room.incremental"     : "true",
                              "room.expandProjection": "true",
-                             "AROUTER_MODULE_NAME"    : project.getName()]
+                             "AROUTER_MODULE_NAME"  : project.getName()]
                 includeCompileClasspath = false
             }
         }
@@ -39,6 +39,10 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -58,9 +62,8 @@ android {
     }
 
     dependencies {
-        compileOnly rootProject.ext.dependencies['dagger-compiler']
-        kapt rootProject.ext.dependencies['arouter-compiler']
-        kapt rootProject.ext.dependencies['room-compiler']
+        rootProject.ext.kaptDependencies.each { k, v -> kapt v }
+        rootProject.ext.compileOnlyDependencies.each { k, v -> compileOnly v }
     }
 }
 

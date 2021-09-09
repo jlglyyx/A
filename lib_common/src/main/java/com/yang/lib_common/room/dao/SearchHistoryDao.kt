@@ -17,8 +17,8 @@ interface SearchHistoryDao {
     @Insert
     fun insertData(searchData: SearchData):Long
 
-    @Query("select * from search_history")
-    fun queryAll():MutableList<SearchData>
+    @Query("select * from search_history where type = (:type)")
+    fun queryAllByType(type:Int):MutableList<SearchData>
 
     @Delete
     fun deleteData(searchData: SearchData):Int

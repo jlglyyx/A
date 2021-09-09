@@ -3,6 +3,7 @@ package com.yang.module_video.viewmodel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
+import com.yang.lib_common.constant.AppConstant
 import com.yang.module_video.model.AccountList
 import com.yang.module_video.model.VideoData
 import com.yang.module_video.model.VideoDataItem
@@ -37,17 +38,39 @@ class VideoViewModel @Inject constructor(
             cancelRefreshLoadMore()
         },errorDialog = false)
     }
+    fun getVideoInfo(type:String = "",pageNum:Int,keyword:String = "",showDialog:Boolean = false) {
+        if (showDialog){
+            launch({
+                val mutableMapOf = mutableMapOf<String, Any>()
+                mutableMapOf[AppConstant.Constant.TYPE] = type
+                mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum
+                mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
+                mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
+                videoRepository.getVideoInfo(mutableMapOf)
+            }, {
+                mVideoData.postValue(it.data)
+            },{
+                showRecyclerViewErrorEvent()
+                cancelRefreshLoadMore()
+            }, messages = *arrayOf("加载中"))
+        }else{
+            launch({
+                val mutableMapOf = mutableMapOf<String, Any>()
+                mutableMapOf[AppConstant.Constant.TYPE] = type
+                mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum
+                mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
+                mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
+                videoRepository.getVideoInfo(mutableMapOf)
+            }, {
+                mVideoData.postValue(it.data)
+            },{
+                showRecyclerViewErrorEvent()
+                cancelRefreshLoadMore()
+            },errorDialog = false)
+        }
 
-
-    fun getVideoInfo(type:String,pageNum:Int) {
-        launch({
-            videoRepository.getVideoInfo(type,pageNum)
-        }, {
-            mVideoData.postValue(it.data)
-        },{
-            cancelRefreshLoadMore()
-        },errorDialog = false)
     }
+
     fun getVideoItemData(sid:String) {
         launch({
             videoRepository.getVideoItemData(sid)
@@ -55,6 +78,10 @@ class VideoViewModel @Inject constructor(
             mVideoItemData.postValue(it.data)
         },errorDialog = false)
     }
+
+
+
+
     fun getVideoTypeData() {
         launch({
             videoRepository.getVideoTypeData()

@@ -1,4 +1,4 @@
-package com.yang.module_mine.ui.data
+package com.yang.module_mine.data
 
 /**
  * @Author Administrator

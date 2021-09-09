@@ -51,6 +51,8 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initData() {
         queryType = arguments?.getString(AppConstant.Constant.TYPE)
+        smartRefreshLayout.autoRefresh()
+        initRecyclerView()
         val mutableListOf = mutableListOf<VideoDataItem>()
         mutableListOf.add(VideoDataItem(AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE))
         mutableListOf.add(VideoDataItem(AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE).apply {
@@ -77,10 +79,11 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         })
         Log.i(TAG, "initView====: ${gson.toJson(mutableListOf)}")
         mAdapter.replaceData(mutableListOf)
+
     }
 
     override fun initView() {
-        initRecyclerView()
+
         initBanner()
         initSmartRefreshLayout()
 
@@ -97,7 +100,6 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
 
     private fun initSmartRefreshLayout() {
-        smartRefreshLayout.autoRefresh()
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
     }
 
@@ -162,7 +164,6 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             }
 
         })
-        registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
 
         videoModule.mVideoData.observe(this, Observer {
             when {
@@ -184,6 +185,8 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 }
             }
         })
+
+        registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
     }
 
     private fun initBanner() {

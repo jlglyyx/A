@@ -8,11 +8,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yang.lib_common.base.ui.fragment.BaseFragment
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getFilePath
 import com.yang.module_main.R
+import com.yang.module_main.helper.getMainComponent
+import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
+import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -22,6 +27,11 @@ import kotlinx.android.synthetic.main.view_normal_recyclerview.*
  */
 @Route(path = AppConstant.RoutePath.MY_COLLECTION_VIDEO_FRAGMENT)
 class MyCollectionVideoFragment : BaseFragment() {
+
+
+    @Inject
+    @ModelWithFactory
+    lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter
 
@@ -36,9 +46,13 @@ class MyCollectionVideoFragment : BaseFragment() {
         initRecyclerView()
     }
 
-    override fun initViewModel() {
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return mainViewModel.uC
     }
 
+    override fun initViewModel() {
+        getMainComponent(this).inject(this)
+    }
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = MAdapter(R.layout.item_menu_my_collection_picture, mutableListOf()).apply {

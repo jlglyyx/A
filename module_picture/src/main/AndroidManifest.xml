@@ -4,7 +4,7 @@
 
     <application>
         <activity android:name="com.yang.module_picture.ui.activity.PictureItemActivity"/>
-        <activity android:name="com.yang.module_picture.ui.activity.SearchActivity"/>
+        <activity android:name="com.yang.module_picture.ui.activity.PictureSearchActivity"/>
     </application>
 
 </manifest>

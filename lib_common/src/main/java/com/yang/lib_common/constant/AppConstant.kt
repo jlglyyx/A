@@ -38,7 +38,7 @@ interface AppConstant {
          * picture
          */
         const val PICTURE_ITEM_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/PictureItemActivity"
-        const val SEARCH_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/SearchActivity"
+        const val PICTURE_SEARCH_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/SearchActivity"
 
         const val PICTURE_FRAGMENT = "/$MODULE_PICTURE/$FRAGMENT/PictureFragment"
         const val PICTURE_ITEM_FRAGMENT = "/$MODULE_PICTURE/$FRAGMENT/PictureItemFragment"
@@ -57,11 +57,11 @@ interface AppConstant {
         const val VIDEO_ITEM_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/VideoItemFragment"
 
 
-        const val ADVERTISEMENT_VIDEO_ACTIVITY =
-            "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
+        const val ADVERTISEMENT_VIDEO_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
         const val VIDEO_MAIN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/MainActivity"
 
         const val VIDEO_ITEM_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoItemActivity"
+        const val VIDEO_SEARCH_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/SearchActivity"
 
         /**
          * mine
@@ -112,6 +112,26 @@ interface AppConstant {
         const val PAGE_SIZE = "pageSize"
 
         const val PAGE_NUMBER = "pageNum"
+
+        const val KEYWORD = "keyword"
+
+        const val LOCATION = "location"
+
+        const val NUM_ZERO = 0
+
+        const val NUM_ONE = 1
+
+        const val NUM_TWO = 2
+
+        const val NUM_THREE = 3
+
+        const val NUM_FOUR = 4
+
+        const val NUM_FIVE = 5
+
+        const val NUM_SIX = 6
+
+        const val NUM_SEVEN = 7
 
         const val ITEM_MAIN_TITLE = 0
         const val ITEM_MAIN_CONTENT_TEXT = 1

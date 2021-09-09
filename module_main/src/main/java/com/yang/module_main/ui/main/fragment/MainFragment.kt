@@ -32,7 +32,7 @@ import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.ui.main.activity.AddDynamicActivity
 import com.yang.module_main.ui.main.activity.MainActivity
-import com.yang.module_main.ui.main.adapter.DynamicAdapter
+import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*

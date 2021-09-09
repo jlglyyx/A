@@ -1,6 +1,5 @@
-package com.yang.module_main.ui.main.adapter
+package com.yang.module_main.adapter
 
-import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions

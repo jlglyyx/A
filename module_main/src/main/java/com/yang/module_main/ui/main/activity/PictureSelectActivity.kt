@@ -4,11 +4,8 @@ import android.content.Intent
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
@@ -24,7 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.math.abs
 
 /**
  * @Author Administrator
@@ -78,7 +74,7 @@ class PictureSelectActivity : BaseActivity() {
                 it.filePath
             } as MutableList<String>
             val imageViewPagerDialog =
-                ImageViewPagerDialog(this, imageList, position)
+                ImageViewPagerDialog(this, imageList, position,false)
             XPopup.Builder(this).asCustom(imageViewPagerDialog).show()
         }
 //        var lastPosition = -1

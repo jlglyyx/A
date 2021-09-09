@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
@@ -18,38 +19,45 @@ import com.yang.lib_common.app.BaseApplication
 class LocationUtil : LifecycleObserver {
 
     private val TAG = "LocationUtil"
-    private lateinit var aMapLocationClientOption:AMapLocationClientOption
+    private lateinit var aMapLocationClientOption: AMapLocationClientOption
     private lateinit var aMapLocationClient: AMapLocationClient
-    private lateinit var mLocationListener : AMapLocationListener
+    private lateinit var mLocationListener: AMapLocationListener
+    var locationListener: LocationListener? = null
 
-    fun startLocation(){
+    interface LocationListener {
+        fun onLocationListener(aMapLocation: AMapLocation)
+    }
+
+    fun startLocation() {
         aMapLocationClientOption = AMapLocationClientOption()
         aMapLocationClient = AMapLocationClient(BaseApplication.baseApplication)
 
         //回调监听
         mLocationListener = AMapLocationListener {
-
-            if (it.errorCode == 0){
-
+            locationListener?.onLocationListener(it)
+            if (it.errorCode == 0) {
                 Log.i(TAG, "startLocation: ${it.toString()}  ${it.toStr()}")
-            }else{
-                Log.e(TAG,"location Error, ErrCode:${it.errorCode }, errInfo:${it.errorInfo}")
+            } else {
+                Log.e(TAG, "location Error, ErrCode:${it.errorCode}, errInfo:${it.errorInfo}")
             }
 
         }
         aMapLocationClient.setLocationListener(mLocationListener)
 
         //场景模式
-        aMapLocationClientOption.locationPurpose = AMapLocationClientOption.AMapLocationPurpose.SignIn
+        aMapLocationClientOption.locationPurpose =
+            AMapLocationClientOption.AMapLocationPurpose.SignIn
         aMapLocationClient.stopLocation()
         aMapLocationClient.startLocation()
 
         //定位模式
 
-        if (NetworkUtil.isNetworkClient(BaseApplication.baseApplication)){
-            aMapLocationClientOption.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
-        }else{
-            aMapLocationClientOption.locationMode = AMapLocationClientOption.AMapLocationMode.Device_Sensors
+        if (NetworkUtil.isNetworkClient(BaseApplication.baseApplication)) {
+            aMapLocationClientOption.locationMode =
+                AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+        } else {
+            aMapLocationClientOption.locationMode =
+                AMapLocationClientOption.AMapLocationMode.Device_Sensors
         }
 
         aMapLocationClientOption.isNeedAddress = true
@@ -61,13 +69,13 @@ class LocationUtil : LifecycleObserver {
     }
 
 
-    fun stopLocation(){
+    fun stopLocation() {
         aMapLocationClient.stopLocation()
     }
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy(){
+    fun onDestroy() {
         aMapLocationClient.onDestroy()
     }
 }

@@ -3,10 +3,6 @@ package com.yang.module_picture.ui.fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
-import com.google.android.material.imageview.ShapeableImageView
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.yang.lib_common.adapter.MBannerAdapter
@@ -16,6 +12,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_picture.R
+import com.yang.module_picture.adapter.PictureAdapter
 import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.model.ImageDataItem
 import com.yang.module_picture.viewmodel.PictureViewModel
@@ -34,7 +31,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private var pageNum = 1
 
 
-    private lateinit var mAdapter: MAdapter
+    private lateinit var mAdapter: PictureAdapter
 
     override fun getLayout(): Int {
         return R.layout.fra_item_picture
@@ -42,6 +39,8 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initData() {
         queryType = arguments?.getString(AppConstant.Constant.TYPE)
+        smartRefreshLayout.autoRefresh()
+        initRecyclerView()
         val mutableListOf = mutableListOf<ImageDataItem>()
         for (i in 0..9){
             mutableListOf.add(ImageDataItem(null,null,"","","https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg","","","",""))
@@ -50,7 +49,6 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     override fun initView() {
-        initRecyclerView()
         initBanner()
         initSmartRefreshLayout()
 
@@ -67,14 +65,13 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private fun initSmartRefreshLayout() {
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
-        smartRefreshLayout.autoRefresh()
     }
 
 
     private fun initRecyclerView() {
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        mAdapter = MAdapter(R.layout.item_picture_image, mutableListOf()).also {
+        mAdapter = PictureAdapter(R.layout.item_picture_image, mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
                 val imageData = adapter.data[position] as ImageDataItem
                 buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
@@ -133,22 +130,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             .indicator = CircleIndicator(requireContext())
     }
 
-    inner class MAdapter(layoutResId: Int, list: MutableList<ImageDataItem>) :
-        BaseQuickAdapter<ImageDataItem, BaseViewHolder>(layoutResId, list) {
-        override fun convert(helper: BaseViewHolder, item: ImageDataItem) {
-            val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            helper.setTag(R.id.siv_img, item.id)
-                .setText(R.id.tv_title,item.imageTitle)
-                .setText(R.id.tv_desc,item.imageDesc)
-//                .setGone(R.id.tv_title,!TextUtils.isEmpty(item.imageTitle))
-//                .setGone(R.id.tv_desc,!TextUtils.isEmpty(item.imageDesc))
-            Glide.with(sivImg)
-                .load(item.imageUrl)
-                .error(R.drawable.iv_image_error)
-                .placeholder(R.drawable.iv_image_placeholder)
-                .into(sivImg)
-        }
-    }
+
 
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {

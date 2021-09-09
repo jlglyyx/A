@@ -1,9 +1,9 @@
-package com.yang.module_mine.ui.adapter
+package com.yang.module_mine.adapter
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yang.module_mine.R
-import com.yang.module_mine.ui.data.ActivityInfoData
+import com.yang.module_mine.data.ActivityInfoData
 
 /**
  * @Author Administrator

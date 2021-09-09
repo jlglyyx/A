@@ -48,7 +48,7 @@ class PictureFragment : BaseLazyFragment() {
         })
         commonToolBar.imageAddCallBack = object :CommonToolBar.ImageAddCallBack{
             override fun imageAddClickListener() {
-                buildARouter(AppConstant.RoutePath.SEARCH_ACTIVITY).navigation()
+                buildARouter(AppConstant.RoutePath.PICTURE_SEARCH_ACTIVITY).withInt(AppConstant.Constant.TYPE,AppConstant.Constant.NUM_ZERO).navigation()
             }
         }
 

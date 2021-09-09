@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lxj.xpopup.XPopup
-import androidx.lifecycle.Observer
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -133,7 +133,7 @@ class AddDynamicActivity : BaseActivity() {
                 it.filePath
             } as MutableList<String>
             val imageViewPagerDialog =
-                ImageViewPagerDialog(this, imageList , position)
+                ImageViewPagerDialog(this, imageList , position,false)
             XPopup.Builder(this).asCustom(imageViewPagerDialog).show()
         }
     }

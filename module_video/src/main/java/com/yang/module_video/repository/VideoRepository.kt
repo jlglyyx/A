@@ -1,7 +1,6 @@
 package com.yang.module_video.repository
 
 import com.yang.lib_common.base.repository.BaseRepository
-import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.module_video.api.VideoApiService
 import com.yang.module_video.model.AccountList
@@ -19,9 +18,9 @@ class VideoRepository @Inject constructor(private val videoApiService: VideoApiS
     }
 
 
-    suspend fun getVideoInfo(type:String,pageNum:Int): MResult<VideoData> {
+    suspend fun getVideoInfo(map: MutableMap<String,Any>): MResult<VideoData> {
         return withContextIO {
-            videoApiService.getVideoInfo(type,pageNum, AppConstant.Constant.PAGE_SIZE_COUNT)
+            videoApiService.getVideoInfo(map)
         }
     }
     suspend fun getVideoItemData(sid:String): MResult<MutableList<VideoDataItem>> {

@@ -8,6 +8,8 @@ import com.yang.module_main.ui.main.activity.DynamicDetailActivity
 import com.yang.module_main.ui.main.activity.MainActivity
 import com.yang.module_main.ui.main.fragment.MainFragment
 import com.yang.module_main.ui.menu.activity.MyPushActivity
+import com.yang.module_main.ui.menu.fragment.MyCollectionPictureFragment
+import com.yang.module_main.ui.menu.fragment.MyCollectionVideoFragment
 import dagger.Component
 
 
@@ -19,4 +21,6 @@ interface MainComponent {
     fun inject(myPushActivity: MyPushActivity)
     fun inject(addDynamicActivity: AddDynamicActivity)
     fun inject(dynamicDetailActivity: DynamicDetailActivity)
+    fun inject(myCollectionPictureFragment: MyCollectionPictureFragment)
+    fun inject(myCollectionVideoFragment: MyCollectionVideoFragment)
 }

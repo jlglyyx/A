@@ -29,21 +29,24 @@ class ImageViewPagerDialog : FullScreenPopupView {
 
     private var mContext: Context
 
-
     private var position: Int = 0
-
 
     var imageViewPagerDialogCallBack: ImageViewPagerDialogCallBack? = null
 
+    var showDownAndCollection: Boolean = true
+
     interface ImageViewPagerDialogCallBack {
         fun getPosition(position: Int)
+
+        fun onViewClickListener(view:View)
     }
 
 
-    constructor(context: Context, data: MutableList<String>, position: Int) : super(context) {
+    constructor(context: Context, data: MutableList<String>, position: Int,showDownAndCollection:Boolean = true) : super(context) {
         this.data = data
         this.mContext = context
         this.position = position
+        this.showDownAndCollection = showDownAndCollection
     }
 
     override fun getImplLayoutId(): Int {
@@ -58,23 +61,39 @@ class ImageViewPagerDialog : FullScreenPopupView {
     }
 
     private fun initToolbar() {
-        tv_rightContent.clicks().subscribe {
-            MultiMoreThreadDownload.Builder(mContext)
-                .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/${if(data[position].endsWith(".mp4")) "video" else "picture"}")
-                .filePath(
-                    "${System.currentTimeMillis()}${data[position].substring(
-                        data[position].lastIndexOf(
-                            "."
-                        )
-                    )}"
-                )
-                .fileUrl(data[position])
-                .build()
-                .start()
-        }
+
         iv_back.clicks().subscribe {
+            imageViewPagerDialogCallBack?.onViewClickListener(this)
             dismiss()
         }
+        if (showDownAndCollection){
+
+            iv_collection.clicks().subscribe {
+                imageViewPagerDialogCallBack?.onViewClickListener(this)
+                iv_collection.setImageResource(R.drawable.iv_collection_click)
+            }
+
+            iv_down.clicks().subscribe {
+                imageViewPagerDialogCallBack?.onViewClickListener(this)
+                MultiMoreThreadDownload.Builder(mContext)
+                    .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/${if(data[position].endsWith(".mp4")) "video" else "picture"}")
+                    .filePath(
+                        "${System.currentTimeMillis()}${data[position].substring(
+                            data[position].lastIndexOf(
+                                "."
+                            )
+                        )}"
+                    )
+                    .fileUrl(data[position])
+                    .build()
+                    .start()
+            }
+        }else{
+            iv_collection.visibility = View.GONE
+            iv_down.visibility = View.GONE
+        }
+
+
     }
 
     private fun initViewPager() {
@@ -115,7 +134,6 @@ class ImageViewPagerDialog : FullScreenPopupView {
                     holder.itemView.findViewById<StandardGSYVideoPlayer>(R.id.detailPlayer)
                 val endsWith = data[position].endsWith(".mp4")
                 if (endsWith) {
-                    //avi.visibility = View.GONE
                     photoView.visibility = View.GONE
                     gsyVideoPlayer.setUpLazy(data[position], true, null, null, "")
                     gsyVideoPlayer.titleTextView.visibility = View.GONE

@@ -5,18 +5,22 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.transform.BlurTransformation
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getUserInfo
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
+import com.yang.module_mine.helper.getMineComponent
+import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.act_other_person_info.*
+import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
 class OtherPersonInfoActivity : BaseActivity() {
-
-    private var alphaPercent = 0f
+    @Inject
+    lateinit var mineViewModel: MineViewModel
 
     private lateinit var tvCenterContent:TextView
 
@@ -55,8 +59,12 @@ class OtherPersonInfoActivity : BaseActivity() {
             .into(siv_img)
     }
 
-    override fun initViewModel() {
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return mineViewModel.uC
+    }
 
+    override fun initViewModel() {
+        getMineComponent(this).inject(this)
     }
 
 

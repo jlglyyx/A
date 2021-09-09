@@ -9,6 +9,7 @@ import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_video.R
 import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.viewmodel.VideoViewModel
@@ -51,6 +52,12 @@ class VideoFragment : BaseLazyFragment() {
     override fun initView() {
         titles = mutableListOf()
         fragments = mutableListOf()
+
+        commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack{
+            override fun imageAddClickListener() {
+                buildARouter(AppConstant.RoutePath.VIDEO_SEARCH_ACTIVITY).withInt(AppConstant.Constant.TYPE,AppConstant.Constant.NUM_ONE).navigation()
+            }
+        }
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {

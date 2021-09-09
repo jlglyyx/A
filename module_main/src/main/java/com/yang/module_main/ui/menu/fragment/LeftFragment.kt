@@ -1,6 +1,7 @@
 package com.yang.module_main.ui.menu.fragment
 
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.amap.api.location.AMapLocation
 import com.bumptech.glide.Glide
 import com.yang.lib_common.base.ui.fragment.BaseFragment
 import com.yang.lib_common.constant.AppConstant
@@ -22,6 +23,16 @@ class LeftFragment : BaseFragment() {
         Glide.with(this).load(userInfo?.userImage).error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder).into(siv_head)
         tv_name.text = userInfo?.userName
+
+        LocationUtil().apply {
+            lifecycle.addObserver(this)
+            locationListener = object :LocationUtil.LocationListener{
+                override fun onLocationListener(aMapLocation: AMapLocation) {
+                    tv_location.text = "${aMapLocation.city}${aMapLocation.district}${aMapLocation.aoiName}"
+                }
+
+            }
+        }.startLocation()
         siv_head.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,userInfo?.id).navigation()
         }

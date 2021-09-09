@@ -7,11 +7,15 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getFilePath
 import com.yang.module_mine.R
+import com.yang.module_mine.helper.getMineComponent
+import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
+import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -21,6 +25,9 @@ import kotlinx.android.synthetic.main.view_normal_recyclerview.*
  */
 @Route(path = AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)
 class ViewHistoryActivity:BaseActivity() {
+
+    @Inject
+    lateinit var mineViewModel: MineViewModel
 
     private lateinit var mAdapter: MAdapter
     override fun getLayout(): Int {
@@ -34,7 +41,12 @@ class ViewHistoryActivity:BaseActivity() {
         initRecyclerView()
     }
 
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return mineViewModel.uC
+    }
+
     override fun initViewModel() {
+        getMineComponent(this).inject(this)
     }
 
     private fun initRecyclerView() {

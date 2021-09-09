@@ -8,16 +8,20 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.uri2path
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
-import com.yang.module_mine.ui.adapter.ActivityInfoAdapter
-import com.yang.module_mine.ui.data.ActivityInfoData
+import com.yang.module_mine.adapter.ActivityInfoAdapter
+import com.yang.module_mine.data.ActivityInfoData
+import com.yang.module_mine.helper.getMineComponent
+import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.act_change_user_info.*
 import kotlinx.android.synthetic.main.act_other_person_info.commonToolBar
+import javax.inject.Inject
 
 
 /**
@@ -28,6 +32,9 @@ import kotlinx.android.synthetic.main.act_other_person_info.commonToolBar
  */
 @Route(path = AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY)
 class ChangeUserInfoActivity : BaseActivity() {
+
+    @Inject
+    lateinit var mineViewModel: MineViewModel
 
     private lateinit var activityInfoAdapter: ActivityInfoAdapter
 
@@ -78,8 +85,12 @@ class ChangeUserInfoActivity : BaseActivity() {
         }
     }
 
-    override fun initViewModel() {
+    override fun initUIChangeLiveData(): UIChangeLiveData {
+        return mineViewModel.uC
+    }
 
+    override fun initViewModel() {
+        getMineComponent(this).inject(this)
     }
 
     private fun initRecyclerView() {

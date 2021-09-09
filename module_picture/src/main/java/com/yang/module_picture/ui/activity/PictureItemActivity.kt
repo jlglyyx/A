@@ -1,11 +1,11 @@
 package com.yang.module_picture.ui.activity
 
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
@@ -34,7 +34,7 @@ class PictureItemActivity : BaseActivity() {
     private lateinit var mCommentAdapter: MCommentAdapter
 
     @Inject
-    lateinit var pictureModule: PictureViewModel
+    lateinit var pictureViewModel: PictureViewModel
 
     override fun getLayout(): Int {
         return R.layout.act_picture_item
@@ -43,7 +43,7 @@ class PictureItemActivity : BaseActivity() {
     override fun initData() {
         val intent = intent
         val sid = intent.getStringExtra(AppConstant.Constant.ID)
-        pictureModule.getImageItemData(sid ?: "")
+        pictureViewModel.getImageItemData(sid ?: "")
     }
 
     override fun initView() {
@@ -52,7 +52,7 @@ class PictureItemActivity : BaseActivity() {
             XPopup.Builder(this).autoOpenSoftInput(true).asCustom(EditBottomDialog(this).apply {
                 dialogCallBack = object : EditBottomDialog.DialogCallBack {
                     override fun getComment(s: String) {
-                        mCommentAdapter.addData(0, CommonData(0,1,s))
+                        mCommentAdapter.addData(0, CommonData(s))
                         recyclerView.smoothScrollToPosition(0)
                     }
 
@@ -66,7 +66,7 @@ class PictureItemActivity : BaseActivity() {
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return pictureModule.uC
+        return pictureViewModel.uC
     }
 
     private fun initRecyclerView() {
@@ -91,6 +91,10 @@ class PictureItemActivity : BaseActivity() {
                         )
                     }
 
+                    override fun onViewClickListener(view: View) {
+
+                    }
+
                 }
                 XPopup.Builder(this).asCustom(imageViewPagerDialog).show()
 
@@ -98,20 +102,23 @@ class PictureItemActivity : BaseActivity() {
         }
         mCommentAdapter =
             MCommentAdapter(mutableListOf<CommonData>().apply {
-                this.add(CommonData(1,1,"今天天气很好啊"))
-                this.add(CommonData(2,2,"今天天气很好啊"))
-                this.add(CommonData(3,3,"今天天气很好啊"))
-                this.add(CommonData(4,4,"今天天气很好啊"))
-                this.add(CommonData(5,5,"今天天气很好啊"))
-                this.add(CommonData(1,1,"今天天气很好啊"))
-                this.add(CommonData(2,2,"今天天气很好啊"))
-                this.add(CommonData(2,2,"今天天气很好啊"))
-                this.add(CommonData(3,3,"今天天气很好啊"))
-                this.add(CommonData(2,3,"今天天气很好啊"))
-                this.add(CommonData(1,1,"今天天气很好啊"))
-                this.add(CommonData(2,2,"今天天气很好啊"))
-                this.add(CommonData(1,1,"今天天气很好啊"))
-            }).also {
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+                this.add(CommonData("今天天气很好啊"))
+            },R.layout.item_picture_comment).also {
                 it.setOnItemChildClickListener { adapter, view, position ->
                     when (view.id) {
                         R.id.siv_img -> {
@@ -124,11 +131,9 @@ class PictureItemActivity : BaseActivity() {
             }
         val concatAdapter = ConcatAdapter(mAdapter, mCommentAdapter)
         recyclerView.adapter = concatAdapter
-        pictureModule.mImageItemData.observe(this, Observer {
+        pictureViewModel.mImageItemData.observe(this, Observer {
             mAdapter.replaceData(it)
         })
-
-
     }
 
 
@@ -146,15 +151,8 @@ class PictureItemActivity : BaseActivity() {
         }
     }
 
-    inner class MCommentAdapter(list: MutableList<CommonData>) :
-        BaseMultiItemQuickAdapter<CommonData, BaseViewHolder>(list) {
-        init {
-            addItemType(1,R.layout.item_picture_comment)
-            addItemType(2,R.layout.item_picture_comment)
-            addItemType(3,R.layout.item_picture_comment)
-            addItemType(4,R.layout.item_picture_comment)
-            addItemType(5,R.layout.item_picture_comment)
-        }
+    inner class MCommentAdapter(list: MutableList<CommonData>,layoutResId: Int) :
+        BaseQuickAdapter<CommonData, BaseViewHolder>(layoutResId,list) {
 
         override fun convert(helper: BaseViewHolder, item: CommonData) {
             helper.addOnClickListener(R.id.siv_img)
