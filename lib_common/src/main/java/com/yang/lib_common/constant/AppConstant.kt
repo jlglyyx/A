@@ -74,6 +74,14 @@ interface AppConstant {
 
         const val VIEW_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ViewHistoryActivity"
 
+        const val MINE_OBTAIN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainActivity"
+
+        const val MINE_SIGN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineSignActivity"
+
+        const val MINE_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionActivity"
+
+        const val MINE_LIMIT_TIME_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineLimitTimeExtensionActivity"
+
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 

@@ -37,6 +37,10 @@ class MineFragment : BaseLazyFragment() {
     override fun initView() {
         initAppBarLayout()
         initRecyclerView()
+        initViewClickListener()
+    }
+
+    override fun initData() {
         val userInfo = getUserInfo()
         tv_toolbar_name.text = userInfo?.userName
         tv_name.text = userInfo?.userName
@@ -56,26 +60,9 @@ class MineFragment : BaseLazyFragment() {
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
             .into(iv_bg)
-        tv_name.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-                .navigation()
-        }
-        tv_toolbar_name.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-                .navigation()
-        }
-        ll_view_history.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)
-                .navigation()
-        }
-
     }
 
-    override fun initData() {
-
-    }
-
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
+    override fun initUIChangeLiveData(): UIChangeLiveData {
         return mineViewModel.uC
     }
 
@@ -123,6 +110,38 @@ class MineFragment : BaseLazyFragment() {
             tv_toolbar_name.alpha = alphaPercent
             tv_toolbar_title.alpha = (1f - alphaPercent)
         })
+    }
+
+
+    private fun initViewClickListener(){
+        tv_name.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                .navigation()
+        }
+        tv_toolbar_name.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                .navigation()
+        }
+        ll_view_history.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)
+                .navigation()
+        }
+        ll_my_obtain.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_OBTAIN_ACTIVITY)
+                .navigation()
+        }
+        ll_my_sing.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_SIGN_ACTIVITY)
+                .navigation()
+        }
+        ll_my_extension.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_EXTENSION_ACTIVITY)
+                .navigation()
+        }
+        ll_time_limit_extension.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_LIMIT_TIME_EXTENSION_ACTIVITY)
+                .navigation()
+        }
     }
 
 }

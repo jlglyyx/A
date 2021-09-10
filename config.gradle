@@ -61,7 +61,7 @@ ext {
             "mmkv"                         : "com.tencent:mmkv:1.0.23",
             "room-runtime"                 : "androidx.room:room-runtime:$version.room_version",
             "room-ktx"                     : "androidx.room:room-ktx:$version.room_version",
-            "huawei-scanplus"              : "com.huawei.hms:scanplus:1.1.1.301",
+            "huawei-scanplus"              : "com.huawei.hms:scan:1.1.1.301",
             "bugly"                        : "com.tencent.bugly:crashreport:latest.release",
             "refresh-layout-kernel"        : "com.scwang.smart:refresh-layout-kernel:2.0.1",
             "refresh-header-classics"      : "com.scwang.smart:refresh-header-classics:2.0.1",

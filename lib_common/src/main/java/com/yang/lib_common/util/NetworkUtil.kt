@@ -57,16 +57,13 @@ class NetworkUtil {
             }
 
 
-
         @JvmStatic
         fun isNetworkClient(context: Context): Boolean {
             var connectivityManager =
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val networkCapabilities =
-                    connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-
+                val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
                 return when {
                     networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
                             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
@@ -79,22 +76,20 @@ class NetworkUtil {
                 }
 
             } else {
-                val activeNetworkInfo = connectivityManager.activeNetworkInfo
+                val activeNetworkInfo = connectivityManager.activeNetworkInfo ?: return false
+
                 return activeNetworkInfo.isAvailable
             }
-
-            return false
         }
     }
 
 
     fun getNetworkStatus(context: Context) {
-        var connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        var connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val networkCapabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?: return
             when {
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
 
@@ -109,7 +104,7 @@ class NetworkUtil {
             }
 
         } else {
-            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo?: return
             if (activeNetworkInfo.isAvailable) {
                 when (activeNetworkInfo.type) {
                     ConnectivityManager.TYPE_MOBILE -> {
@@ -124,7 +119,6 @@ class NetworkUtil {
             }
         }
     }
-
 
 
 }
