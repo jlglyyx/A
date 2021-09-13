@@ -92,15 +92,6 @@ class GridNinePictureView : RelativeLayout {
         defStyleAttr
     ) {
         this.mContext = context
-
-//        val findViewById = childAt.findViewById<ImageView>(R.id.iv_nine_image)
-//        val layoutParams = findViewById.layoutParams
-//        layoutParams.width = 200
-//        layoutParams.height = 200
-//        findViewById.layoutParams = layoutParams
-//
-//        Log.i("TAG", "layoutImage: "+findViewById)
-        Log.i("TAG", ": " + mImageViewWidth)
         init()
     }
 

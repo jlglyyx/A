@@ -142,6 +142,10 @@ class MineFragment : BaseLazyFragment() {
             buildARouter(AppConstant.RoutePath.MINE_LIMIT_TIME_EXTENSION_ACTIVITY)
                 .navigation()
         }
+        ll_exchange_obtain.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_OBTAIN_EXCHANGE_ACTIVITY)
+                .navigation()
+        }
     }
 
 }

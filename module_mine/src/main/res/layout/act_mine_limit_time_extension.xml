@@ -22,5 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_qr_code"
         android:layout_centerHorizontal="true"
+        android:padding="@dimen/dp_10"
         android:text="扫描二维码推广更多好朋友吧(长按保存二维码）"/>
 </RelativeLayout>

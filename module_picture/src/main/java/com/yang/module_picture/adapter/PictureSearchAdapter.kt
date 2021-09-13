@@ -9,22 +9,17 @@ import com.yang.module_picture.model.ImageDataItem
 
 /**
  * @Author Administrator
- * @ClassName PictureAdapter
+ * @ClassName PictureSearchAdapter
  * @Description
- * @Date 2021/9/9 11:02
+ * @Date 2021/9/13 16:55
  */
-class PictureAdapter(layoutResId: Int, list: MutableList<ImageDataItem>): BaseQuickAdapter<ImageDataItem, BaseViewHolder>(layoutResId, list) {
+class PictureSearchAdapter(layoutResId: Int, list: MutableList<ImageDataItem>): BaseQuickAdapter<ImageDataItem, BaseViewHolder>(layoutResId, list) {
     override fun convert(helper: BaseViewHolder, item: ImageDataItem) {
-        val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-        helper
-            .setText(R.id.tv_title,item.imageTitle)
-            .setText(R.id.tv_desc,item.imageDesc)
-//                .setGone(R.id.tv_title,!TextUtils.isEmpty(item.imageTitle))
-//                .setGone(R.id.tv_desc,!TextUtils.isEmpty(item.imageDesc))
-        Glide.with(sivImg)
+        val ivImage = helper.getView<ShapeableImageView>(R.id.iv_image)
+        Glide.with(ivImage)
             .load(item.imageUrl)
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
-            .into(sivImg)
+            .into(ivImage)
     }
 }

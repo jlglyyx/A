@@ -19,7 +19,7 @@ import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.simpleDateFormat
 import com.yang.module_picture.R
-import com.yang.module_picture.adapter.PictureAdapter
+import com.yang.module_picture.adapter.PictureSearchAdapter
 import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.model.ImageDataItem
 import com.yang.module_picture.viewmodel.PictureViewModel
@@ -48,7 +48,7 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
     private var pageNum = 1
     private var list = mutableListOf<SearchData>()
     private lateinit var flowLayoutAdapter: FlowLayoutAdapter
-    private lateinit var mAdapter: PictureAdapter
+    private lateinit var mAdapter: PictureSearchAdapter
 
     private var type:Int = -1
     private var keyword = ""
@@ -126,7 +126,7 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter = PictureAdapter(R.layout.item_picture_image, mutableListOf()).also {
+        mAdapter = PictureSearchAdapter(R.layout.item_search_picture, mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
                 val imageData = adapter.data[position] as ImageDataItem
                 buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)

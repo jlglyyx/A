@@ -47,7 +47,7 @@ class OtherPersonInfoActivity : BaseActivity() {
         }
 
         Glide.with(this)
-            .load("https://img1.baidu.com/it/u=584562345,1740343441&fm=26&fmt=auto&gp=0.jpg")
+            .load("https://scpic.chinaz.net/files/pic/pic9/202107/bpic23810.jpg")
             .apply(RequestOptions.bitmapTransform(BlurTransformation(this)))
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
