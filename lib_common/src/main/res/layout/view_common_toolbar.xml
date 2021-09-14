@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:id="@+id/cl_toolbar"
-    android:background="@color/white">
+    android:background="@color/plum">
 
     <TextView
         android:id="@+id/tv_centerContent"
@@ -45,6 +45,8 @@
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
         android:gravity="center"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
         android:padding="@dimen/dp_10"
         android:src="@drawable/iv_back"
         app:layout_constraintBottom_toBottomOf="parent"

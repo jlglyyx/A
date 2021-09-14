@@ -15,6 +15,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:shapeAppearance="@style/circleShapeImage"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
         android:id="@+id/siv_img"/>
 
     <TextView

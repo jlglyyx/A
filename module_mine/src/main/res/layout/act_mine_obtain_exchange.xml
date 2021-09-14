@@ -9,6 +9,8 @@
         android:id="@+id/commonToolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:rightContentVisible="true"
+        app:rightContent="我的兑换"
         app:centerContent="积分兑换" />
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -41,6 +43,7 @@
                     android:id="@id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:paddingEnd="@dimen/dp_2"
                     android:overScrollMode="never" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

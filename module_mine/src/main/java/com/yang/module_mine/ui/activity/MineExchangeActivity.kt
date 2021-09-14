@@ -7,26 +7,22 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
 import com.yang.module_mine.adapter.MineObtainExchangeAdapter
 import com.yang.module_mine.data.MineObtainExchangeData
 import com.yang.module_mine.helper.getMineComponent
 import com.yang.module_mine.viewmodel.MineViewModel
-import kotlinx.android.synthetic.main.act_mine_obtain_exchange.*
-import kotlinx.android.synthetic.main.view_normal_recyclerview.recyclerView
-import kotlinx.android.synthetic.main.view_normal_recyclerview.smartRefreshLayout
+import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import javax.inject.Inject
 
 /**
  * @Author Administrator
- * @ClassName MineObtainChageActivity
+ * @ClassName MineExchangeActivity
  * @Description
- * @Date 2021/9/13 17:16
+ * @Date 2021/9/14 10:39
  */
-@Route(path = AppConstant.RoutePath.MINE_OBTAIN_EXCHANGE_ACTIVITY)
-class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
+@Route(path = AppConstant.RoutePath.MINE_EXCHANGE_ACTIVITY)
+class MineExchangeActivity :BaseActivity(), OnRefreshLoadMoreListener {
 
     @Inject
     lateinit var mineViewModel: MineViewModel
@@ -46,13 +42,6 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
     override fun initView() {
         initSmartRefreshLayout()
         initRecyclerView()
-
-        commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
-            override fun tvRightClickListener() {
-                buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_ACTIVITY).navigation()
-            }
-
-        }
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
@@ -68,7 +57,7 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
     }
 
     private fun initRecyclerView() {
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         mAdapter = MineObtainExchangeAdapter(mutableListOf<MineObtainExchangeData>().apply {
             add(MineObtainExchangeData("签到了一天","100","+100"))
             add(MineObtainExchangeData("兑换了一块钱","99","-1"))

@@ -15,6 +15,8 @@ interface MineComponent {
     fun inject(otherPersonInfoActivity: OtherPersonInfoActivity)
     fun inject(viewHistoryActivity: ViewHistoryActivity)
     fun inject(mineObtainActivity: MineObtainActivity)
+    fun inject(mineObtainExchangeActivity: MineObtainExchangeActivity)
+    fun inject(mineExchangeActivity: MineExchangeActivity)
     fun inject(mineSignActivity: MineSignActivity)
     fun inject(mineExtensionActivity: MineExtensionActivity)
     fun inject(mineLimitTimeExtensionActivity: MineLimitTimeExtensionActivity)
