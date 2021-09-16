@@ -7,6 +7,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.yang.lib_common.base.ui.fragment.BaseFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -26,7 +28,7 @@ import javax.inject.Inject
  * @Date 2021/7/30 14:36
  */
 @Route(path = AppConstant.RoutePath.MY_COLLECTION_VIDEO_FRAGMENT)
-class MyCollectionVideoFragment : BaseFragment() {
+class MyCollectionVideoFragment : BaseFragment(), OnRefreshLoadMoreListener {
 
 
     @Inject
@@ -35,11 +37,15 @@ class MyCollectionVideoFragment : BaseFragment() {
 
     private lateinit var mAdapter: MAdapter
 
+    private var pageNum = 1
+
     override fun getLayout(): Int {
         return R.layout.fra_my_collection_video
     }
 
     override fun initData() {
+        smartRefreshLayout.autoRefresh()
+        initSmartRefreshLayout()
     }
 
     override fun initView() {
@@ -53,6 +59,10 @@ class MyCollectionVideoFragment : BaseFragment() {
     override fun initViewModel() {
         getMainComponent(this).inject(this)
     }
+
+    private fun initSmartRefreshLayout() {
+        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+    }
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = MAdapter(R.layout.item_menu_my_collection_picture, mutableListOf()).apply {
@@ -63,7 +73,12 @@ class MyCollectionVideoFragment : BaseFragment() {
         }
         recyclerView.adapter = mAdapter
         val filePath = getFilePath("/MFiles/video")
-        mAdapter.replaceData(filePath)
+        if (filePath.size == 0){
+            mainViewModel.showRecyclerViewEmptyEvent()
+        }else{
+            mAdapter.replaceData(filePath)
+        }
+        showRecyclerViewEvent(mAdapter)
     }
 
     inner class MAdapter(layoutResId: Int, list: MutableList<String>) :
@@ -73,5 +88,13 @@ class MyCollectionVideoFragment : BaseFragment() {
             Glide.with(ivImage).setDefaultRequestOptions(RequestOptions().frame(1000).fitCenter()).load(item).error(R.drawable.iv_image_error)
                 .placeholder(R.drawable.iv_image_placeholder).into(ivImage)
         }
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        pageNum = 1
+    }
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        pageNum++
     }
 }

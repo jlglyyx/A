@@ -6,6 +6,8 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.yang.lib_common.base.ui.fragment.BaseFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -25,7 +27,7 @@ import javax.inject.Inject
  * @Date 2021/7/30 14:36
  */
 @Route(path = AppConstant.RoutePath.MY_COLLECTION_PICTURE_FRAGMENT)
-class MyCollectionPictureFragment : BaseFragment() {
+class MyCollectionPictureFragment : BaseFragment(), OnRefreshLoadMoreListener {
 
     @Inject
     @ModelWithFactory
@@ -33,11 +35,15 @@ class MyCollectionPictureFragment : BaseFragment() {
 
     private lateinit var mAdapter: MAdapter
 
+    private var pageNum = 1
+
     override fun getLayout(): Int {
         return R.layout.fra_my_collection_picture
     }
 
     override fun initData() {
+        smartRefreshLayout.autoRefresh()
+        initSmartRefreshLayout()
     }
 
     override fun initView() {
@@ -52,6 +58,10 @@ class MyCollectionPictureFragment : BaseFragment() {
         getMainComponent(this).inject(this)
     }
 
+    private fun initSmartRefreshLayout() {
+        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+    }
+
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = MAdapter(R.layout.item_menu_my_collection_picture, mutableListOf()).apply {
@@ -62,7 +72,12 @@ class MyCollectionPictureFragment : BaseFragment() {
         }
         recyclerView.adapter = mAdapter
         val filePath = getFilePath()
-        mAdapter.replaceData(filePath)
+        if (filePath.size == 0){
+            mainViewModel.showRecyclerViewEmptyEvent()
+        }else{
+            mAdapter.replaceData(filePath)
+        }
+        showRecyclerViewEvent(mAdapter)
     }
 
     inner class MAdapter(layoutResId: Int, list: MutableList<String>) :
@@ -72,6 +87,14 @@ class MyCollectionPictureFragment : BaseFragment() {
             Glide.with(ivImage).load(item).error(R.drawable.iv_image_error)
                 .placeholder(R.drawable.iv_image_placeholder).into(ivImage)
         }
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        pageNum = 1
+    }
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        pageNum++
     }
 
 }

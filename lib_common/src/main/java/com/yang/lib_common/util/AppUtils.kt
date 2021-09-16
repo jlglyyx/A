@@ -86,9 +86,11 @@ fun getFilePath(path: String = "/MFiles/picture"): MutableList<String> {
     val file = File("${Environment.getExternalStorageDirectory()}$path")
     if (file.isDirectory) {
         val listFiles = file.listFiles()
-        for (mFiles in listFiles) {
-            Log.i(TAG, "getFilePath: ${mFiles.absolutePath}")
-            mutableListOf.add(mFiles.absolutePath)
+        listFiles?.let {
+            for (mFiles in listFiles) {
+                Log.i(TAG, "getFilePath: ${mFiles.absolutePath}")
+                mutableListOf.add(mFiles.absolutePath)
+            }
         }
     }
 

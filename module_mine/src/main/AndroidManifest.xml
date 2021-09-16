@@ -9,6 +9,7 @@
         <activity android:name="com.yang.module_mine.ui.activity.MineObtainActivity"/>
         <activity android:name="com.yang.module_mine.ui.activity.MineObtainExchangeActivity"/>
         <activity android:name="com.yang.module_mine.ui.activity.MineExchangeActivity"/>
+        <activity android:name="com.yang.module_mine.ui.activity.MineExchangeGoodsDetailActivity"/>
         <activity android:name="com.yang.module_mine.ui.activity.MineSignActivity"/>
         <activity android:name="com.yang.module_mine.ui.activity.MineExtensionActivity"/>
         <activity android:name="com.yang.module_mine.ui.activity.MineLimitTimeExtensionActivity"/>

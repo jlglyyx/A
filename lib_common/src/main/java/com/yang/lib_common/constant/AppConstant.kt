@@ -80,6 +80,8 @@ interface AppConstant {
 
         const val MINE_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeActivity"
 
+        const val MINE_EXCHANGE_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeDetailActivity"
+
         const val MINE_SIGN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineSignActivity"
 
         const val MINE_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionActivity"

@@ -81,6 +81,10 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
             add(MineObtainExchangeData("签到了一天","100","+100"))
             add(MineObtainExchangeData("兑换了一块钱","99","-1"))
         })
+        mAdapter.setOnItemClickListener { adapter, view, position ->
+
+            buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_DETAIL_ACTIVITY).navigation()
+        }
         recyclerView.adapter = mAdapter
 //        mineViewModel.mVideoData.observe(this, Observer {
 //            when {
