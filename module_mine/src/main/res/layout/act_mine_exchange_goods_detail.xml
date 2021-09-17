@@ -1,54 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:contentScrim="@color/orchid"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            android:layout_height="wrap_content">
 
-            <com.youth.banner.Banner
-                android:id="@id/banner"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_300"
-                app:banner_indicator_gravity="right"
-                app:layout_collapseMode="parallax" />
-
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentInsetEnd="@dimen/dp_0"
-                app:contentInsetStart="@dimen/dp_0"
-                app:titleMargin="@dimen/dp_0"
-                app:layout_collapseMode="pin">
+                app:contentScrim="@color/orchid"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <com.yang.lib_common.widget.CommonToolBar
-                    android:id="@+id/commonToolBar"
+                <com.youth.banner.Banner
+                    android:id="@id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_300"
+                    app:banner_auto_loop="false"
+                    app:banner_indicator_gravity="right"
+                    app:layout_collapseMode="parallax" />
+
+                <androidx.appcompat.widget.Toolbar
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:centerContent=""
-                    app:toolbarBg="@android:color/transparent" />
-            </androidx.appcompat.widget.Toolbar>
+                    app:contentInsetEnd="@dimen/dp_0"
+                    app:contentInsetStart="@dimen/dp_0"
+                    app:layout_collapseMode="pin"
+                    app:titleMargin="@dimen/dp_0">
+
+                    <com.yang.lib_common.widget.CommonToolBar
+                        android:id="@+id/commonToolBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:centerContent=""
+                        app:toolbarBg="@android:color/transparent" />
+                </androidx.appcompat.widget.Toolbar>
 
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@id/recyclerView"
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:paddingBottom="@dimen/dp_50"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    app:cardBackgroundColor="@color/white"
+                    android:layout_margin="@dimen/dp_5"
+                    app:cardCornerRadius="@dimen/dp_8"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/dp_8"
+                        android:paddingHorizontal="@dimen/dp_5"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="@dimen/dp_5"
+                            android:text="999积分"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/sp_18" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/dp_5"
+                            android:text="限时抢购"
+                            android:textSize="@dimen/sp_12" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="@dimen/dp_5"
+                            android:text="官方正版官方正版官方正版官方正版官方正版官方正版官方正版"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/sp_16"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_5"
+                    android:text="-宝贝详情-"
+                    android:textSize="@dimen/sp_12" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:overScrollMode="never" />
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:paddingHorizontal="@dimen/dp_2"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_50"
+            android:layout_weight="1"
+            android:background="@color/orchid"
+            android:gravity="center"
+            android:text="立即兑换" />
+    </LinearLayout>
+</RelativeLayout>

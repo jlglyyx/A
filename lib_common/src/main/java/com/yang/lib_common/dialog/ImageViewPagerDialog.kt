@@ -5,6 +5,7 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -33,7 +34,7 @@ class ImageViewPagerDialog : FullScreenPopupView {
 
     var imageViewPagerDialogCallBack: ImageViewPagerDialogCallBack? = null
 
-    var showDownAndCollection: Boolean = true
+    private var showDownAndCollection: Boolean = true
 
     interface ImageViewPagerDialogCallBack {
         fun getPosition(position: Int)
@@ -109,8 +110,7 @@ class ImageViewPagerDialog : FullScreenPopupView {
                 parent: ViewGroup,
                 viewType: Int
             ): RecyclerView.ViewHolder {
-                val inflate = LayoutInflater.from(mContext)
-                    .inflate(R.layout.dialog_image_viewpager_item, parent, false)
+                val inflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_image_viewpager_item, parent, false)
                 return object : RecyclerView.ViewHolder(inflate) {
 
                 }
@@ -129,10 +129,23 @@ class ImageViewPagerDialog : FullScreenPopupView {
             }
 
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+
                 val photoView = holder.itemView.findViewById<PhotoView>(R.id.photoView)
-                val gsyVideoPlayer =
-                    holder.itemView.findViewById<StandardGSYVideoPlayer>(R.id.detailPlayer)
+                val gsyVideoPlayer = holder.itemView.findViewById<StandardGSYVideoPlayer>(R.id.detailPlayer)
+                val cl_dialog = holder.itemView.findViewById<ConstraintLayout>(R.id.cl_dialog)
                 val endsWith = data[position].endsWith(".mp4")
+                cl_dialog.setOnTouchListener { v, event ->
+                    if (v.id == com.shuyu.gsyvideoplayer.R.id.start){
+                        gsyVideoPlayer.onTouchEvent(event)
+                        return@setOnTouchListener true
+                    }
+                    return@setOnTouchListener false
+                }
+                cl_dialog.setOnClickListener {
+                    dismiss()
+                }
+
                 if (endsWith) {
                     photoView.visibility = View.GONE
                     gsyVideoPlayer.setUpLazy(data[position], true, null, null, "")

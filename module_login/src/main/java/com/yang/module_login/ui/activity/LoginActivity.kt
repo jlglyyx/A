@@ -1,8 +1,6 @@
 package com.yang.module_login.ui.activity
 
 import android.text.TextUtils
-import android.view.View
-import android.widget.MediaController
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -18,7 +16,9 @@ import com.yang.module_login.R
 import com.yang.module_login.helper.getLoginComponent
 import com.yang.module_login.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.act_login.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.LOGIN_ACTIVITY)
@@ -45,6 +45,7 @@ class LoginActivity : BaseActivity() {
         }
         tv_not_login.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
+            finish()
         }
 
         tv_verification_code.clicks().subscribe {

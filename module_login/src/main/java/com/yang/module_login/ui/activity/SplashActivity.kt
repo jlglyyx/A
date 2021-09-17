@@ -43,11 +43,14 @@ class SplashActivity : BaseActivity() {
 //                tv_timer.text = "${i}s点击跳过"
 //                delay(1000)
 //            }
-                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation(this@SplashActivity)
-//                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withTransition(
-//                    R.anim.fade_in,
-//                    R.anim.fade_out
-//                ).navigation(this@SplashActivity)
+
+                android.R.anim.slide_out_right
+
+  //             buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation(this@SplashActivity)
+                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withTransition(
+                    0,
+                    0
+                ).navigation(this@SplashActivity)
                 finish()
             }
 
@@ -57,11 +60,11 @@ class SplashActivity : BaseActivity() {
                 finish()
             }
 
-        }else{
+        } else {
 
-            loginViewModel.login(userInfo.userAccount,userInfo.userPassword)
+            loginViewModel.login(userInfo.userAccount, userInfo.userPassword)
             loginViewModel.mUserInfoData.observe(this, Observer {
-                getDefaultMMKV().encode(AppConstant.Constant.USER_INFO,gson.toJson(it))
+                getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
                 finish()
             })
@@ -70,7 +73,7 @@ class SplashActivity : BaseActivity() {
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withTransition(R.anim.fade_in, 0)
                     .navigation(this@SplashActivity)
                 finish()
-           }
+            }
         }
     }
 
