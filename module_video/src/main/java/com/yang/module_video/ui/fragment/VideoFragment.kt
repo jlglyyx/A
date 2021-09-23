@@ -2,18 +2,22 @@ package com.yang.module_video.ui.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yang.lib_common.adapter.TabAndViewPagerFragmentAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_video.R
 import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.fra_video.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.VIDEO_FRAGMENT)
@@ -41,6 +45,9 @@ class VideoFragment : BaseLazyFragment() {
                         .withString(AppConstant.Constant.TYPE,videoTypeData.type)
                         .navigation() as Fragment
                 )
+            }
+            lifecycleScope.launch(Dispatchers.IO){
+                BaseAppDatabase.instance.videoTypeDao().updateData(it)
             }
             initViewPager()
             initTabLayout()
@@ -73,7 +80,9 @@ class VideoFragment : BaseLazyFragment() {
     private fun initViewPager() {
 
         viewPager.adapter = TabAndViewPagerFragmentAdapter(this, fragments, titles)
-        viewPager.offscreenPageLimit = fragments.size
+        if(fragments.size != 0){
+            viewPager.offscreenPageLimit = fragments.size
+        }
     }
 
     private fun initTabLayout() {

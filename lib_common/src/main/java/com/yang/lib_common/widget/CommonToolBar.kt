@@ -27,7 +27,7 @@ class CommonToolBar : ConstraintLayout {
         tvCenterContent.text = field
     }
 
-    private lateinit var tvCenterContent: TextView
+    lateinit var tvCenterContent: TextView
 
     lateinit var ivBack: ShapeableImageView
 

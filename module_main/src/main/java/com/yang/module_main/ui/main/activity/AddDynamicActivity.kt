@@ -17,10 +17,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.scope.ModelWithFactory
-import com.yang.lib_common.util.dip2px
-import com.yang.lib_common.util.formatWithComma
-import com.yang.lib_common.util.getScreenPx
-import com.yang.lib_common.util.getUserInfo
+import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_main.R
 import com.yang.module_main.adapter.PictureSelectAdapter
@@ -69,7 +66,7 @@ class AddDynamicActivity : BaseActivity() {
         val dynamicData = DynamicData()
         dynamicData.userId = getUserInfo()?.id
         dynamicData.content = et_dynamic.text.toString()
-        dynamicData.imageUrls = mainViewModel.pictureListLiveData.value?.formatWithComma()
+        dynamicData.imageUrls = mainViewModel.pictureListLiveData.value?.formatWithSymbol("#")
         mainViewModel.addDynamic(dynamicData)
     }
 

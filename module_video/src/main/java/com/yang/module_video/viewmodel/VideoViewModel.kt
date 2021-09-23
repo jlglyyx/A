@@ -4,11 +4,14 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.room.BaseAppDatabase
+import com.yang.lib_common.room.entity.VideoTypeData
 import com.yang.module_video.model.AccountList
 import com.yang.module_video.model.VideoData
 import com.yang.module_video.model.VideoDataItem
-import com.yang.module_video.model.VideoTypeData
 import com.yang.module_video.repository.VideoRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -88,18 +91,9 @@ class VideoViewModel @Inject constructor(
         }, {
             mVideoTypeData.postValue(it.data)
         },{
-            val mutableListOf = mutableListOf<VideoTypeData>()
-            for (i in 1..10){
-                mutableListOf.add(
-                    VideoTypeData(
-                        1,
-                        "推荐",
-                        "1",
-                        ""
-                    )
-                )
+            withContext(Dispatchers.IO){
+                mVideoTypeData.postValue(BaseAppDatabase.instance.videoTypeDao().queryData())
             }
-            mVideoTypeData.postValue(mutableListOf)
         }, "加载中...")
     }
 

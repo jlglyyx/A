@@ -18,12 +18,12 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.commaToList
 import com.yang.lib_common.util.getUserInfo
+import com.yang.lib_common.util.symbolToList
 import com.yang.module_main.R
+import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
-import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import javax.inject.Inject
@@ -145,12 +145,12 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
             mRecyclerView.layoutManager = GridLayoutManager(mContext,3)
             val dynamicAdapter = DynamicAdapter(
                 R.layout.view_item_grid_nine_picture,
-                item.imageUrls?.commaToList()!!
+                item.imageUrls?.symbolToList("#")!!
             )
             mRecyclerView.adapter = dynamicAdapter
             dynamicAdapter.setOnItemClickListener { adapter, view, position ->
                 val imageViewPagerDialog =
-                    ImageViewPagerDialog(this@MyPushActivity, item.imageUrls?.commaToList()!!, position)
+                    ImageViewPagerDialog(this@MyPushActivity, item.imageUrls?.symbolToList("#")!!, position)
                 XPopup.Builder(this@MyPushActivity).asCustom(imageViewPagerDialog).show()
             }
         }

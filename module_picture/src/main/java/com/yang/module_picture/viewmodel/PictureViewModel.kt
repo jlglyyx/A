@@ -4,10 +4,13 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.room.entity.ImageTypeData
 import com.yang.module_picture.model.ImageData
 import com.yang.module_picture.model.ImageDataItem
 import com.yang.module_picture.repository.PictureRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -71,18 +74,22 @@ class PictureViewModel @Inject constructor(
         }, {
             mImageTypeData.postValue(it.data)
         },{
-            val mutableListOf = mutableListOf<ImageTypeData>()
-            for (i in 1..10){
-                mutableListOf.add(
-                    ImageTypeData(
-                        1,
-                        "推荐",
-                        "1",
-                        ""
-                    )
-                )
+//            val mutableListOf = mutableListOf<ImageTypeData>()
+//            for (i in 1..10){
+//                mutableListOf.add(
+//                    ImageTypeData(
+//                        i,
+//                        "推=${i}=荐",
+//                        "1",
+//                        ""
+//                    )
+//                )
+//            }
+            withContext(Dispatchers.IO){
+                mImageTypeData.postValue(BaseAppDatabase.instance.imageTypeDao().queryData())
             }
-            mImageTypeData.postValue(mutableListOf)
+
+            //mImageTypeData.postValue(mutableListOf)
         }, "加载中...")
     }
 

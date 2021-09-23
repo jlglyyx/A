@@ -112,21 +112,22 @@ fun getUserInfo(): UserInfoData? {
     return null
 }
 
-fun MutableList<String>.formatWithComma(): String {
+
+fun MutableList<String>.formatWithSymbol(symbol: String = ","): String {
     val stringBuilder = StringBuilder()
     this.forEachIndexed { index, s ->
         if (index == this.size - 1) {
             stringBuilder.append(s)
         } else {
-            stringBuilder.append(s).append(",")
+            stringBuilder.append(s).append(symbol)
         }
     }
     return stringBuilder.toString()
 }
 
-fun String.commaToList(): MutableList<String> {
+fun String.symbolToList(symbol: String = ","): MutableList<String> {
     val mutableListOf = mutableListOf<String>()
-    val split = this.split(",")
+    val split = this.split(symbol)
     mutableListOf.addAll(split)
     return mutableListOf
 }

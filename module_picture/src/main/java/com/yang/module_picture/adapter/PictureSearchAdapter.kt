@@ -1,9 +1,9 @@
 package com.yang.module_picture.adapter
 
+import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.google.android.material.imageview.ShapeableImageView
 import com.yang.module_picture.R
 import com.yang.module_picture.model.ImageDataItem
 
@@ -15,7 +15,7 @@ import com.yang.module_picture.model.ImageDataItem
  */
 class PictureSearchAdapter(layoutResId: Int, list: MutableList<ImageDataItem>): BaseQuickAdapter<ImageDataItem, BaseViewHolder>(layoutResId, list) {
     override fun convert(helper: BaseViewHolder, item: ImageDataItem) {
-        val ivImage = helper.getView<ShapeableImageView>(R.id.iv_image)
+        val ivImage = helper.getView<ImageView>(R.id.iv_image)
         Glide.with(ivImage)
             .load(item.imageUrl)
             .error(R.drawable.iv_image_error)

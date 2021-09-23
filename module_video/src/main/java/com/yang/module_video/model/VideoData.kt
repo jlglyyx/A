@@ -1,7 +1,5 @@
 package com.yang.module_video.model
 
-import com.chad.library.adapter.base.entity.MultiItemEntity
-
 data class VideoData(
     var list: List<VideoDataItem>,
     var pageNum: Int,
@@ -11,10 +9,7 @@ data class VideoData(
 
 )
 
-data class VideoDataItem constructor(private val itemType: Int) : MultiItemEntity {
-    override fun getItemType(): Int {
-        return itemType
-    }
+class VideoDataItem  {
     var select = false
     var position = 0
     var createTime: String? = null
@@ -24,13 +19,6 @@ data class VideoDataItem constructor(private val itemType: Int) : MultiItemEntit
     var videoUrl: String? = null
     var videoTitle: String? = null
     var updateTime: String? = null
-
+    var smartVideoUrls : MutableList<VideoDataItem>? = null
 }
 
-
-data class VideoTypeData(
-    var id: Int? = 0,
-    var name: String,
-    var type: String,
-    var extraInfo: String
-)

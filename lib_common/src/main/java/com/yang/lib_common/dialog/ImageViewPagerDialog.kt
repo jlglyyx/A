@@ -5,7 +5,6 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -133,16 +132,12 @@ class ImageViewPagerDialog : FullScreenPopupView {
 
                 val photoView = holder.itemView.findViewById<PhotoView>(R.id.photoView)
                 val gsyVideoPlayer = holder.itemView.findViewById<StandardGSYVideoPlayer>(R.id.detailPlayer)
-                val cl_dialog = holder.itemView.findViewById<ConstraintLayout>(R.id.cl_dialog)
                 val endsWith = data[position].endsWith(".mp4")
-                cl_dialog.setOnTouchListener { v, event ->
-                    if (v.id == com.shuyu.gsyvideoplayer.R.id.start){
-                        gsyVideoPlayer.onTouchEvent(event)
-                        return@setOnTouchListener true
-                    }
-                    return@setOnTouchListener false
+
+                gsyVideoPlayer.findViewById<View>(com.shuyu.gsyvideoplayer.R.id.surface_container).setOnClickListener {
+                    dismiss()
                 }
-                cl_dialog.setOnClickListener {
+                photoView.setOnClickListener {
                     dismiss()
                 }
 

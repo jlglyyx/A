@@ -86,26 +86,26 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             onRefresh(smartRefreshLayout)
 
             val mutableListOf = mutableListOf<VideoDataItem>()
-            mutableListOf.add(VideoDataItem(AppConstant.Constant.ITEM_VIDEO_RECOMMEND_TYPE))
-            mutableListOf.add(VideoDataItem(AppConstant.Constant.ITEM_VIDEO_BIG_IMAGE).apply {
+            mutableListOf.add(VideoDataItem())
+            mutableListOf.add(VideoDataItem().apply {
                 videoTitle = "1=="
                 videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
             })
-            mutableListOf.add(VideoDataItem(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
+            mutableListOf.add(VideoDataItem().apply {
                 videoTitle = "1=="
                 videoUrl =
                     "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
             })
-            mutableListOf.add(VideoDataItem(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
+            mutableListOf.add(VideoDataItem().apply {
                 videoTitle = "1=="
                 videoUrl =
                     "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
             })
-            mutableListOf.add(VideoDataItem(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
+            mutableListOf.add(VideoDataItem().apply {
                 videoTitle = "1=="
                 videoUrl = "https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"
             })
-            mutableListOf.add(VideoDataItem(AppConstant.Constant.ITEM_VIDEO_SMART_IMAGE).apply {
+            mutableListOf.add(VideoDataItem().apply {
                 videoTitle = "1=="
                 videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
             })
@@ -221,9 +221,6 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             val await = async.await()
             if (await != 0L) {
                 list.add(searchData)
-                if (iv_delete.visibility == View.GONE){
-                    iv_delete.visibility = View.VISIBLE
-                }
                 flowLayoutAdapter.notifyDataChanged()
             }
         }

@@ -2,6 +2,8 @@ package com.yang.lib_common.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import com.yang.lib_common.room.entity.ImageTypeData
 
 /**
@@ -13,12 +15,12 @@ import com.yang.lib_common.room.entity.ImageTypeData
 @Dao
 interface ImageTypeDao {
 
-//    @Query("SELECT  * FROM image_type")
-//    fun getAllData():MutableList<ImageTypeData>
+    @Update
+    fun updateData(data:MutableList<ImageTypeData>)
+
+    @Query("select * from image_type")
+    fun queryData():MutableList<ImageTypeData>
 
     @Insert
-    fun insertData(imageTypeData:ImageTypeData)
-
-//    @Insert
-//    fun insertData(imageTypeData:MutableList<ImageTypeData>)
+    fun insertData(data:MutableList<ImageTypeData>)
 }

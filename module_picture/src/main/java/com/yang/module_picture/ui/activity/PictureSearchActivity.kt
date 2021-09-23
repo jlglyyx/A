@@ -193,9 +193,6 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             val await = async.await()
             if (await != 0L) {
                 list.add(searchData)
-                if (iv_delete.visibility == View.GONE){
-                    iv_delete.visibility = View.VISIBLE
-                }
                 flowLayoutAdapter.notifyDataChanged()
             }
         }

@@ -11,8 +11,7 @@
         android:id="@+id/iv_image"
         android:layout_width="@dimen/dp_150"
         android:layout_height="@dimen/dp_150"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <TextView

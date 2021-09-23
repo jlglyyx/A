@@ -14,8 +14,7 @@
         android:layout_height="@dimen/dp_50"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:shapeAppearance="@style/circleShapeImage"
         android:id="@+id/siv_img"/>
 

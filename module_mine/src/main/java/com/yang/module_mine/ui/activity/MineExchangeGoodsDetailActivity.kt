@@ -2,11 +2,15 @@ package com.yang.module_mine.ui.activity
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.google.android.material.appbar.AppBarLayout
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.interfaces.OnConfirmListener
 import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
+import com.yang.lib_common.util.clicks
 import com.yang.module_mine.R
 import com.yang.module_mine.adapter.MineObtainExchangeAdapter
 import com.yang.module_mine.data.MineObtainExchangeData
@@ -15,6 +19,7 @@ import com.yang.module_mine.viewmodel.MineViewModel
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.act_mine_exchange_goods_detail.*
 import javax.inject.Inject
+import kotlin.math.abs
 
 /**
  * @Author Administrator
@@ -28,6 +33,8 @@ class MineExchangeGoodsDetailActivity :BaseActivity() {
     @Inject
     lateinit var mineViewModel: MineViewModel
 
+    private var alphaPercent = 0f
+
     private lateinit var mAdapter: MineObtainExchangeAdapter
 
     override fun getLayout(): Int {
@@ -40,6 +47,16 @@ class MineExchangeGoodsDetailActivity :BaseActivity() {
 
     override fun initView() {
         initRecyclerView()
+        initAppBarLayout()
+
+        tv_exchange.clicks().subscribe {
+            XPopup.Builder(this).asConfirm("确认兑换","抽纸一包",object : OnConfirmListener{
+                override fun onConfirm() {
+
+                }
+
+            }).show()
+        }
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
@@ -118,6 +135,21 @@ class MineExchangeGoodsDetailActivity :BaseActivity() {
                 add(BannerBean("https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"))
             }))
             .indicator = CircleIndicator(this)
+    }
+
+    private fun initAppBarLayout() {
+        commonToolBar.tvCenterContent.alpha = alphaPercent
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            //滑动状态
+            alphaPercent = abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange.toFloat()
+            if (alphaPercent <= 0.2f) {
+                alphaPercent = 0f
+            }
+            if (alphaPercent >= 0.8f) {
+                alphaPercent = 1f
+            }
+            commonToolBar.tvCenterContent.alpha = alphaPercent
+        })
     }
 
 }

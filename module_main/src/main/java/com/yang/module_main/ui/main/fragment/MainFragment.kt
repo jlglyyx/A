@@ -28,11 +28,11 @@ import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_main.R
+import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.ui.main.activity.AddDynamicActivity
 import com.yang.module_main.ui.main.activity.MainActivity
-import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
@@ -84,7 +84,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     }
                     if (!images.isNullOrEmpty()) {
                         add((DynamicData().apply {
-                            imageUrls = images.formatWithComma()
+                            imageUrls = images.formatWithSymbol("#")
                         }))
                     }
                 }
@@ -174,6 +174,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = MAdapter(mutableListOf).apply {
+            addData(DynamicData().apply{imageUrls = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"})
             setOnItemChildClickListener { adapter, view, position ->
                 when (view.id) {
                     R.id.siv_img -> {
@@ -237,14 +238,14 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             mRecyclerView.layoutManager = GridLayoutManager(mContext, 3)
             val dynamicAdapter = DynamicAdapter(
                 R.layout.view_item_grid_nine_picture,
-                item.imageUrls?.commaToList()!!
+                item.imageUrls?.symbolToList("#")!!
             )
             mRecyclerView.adapter = dynamicAdapter
             dynamicAdapter.setOnItemClickListener { adapter, view, position ->
                 val imageViewPagerDialog =
                     ImageViewPagerDialog(
                         requireContext(),
-                        item.imageUrls?.commaToList()!!,
+                        item.imageUrls?.symbolToList("#")!!,
                         position
                     )
                 XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
