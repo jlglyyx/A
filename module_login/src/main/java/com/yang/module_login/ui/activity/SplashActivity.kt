@@ -1,5 +1,6 @@
 package com.yang.module_login.ui.activity
 
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -15,6 +16,7 @@ import com.yang.module_login.helper.getLoginComponent
 import com.yang.module_login.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.act_splash.*
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,24 +41,34 @@ class SplashActivity : BaseActivity() {
         val userInfo = getUserInfo()
         if (null == userInfo) {
             val launch = lifecycleScope.launch {
-//            for (i in 3 downTo 0) {
-//                tv_timer.text = "${i}s点击跳过"
-//                delay(1000)
-//            }
+                for (i in 1 downTo 0) {
+                    tv_timer.text = "${i}s点击跳过"
+                    delay(1000)
+                }
 
-                android.R.anim.slide_out_right
-
-  //             buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation(this@SplashActivity)
-                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withTransition(
-                    0,
-                    0
-                ).navigation(this@SplashActivity)
+                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                    .withOptionsCompat(
+                        ActivityOptionsCompat.makeCustomAnimation(
+                            this@SplashActivity,
+                            0,
+                            0
+                        )
+                    )
+                    .navigation(this@SplashActivity)
                 finish()
             }
 
             tv_timer.clicks().subscribe {
                 launch.cancel()
-                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation(this@SplashActivity)
+                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                    .withOptionsCompat(
+                        ActivityOptionsCompat.makeCustomAnimation(
+                            this@SplashActivity,
+                            0,
+                            0
+                        )
+                    )
+                    .navigation(this@SplashActivity)
                 finish()
             }
 
@@ -65,12 +77,24 @@ class SplashActivity : BaseActivity() {
             loginViewModel.login(userInfo.userAccount, userInfo.userPassword)
             loginViewModel.mUserInfoData.observe(this, Observer {
                 getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
-                buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
+                buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
+                    ActivityOptionsCompat.makeCustomAnimation(
+                        this@SplashActivity,
+                        R.anim.fade_in,
+                        R.anim.fade_out
+                    )
+                ).navigation()
                 finish()
             })
 
             tv_timer.clicks().subscribe {
-                buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withTransition(R.anim.fade_in, 0)
+                buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
+                    ActivityOptionsCompat.makeCustomAnimation(
+                        this@SplashActivity,
+                        R.anim.fade_in,
+                        R.anim.fade_out
+                    )
+                )
                     .navigation(this@SplashActivity)
                 finish()
             }

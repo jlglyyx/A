@@ -1,6 +1,7 @@
 package com.yang.module_login.ui.activity
 
 import android.text.TextUtils
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -44,7 +45,13 @@ class LoginActivity : BaseActivity() {
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
+                ActivityOptionsCompat.makeCustomAnimation(
+                    this@LoginActivity,
+                    R.anim.fade_in,
+                    R.anim.fade_out
+                )
+            ).navigation()
             finish()
         }
 
@@ -76,7 +83,13 @@ class LoginActivity : BaseActivity() {
         loginViewModel.login(et_user.text.toString(), et_password.text.toString())
         loginViewModel.mUserInfoData.observe(this, Observer {
             getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
-            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
+                ActivityOptionsCompat.makeCustomAnimation(
+                    this@LoginActivity,
+                    R.anim.fade_in,
+                    R.anim.fade_out
+                )
+            ).navigation()
             finish()
         })
     }

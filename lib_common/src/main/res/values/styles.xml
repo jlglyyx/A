@@ -38,12 +38,12 @@
     <style name="tabTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/itemTabTextAppearance</item>
         <item name="tabMode">scrollable</item>
-        <item name="tabSelectedTextColor">@color/colorAccent</item>
+        <item name="tabSelectedTextColor">@color/plum</item>
         <item name="tabRippleColor">@android:color/transparent</item>
+        <item name="tabIndicatorColor">@color/plum</item>
     </style>
-    <style name="itemTabTextAppearance" parent="TextAppearance.AppCompat">
+    <style name="itemTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">@dimen/sp_14</item>
-        <item name="tabSelectedTextColor">@color/colorAccent</item>
     </style>
 
     <style name="circleShapeImage">

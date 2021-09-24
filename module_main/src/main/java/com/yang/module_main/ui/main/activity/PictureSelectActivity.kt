@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
+
 /**
  * @Author Administrator
  * @ClassName PictureSelectActivity
@@ -65,16 +66,16 @@ class PictureSelectActivity : BaseActivity() {
     }
 
     private fun initRecyclerView() {
+        //(recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         pictureSelectAdapter = PictureSelectAdapter(R.layout.item_picture_select, mutableListOf())
         recyclerView.adapter = pictureSelectAdapter
         recyclerView.layoutManager = GridLayoutManager(this, 3)
-
         pictureSelectAdapter.setOnItemClickListener { adapter, view, position ->
             var imageList = (adapter.data as MutableList<MediaInfoBean>).map {
                 it.filePath
             } as MutableList<String>
             val imageViewPagerDialog =
-                ImageViewPagerDialog(this, imageList, position,false)
+                ImageViewPagerDialog(this, imageList, position, false)
             XPopup.Builder(this).asCustom(imageViewPagerDialog).show()
         }
 //        var lastPosition = -1
@@ -144,13 +145,24 @@ class PictureSelectActivity : BaseActivity() {
                     } else {
                         if (data.size < 9) {
                             element.isSelect = true
-                            element.selectPosition = data.size + 1
                             data.add(element)
                         } else {
                             showShort("已达到最大数量")
+                            return@setOnItemChildClickListener
                         }
                     }
-                    adapter.notifyItemChanged(position, false)
+
+
+                    for (a in data.withIndex()) {
+                        for (b in (adapter.data as MutableList<MediaInfoBean>).withIndex()) {
+                            if (TextUtils.equals(a.value.filePath, b.value.filePath)) {
+                                b.value.selectPosition = a.index + 1
+                                break
+                            }
+                        }
+                    }
+                    //adapter.notifyItemChanged(position, false)
+                    adapter.notifyDataSetChanged()
                 }
             }
 

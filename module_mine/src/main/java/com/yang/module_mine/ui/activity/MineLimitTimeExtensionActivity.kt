@@ -44,7 +44,7 @@ class MineLimitTimeExtensionActivity:BaseActivity() {
     }
 
     private fun createQRCode(){
-        val content = "QR Code Content"
+        val content = "https://www.baidu.com/"
         val width = 400
         val height = 400
         val buildBitmap = ScanUtil.buildBitmap(content, width, height)
