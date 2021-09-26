@@ -1,4 +1,4 @@
-package com.yang.module_mine.ui.activity
+package com.yang.module_mine.ui.obtain.activity
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -18,7 +18,7 @@ import javax.inject.Inject
 /**
  * @Author Administrator
  * @ClassName MineObtainActivity
- * @Description
+ * @Description 我的积分历史
  * @Date 2021/9/10 10:51
  */
 @Route(path = AppConstant.RoutePath.MINE_OBTAIN_ACTIVITY)

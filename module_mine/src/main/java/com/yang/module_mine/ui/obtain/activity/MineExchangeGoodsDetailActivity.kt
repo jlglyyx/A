@@ -1,15 +1,14 @@
-package com.yang.module_mine.ui.activity
+package com.yang.module_mine.ui.obtain.activity
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.appbar.AppBarLayout
-import com.lxj.xpopup.XPopup
-import com.lxj.xpopup.interfaces.OnConfirmListener
 import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
+import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.module_mine.R
 import com.yang.module_mine.adapter.MineObtainExchangeAdapter
@@ -24,7 +23,7 @@ import kotlin.math.abs
 /**
  * @Author Administrator
  * @ClassName MineExchangeActivity
- * @Description
+ * @Description 我的兑换-物品详情
  * @Date 2021/9/14 10:39
  */
 @Route(path = AppConstant.RoutePath.MINE_EXCHANGE_DETAIL_ACTIVITY)
@@ -50,12 +49,7 @@ class MineExchangeGoodsDetailActivity :BaseActivity() {
         initAppBarLayout()
 
         tv_exchange.clicks().subscribe {
-            XPopup.Builder(this).asConfirm("确认兑换","抽纸一包",object : OnConfirmListener{
-                override fun onConfirm() {
-
-                }
-
-            }).show()
+            buildARouter(AppConstant.RoutePath.MINE_SHIPPING_ADDRESS_ACTIVITY).navigation()
         }
     }
 

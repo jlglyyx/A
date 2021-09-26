@@ -5,6 +5,7 @@ import com.yang.lib_common.scope.ActivityScope
 import com.yang.module_mine.di.module.MineModule
 import com.yang.module_mine.ui.activity.*
 import com.yang.module_mine.ui.fragment.MineFragment
+import com.yang.module_mine.ui.obtain.activity.*
 import dagger.Component
 
 
@@ -21,6 +22,7 @@ interface MineComponent {
     fun inject(mineSignActivity: MineSignActivity)
     fun inject(mineExtensionActivity: MineExtensionActivity)
     fun inject(mineLimitTimeExtensionActivity: MineLimitTimeExtensionActivity)
+    fun inject(mineAddAddressActivity: MineAddAddressActivity)
 
     fun inject(mineFragment: MineFragment)
 }

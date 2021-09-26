@@ -1,4 +1,4 @@
-package com.yang.module_mine.ui.activity
+package com.yang.module_mine.ui.obtain.activity
 
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -19,7 +19,7 @@ import javax.inject.Inject
 /**
  * @Author Administrator
  * @ClassName MineExchangeActivity
- * @Description
+ * @Description 我的兑换
  * @Date 2021/9/14 10:39
  */
 @Route(path = AppConstant.RoutePath.MINE_EXCHANGE_ACTIVITY)
