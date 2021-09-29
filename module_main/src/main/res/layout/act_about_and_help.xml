@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 app:itemLeftContent="当前版本"
                 app:itemLeftImgVisible="false"
+                android:id="@+id/icv_version"
                 android:layout_marginTop="@dimen/dp_10"
                 app:itemRightContent="1.0.0" />
         </LinearLayout>

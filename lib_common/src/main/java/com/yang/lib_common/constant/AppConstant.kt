@@ -98,6 +98,8 @@ interface AppConstant {
 
         const val MINE_ADD_ADDRESS_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineAddAddressActivity"
 
+        const val MINE_EARN_OBTAIN_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineEarnObtainActivity"
+
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 

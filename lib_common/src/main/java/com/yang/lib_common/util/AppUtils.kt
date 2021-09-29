@@ -151,3 +151,22 @@ fun uri2path(context: Context, uri: Uri): String {
     return path
 }
 
+/**
+ * 获取app VersionCode
+ */
+fun getVersionCode(context: Context):Int{
+    val packageManager = context.packageManager
+    val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
+    return  packageInfo.versionCode
+
+}
+/**
+ * 获取app VersionName
+ */
+fun getVersionName(context: Context):String{
+    val packageManager = context.packageManager
+    val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
+    return  packageInfo.versionName
+}
+
+

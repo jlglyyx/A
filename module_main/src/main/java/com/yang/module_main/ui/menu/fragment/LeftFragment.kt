@@ -22,7 +22,7 @@ class LeftFragment : BaseFragment() {
         val userInfo = getUserInfo()
         Glide.with(this).load(userInfo?.userImage).error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder).into(siv_head)
-        tv_name.text = userInfo?.userName
+        tv_name.text = userInfo?.userName?:"张三"
 
         LocationUtil().apply {
             lifecycle.addObserver(this)
@@ -48,8 +48,7 @@ class LeftFragment : BaseFragment() {
             buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY).withString(AppConstant.Constant.NAME,"我的收藏").navigation()
         }
         tv_my_down.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY)
-                .withString("name","我的下载").navigation()
+            buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY).withString(AppConstant.Constant.NAME,"我的下载").navigation()
         }
         tv_privacy.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.PRIVACY_ACTIVITY).navigation()

@@ -17,6 +17,14 @@ import com.yang.lib_common.R
  */
 class ItemContentView:LinearLayout {
 
+    private lateinit var tvRightContent:TextView
+
+    var rightContent:String? = null
+    set(value) {
+         field = value
+        tvRightContent.text = field
+    }
+
     constructor(context: Context) : this(context,null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs,0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -35,7 +43,7 @@ class ItemContentView:LinearLayout {
         val ivLeft = view.findViewById<ImageView>(R.id.iv_left)
         val ivRight = view.findViewById<ImageView>(R.id.iv_right)
         val tvContent = view.findViewById<TextView>(R.id.tv_content)
-        val tvRightContent = view.findViewById<TextView>(R.id.tv_rightContent)
+        tvRightContent = view.findViewById(R.id.tv_rightContent)
         val obtainStyledAttributes = context.obtainStyledAttributes(attrs, R.styleable.ItemContentView)
         val leftContent = obtainStyledAttributes.getString(R.styleable.ItemContentView_itemLeftContent)
         val leftImgVisible =

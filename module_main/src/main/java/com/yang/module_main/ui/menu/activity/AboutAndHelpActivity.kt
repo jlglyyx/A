@@ -3,7 +3,9 @@ package com.yang.module_main.ui.menu.activity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.util.getVersionName
 import com.yang.module_main.R
+import kotlinx.android.synthetic.main.act_about_and_help.*
 
 /**
  * @Author Administrator
@@ -21,6 +23,7 @@ class AboutAndHelpActivity:BaseActivity() {
     }
 
     override fun initView() {
+        icv_version.rightContent = getVersionName(this)
     }
 
     override fun initViewModel() {
