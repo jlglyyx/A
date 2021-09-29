@@ -11,4 +11,14 @@
         <attr name="rightContentVisible" format="boolean"/>
         <attr name="toolbarBg" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="ItemContentView">
+        <attr name="itemLeftContent" format="string"/>
+        <attr name="itemLeftImgVisible" format="boolean"/>
+        <attr name="itemLeftImgSrc" format="reference"/>
+        <attr name="itemRightContent" format="string"/>
+        <attr name="itemRightImgVisible" format="boolean"/>
+        <attr name="itemRightImgSrc" format="reference"/>
+        <attr name="itemRightContentVisible" format="boolean"/>
+        <attr name="itemBg" format="reference"/>
+    </declare-styleable>
 </resources>

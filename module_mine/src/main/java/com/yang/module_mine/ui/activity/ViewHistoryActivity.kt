@@ -20,7 +20,7 @@ import javax.inject.Inject
 /**
  * @Author Administrator
  * @ClassName HistoryActivity
- * @Description
+ * @Description 观看历史
  * @Date 2021/8/31 10:44
  */
 @Route(path = AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)

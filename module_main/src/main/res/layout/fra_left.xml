@@ -77,7 +77,8 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:padding="@dimen/dp_15"
-            android:text="开通会员"
+            android:text="开通VIP"
+            android:id="@+id/tv_open_vip"
             android:layout_marginVertical="@dimen/dp_10"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp_16" />
@@ -136,6 +137,7 @@
                 android:background="@android:color/white"
                 android:padding="@dimen/dp_15"
                 android:text="隐私"
+                android:id="@+id/tv_privacy"
                 android:layout_marginBottom="@dimen/dp_2"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp_16" />
@@ -148,6 +150,7 @@
                 android:background="@android:color/white"
                 android:padding="@dimen/dp_15"
                 android:text="通用"
+                android:id="@+id/tv_universal"
                 android:layout_marginBottom="@dimen/dp_2"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp_16" />
@@ -160,6 +163,7 @@
                 android:background="@android:color/white"
                 android:padding="@dimen/dp_15"
                 android:text="辅助功能"
+                android:id="@+id/tv_accessibility"
                 android:layout_marginBottom="@dimen/dp_10"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/sp_16" />
@@ -182,6 +186,7 @@
             android:background="@android:color/white"
             android:padding="@dimen/dp_15"
             android:text="关于与帮助"
+            android:id="@+id/tv_about_and_help"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp_16" />
         <TextView

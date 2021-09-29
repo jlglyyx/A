@@ -20,7 +20,7 @@ import javax.inject.Inject
 /**
  * @Author Administrator
  * @ClassName MineLimitTimeExtensionActivity
- * @Description
+ * @Description 限时推广二维码
  * @Date 2021/9/10 11:53
  */
 @Route(path = AppConstant.RoutePath.MINE_LIMIT_TIME_EXTENSION_ACTIVITY)

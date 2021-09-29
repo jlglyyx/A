@@ -25,6 +25,12 @@ interface AppConstant {
         const val MY_PUSH_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/MyPushActivity"
         const val DYNAMIC_DETAIL_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/DynamicDetailActivity"
         const val PICTURE_SELECT_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/PictureSelectActivity"
+        const val OPEN_VIP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/OpenVipActivity"
+        const val PRIVACY_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/PrivacyActivity"
+        const val UNIVERSAL_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/UniversalActivity"
+        const val ACCESSIBILITY_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AccessibilityActivity"
+        const val SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/SettingActivity"
+        const val ABOUT_AND_HELP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AboutAndHelpActivity"
 
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"

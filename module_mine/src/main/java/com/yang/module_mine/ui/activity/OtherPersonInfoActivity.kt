@@ -16,7 +16,12 @@ import com.yang.module_mine.helper.getMineComponent
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.act_other_person_info.*
 import javax.inject.Inject
-
+/**
+ * @Author Administrator
+ * @ClassName OtherPersonInfoActivity
+ * @Description 其他人信息
+ * @Date 2021/9/10 10:51
+ */
 @Route(path = AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
 class OtherPersonInfoActivity : BaseActivity() {
     @Inject

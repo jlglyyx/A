@@ -5,9 +5,11 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.lxj.xpopup.impl.FullScreenPopupView
 import com.lxj.xpopup.photoview.PhotoView
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -157,8 +159,11 @@ class ImageViewPagerDialog : FullScreenPopupView {
                         setIsTouchWigetFull(false)
                         setThumbPlay(false)
                     }
+                    val imageView = ImageView(mContext)
 
-
+                    Glide.with(imageView).setDefaultRequestOptions(RequestOptions().frame(1000)).load(data[position]).into(imageView)
+                    gsyVideoPlayer.thumbImageView = imageView
+                    gsyVideoPlayer.thumbImageViewLayout.visibility = VISIBLE
                 } else {
                     gsyVideoPlayer.visibility = View.GONE
                     Glide.with(photoView)

@@ -18,7 +18,7 @@ import javax.inject.Inject
 /**
  * @Author Administrator
  * @ClassName MineObtainActivity
- * @Description
+ * @Description 我的推广历史
  * @Date 2021/9/10 10:51
  */
 @Route(path = AppConstant.RoutePath.MINE_EXTENSION_ACTIVITY)

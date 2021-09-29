@@ -27,7 +27,7 @@ import javax.inject.Inject
 /**
  * @Author Administrator
  * @ClassName ChangeUserInfoActivity
- * @Description
+ * @Description 修改信息
  * @Date 2021/8/27 14:53
  */
 @Route(path = AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY)

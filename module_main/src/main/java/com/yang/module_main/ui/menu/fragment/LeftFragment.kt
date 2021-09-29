@@ -33,8 +33,13 @@ class LeftFragment : BaseFragment() {
 
             }
         }.startLocation()
+
+
         siv_head.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,userInfo?.id).navigation()
+        }
+        tv_open_vip.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.OPEN_VIP_ACTIVITY).navigation()
         }
         tv_my_push.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MY_PUSH_ACTIVITY).navigation()
@@ -46,8 +51,20 @@ class LeftFragment : BaseFragment() {
             buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY)
                 .withString("name","我的下载").navigation()
         }
+        tv_privacy.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.PRIVACY_ACTIVITY).navigation()
+        }
+        tv_universal.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.UNIVERSAL_ACTIVITY).navigation()
+        }
+        tv_accessibility.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.ACCESSIBILITY_ACTIVITY).navigation()
+        }
         tv_setting.clicks().subscribe {
-
+            buildARouter(AppConstant.RoutePath.SETTING_ACTIVITY).navigation()
+        }
+        tv_about_and_help.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.ABOUT_AND_HELP_ACTIVITY).navigation()
         }
 
         tv_login_out.clicks().subscribe {
