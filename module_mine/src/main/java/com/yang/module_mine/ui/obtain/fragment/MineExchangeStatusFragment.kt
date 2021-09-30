@@ -1,42 +1,39 @@
-package com.yang.module_mine.ui.obtain.activity
+package com.yang.module_mine.ui.obtain.fragment
 
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
-import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
-import com.yang.module_mine.adapter.MineObtainExchangeAdapter
 import com.yang.module_mine.data.MineObtainExchangeData
 import com.yang.module_mine.helper.getMineComponent
+import com.yang.module_mine.ui.obtain.adapter.MineExchangeStatusAdapter
 import com.yang.module_mine.viewmodel.MineViewModel
-import kotlinx.android.synthetic.main.act_mine_obtain_exchange.*
-import kotlinx.android.synthetic.main.view_normal_recyclerview.recyclerView
-import kotlinx.android.synthetic.main.view_normal_recyclerview.smartRefreshLayout
+import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import javax.inject.Inject
 
 /**
  * @Author Administrator
- * @ClassName MineObtainExchangeActivity
- * @Description 我的积分兑换
- * @Date 2021/9/13 17:16
+ * @ClassName MineExchangeStatusFragment
+ * @Description
+ * @Date 2021/9/14 10:39
  */
-@Route(path = AppConstant.RoutePath.MINE_OBTAIN_EXCHANGE_ACTIVITY)
-class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
+@Route(path = AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT)
+class MineExchangeStatusFragment :BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     @Inject
     lateinit var mineViewModel: MineViewModel
 
     private var pageNum = 1
 
-    private lateinit var mAdapter: MineObtainExchangeAdapter
+    private lateinit var mAdapter: MineExchangeStatusAdapter
 
     override fun getLayout(): Int {
-        return R.layout.act_mine_obtain_exchange
+        return R.layout.act_mine_exchange_status
     }
 
     override fun initData() {
@@ -46,13 +43,6 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
     override fun initView() {
         initSmartRefreshLayout()
         initRecyclerView()
-
-        commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
-            override fun tvRightClickListener() {
-                buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_ACTIVITY).navigation()
-            }
-
-        }
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
@@ -68,8 +58,8 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
     }
 
     private fun initRecyclerView() {
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
-        mAdapter = MineObtainExchangeAdapter(mutableListOf<MineObtainExchangeData>().apply {
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        mAdapter = MineExchangeStatusAdapter(R.layout.item_mine_exchange_status,mutableListOf<MineObtainExchangeData>().apply {
             add(MineObtainExchangeData("签到了一天","100","+100"))
             add(MineObtainExchangeData("兑换了一块钱","99","-1"))
             add(MineObtainExchangeData("签到了一天","100","+100"))
@@ -81,10 +71,13 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
             add(MineObtainExchangeData("签到了一天","100","+100"))
             add(MineObtainExchangeData("兑换了一块钱","99","-1"))
         })
+
         mAdapter.setOnItemClickListener { adapter, view, position ->
 
             buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_DETAIL_ACTIVITY).navigation()
         }
+
+
         recyclerView.adapter = mAdapter
 //        mineViewModel.mVideoData.observe(this, Observer {
 //            when {

@@ -1,19 +1,17 @@
 package com.yang.module_mine.ui.obtain.activity
 
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.fragment.app.Fragment
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.google.android.material.tabs.TabLayoutMediator
+import com.yang.lib_common.adapter.TabAndViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_mine.R
-import com.yang.module_mine.adapter.MineObtainExchangeAdapter
-import com.yang.module_mine.data.MineObtainExchangeData
 import com.yang.module_mine.helper.getMineComponent
 import com.yang.module_mine.viewmodel.MineViewModel
-import kotlinx.android.synthetic.main.view_normal_recyclerview.*
+import kotlinx.android.synthetic.main.act_mine_exchange.*
 import javax.inject.Inject
 
 /**
@@ -23,26 +21,34 @@ import javax.inject.Inject
  * @Date 2021/9/14 10:39
  */
 @Route(path = AppConstant.RoutePath.MINE_EXCHANGE_ACTIVITY)
-class MineExchangeActivity :BaseActivity(), OnRefreshLoadMoreListener {
+class MineExchangeActivity :BaseActivity() {
 
     @Inject
     lateinit var mineViewModel: MineViewModel
 
-    private var pageNum = 1
+    private lateinit var fragments: MutableList<Fragment>
 
-    private lateinit var mAdapter: MineObtainExchangeAdapter
+    private lateinit var titles: MutableList<String>
+
 
     override fun getLayout(): Int {
-        return R.layout.act_mine_obtain_exchange
+        return R.layout.act_mine_exchange
     }
 
     override fun initData() {
-
+        titles = mutableListOf()
+        fragments = mutableListOf()
+        titles.add("待付款")
+        titles.add("待发货")
+        titles.add("待收货")
+        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
+        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
+        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
     }
 
     override fun initView() {
-        initSmartRefreshLayout()
-        initRecyclerView()
+        initViewPager()
+        initTabLayout()
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
@@ -53,63 +59,23 @@ class MineExchangeActivity :BaseActivity(), OnRefreshLoadMoreListener {
         getMineComponent(this).inject(this)
     }
 
-    private fun initSmartRefreshLayout() {
-        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
-    }
+    private fun initViewPager() {
 
-    private fun initRecyclerView() {
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        mAdapter = MineObtainExchangeAdapter(mutableListOf<MineObtainExchangeData>().apply {
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-        })
-
-        mAdapter.setOnItemClickListener { adapter, view, position ->
-
-            buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_DETAIL_ACTIVITY).navigation()
+        viewPager.adapter = TabAndViewPagerAdapter(this, fragments, titles)
+        if(fragments.size != 0){
+            viewPager.offscreenPageLimit = fragments.size
         }
-
-
-        recyclerView.adapter = mAdapter
-//        mineViewModel.mVideoData.observe(this, Observer {
-//            when {
-//                smartRefreshLayout.isRefreshing -> {
-//                    smartRefreshLayout.finishRefresh()
-//                    mAdapter.replaceData(it.list)
-//                }
-//                smartRefreshLayout.isLoading -> {
-//                    smartRefreshLayout.finishLoadMore()
-//                    if (pageNum != 1 && it.list.isEmpty()) {
-//                        smartRefreshLayout.setNoMoreData(true)
-//                    } else {
-//                        smartRefreshLayout.setNoMoreData(false)
-//                        mAdapter.addData(it.list)
-//                    }
-//                }
-//                else -> {
-//                    mAdapter.replaceData(it.list)
-//                }
-//            }
-//        })
-
-        registerRefreshAndRecyclerView(smartRefreshLayout, mAdapter)
     }
 
-    override fun onRefresh(refreshLayout: RefreshLayout) {
-        pageNum = 1
-        //mineViewModel.getVideoInfo("",pageNum,keyword,true)
+    private fun initTabLayout() {
+
+        TabLayoutMediator(
+            tabLayout,
+            viewPager
+        ) { tab, position ->
+            tab.text = titles[position]
+        }.attach()
+
     }
 
-    override fun onLoadMore(refreshLayout: RefreshLayout) {
-        pageNum++
-        //mineViewModel.getVideoInfo("",pageNum,keyword,true)
-    }
 }

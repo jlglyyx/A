@@ -139,6 +139,8 @@ class ImageViewPagerDialog : FullScreenPopupView {
                 gsyVideoPlayer.findViewById<View>(com.shuyu.gsyvideoplayer.R.id.surface_container).setOnClickListener {
                     dismiss()
                 }
+
+
                 photoView.setOnClickListener {
                     dismiss()
                 }
@@ -160,7 +162,9 @@ class ImageViewPagerDialog : FullScreenPopupView {
                         setThumbPlay(false)
                     }
                     val imageView = ImageView(mContext)
-
+                    imageView.setOnClickListener {
+                        dismiss()
+                    }
                     Glide.with(imageView).setDefaultRequestOptions(RequestOptions().frame(1000)).load(data[position]).into(imageView)
                     gsyVideoPlayer.thumbImageView = imageView
                     gsyVideoPlayer.thumbImageViewLayout.visibility = VISIBLE

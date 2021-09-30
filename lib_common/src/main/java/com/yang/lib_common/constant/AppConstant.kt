@@ -103,6 +103,8 @@ interface AppConstant {
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
+        const val MINE_EXCHANGE_STATUS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
+
 
 
     }
