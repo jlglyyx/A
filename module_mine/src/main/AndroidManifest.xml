@@ -16,6 +16,7 @@
         <activity android:name="com.yang.module_mine.ui.activity.MineLimitTimeExtensionActivity"/>
         <activity android:name="com.yang.module_mine.ui.obtain.activity.MineShippingAddressActivity"/>
         <activity android:name="com.yang.module_mine.ui.obtain.activity.MineAddAddressActivity"/>
+        <activity android:name="com.yang.module_mine.ui.obtain.activity.MineOrderDetailActivity"/>
 
     </application>
 

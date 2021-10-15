@@ -1,9 +1,14 @@
 package com.yang.module_main.ui.menu.activity
 
+import android.os.Environment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.util.formatSize
+import com.yang.lib_common.util.getAllFileSize
 import com.yang.module_main.R
+import kotlinx.android.synthetic.main.act_setting.*
+import java.io.File
 
 /**
  * @Author Administrator
@@ -21,6 +26,7 @@ class SettingActivity:BaseActivity() {
     }
 
     override fun initView() {
+        icv_cache.rightContent = formatSize(getAllFileSize(File("${Environment.getExternalStorageDirectory()}/MFiles/picture")))
     }
 
     override fun initViewModel() {

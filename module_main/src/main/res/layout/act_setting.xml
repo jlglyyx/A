@@ -38,6 +38,7 @@
                 app:itemLeftContent="清除缓存"
                 app:itemLeftImgVisible="false"
                 android:layout_marginTop="@dimen/dp_10"
+                android:id="@+id/icv_cache"
                 app:itemRightContent="100MB" />
         </LinearLayout>
 

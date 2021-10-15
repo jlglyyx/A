@@ -44,11 +44,11 @@ class MineShippingAddressActivity:BaseActivity() {
 
     private fun initRecyclerView(){
         mAdapter = MineShippingAddressAdapter(R.layout.item_mine_shipping_address, mutableListOf<MineShippingAddressData>().apply {
-            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","张三","12345785236"))
-            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","里斯","12345785236"))
-            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","张三","12345785236"))
-            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","张三","12345785236"))
-            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","张三","12345785236"))
+            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","张三","12345785236",true))
+            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","里斯","12345785236",false))
+            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","张三","12345785236",false))
+            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","张三","12345785236",false))
+            add(MineShippingAddressData("1","湖北省武汉市武昌区湖北大学","张三","12345785236",false))
         })
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)

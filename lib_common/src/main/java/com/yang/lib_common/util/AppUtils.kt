@@ -154,19 +154,72 @@ fun uri2path(context: Context, uri: Uri): String {
 /**
  * 获取app VersionCode
  */
-fun getVersionCode(context: Context):Int{
+fun getVersionCode(context: Context): Int {
     val packageManager = context.packageManager
     val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
-    return  packageInfo.versionCode
+    return packageInfo.versionCode
 
 }
+
 /**
  * 获取app VersionName
  */
-fun getVersionName(context: Context):String{
+fun getVersionName(context: Context): String {
     val packageManager = context.packageManager
     val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
-    return  packageInfo.versionName
+    return packageInfo.versionName
 }
 
+/**
+ * 获取指定文件大小
+ */
+fun getAllFileSize(file: File): Long {
+    var size = 0L
+    if (file.isDirectory) {
+        val listFiles = file.listFiles()
+        listFiles?.let {
+            if (listFiles.isEmpty()) {
+                return 0
+            }
+            for (mFile in listFiles) {
+                size += if (mFile.isDirectory) {
+                    getAllFileSize(mFile)
+                } else {
+                    mFile.length()
+                }
+            }
+        }
+    } else {
+        size = file.length()
+    }
+    return size
+}
+
+/**
+ * 格式化文件大小格式
+ */
+fun formatSize(size: Long): String {
+    val k = size / 1024
+    if (k < 1) {
+        return "0K"
+    }
+    val m = k / 1024
+
+    if (m < 1) {
+        return "${k}K"
+    }
+
+    val t = m / 1024
+
+    if (t < 1) {
+        return "${m}M"
+    }
+
+    val t1 = t / 1024
+
+    if (t1 < 1) {
+        return "${t}T"
+    }
+    return "${t1}T"
+}
 
