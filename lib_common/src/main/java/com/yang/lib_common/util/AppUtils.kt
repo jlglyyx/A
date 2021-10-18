@@ -16,6 +16,7 @@ import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
 import com.yang.lib_common.data.UserInfoData
 import io.reactivex.rxjava3.core.Observable
 import java.io.File
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 
@@ -199,27 +200,29 @@ fun getAllFileSize(file: File): Long {
  * 格式化文件大小格式
  */
 fun formatSize(size: Long): String {
-    val k = size / 1024
+    Log.i(TAG, "formatSize: $size")
+
+    val k = size.toFloat() / 1024
     if (k < 1) {
         return "0K"
     }
     val m = k / 1024
 
     if (m < 1) {
-        return "${k}K"
+        return DecimalFormat("0.00K").format(k)
     }
 
     val t = m / 1024
 
     if (t < 1) {
-        return "${m}M"
+        return DecimalFormat("0.00M").format(m)
     }
 
     val t1 = t / 1024
 
     if (t1 < 1) {
-        return "${t}T"
+        return DecimalFormat("0.00T").format(t)
     }
-    return "${t1}T"
+    return DecimalFormat("0.00T").format(t1)
 }
 

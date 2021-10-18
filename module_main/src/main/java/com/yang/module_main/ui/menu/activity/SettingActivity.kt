@@ -26,7 +26,7 @@ class SettingActivity:BaseActivity() {
     }
 
     override fun initView() {
-        icv_cache.rightContent = formatSize(getAllFileSize(File("${Environment.getExternalStorageDirectory()}/MFiles/picture")))
+        icv_cache.rightContent = formatSize(getAllFileSize(File("${Environment.getExternalStorageDirectory()}/MFiles")))
     }
 
     override fun initViewModel() {
