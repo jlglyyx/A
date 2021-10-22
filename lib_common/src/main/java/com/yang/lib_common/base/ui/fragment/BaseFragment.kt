@@ -2,6 +2,7 @@ package com.yang.lib_common.base.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +56,7 @@ abstract class BaseFragment : Fragment() {
         uC = initUIChangeLiveData()
         initView()
         registerListener()
+        Log.e(TAG, "OpenView===: $TAG")
     }
 
     open fun initUIChangeLiveData(): UIChangeLiveData? {//在ViewModel层操作ui

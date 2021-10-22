@@ -1,6 +1,7 @@
 package com.yang.lib_common.base.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.NonNull
@@ -20,10 +21,6 @@ import com.yang.lib_common.util.removeActivity
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    companion object {
-        private const val TAG  = "BaseActivity"
-    }
-
     private var uC: UIChangeLiveData? = null
 
     private var loadingPopupView: LoadingPopupView? = null
@@ -42,6 +39,7 @@ abstract class BaseActivity : AppCompatActivity() {
         initView()
         registerListener()
         addActivity(this)
+        Log.e(TAG, "OpenView===: $TAG")
     }
 
     abstract fun getLayout(): Int

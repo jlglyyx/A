@@ -9,6 +9,7 @@ class UrlInterceptor: Interceptor {
     companion object{
         private const val TAG = "UrlInterceptor"
         var url:String? = null
+        var disposable : Boolean = false
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -19,7 +20,9 @@ class UrlInterceptor: Interceptor {
                 throw Exception("url请以\"/\"结尾")
             }
             request = request.newBuilder().url(url+encodedPath.substring(1,encodedPath.length)).build()
-            url = null //重置url
+            if (disposable){
+                url = null //重置url
+            }
         }
         return chain.proceed(request)
     }

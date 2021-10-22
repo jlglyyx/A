@@ -61,6 +61,9 @@ class LoginActivity : BaseActivity() {
         tv_to_register.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.REGISTER_ACTIVITY).navigation()
         }
+        iv_icon.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.CONNECT_ADDRESS_ACTIVITY).navigation()
+        }
     }
 
     override fun initViewModel() {

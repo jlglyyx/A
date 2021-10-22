@@ -67,6 +67,7 @@ abstract class BaseLazyFragment : Fragment() {
         uC = initUIChangeLiveData()
         initView()
         registerListener()
+        Log.e(TAG, "OpenView===: $TAG")
     }
 
 

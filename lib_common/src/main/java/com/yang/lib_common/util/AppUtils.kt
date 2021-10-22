@@ -226,3 +226,28 @@ fun formatSize(size: Long): String {
     return DecimalFormat("0.00T").format(t1)
 }
 
+fun deleteDirectory(file: File) {
+    if (file.isDirectory) {
+        file.listFiles()?.let {
+            if (it.isNotEmpty()) {
+                for (mFile in it) {
+                    if (mFile.isDirectory) {
+                        deleteDirectory(file)
+                    } else {
+                        deleteFile(mFile)
+                    }
+                }
+            }
+        }
+    } else {
+        deleteFile(file)
+    }
+}
+
+
+fun deleteFile(file: File) {
+    if (file.exists()) {
+        file.delete()
+    }
+}
+

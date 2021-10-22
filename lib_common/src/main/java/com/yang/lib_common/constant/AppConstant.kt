@@ -2,6 +2,25 @@ package com.yang.lib_common.constant
 
 interface AppConstant {
 
+    object ClientInfo{
+
+        const val BASE_IP = "http://10.16.242.28"
+
+        const val BASE_PORT = "20000"
+
+        const val BASE_URL = "http://10.16.242.28:20000/"
+
+        const val TAG = "RemoteModule"
+
+        const val TAG_LOG = "httpLog"
+
+        const val CONNECT_TIMEOUT: Long = 1800
+
+        const val READ_TIMEOUT: Long = 18000
+
+        const val WRITE_TIMEOUT: Long = 18000
+    }
+
     object RoutePath {
         private const val ACTIVITY = "activity"
         private const val FRAGMENT = "fragment"
@@ -31,6 +50,7 @@ interface AppConstant {
         const val ACCESSIBILITY_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AccessibilityActivity"
         const val SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/SettingActivity"
         const val ABOUT_AND_HELP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AboutAndHelpActivity"
+        const val CONNECT_ADDRESS_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/ConnectAddressActivity"
 
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
@@ -113,9 +133,6 @@ interface AppConstant {
 
     object Constant {
 
-        /**
-         * 主页布局类型
-         */
         const val CLICK_TIME: Long = 1000
 
         const val SPLASH_VIDEO_URL = "http://192.168.31.60:8080/AdobePhotoshopCS6.rar"
@@ -164,6 +181,10 @@ interface AppConstant {
         const val NUM_SIX = 6
 
         const val NUM_SEVEN = 7
+
+        const val IP = "ip"
+
+        const val PORT = "port"
 
         const val ITEM_MAIN_TITLE = 0
         const val ITEM_MAIN_CONTENT_TEXT = 1

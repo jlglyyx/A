@@ -7,6 +7,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.interceptor.UrlInterceptor
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getDefaultMMKV
@@ -37,6 +38,16 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun initView() {
+
+        val ip = getDefaultMMKV().decodeString(
+            AppConstant.Constant.IP,
+            AppConstant.ClientInfo.BASE_IP
+        )
+        val port = getDefaultMMKV().decodeString(
+            AppConstant.Constant.PORT,
+            AppConstant.ClientInfo.BASE_PORT
+        )
+        UrlInterceptor.url = "$ip:$port/"
 
         val userInfo = getUserInfo()
         if (null == userInfo) {
@@ -74,7 +85,7 @@ class SplashActivity : BaseActivity() {
 
         } else {
 
-            loginViewModel.login(userInfo.userAccount, userInfo.userPassword)
+            loginViewModel.login(userInfo.userAccount, userInfo.userPassword,true)
             loginViewModel.mUserInfoData.observe(this, Observer {
                 getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
