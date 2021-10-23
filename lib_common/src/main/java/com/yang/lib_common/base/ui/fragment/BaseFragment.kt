@@ -103,13 +103,12 @@ abstract class BaseFragment : Fragment() {
     fun showRecyclerViewEvent(adapter:BaseQuickAdapter<*,*>){
         uC?.let { uC ->
             uC.showRecyclerViewEvent.observe(this, Observer {
-                if (null == emptyView){
                     if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
                         emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_error_data, null, false)
                     }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
                         emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_empty_data, null, false)
                     }
-                }
+                adapter.setNewData(null)
                 adapter.emptyView = emptyView
             })
         }
@@ -123,13 +122,12 @@ abstract class BaseFragment : Fragment() {
                 smartRefreshLayout.finishLoadMore()
             })
             uC.showRecyclerViewEvent.observe(this, Observer {
-                if (null == emptyView){
                     if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
                         emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_error_data, null, false)
                     }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
                         emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_empty_data, null, false)
                     }
-                }
+                adapter.setNewData(null)
                 adapter.emptyView = emptyView
             })
         }

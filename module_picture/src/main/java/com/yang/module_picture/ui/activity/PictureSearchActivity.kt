@@ -81,13 +81,6 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             keyword = et_search.text.toString()
             onRefresh(smartRefreshLayout)
 
-            val mutableListOf = mutableListOf<ImageDataItem>()
-            for (i in 0..9){
-                mutableListOf.add(ImageDataItem(null,null,"","","https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg","","","",""))
-            }
-            mAdapter.replaceData(mutableListOf)
-
-
             if (list.findLast { TextUtils.equals(it.content, et_search.text.toString()) } != null){
                 return@subscribe
             }
@@ -139,11 +132,15 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it.list)
+                    if (it.list.isEmpty()) {
+                        pictureViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+                    }
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.list.isEmpty()) {
+                    if (pageNum != 1 && it.list.isNotEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
@@ -151,7 +148,11 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
                     }
                 }
                 else -> {
-                    mAdapter.replaceData(it.list)
+                    if (it.list.isEmpty()) {
+                        pictureViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+                    }
                 }
             }
         })

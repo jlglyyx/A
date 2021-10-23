@@ -167,11 +167,15 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it.list)
+                    if (it.list.isEmpty()) {
+                        videoViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+                    }
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.list.isEmpty()) {
+                    if (pageNum != 1 && it.list.isNotEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
@@ -179,7 +183,11 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
                     }
                 }
                 else -> {
-                    mAdapter.replaceData(it.list)
+                    if (it.list.isEmpty()) {
+                        videoViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+                    }
                 }
             }
         })

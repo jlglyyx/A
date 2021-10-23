@@ -103,7 +103,7 @@ abstract class BaseLazyFragment : Fragment() {
         return ViewModelProvider(requireActivity(), factory).get(clazz)
     }
 
-    fun finishRefreshLoadMore(smartRefreshLayout:SmartRefreshLayout){
+    fun finishRefreshLoadMore(smartRefreshLayout: SmartRefreshLayout) {
         uC?.let { uC ->
             uC.refreshEvent.observe(this, Observer {
                 smartRefreshLayout.finishRefresh()
@@ -113,41 +113,47 @@ abstract class BaseLazyFragment : Fragment() {
             })
         }
     }
-    fun showRecyclerViewEvent(adapter:BaseQuickAdapter<*,*>){
+
+    fun showRecyclerViewEvent(adapter: BaseQuickAdapter<*, *>) {
         uC?.let { uC ->
             uC.showRecyclerViewEvent.observe(this, Observer {
-                if (null == emptyView){
-                    if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
-                        emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_error_data, null, false)
-                    }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
-                        emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_empty_data, null, false)
-                    }
+                if (it == AppConstant.LoadingViewEnum.ERROR_VIEW) {
+                    emptyView = LayoutInflater.from(requireContext())
+                        .inflate(R.layout.view_error_data, null, false)
+                } else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW) {
+                    emptyView = LayoutInflater.from(requireContext())
+                        .inflate(R.layout.view_empty_data, null, false)
                 }
-                adapter.emptyView = emptyView
-            })
-        }
-    }
-    fun registerRefreshAndRecyclerView(smartRefreshLayout:SmartRefreshLayout,adapter:BaseQuickAdapter<*,*>){
-        uC?.let { uC ->
-            uC.refreshEvent.observe(this, Observer {
-                smartRefreshLayout.finishRefresh()
-            })
-            uC.loadMoreEvent.observe(this, Observer {
-                smartRefreshLayout.finishLoadMore()
-            })
-            uC.showRecyclerViewEvent.observe(this, Observer {
-                if (null == emptyView){
-                    if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
-                        emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_error_data, null, false)
-                    }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
-                        emptyView = LayoutInflater.from(requireContext()).inflate(R.layout.view_empty_data, null, false)
-                    }
-                }
+                adapter.setNewData(null)
                 adapter.emptyView = emptyView
             })
         }
     }
 
+    fun registerRefreshAndRecyclerView(
+        smartRefreshLayout: SmartRefreshLayout,
+        adapter: BaseQuickAdapter<*, *>
+    ) {
+        uC?.let { uC ->
+            uC.refreshEvent.observe(this, Observer {
+                smartRefreshLayout.finishRefresh()
+            })
+            uC.loadMoreEvent.observe(this, Observer {
+                smartRefreshLayout.finishLoadMore()
+            })
+            uC.showRecyclerViewEvent.observe(this, Observer {
+                if (it == AppConstant.LoadingViewEnum.ERROR_VIEW) {
+                    emptyView = LayoutInflater.from(requireContext())
+                        .inflate(R.layout.view_error_data, null, false)
+                } else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW) {
+                    emptyView = LayoutInflater.from(requireContext())
+                        .inflate(R.layout.view_empty_data, null, false)
+                }
+                adapter.setNewData(null)
+                adapter.emptyView = emptyView
+            })
+        }
+    }
 
 
     private fun registerListener() {
@@ -183,7 +189,6 @@ abstract class BaseLazyFragment : Fragment() {
             uC.showRecyclerViewEvent.removeObservers(this)
         }
     }
-
 
 
     override fun onResume() {

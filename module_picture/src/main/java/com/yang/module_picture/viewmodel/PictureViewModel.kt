@@ -1,6 +1,7 @@
 package com.yang.module_picture.viewmodel
 
 import android.app.Application
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
@@ -33,10 +34,14 @@ class PictureViewModel @Inject constructor(
         if (showDialog){
             launch({
                 val mutableMapOf = mutableMapOf<String, Any>()
-                mutableMapOf[AppConstant.Constant.TYPE] = type
+                if (!TextUtils.isEmpty(type)){
+                    mutableMapOf[AppConstant.Constant.TYPE] = type
+                }
+                if (!TextUtils.isEmpty(keyword)){
+                    mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
+                }
                 mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum
                 mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
-                mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
                 pictureRepository.getImageInfo(mutableMapOf)
             }, {
                 mImageData.postValue(it.data)
@@ -47,10 +52,14 @@ class PictureViewModel @Inject constructor(
         }else{
             launch({
                 val mutableMapOf = mutableMapOf<String, Any>()
-                mutableMapOf[AppConstant.Constant.TYPE] = type
+                if (!TextUtils.isEmpty(type)){
+                    mutableMapOf[AppConstant.Constant.TYPE] = type
+                }
+                if (!TextUtils.isEmpty(keyword)){
+                    mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
+                }
                 mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum
                 mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
-                mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
                 pictureRepository.getImageInfo(mutableMapOf)
             }, {
                 mImageData.postValue(it.data)

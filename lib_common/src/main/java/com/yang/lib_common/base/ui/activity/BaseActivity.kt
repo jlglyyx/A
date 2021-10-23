@@ -55,17 +55,20 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
 
-    fun <T:BaseViewModel> getViewModel(@NonNull clazz: Class<T>):T{
+    fun <T : BaseViewModel> getViewModel(@NonNull clazz: Class<T>): T {
 
         return ViewModelProvider(this).get(clazz)
     }
-    
-    fun <T:BaseViewModel> getViewModel(@NonNull factory: ViewModelProvider.Factory,@NonNull clazz: Class<T>):T{
+
+    fun <T : BaseViewModel> getViewModel(
+        @NonNull factory: ViewModelProvider.Factory,
+        @NonNull clazz: Class<T>
+    ): T {
 
         return ViewModelProvider(this, factory).get(clazz)
     }
 
-    fun finishRefreshLoadMore(smartRefreshLayout:SmartRefreshLayout){
+    fun finishRefreshLoadMore(smartRefreshLayout: SmartRefreshLayout) {
         uC?.let { uC ->
             uC.refreshEvent.observe(this, Observer {
                 smartRefreshLayout.finishRefresh()
@@ -75,21 +78,27 @@ abstract class BaseActivity : AppCompatActivity() {
             })
         }
     }
-    fun showRecyclerViewEvent(adapter:BaseQuickAdapter<*,*>){
+
+    fun showRecyclerViewEvent(adapter: BaseQuickAdapter<*, *>) {
         uC?.let { uC ->
             uC.showRecyclerViewEvent.observe(this, Observer {
-                if (null == emptyView){
-                    if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
-                        emptyView = LayoutInflater.from(this).inflate(R.layout.view_error_data, null, false)
-                    }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
-                        emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_data, null, false)
+                    if (it == AppConstant.LoadingViewEnum.ERROR_VIEW) {
+                        emptyView =
+                            LayoutInflater.from(this).inflate(R.layout.view_error_data, null, false)
+                    } else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW) {
+                        emptyView =
+                            LayoutInflater.from(this).inflate(R.layout.view_empty_data, null, false)
                     }
-                }
+                adapter.setNewData(null)
                 adapter.emptyView = emptyView
             })
         }
     }
-    fun registerRefreshAndRecyclerView(smartRefreshLayout:SmartRefreshLayout,adapter:BaseQuickAdapter<*,*>){
+
+    fun registerRefreshAndRecyclerView(
+        smartRefreshLayout: SmartRefreshLayout,
+        adapter: BaseQuickAdapter<*, *>
+    ) {
         uC?.let { uC ->
             uC.refreshEvent.observe(this, Observer {
                 smartRefreshLayout.finishRefresh()
@@ -98,13 +107,14 @@ abstract class BaseActivity : AppCompatActivity() {
                 smartRefreshLayout.finishLoadMore()
             })
             uC.showRecyclerViewEvent.observe(this, Observer {
-                if (null == emptyView){
-                    if (it == AppConstant.LoadingViewEnum.ERROR_VIEW){
-                        emptyView = LayoutInflater.from(this).inflate(R.layout.view_error_data, null, false)
-                    }else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW){
-                        emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_data, null, false)
-                    }
+                if (it == AppConstant.LoadingViewEnum.ERROR_VIEW) {
+                    emptyView =
+                        LayoutInflater.from(this).inflate(R.layout.view_error_data, null, false)
+                } else if (it == AppConstant.LoadingViewEnum.EMPTY_VIEW) {
+                    emptyView =
+                        LayoutInflater.from(this).inflate(R.layout.view_empty_data, null, false)
                 }
+                adapter.setNewData(null)
                 adapter.emptyView = emptyView
             })
         }
@@ -114,13 +124,13 @@ abstract class BaseActivity : AppCompatActivity() {
     private fun registerListener() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
-                if (loadingPopupView == null){
+                if (loadingPopupView == null) {
                     loadingPopupView = XPopup.Builder(this)
                         .asLoading(it)
-                }else{
+                } else {
                     loadingPopupView?.setTitle(it)
                 }
-                if (!loadingPopupView?.isShow!!){
+                if (!loadingPopupView?.isShow!!) {
                     loadingPopupView?.show()
                 }
             })
