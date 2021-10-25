@@ -137,8 +137,7 @@ abstract class BaseFragment : Fragment() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
                 if (loadingPopupView == null) {
-                    loadingPopupView = XPopup.Builder(requireContext())
-                        .asLoading(it)
+                    loadingPopupView = XPopup.Builder(requireContext()).dismissOnTouchOutside(false).asLoading(it)
                 } else {
                     loadingPopupView?.setTitle(it)
                 }

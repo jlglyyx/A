@@ -100,7 +100,7 @@ class PictureSelectActivity : BaseActivity() {
                         }
                     }
 
-                    var max = 0
+                    var max = position
                     for (a in data.withIndex()) {
                         for ((key, value) in mPositionMap) {
                             if (TextUtils.equals(a.value.filePath, key.filePath)) {
@@ -112,7 +112,7 @@ class PictureSelectActivity : BaseActivity() {
                         }
                     }
 
-                    pictureSelectAdapter.notifyItemRangeChanged(0, max+1)
+                    pictureSelectAdapter.notifyItemRangeChanged(0, max + 1)
                 }
             }
 

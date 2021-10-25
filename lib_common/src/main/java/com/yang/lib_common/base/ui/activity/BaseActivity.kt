@@ -125,8 +125,7 @@ abstract class BaseActivity : AppCompatActivity() {
         uC?.let { uC ->
             uC.showLoadingEvent.observe(this, Observer {
                 if (loadingPopupView == null) {
-                    loadingPopupView = XPopup.Builder(this)
-                        .asLoading(it)
+                    loadingPopupView = XPopup.Builder(this).dismissOnTouchOutside(false).asLoading(it)
                 } else {
                     loadingPopupView?.setTitle(it)
                 }

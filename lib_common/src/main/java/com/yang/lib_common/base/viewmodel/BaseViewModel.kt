@@ -25,35 +25,64 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         uC.dismissDialogEvent.call()
     }
 
+    /**
+     * 关闭刷新
+     */
     fun cancelRefresh() {
         uC.refreshEvent.call()
     }
 
+    /**
+     * 关闭加载
+     */
     fun cancelLoadMore() {
         uC.loadMoreEvent.call()
     }
 
+    /**
+     * 关闭刷新和加载
+     */
     fun cancelRefreshLoadMore(){
         uC.refreshEvent.call()
         uC.loadMoreEvent.call()
     }
 
+    /**
+     * 请求成功
+     */
     fun requestSuccess(){
         uC.requestSuccessEvent.call()
     }
+    /**
+     * 请求失败
+     */
     fun requestFail(){
         uC.requestFailEvent.call()
     }
+
+    /**
+     * 结束activity
+     */
     fun finishActivity(){
         uC.finishActivityEvent.call()
     }
 
+    /**
+     * 展示recyclerView 布局类型
+     */
     fun showRecyclerViewEvent(type:Int){
         uC.showRecyclerViewEvent.postValue(type)
     }
+
+    /**
+     * 展示recyclerView 加载失败
+     */
     fun showRecyclerViewErrorEvent(){
         uC.showRecyclerViewEvent.postValue(AppConstant.LoadingViewEnum.ERROR_VIEW)
     }
+    /**
+     * 展示recyclerView 加载空数据
+     */
     fun showRecyclerViewEmptyEvent(){
         uC.showRecyclerViewEvent.postValue(AppConstant.LoadingViewEnum.EMPTY_VIEW)
     }
@@ -74,6 +103,14 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
+    /**
+     * 请求
+     * @param onRequest 请求
+     * @param onSuccess 请求成功
+     * @param error 请求失败
+     * @param messages dialog 请求开始 请求成功 请求失败提示
+     * @param errorDialog 是否展示统一处理失败dialog
+     */
     fun <T> launch(
         onRequest: suspend () -> T,
         onSuccess: suspend (t: T) -> Unit = {},

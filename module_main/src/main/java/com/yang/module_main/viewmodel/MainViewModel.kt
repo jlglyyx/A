@@ -43,6 +43,12 @@ class MainViewModel @Inject constructor(
         }, {
             showRecyclerViewErrorEvent()
             cancelRefreshLoadMore()
+            val mutableListOf = mutableListOf<DynamicData>()
+            mutableListOf.add(DynamicData().apply {
+                imageUrls =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"
+            })
+            dynamicListLiveData.postValue(mutableListOf)
         }, errorDialog = false)
     }
 
@@ -59,7 +65,7 @@ class MainViewModel @Inject constructor(
             mainRepository.uploadFile(mutableMapOf)
         }, {
             pictureListLiveData.postValue(it.data)
-        }, messages = *arrayOf("上传中","添加成功"))
+        }, messages = *arrayOf("上传中", "添加成功"))
     }
 
 

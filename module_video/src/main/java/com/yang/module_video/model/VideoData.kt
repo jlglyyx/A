@@ -2,10 +2,10 @@ package com.yang.module_video.model
 
 data class VideoData(
     var list: List<VideoDataItem>,
-    var pageNum: Int,
-    var pageSize: Int,
-    var size: Int,
-    var total: String
+    var pageNum: Int?,
+    var pageSize: Int?,
+    var size: Int?,
+    var total: String?
 
 )
 

@@ -1,7 +1,6 @@
 package com.yang.module_video.ui.activity
 
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -84,36 +83,6 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             et_search.clearFocus()
             keyword = et_search.text.toString()
             onRefresh(smartRefreshLayout)
-
-            val mutableListOf = mutableListOf<VideoDataItem>()
-            mutableListOf.add(VideoDataItem())
-            mutableListOf.add(VideoDataItem().apply {
-                videoTitle = "1=="
-                videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
-            })
-            mutableListOf.add(VideoDataItem().apply {
-                videoTitle = "1=="
-                videoUrl =
-                    "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
-            })
-            mutableListOf.add(VideoDataItem().apply {
-                videoTitle = "1=="
-                videoUrl =
-                    "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
-            })
-            mutableListOf.add(VideoDataItem().apply {
-                videoTitle = "1=="
-                videoUrl = "https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"
-            })
-            mutableListOf.add(VideoDataItem().apply {
-                videoTitle = "1=="
-                videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
-            })
-            Log.i(TAG, "initView====: ${gson.toJson(mutableListOf)}")
-            mAdapter.replaceData(mutableListOf)
-
-
-
             if (list.findLast { TextUtils.equals(it.content, et_search.text.toString()) } != null){
                 return@subscribe
             }

@@ -8,10 +8,10 @@ package com.yang.module_picture.model
  */
 data class ImageData(
     val list: List<ImageDataItem>,
-    val pageNum: Int,
-    val pageSize: Int,
-    val size: Int,
-    val total: String
+    val pageNum: Int?,
+    val pageSize: Int?,
+    val size: Int?,
+    val total: String?
 )
 
 data class ImageDataItem(

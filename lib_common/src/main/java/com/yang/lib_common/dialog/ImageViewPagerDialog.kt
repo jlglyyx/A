@@ -179,6 +179,7 @@ class ImageViewPagerDialog : FullScreenPopupView {
                 }
             }
         }
+        viewPager.offscreenPageLimit = 20
         viewPager.setCurrentItem(position, false)
     }
 

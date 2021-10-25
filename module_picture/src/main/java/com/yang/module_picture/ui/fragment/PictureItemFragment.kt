@@ -41,11 +41,6 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         queryType = arguments?.getString(AppConstant.Constant.TYPE)
         smartRefreshLayout.autoRefresh()
         initRecyclerView()
-        val mutableListOf = mutableListOf<ImageDataItem>()
-        for (i in 0..9){
-            mutableListOf.add(ImageDataItem(null,null,"","","https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg","","","",""))
-        }
-        mAdapter.replaceData(mutableListOf)
     }
 
     override fun initView() {

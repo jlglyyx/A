@@ -50,7 +50,7 @@ interface AppConstant {
         const val ACCESSIBILITY_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AccessibilityActivity"
         const val SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/SettingActivity"
         const val ABOUT_AND_HELP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AboutAndHelpActivity"
-        const val CONNECT_ADDRESS_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/ConnectAddressActivity"
+
 
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
@@ -75,6 +75,7 @@ interface AppConstant {
         const val SPLASH_ACTIVITY = "/$MODULE_LOGIN/$ACTIVITY/SplashActivity"
         const val LOGIN_ACTIVITY = "/$MODULE_LOGIN/$ACTIVITY/LoginActivity"
         const val REGISTER_ACTIVITY = "/$MODULE_LOGIN/$ACTIVITY/RegisterActivity"
+        const val CONNECT_ADDRESS_ACTIVITY = "/$MODULE_LOGIN/$ACTIVITY/ConnectAddressActivity"
 
         /**
          * video

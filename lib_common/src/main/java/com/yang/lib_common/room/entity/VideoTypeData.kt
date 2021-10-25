@@ -19,5 +19,5 @@ data class VideoTypeData(
     @ColumnInfo(name = "type")
     var type: String,
     @ColumnInfo(name = "extra_info")
-    var extraInfo: String
+    var extraInfo: String?
 )

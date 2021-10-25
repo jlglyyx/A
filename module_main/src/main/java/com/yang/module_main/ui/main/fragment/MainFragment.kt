@@ -174,7 +174,6 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = MAdapter(mutableListOf).apply {
-            addData(DynamicData().apply{imageUrls = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"})
             setOnItemChildClickListener { adapter, view, position ->
                 when (view.id) {
                     R.id.siv_img -> {

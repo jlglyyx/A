@@ -48,6 +48,11 @@ class PictureViewModel @Inject constructor(
             },{
                 showRecyclerViewErrorEvent()
                 cancelRefreshLoadMore()
+                val mutableListOf = mutableListOf<ImageDataItem>()
+                for (i in 0..9){
+                    mutableListOf.add(ImageDataItem(null,null,"","","https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg","","","",""))
+                }
+                mImageData.postValue(ImageData(mutableListOf,null,null,null,null))
             }, messages = *arrayOf("加载中"))
         }else{
             launch({
@@ -66,6 +71,11 @@ class PictureViewModel @Inject constructor(
             },{
                 showRecyclerViewErrorEvent()
                 cancelRefreshLoadMore()
+                val mutableListOf = mutableListOf<ImageDataItem>()
+                for (i in 0..9){
+                    mutableListOf.add(ImageDataItem(null,null,"","","https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg","","","",""))
+                }
+                mImageData.postValue(ImageData(mutableListOf,null,null,null,null))
             },errorDialog = false)
         }
 
@@ -82,23 +92,26 @@ class PictureViewModel @Inject constructor(
             pictureRepository.getImageTypeData()
         }, {
             mImageTypeData.postValue(it.data)
-        },{
-//            val mutableListOf = mutableListOf<ImageTypeData>()
-//            for (i in 1..10){
-//                mutableListOf.add(
-//                    ImageTypeData(
-//                        i,
-//                        "推=${i}=荐",
-//                        "1",
-//                        ""
-//                    )
-//                )
-//            }
-            withContext(Dispatchers.IO){
-                mImageTypeData.postValue(BaseAppDatabase.instance.imageTypeDao().queryData())
-            }
+        }, {
+            withContext(Dispatchers.IO) {
+                if (BaseAppDatabase.instance.imageTypeDao().queryData().size == 0) {
+                    val mutableListOf = mutableListOf<ImageTypeData>()
+                    for (i in 1..10) {
+                        mutableListOf.add(
+                            ImageTypeData(
+                                i,
+                                "推=${i}=荐",
+                                "1",
+                                ""
+                            )
+                        )
+                    }
+                    mImageTypeData.postValue(mutableListOf)
+                }else{
+                    mImageTypeData.postValue(BaseAppDatabase.instance.imageTypeDao().queryData())
+                }
 
-            //mImageTypeData.postValue(mutableListOf)
+            }
         }, "加载中...")
     }
 

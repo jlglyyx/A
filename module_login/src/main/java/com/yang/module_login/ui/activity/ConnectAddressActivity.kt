@@ -1,4 +1,4 @@
-package com.yang.module_main.ui.main.activity
+package com.yang.module_login.ui.activity
 
 import android.text.TextUtils
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -7,7 +7,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.interceptor.UrlInterceptor
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getDefaultMMKV
-import com.yang.module_main.R
+import com.yang.module_login.R
 import kotlinx.android.synthetic.main.act_connect_address.*
 
 /**
