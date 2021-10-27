@@ -18,9 +18,9 @@ import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.module_picture.R
-import com.yang.module_picture.data.CommonData
+import com.yang.module_picture.data.model.CommonData
+import com.yang.module_picture.data.model.ImageDataItem
 import com.yang.module_picture.helper.getPictureComponent
-import com.yang.module_picture.model.ImageDataItem
 import com.yang.module_picture.viewmodel.PictureViewModel
 import kotlinx.android.synthetic.main.act_picture_item.*
 import kotlinx.android.synthetic.main.fra_item_picture.recyclerView
@@ -151,7 +151,7 @@ class PictureItemActivity : BaseActivity() {
         }
     }
 
-    inner class MCommentAdapter(list: MutableList<CommonData>,layoutResId: Int) :
+    inner class MCommentAdapter(list: MutableList<CommonData>, layoutResId: Int) :
         BaseQuickAdapter<CommonData, BaseViewHolder>(layoutResId,list) {
 
         override fun convert(helper: BaseViewHolder, item: CommonData) {

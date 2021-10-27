@@ -13,8 +13,8 @@ import com.yang.lib_common.data.BannerBean
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_picture.R
 import com.yang.module_picture.adapter.PictureAdapter
+import com.yang.module_picture.data.model.ImageDataItem
 import com.yang.module_picture.helper.getPictureComponent
-import com.yang.module_picture.model.ImageDataItem
 import com.yang.module_picture.viewmodel.PictureViewModel
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.fra_item_picture.*

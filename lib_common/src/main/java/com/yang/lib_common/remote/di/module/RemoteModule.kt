@@ -76,15 +76,7 @@ class RemoteModule() {
             val request = chain.request()
             var response = chain.proceed(request)
             Log.d(AppConstant.ClientInfo.TAG_LOG, "intercept: ===============request===============")
-            Log.d(
-                AppConstant.ClientInfo.TAG_LOG,
-                "request.baseUrl: ${
-                    request.url().toString().substring(
-                        0,
-                        (request.url().toString().length - request.url().encodedPath().length + 1)
-                    )
-                }\n"
-            )
+            //Log.d(AppConstant.ClientInfo.TAG_LOG, "request.baseUrl: ${request.url().toString().substring(0, request.url().toString().lastIndexOf("?"))}\n")
             Log.d(AppConstant.ClientInfo.TAG_LOG, "request.url: ${request.url()}\n")
             Log.d(AppConstant.ClientInfo.TAG_LOG, "request.method: ${request.method()}\n")
             Log.d(AppConstant.ClientInfo.TAG_LOG, "request.headers: ${request.headers()}\n")

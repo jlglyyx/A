@@ -9,7 +9,7 @@ data class VideoData(
 
 )
 
-class VideoDataItem  {
+class VideoDataItem {
     var select = false
     var position = 0
     var createTime: String? = null
@@ -19,6 +19,8 @@ class VideoDataItem  {
     var videoUrl: String? = null
     var videoTitle: String? = null
     var updateTime: String? = null
-    var smartVideoUrls : MutableList<VideoDataItem>? = null
+    var isLarge: Boolean = false
+    var itemId: String? = null
+    var smartVideoUrls: MutableList<VideoDataItem>? = null
 }
 

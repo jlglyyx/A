@@ -20,22 +20,21 @@ import com.yang.lib_common.util.clicks
 import kotlinx.android.synthetic.main.dialog_image_viewpager.view.*
 
 
-class ImageViewPagerDialog : FullScreenPopupView {
+class ImageViewPagerDialog(
+    context: Context,
+    private var data: MutableList<String>,
+    private var position: Int,
+    private var showDownAndCollection: Boolean = true
+) : FullScreenPopupView(context) {
 
     companion object {
         private const val TAG = "ImageViewPagerDialog"
     }
 
 
-    private var data: MutableList<String>
-
-    private var mContext: Context
-
-    private var position: Int = 0
+    private var mContext: Context = context
 
     var imageViewPagerDialogCallBack: ImageViewPagerDialogCallBack? = null
-
-    private var showDownAndCollection: Boolean = true
 
     interface ImageViewPagerDialogCallBack {
         fun getPosition(position: Int)
@@ -43,13 +42,6 @@ class ImageViewPagerDialog : FullScreenPopupView {
         fun onViewClickListener(view:View)
     }
 
-
-    constructor(context: Context, data: MutableList<String>, position: Int,showDownAndCollection:Boolean = true) : super(context) {
-        this.data = data
-        this.mContext = context
-        this.position = position
-        this.showDownAndCollection = showDownAndCollection
-    }
 
     override fun getImplLayoutId(): Int {
         return R.layout.dialog_image_viewpager

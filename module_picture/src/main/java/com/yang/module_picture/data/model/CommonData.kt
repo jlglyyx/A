@@ -1,4 +1,4 @@
-package com.yang.module_picture.data
+package com.yang.module_picture.data.model
 
 /**
  * @Author Administrator

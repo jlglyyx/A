@@ -9,7 +9,6 @@ import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.room.entity.VideoTypeData
-import com.yang.module_video.model.AccountList
 import com.yang.module_video.model.VideoData
 import com.yang.module_video.model.VideoDataItem
 import com.yang.module_video.repository.VideoRepository
@@ -27,7 +26,6 @@ class VideoViewModel @Inject constructor(
     private val videoRepository: VideoRepository
 ) : BaseViewModel(application) {
 
-    var sMutableLiveData = MutableLiveData<MutableList<AccountList>>()
 
     var mVideoData = MutableLiveData<VideoData>()
 
@@ -35,31 +33,18 @@ class VideoViewModel @Inject constructor(
 
     var mVideoTypeData = MutableLiveData<MutableList<VideoTypeData>>()
 
-    fun getVideoRepository() {
-        launch({
-            videoRepository.getVideoRepository()
-        }, {
-            sMutableLiveData.postValue(it.data)
-        }, {
-            cancelRefreshLoadMore()
-        },errorDialog = false)
-    }
-    fun getVideoInfo(type:String = "",pageNum:Int,keyword:String = "",showDialog:Boolean = false) {
-        if (showDialog){
+    fun getVideoInfo(type: String = "", pageNum: Int, keyword: String = "", showDialog: Boolean = false) {
+        if (showDialog) {
             launch({
                 val mutableMapOf = mutableMapOf<String, Any>()
-                if (!TextUtils.isEmpty(type)){
-                    mutableMapOf[AppConstant.Constant.TYPE] = type
-                }
-                if (!TextUtils.isEmpty(keyword)){
-                    mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
-                }
+                mutableMapOf[AppConstant.Constant.TYPE] = type
+                mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
                 mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum
                 mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT
                 videoRepository.getVideoInfo(mutableMapOf)
             }, {
                 mVideoData.postValue(it.data)
-            },{
+            }, {
                 showRecyclerViewErrorEvent()
                 cancelRefreshLoadMore()
                 val mutableListOf = mutableListOf<VideoDataItem>()
@@ -70,11 +55,13 @@ class VideoViewModel @Inject constructor(
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
@@ -82,18 +69,25 @@ class VideoViewModel @Inject constructor(
                     videoTitle = "1=="
                     videoUrl =
                         "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
+                    isLarge = true
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            isLarge = false
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            isLarge = false
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            isLarge = false
                         })
                     }
                 })
@@ -104,27 +98,33 @@ class VideoViewModel @Inject constructor(
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
@@ -138,32 +138,36 @@ class VideoViewModel @Inject constructor(
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
-                mVideoData.postValue(VideoData(mutableListOf,null,null,null,null))
+                mVideoData.postValue(VideoData(mutableListOf, null, null, null, null))
                 Log.i("TAG", "initView====: ${GsonBuilder().create().toJson(mutableListOf)}")
             }, messages = *arrayOf("加载中"))
-        }else{
+        } else {
             launch({
                 val mutableMapOf = mutableMapOf<String, Any>()
-                if (!TextUtils.isEmpty(type)){
+                if (!TextUtils.isEmpty(type)) {
                     mutableMapOf[AppConstant.Constant.TYPE] = type
                 }
-                if (!TextUtils.isEmpty(keyword)){
+                if (!TextUtils.isEmpty(keyword)) {
                     mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
                 }
                 mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum
@@ -171,7 +175,7 @@ class VideoViewModel @Inject constructor(
                 videoRepository.getVideoInfo(mutableMapOf)
             }, {
                 mVideoData.postValue(it.data)
-            },{
+            }, {
                 showRecyclerViewErrorEvent()
                 cancelRefreshLoadMore()
                 val mutableListOf = mutableListOf<VideoDataItem>()
@@ -182,11 +186,13 @@ class VideoViewModel @Inject constructor(
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
@@ -197,15 +203,18 @@ class VideoViewModel @Inject constructor(
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
@@ -216,27 +225,33 @@ class VideoViewModel @Inject constructor(
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
@@ -250,38 +265,40 @@ class VideoViewModel @Inject constructor(
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
                             videoTitle = "1=="
-                            videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                            videoUrl =
+                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
-                mVideoData.postValue(VideoData(mutableListOf,null,null,null,null))
+                mVideoData.postValue(VideoData(mutableListOf, null, null, null, null))
                 Log.i("TAG", "initView====: ${GsonBuilder().create().toJson(mutableListOf)}")
-            },errorDialog = false)
+            }, errorDialog = false)
         }
 
     }
 
-    fun getVideoItemData(sid:String) {
+    fun getVideoItemData(sid: String) {
         launch({
             videoRepository.getVideoItemData(sid)
         }, {
             mVideoItemData.postValue(it.data)
-        },errorDialog = false)
+        }, errorDialog = false)
     }
-
-
 
 
     fun getVideoTypeData() {
@@ -289,8 +306,8 @@ class VideoViewModel @Inject constructor(
             videoRepository.getVideoTypeData()
         }, {
             mVideoTypeData.postValue(it.data)
-        },{
-            withContext(Dispatchers.IO){
+        }, {
+            withContext(Dispatchers.IO) {
                 if (BaseAppDatabase.instance.videoTypeDao().queryData().size == 0) {
                     val mutableListOf = mutableListOf<VideoTypeData>()
                     for (i in 1..10) {
@@ -304,7 +321,7 @@ class VideoViewModel @Inject constructor(
                         )
                     }
                     mVideoTypeData.postValue(mutableListOf)
-                }else{
+                } else {
                     mVideoTypeData.postValue(BaseAppDatabase.instance.videoTypeDao().queryData())
                 }
             }

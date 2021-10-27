@@ -21,7 +21,7 @@ import com.yang.lib_common.util.simpleDateFormat
 import com.yang.module_picture.R
 import com.yang.module_picture.adapter.PictureSearchAdapter
 import com.yang.module_picture.helper.getPictureComponent
-import com.yang.module_picture.model.ImageDataItem
+import com.yang.module_picture.data.model.ImageDataItem
 import com.yang.module_picture.viewmodel.PictureViewModel
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
