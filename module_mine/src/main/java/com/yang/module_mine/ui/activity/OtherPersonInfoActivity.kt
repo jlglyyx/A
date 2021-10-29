@@ -57,11 +57,6 @@ class OtherPersonInfoActivity : BaseActivity() {
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
             .into(iv_bg)
-        Glide.with(this)
-            .load("https://img1.baidu.com/it/u=584562345,1740343441&fm=26&fmt=auto&gp=0.jpg")
-            .error(R.drawable.iv_image_error)
-            .placeholder(R.drawable.iv_image_placeholder)
-            .into(siv_img)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {

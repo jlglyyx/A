@@ -21,6 +21,7 @@ import com.lxj.xpopup.XPopup
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
+import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.dialog.ImageViewPagerDialog
@@ -155,7 +156,10 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             }
         })
 
+        LiveDataBus.instance.with("refresh_dynamic").observe(this, Observer {
 
+            onRefresh(smartRefreshLayout)
+        })
     }
 
     private fun initSmartRefreshLayout() {

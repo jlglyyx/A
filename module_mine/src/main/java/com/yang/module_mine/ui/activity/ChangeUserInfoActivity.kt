@@ -12,6 +12,7 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.getUserInfo
 import com.yang.lib_common.util.uri2path
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
@@ -50,6 +51,9 @@ class ChangeUserInfoActivity : BaseActivity() {
 
     override fun initData() {
         initRecyclerView()
+        val userInfo = getUserInfo()
+        Glide.with(this).load(userInfo?.userImage).error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
     }
 
     override fun initView() {

@@ -2,6 +2,7 @@ package com.yang.module_main.ui.main.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -53,7 +54,11 @@ class AddDynamicActivity : BaseActivity() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
                 if (pictureSelectAdapter.data.isEmpty()){
-                    mainViewModel.requestSuccess()
+                    if (!TextUtils.isEmpty(et_dynamic.text.toString())){
+                        addDynamic()
+                    }else{
+                        showShort("要说些什么才能发表哦")
+                    }
                     return
                 }
                 uploadFile(pictureSelectAdapter.data)
