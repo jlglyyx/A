@@ -39,15 +39,15 @@ class SplashActivity : BaseActivity() {
 
     override fun initView() {
 
-        val ip = getDefaultMMKV().decodeString(
-            AppConstant.Constant.IP,
-            AppConstant.ClientInfo.BASE_IP
-        )
-        val port = getDefaultMMKV().decodeString(
-            AppConstant.Constant.PORT,
-            AppConstant.ClientInfo.BASE_PORT
-        )
-        UrlInterceptor.url = "$ip:$port/"
+//        val ip = getDefaultMMKV().decodeString(
+//            AppConstant.Constant.IP,
+//            AppConstant.ClientInfo.BASE_IP
+//        )
+//        val port = getDefaultMMKV().decodeString(
+//            AppConstant.Constant.PORT,
+//            AppConstant.ClientInfo.BASE_PORT
+//        )
+//        UrlInterceptor.url = "$ip:$port/"
 
         val userInfo = getUserInfo()
         if (null == userInfo) {

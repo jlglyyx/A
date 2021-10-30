@@ -17,7 +17,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
-class RemoteModule() {
+class RemoteModule {
 
 
     @RemoteScope

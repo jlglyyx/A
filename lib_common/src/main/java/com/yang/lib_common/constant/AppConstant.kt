@@ -4,7 +4,7 @@ interface AppConstant {
 
     object ClientInfo{
 
-        const val BASE_IP = "http://10.16.242.28"
+        const val BASE_IP = "http://192.168.81.200"
 
         const val BASE_PORT = "20000"
 

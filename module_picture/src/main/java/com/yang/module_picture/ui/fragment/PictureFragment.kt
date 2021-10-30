@@ -47,9 +47,9 @@ class PictureFragment : BaseLazyFragment() {
                         .navigation() as Fragment
                 )
             }
-            lifecycleScope.launch(Dispatchers.IO){
-                BaseAppDatabase.instance.imageTypeDao().updateData(it)
-            }
+//            lifecycleScope.launch(Dispatchers.IO){
+//                BaseAppDatabase.instance.imageTypeDao().updateData(it)
+//            }
             initViewPager()
             initTabLayout()
         })

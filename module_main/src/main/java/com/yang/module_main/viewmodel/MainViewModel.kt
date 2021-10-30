@@ -3,6 +3,7 @@ package com.yang.module_main.viewmodel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
+import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.data.MediaInfoBean
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.repository.MainRepository
@@ -31,6 +32,7 @@ class MainViewModel @Inject constructor(
         launch({
             mainRepository.addDynamic(dynamicData)
         }, {
+            LiveDataBus.instance.with("refresh_dynamic").value = "refresh_dynamic"
             finishActivity()
         }, messages = *arrayOf("正在努力发表中...", "发表成功"))
     }
