@@ -5,7 +5,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yang.module_picture.R
-import com.yang.module_picture.model.ImageDataItem
+import com.yang.module_picture.data.model.ImageDataItem
 
 /**
  * @Author Administrator

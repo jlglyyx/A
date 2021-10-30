@@ -4,8 +4,8 @@ import com.yang.lib_common.base.repository.BaseRepository
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.ImageTypeData
 import com.yang.module_picture.api.PictureApiService
-import com.yang.module_picture.model.ImageData
-import com.yang.module_picture.model.ImageDataItem
+import com.yang.module_picture.data.model.ImageData
+import com.yang.module_picture.data.model.ImageDataItem
 import javax.inject.Inject
 
 class PictureRepository @Inject constructor(private val pictureApiService: PictureApiService):BaseRepository() {

@@ -1,4 +1,4 @@
-package com.yang.module_picture.model
+package com.yang.module_picture.data.model
 
 /**
  *des:
