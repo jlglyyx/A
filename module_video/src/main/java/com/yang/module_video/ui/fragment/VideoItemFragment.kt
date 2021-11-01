@@ -1,12 +1,13 @@
 package com.yang.module_video.ui.fragment
 
-import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
@@ -158,11 +159,31 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             val recyclerView = helper.getView<RecyclerView>(R.id.recyclerView)
             helper.setText(R.id.tv_title, item.videoTitle).addOnClickListener(R.id.item_video_big_image).addOnClickListener(R.id.item_video_recommend_type)
-            Glide.with(sivImg)
-                .load(item.videoUrl)
-                .error(R.drawable.iv_image_error)
-                .placeholder(R.drawable.iv_image_placeholder)
-                .into(sivImg)
+
+
+            item.videoUrl?.let {
+                if (it.endsWith(".mp4")){
+                    Glide.with(sivImg)
+                        .setDefaultRequestOptions(RequestOptions().frame(5000))
+                        .load(item.videoUrl)
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .error(R.drawable.iv_image_error)
+                        .placeholder(R.drawable.iv_image_placeholder)
+                        .override(1080,500)
+                        .into(sivImg)
+                }else{
+                    Glide.with(sivImg)
+                        .load(item.videoUrl)
+                        .error(R.drawable.iv_image_error)
+                        .placeholder(R.drawable.iv_image_placeholder)
+                        .into(sivImg)
+                }
+            }
+
+
+
+
             initRecyclerView(recyclerView, item.smartVideoUrls ?: mutableListOf())
         }
 
@@ -193,11 +214,25 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         override fun convert(helper: BaseViewHolder, item: VideoDataItem) {
             helper.setText(R.id.tv_title, item.videoTitle)
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            Glide.with(sivImg)
-                .load(item.videoUrl)
-                .error(R.drawable.iv_image_error)
-                .placeholder(R.drawable.iv_image_placeholder)
-                .into(sivImg)
+            item.videoUrl?.let {
+                if (it.endsWith(".mp4")){
+                    Glide.with(sivImg)
+                        .setDefaultRequestOptions(RequestOptions().frame(5000))
+                        .load(item.videoUrl)
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .error(R.drawable.iv_image_error)
+                        .placeholder(R.drawable.iv_image_placeholder)
+                        .override(1080,500)
+                        .into(sivImg)
+                }else{
+                    Glide.with(sivImg)
+                        .load(item.videoUrl)
+                        .error(R.drawable.iv_image_error)
+                        .placeholder(R.drawable.iv_image_placeholder)
+                        .into(sivImg)
+                }
+            }
         }
     }
 
