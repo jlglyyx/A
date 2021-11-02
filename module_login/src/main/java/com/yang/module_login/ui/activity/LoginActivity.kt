@@ -1,10 +1,16 @@
 package com.yang.module_login.ui.activity
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.text.TextUtils
+import android.util.Log
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
@@ -40,6 +46,21 @@ class LoginActivity : BaseActivity() {
 
     override fun initView() {
         //initVideoView()
+
+        lifecycle.addObserver(isv_image)
+        Glide.with(this).asBitmap().load("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic2.zhimg.com%2Fv2-583a86cd154739160d2e17e185dcc8f2_r.jpg%3Fsource%3D1940ef5c&refer=http%3A%2F%2Fpic2.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638427892&t=e2a584b32bb0b6f820613078d552716c").into(
+            object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Log.i(TAG, "onResourceReady: $resource")
+                    isv_image.setBitMap(resource)
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                }
+
+            })
+
+
         bt_login.clicks().subscribe {
             checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()

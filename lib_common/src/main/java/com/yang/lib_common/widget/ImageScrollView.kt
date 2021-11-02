@@ -33,6 +33,9 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
     private var mPanDistance = 0f
     private var mJob: Job? = null
 
+    private var w: Int = 0
+    private var h: Int = 0
+
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -41,11 +44,17 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         defStyleAttr
     ) {
         setWillNotDraw(false)
-        bitmap = BitmapFactory.decodeResource(resources, R.drawable.sample_footer_loading)
+        bitmap = BitmapFactory.decodeResource(resources, R.drawable.iv_login_bg)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        this.w = w
+        this.h = h
+        init(bitmap)
+    }
+
+    private fun init(bitmap:Bitmap){
         val copy = bitmap.copy(Bitmap.Config.RGB_565, true)
         scaleBitmap = scaleBitmap(copy, w, h)
         mBitmapCount = measuredHeight / scaleBitmap.height + 1
@@ -53,8 +62,12 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
             copy.recycle()
             System.gc()
         }
-
     }
+    
+    fun setBitMap(bitmap:Bitmap){
+        init(bitmap)
+    }
+
 
 
     override fun onDraw(canvas: Canvas) {
@@ -96,6 +109,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         newHeight = newWidth * height / width
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
     }
+
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)

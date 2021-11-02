@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.interceptor.UrlInterceptor
 import com.yang.lib_common.util.buildARouter
@@ -85,7 +86,7 @@ class SplashActivity : BaseActivity() {
 
         } else {
 
-            loginViewModel.login(userInfo.userAccount, userInfo.userPassword,true)
+            loginViewModel.splashLogin(userInfo.userAccount, userInfo.userPassword)
             loginViewModel.mUserInfoData.observe(this, Observer {
                 getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
@@ -110,6 +111,12 @@ class SplashActivity : BaseActivity() {
                 finish()
             }
         }
+
+    }
+
+
+    override fun initUIChangeLiveData(): UIChangeLiveData {
+        return loginViewModel.uC
     }
 
     override fun initViewModel() {
