@@ -54,7 +54,8 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         init(bitmap)
     }
 
-    private fun init(bitmap:Bitmap){
+    private fun init(bitmap: Bitmap) {
+        setLayerType(LAYER_TYPE_SOFTWARE,null)
         val copy = bitmap.copy(Bitmap.Config.RGB_565, true)
         scaleBitmap = scaleBitmap(copy, w, h)
         mBitmapCount = measuredHeight / scaleBitmap.height + 1
@@ -62,12 +63,22 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
             copy.recycle()
             System.gc()
         }
-    }
-    
-    fun setBitMap(bitmap:Bitmap){
-        init(bitmap)
+
+        mPaint.colorFilter = ColorMatrixColorFilter(
+            floatArrayOf(
+                2f, 0f, 0f, 0f, 0f,
+                0f, 1f, 0f, 0f, 0f,
+                0f, 0f, 1f, 0f, 0f,
+                0f, 0f, 0f, 1f, 0f
+            )
+        )
+        //mPaint.colorFilter = LightingColorFilter(0xFFFFFF,0xFF0000)
+
     }
 
+    fun setBitMap(bitmap: Bitmap) {
+        init(bitmap)
+    }
 
 
     override fun onDraw(canvas: Canvas) {
@@ -104,12 +115,11 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
     private fun scaleBitmap(bitmap: Bitmap, w: Int, h: Int): Bitmap {
         val width = bitmap.width
         val height = bitmap.height
-        var newHeight: Int
-        var newWidth: Int = measuredWidth
+        val newHeight: Int
+        val newWidth: Int = measuredWidth
         newHeight = newWidth * height / width
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
     }
-
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)

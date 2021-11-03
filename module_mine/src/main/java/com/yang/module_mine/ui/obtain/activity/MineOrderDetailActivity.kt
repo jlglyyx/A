@@ -5,11 +5,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.module_mine.R
-import kotlinx.android.synthetic.main.act_mine_order_detail.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
 /**
@@ -36,12 +32,12 @@ class MineOrderDetailActivity : BaseActivity() {
     }
 
     private fun initTimer() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            for (i in 60 * 60 downTo 1) {
-                tv_good_status.text = "${formatNumber(i / 60 / 60 % 60)}:${formatNumber(i / 60 % 60)}:${formatNumber(i % 60)}"
-                delay(1000)
-            }
-        }
+//        lifecycleScope.launch(Dispatchers.Main) {
+//            for (i in 60 * 60 downTo 1) {
+//                tv_good_status.text = "${formatNumber(i / 60 / 60 % 60)}:${formatNumber(i / 60 % 60)}:${formatNumber(i % 60)}"
+//                delay(1000)
+//            }
+//        }
     }
 
     private fun formatNumber(i:Int):String{

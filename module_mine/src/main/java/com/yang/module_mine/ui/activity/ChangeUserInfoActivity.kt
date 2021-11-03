@@ -77,6 +77,7 @@ class ChangeUserInfoActivity : BaseActivity() {
                     it.data?.data?.let { uri ->
                         imageUrl = uri2path(this, uri)
                     }
+                    mineViewModel.uploadFile(mutableListOf(imageUrl))
                     Glide.with(this).load(imageUrl).centerCrop().error(R.drawable.iv_image_error)
                         .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
                 }

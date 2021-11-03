@@ -74,7 +74,7 @@ class MineExchangeStatusFragment :BaseLazyFragment(), OnRefreshLoadMoreListener 
 
         mAdapter.setOnItemClickListener { adapter, view, position ->
 
-            buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_DETAIL_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_ORDER_DETAIL_ACTIVITY).navigation()
         }
 
 

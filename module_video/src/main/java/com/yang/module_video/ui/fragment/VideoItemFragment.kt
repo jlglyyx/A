@@ -101,7 +101,6 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
             }
         }
-        mAdapter.openLoadAnimation()
         recyclerView.adapter = mAdapter
 
 

@@ -38,9 +38,11 @@ class MineExchangeActivity :BaseActivity() {
     override fun initData() {
         titles = mutableListOf()
         fragments = mutableListOf()
+        titles.add("全部")
         titles.add("待付款")
         titles.add("待发货")
         titles.add("待收货")
+        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
         fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
         fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
         fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)

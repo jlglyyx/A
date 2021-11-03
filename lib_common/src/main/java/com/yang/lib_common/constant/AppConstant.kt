@@ -124,6 +124,8 @@ interface AppConstant {
 
         const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineOrderDetailActivity"
 
+        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
+
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
