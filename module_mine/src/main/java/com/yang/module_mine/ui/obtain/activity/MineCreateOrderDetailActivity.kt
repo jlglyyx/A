@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.bumptech.glide.Glide
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.clicks
@@ -19,7 +20,6 @@ import com.yang.module_mine.R
 import com.yang.module_mine.data.MineShippingAddressData
 import kotlinx.android.synthetic.main.act_mine_create_order_detail.*
 import kotlinx.coroutines.cancel
-import java.text.DecimalFormat
 
 /**
  * @Author Administrator
@@ -37,8 +37,6 @@ class MineCreateOrderDetailActivity : BaseActivity() {
     }
 
     override fun initData() {
-        //initTimer()
-
         registerForActivityResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK && it.data != null){
@@ -58,6 +56,9 @@ class MineCreateOrderDetailActivity : BaseActivity() {
     }
 
     override fun initView() {
+        Glide.with(this)
+            .load("https://img.alicdn.com/bao/uploaded/i2/2209667639897/O1CN015Oh5X32MysY6ea4fc_!!0-item_pic.jpg_200x200q90.jpg_.webp")
+            .into(iv_image)
         cv_address.clicks().subscribe {
             registerForActivityResult.launch(Intent(this@MineCreateOrderDetailActivity,MineShippingAddressActivity::class.java))
         }
@@ -65,19 +66,6 @@ class MineCreateOrderDetailActivity : BaseActivity() {
 
     override fun initViewModel() {
 
-    }
-
-    private fun initTimer() {
-//        lifecycleScope.launch(Dispatchers.Main) {
-//            for (i in 60 * 60 downTo 1) {
-//                tv_good_status.text = "${formatNumber(i / 60 / 60 % 60)}:${formatNumber(i / 60 % 60)}:${formatNumber(i % 60)}"
-//                delay(1000)
-//            }
-//        }
-    }
-
-    private fun formatNumber(i:Int):String{
-        return DecimalFormat("00").format(i)
     }
 
 

@@ -1,15 +1,9 @@
 package com.yang.module_login.ui.activity
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.text.TextUtils
-import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -40,17 +34,6 @@ class RegisterActivity : BaseActivity() {
 
     override fun initView() {
         lifecycle.addObserver(isv_image)
-        Glide.with(this).asBitmap().load("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.zhimg.com%2F50%2Fv2-aa0e39f579e586cb84e57737d7fe4a32_hd.jpg&refer=http%3A%2F%2Fpic1.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638520579&t=6ff895868c8fabaed70f7171e4aa8061").into(
-            object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    Log.i(TAG, "onResourceReady: $resource")
-                    isv_image.setBitMap(resource)
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-                }
-
-            })
         bt_register.clicks().subscribe {
             checkForm()
         }

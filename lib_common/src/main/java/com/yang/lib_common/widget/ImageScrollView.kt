@@ -2,13 +2,17 @@ package com.yang.lib_common.widget
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.yang.lib_common.R
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
+import com.yang.lib_common.util.getScreenPx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -25,7 +29,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         private const val TAG = "ImageScrollView"
     }
 
-    private var bitmap: Bitmap
+    private lateinit var bitmap: Bitmap
     private lateinit var scaleBitmap: Bitmap
     private var mPaint = Paint()
     private var mMatrix = Matrix()
@@ -44,8 +48,43 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         defStyleAttr
     ) {
         setWillNotDraw(false)
-        bitmap = BitmapFactory.decodeResource(resources, R.drawable.iv_login_bg)
+//        val obtainStyledAttributes = context.obtainStyledAttributes(attrs, R.styleable.ImageScrollView)
+//        val string = obtainStyledAttributes.getString(R.styleable.ImageScrollView_imageName)
+//        val file = File("${Environment.getExternalStorageDirectory()}/MFiles/picture/${string}.png")
+//        if (file.exists()){
+//            bitmap = BitmapFactory.decodeFile("${Environment.getExternalStorageDirectory()}/MFiles/picture/${string}.png")
+//        }else{
+//            bitmap = Bitmap.createBitmap(getScreenPx(context)[0], getScreenPx(context)[1], Bitmap.Config.RGB_565)
+//            val canvas = Canvas(bitmap)
+//            canvas.drawColor(Color.WHITE)
+//        }
+//        obtainStyledAttributes.recycle()
+
+        Glide.with(this).asBitmap()
+            .load("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic2.zhimg.com%2Fv2-583a86cd154739160d2e17e185dcc8f2_r.jpg%3Fsource%3D1940ef5c&refer=http%3A%2F%2Fpic2.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638427892&t=e2a584b32bb0b6f820613078d552716c")
+            .into(
+                object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        Log.i(TAG, "onResourceReady: $resource")
+                        bitmap = resource
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                        bitmap = Bitmap.createBitmap(
+                            getScreenPx(context)[0],
+                            getScreenPx(context)[1],
+                            Bitmap.Config.RGB_565
+                        )
+                        val canvas = Canvas(bitmap)
+                        canvas.drawColor(Color.WHITE)
+                    }
+
+                })
     }
+
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -55,7 +94,6 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
     }
 
     private fun init(bitmap: Bitmap) {
-        setLayerType(LAYER_TYPE_SOFTWARE,null)
         val copy = bitmap.copy(Bitmap.Config.RGB_565, true)
         scaleBitmap = scaleBitmap(copy, w, h)
         mBitmapCount = measuredHeight / scaleBitmap.height + 1
@@ -72,14 +110,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
                 0f, 0f, 0f, 1f, 0f
             )
         )
-        //mPaint.colorFilter = LightingColorFilter(0xFFFFFF,0xFF0000)
-
     }
-
-    fun setBitMap(bitmap: Bitmap) {
-        init(bitmap)
-    }
-
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -103,7 +134,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
 
     private fun invalidateView() {
         mJob = GlobalScope.launch(Dispatchers.IO) {
-            var length = scaleBitmap.height
+            val length = scaleBitmap.height
             if (length + mPanDistance <= 0f) {
                 mPanDistance = 0f
             }
