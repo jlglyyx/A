@@ -9,8 +9,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -19,7 +19,7 @@ import com.yang.lib_common.util.dip2px
 import kotlin.math.abs
 import kotlin.math.ceil
 
-class GridNinePictureView : RelativeLayout {
+class GridNinePictureView : ViewGroup {
 
     private var mContext: Context
     private var mWidth: Int = 0
@@ -32,7 +32,6 @@ class GridNinePictureView : RelativeLayout {
     private var mPaint = Paint()
     private var mTextPaint = Paint()
     var imageCallback: ImageCallback? = null
-    private var isFirst = true
 
     interface ImageCallback {
         fun imageClickListener(position: Int)
@@ -49,15 +48,14 @@ class GridNinePictureView : RelativeLayout {
                 } else {
                     dataSize
                 }) {
-                    val inflate = LayoutInflater.from(mContext)
-                        .inflate(R.layout.view_item_grid_nine_picture, null, false)
+                    val inflate = LayoutInflater.from(mContext).inflate(R.layout.view_item_grid_nine_picture, this, false)
                     val ivNineImage = inflate.findViewById<ImageView>(R.id.iv_nine_image)
                     Log.i("TAG", "============: $ivNineImage")
                     val ivPlay = inflate.findViewById<ImageView>(R.id.iv_play)
                     ivNineImage.setOnClickListener {
                         imageCallback?.imageClickListener(i)
                     }
-                    if (data[i].endsWith(".mp4")){
+                    if (data[i].endsWith(".mp4")) {
                         ivPlay.visibility = View.VISIBLE
                         Glide.with(mContext)
                             .setDefaultRequestOptions(RequestOptions().frame(1000))
@@ -68,7 +66,7 @@ class GridNinePictureView : RelativeLayout {
                             .error(R.drawable.iv_image_error)
                             .placeholder(R.drawable.iv_image_placeholder)
                             .into(ivNineImage)
-                    }else{
+                    } else {
                         ivPlay.visibility = View.GONE
                         Glide.with(mContext)
                             .load(
@@ -97,14 +95,11 @@ class GridNinePictureView : RelativeLayout {
 
 
     private fun init() {
-
         mPaint.color = Color.parseColor("#afffffff")
         mPaint.style = Paint.Style.FILL
-
         mTextPaint.color = Color.parseColor("#8a8a8a")
         mTextPaint.style = Paint.Style.FILL
         mTextPaint.textSize = 50f.dip2px(mContext).toFloat()
-
     }
 
 
@@ -114,16 +109,38 @@ class GridNinePictureView : RelativeLayout {
         mHeight = h
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        mImageViewWidth = measuredWidth / spanCount
+        for (i in 0 until childCount) {
+            val childAt = getChildAt(i) as ConstraintLayout
+            val ivNineImage = childAt.findViewById<ImageView>(R.id.iv_nine_image)
+            val layoutParams = ivNineImage.layoutParams as ConstraintLayout.LayoutParams
+            layoutParams.width = mImageViewWidth
+            layoutParams.height = mImageViewWidth
+            Log.i("TAG", ": mImageViewWidth$mImageViewWidth")
+            ivNineImage.layoutParams = layoutParams
+        }
+        setMeasuredDimension(
+            widthSize,
+            (measuredWidth / spanCount) * ceil(
+                if (dataSize > maxChild) {
+                    maxChild.toFloat()
+                } else {
+                    dataSize.toFloat()
+                } / spanCount.toFloat()
+            ).toInt()
+        )
+    }
 
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         layoutImage()
     }
 
     private fun layoutImage() {
         var countWidth = 0
         var countHeight = 0
-        mImageViewWidth = measuredWidth / spanCount
         for (i in 0 until childCount) {
             val childAt = getChildAt(i)
             if (i % spanCount == 0) {
@@ -158,25 +175,6 @@ class GridNinePictureView : RelativeLayout {
         }
     }
 
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
-        setMeasuredDimension(
-            widthSize,
-            (measuredWidth / spanCount) * ceil(
-                if (dataSize > maxChild) {
-                    maxChild.toFloat()
-                } else {
-                    dataSize.toFloat()
-                } / spanCount.toFloat()
-            ).toInt()
-        )
-
-
-    }
-
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
         if (dataSize - maxChild > 0) {
@@ -200,20 +198,6 @@ class GridNinePictureView : RelativeLayout {
             )
             canvas.restoreToCount(textLayer)
         }
-
-        if (isFirst) {
-            for (i in 0 until childCount) {
-                val childAt = getChildAt(i) as ConstraintLayout
-                val ivNineImage = childAt.findViewById<ImageView>(R.id.iv_nine_image)
-                val layoutParams = ivNineImage.layoutParams as ConstraintLayout.LayoutParams
-                layoutParams.width = mImageViewWidth
-                layoutParams.height = mImageViewWidth
-                Log.i("TAG", ": mImageViewWidth$mImageViewWidth")
-                ivNineImage.layoutParams = layoutParams
-            }
-            isFirst = false
-        }
-
     }
 
 

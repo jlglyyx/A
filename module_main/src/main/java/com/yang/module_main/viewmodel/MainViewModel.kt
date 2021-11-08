@@ -69,6 +69,36 @@ class MainViewModel @Inject constructor(
             dynamicListLiveData.postValue(mutableListOf)
         }, errorDialog = false)
     }
+    fun getDynamicDetail(params: Map<String, String>) {
+        launch({
+            mainRepository.getDynamicList(params)
+        }, {
+            dynamicListLiveData.postValue(it.data)
+        }, {
+            val mutableListOf = mutableListOf<DynamicData>()
+            mutableListOf.add(DynamicData().apply {
+                imageUrls =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"
+            })
+            mutableListOf.add(DynamicData().apply {
+                imageUrls =
+                    "https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg#https://img2.baidu.com/it/u=3583098839,704145971&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=889#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"
+            })
+            mutableListOf.add(DynamicData().apply {
+                imageUrls =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
+            })
+            mutableListOf.add(DynamicData().apply {
+                imageUrls =
+                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"
+            })
+            mutableListOf.add(DynamicData().apply {
+                imageUrls =
+                    "https://img1.baidu.com/it/u=3222474767,386356710&fm=26&fmt=auto#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg#https://img2.baidu.com/it/u=3583098839,704145971&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=889"
+            })
+            dynamicListLiveData.postValue(mutableListOf)
+        },messages = *arrayOf("请求中"))
+    }
 
     fun uploadFile(filePaths: MutableList<MediaInfoBean>) {
         launch({

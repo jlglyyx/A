@@ -31,6 +31,18 @@ class CommonToolBar : ConstraintLayout {
 
     lateinit var ivBack: ShapeableImageView
 
+    private lateinit var tvRightContent:TextView
+
+    var rightContentVisible:Boolean = false
+    set(value) {
+        field = value
+        if (field) {
+            tvRightContent.visibility = View.VISIBLE
+        } else {
+            tvRightContent.visibility = View.GONE
+        }
+    }
+
     interface ImageBackCallBack {
         fun imageBackClickListener()
     }
@@ -59,7 +71,7 @@ class CommonToolBar : ConstraintLayout {
         clToolbar.setPadding(0, getStatusBarHeight(context), 0, 0)
         tvCenterContent = inflate.findViewById(R.id.tv_centerContent)
         val tvLeftContent = inflate.findViewById<TextView>(R.id.tv_leftContent)
-        val tvRightContent = inflate.findViewById<TextView>(R.id.tv_rightContent)
+        tvRightContent = inflate.findViewById<TextView>(R.id.tv_rightContent)
         ivBack = inflate.findViewById(R.id.iv_back)
         val ivAdd = inflate.findViewById<ImageView>(R.id.iv_add)
         val obtainStyledAttributes =
@@ -75,7 +87,7 @@ class CommonToolBar : ConstraintLayout {
         val rightContent = obtainStyledAttributes.getString(R.styleable.CommonToolBar_rightContent)
         val rightImgVisible =
             obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_rightImgVisible, false)
-        val rightContentVisible =
+        rightContentVisible =
             obtainStyledAttributes.getBoolean(R.styleable.CommonToolBar_rightContentVisible, false)
         val rightImgSrc =
             obtainStyledAttributes.getResourceId(R.styleable.CommonToolBar_rightImgSrc, 0)

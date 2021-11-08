@@ -1,6 +1,6 @@
 package com.yang.module_mine.ui.activity
 
-import android.widget.TextView
+import android.text.TextUtils
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -27,10 +27,6 @@ class OtherPersonInfoActivity : BaseActivity() {
     @Inject
     lateinit var mineViewModel: MineViewModel
 
-    private lateinit var tvCenterContent:TextView
-
-
-
     override fun getLayout(): Int {
         return R.layout.act_other_person_info
     }
@@ -38,12 +34,16 @@ class OtherPersonInfoActivity : BaseActivity() {
     override fun initData() {
         val id = intent.getStringExtra(AppConstant.Constant.ID)
         val userInfo = getUserInfo()
+
+        if (!TextUtils.equals(id,userInfo?.id)){
+            commonToolBar.rightContentVisible = false
+        }
+
         Glide.with(this).load(userInfo?.userImage).error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder).into(siv_img)
     }
 
     override fun initView() {
-        tvCenterContent = commonToolBar.findViewById(R.id.tv_centerContent)
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
             override fun tvRightClickListener() {
                 buildARouter(AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY).navigation()

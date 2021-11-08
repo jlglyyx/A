@@ -64,7 +64,7 @@ class PictureItemActivity : BaseActivity() {
                     override fun getComment(s: String) {
                         mCommentAdapter.addData(0, CommonData(s))
 
-                        recyclerView.smoothScrollToPosition(0)
+                        nestedScrollView.fullScroll(View.FOCUS_UP)
                     }
 
                 }
@@ -109,9 +109,7 @@ class PictureItemActivity : BaseActivity() {
                 it.setOnItemChildClickListener { adapter, view, position ->
                     when (view.id) {
                         R.id.siv_img -> {
-                            buildARouter(
-                                AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY
-                            ).navigation()
+                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
                         }
                     }
                 }
@@ -189,7 +187,7 @@ class PictureItemActivity : BaseActivity() {
         })
 
         val pageRecyclerView = viewPager.getChildAt(0) as RecyclerView
-        pageRecyclerView.setPadding(10f.dip2px(this),0,10f.dip2px(this),0)
+        pageRecyclerView.setPadding(10f.dip2px(this), 0, 10f.dip2px(this), 0)
         pageRecyclerView.clipToPadding = false
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(MarginPageTransformer(5f.dip2px(this)))

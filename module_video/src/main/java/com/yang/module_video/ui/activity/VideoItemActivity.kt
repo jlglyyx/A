@@ -138,8 +138,7 @@ class VideoItemActivity : BaseActivity() {
             setOnItemChildClickListener { adapter, view, position ->
                 when (view.id) {
                     R.id.siv_img -> {
-                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
-                            .navigation()
+                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
                     }
                 }
 

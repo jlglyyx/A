@@ -1,22 +1,34 @@
 package com.yang.module_main.ui.main.activity
 
+import android.text.TextUtils
+import android.view.View
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.google.android.material.imageview.ShapeableImageView
+import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.dialog.EditBottomDialog
+import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.symbolToList
 import com.yang.module_main.R
+import com.yang.module_main.adapter.DynamicAdapter
+import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
-import com.google.android.material.imageview.ShapeableImageView
-import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.act_dynamic_detail.*
+import kotlinx.android.synthetic.main.item_dynamic_detail_comment.*
+import kotlinx.android.synthetic.main.item_dynamic_detail_comment.view.*
+import kotlinx.android.synthetic.main.item_main_content_image.*
+import kotlinx.android.synthetic.main.item_main_content_text.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,7 +55,47 @@ class DynamicDetailActivity:BaseActivity() {
     }
 
     override fun initData() {
-        getDynamicList()
+        getDynamicDetail()
+
+        mainViewModel.dynamicListLiveData.observe(this, Observer {
+            val dynamicData = it[1]
+            initItemMainContentImage(dynamicData)
+            initItemMainTitle(dynamicData)
+            initItemMainContentText(dynamicData)
+        })
+    }
+
+    private fun initItemMainTitle(item: DynamicData) {
+        siv_img.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
+        }
+        tv_time.text = item.createTime
+        Glide.with(this).load(item.userImage)
+            .error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder).into(siv_img)
+    }
+
+    private fun initItemMainContentText(item: DynamicData) {
+        if (TextUtils.isEmpty(item.content)){
+            item_main_content_text.visibility = View.GONE
+        }else{
+            item_main_content_text.visibility = View.VISIBLE
+            tv_text.text = item.content
+        }
+    }
+
+    private fun initItemMainContentImage(item: DynamicData){
+        mRecyclerView.layoutManager = LinearLayoutManager(this@DynamicDetailActivity)
+        val dynamicAdapter = DynamicAdapter(
+            R.layout.view_item_grid_nine_picture,
+            item.imageUrls?.symbolToList("#")!!
+        )
+        mRecyclerView.adapter = dynamicAdapter
+        dynamicAdapter.setOnItemClickListener { adapter, view, position ->
+            val imageViewPagerDialog =
+                ImageViewPagerDialog(this@DynamicDetailActivity, item.imageUrls?.symbolToList("#")!!, position)
+            XPopup.Builder(this@DynamicDetailActivity).asCustom(imageViewPagerDialog).show()
+        }
     }
 
     override fun initView() {
@@ -65,11 +117,14 @@ class DynamicDetailActivity:BaseActivity() {
         getMainComponent(this).inject(this)
     }
 
+    override fun initUIChangeLiveData(): UIChangeLiveData {
+        return mainViewModel.uC
+    }
 
-    private fun getDynamicList(){
+    private fun getDynamicDetail(){
         val mutableMapOf = mutableMapOf<String, String>()
         mutableMapOf[AppConstant.Constant.ID] = ""
-        mainViewModel.getDynamicList(mutableMapOf)
+        mainViewModel.getDynamicDetail(mutableMapOf)
     }
 
 
@@ -89,8 +144,7 @@ class DynamicDetailActivity:BaseActivity() {
             setOnItemChildClickListener { adapter, view, position ->
                 when(view.id){
                     R.id.siv_img -> {
-                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
-                            .navigation()
+                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
                     }
                 }
 
