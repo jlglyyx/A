@@ -29,8 +29,8 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         private const val TAG = "ImageScrollView"
     }
 
-    private lateinit var bitmap: Bitmap
-    private lateinit var scaleBitmap: Bitmap
+    private var bitmap: Bitmap? = null
+    private var scaleBitmap: Bitmap? = null
     private var mPaint = Paint()
     private var mMatrix = Matrix()
     private var mBitmapCount = 0
@@ -60,6 +60,14 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
 //        }
 //        obtainStyledAttributes.recycle()
 
+
+    }
+
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        this.w = w
+        this.h = h
         Glide.with(this).asBitmap()
             .load("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic2.zhimg.com%2Fv2-583a86cd154739160d2e17e185dcc8f2_r.jpg%3Fsource%3D1940ef5c&refer=http%3A%2F%2Fpic2.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638427892&t=e2a584b32bb0b6f820613078d552716c")
             .into(
@@ -70,6 +78,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
                     ) {
                         Log.i(TAG, "onResourceReady: $resource")
                         bitmap = resource
+                        init(bitmap!!)
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {
@@ -78,25 +87,19 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
                             getScreenPx(context)[1],
                             Bitmap.Config.RGB_565
                         )
-                        val canvas = Canvas(bitmap)
+                        val canvas = Canvas(bitmap!!)
                         canvas.drawColor(Color.WHITE)
+                        init(bitmap!!)
                     }
 
                 })
-    }
 
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        this.w = w
-        this.h = h
-        init(bitmap)
     }
 
     private fun init(bitmap: Bitmap) {
         val copy = bitmap.copy(Bitmap.Config.RGB_565, true)
         scaleBitmap = scaleBitmap(copy, w, h)
-        mBitmapCount = measuredHeight / scaleBitmap.height + 1
+        mBitmapCount = measuredHeight / scaleBitmap!!.height + 1
         if (!copy.isRecycled) {
             copy.recycle()
             System.gc()
@@ -106,40 +109,46 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
             floatArrayOf(
                 2f, 0f, 0f, 0f, 0f,
                 0f, 1f, 0f, 0f, 0f,
-                0f, 0f, 1f, 0f, 0f,
+                0f, 0f, 2f, 0f, 0f,
                 0f, 0f, 0f, 1f, 0f
             )
         )
+        requestLayout()
+        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val height = scaleBitmap.height
-        if (height + mPanDistance != 0f) {
-            mMatrix.reset()
-            mMatrix.postTranslate(0f, mPanDistance)
-            canvas.drawBitmap(scaleBitmap, mMatrix, mPaint)
-        }
-        if (height + mPanDistance < measuredHeight) {
-            for (i in 0 until mBitmapCount) {
+        scaleBitmap?.let { scaleBitmap ->
+            val height = scaleBitmap.height
+            if (height + mPanDistance != 0f) {
                 mMatrix.reset()
-                mMatrix.postTranslate(0f, (i + 1) * scaleBitmap.height + mPanDistance)
+                mMatrix.postTranslate(0f, mPanDistance)
                 canvas.drawBitmap(scaleBitmap, mMatrix, mPaint)
             }
+            if (height + mPanDistance < measuredHeight) {
+                for (i in 0 until mBitmapCount) {
+                    mMatrix.reset()
+                    mMatrix.postTranslate(0f, (i + 1) * scaleBitmap.height + mPanDistance)
+                    canvas.drawBitmap(scaleBitmap, mMatrix, mPaint)
+                }
+            }
+            invalidateView()
         }
-        invalidateView()
 
     }
 
 
     private fun invalidateView() {
-        mJob = GlobalScope.launch(Dispatchers.IO) {
-            val length = scaleBitmap.height
-            if (length + mPanDistance <= 0f) {
-                mPanDistance = 0f
+        scaleBitmap?.let { scaleBitmap ->
+            mJob = GlobalScope.launch(Dispatchers.IO) {
+                val length = scaleBitmap.height
+                if (length + mPanDistance <= 0f) {
+                    mPanDistance = 0f
+                }
+                mPanDistance -= 0.5f
+                postInvalidate()
             }
-            mPanDistance -= 0.5f
-            postInvalidate()
         }
     }
 
