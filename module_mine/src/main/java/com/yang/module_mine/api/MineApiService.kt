@@ -3,9 +3,8 @@ package com.yang.module_mine.api
 import com.yang.lib_common.api.BaseApiService
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.remote.di.response.MResult
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Query
+import okhttp3.RequestBody
+import retrofit2.http.*
 
 interface MineApiService : BaseApiService {
 
@@ -14,4 +13,8 @@ interface MineApiService : BaseApiService {
 
     @POST("user/register")
     suspend fun register(@Body userInfoData: UserInfoData): MResult<UserInfoData>
+
+    @Multipart
+    @POST("/uploadFile")
+    suspend fun uploadFile(@PartMap file: MutableMap<String, RequestBody>): MResult<MutableList<String>>
 }

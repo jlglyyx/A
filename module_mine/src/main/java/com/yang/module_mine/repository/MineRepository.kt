@@ -4,6 +4,9 @@ import com.yang.lib_common.base.repository.BaseRepository
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.module_mine.api.MineApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class MineRepository @Inject constructor(private val mineApiService: MineApiService) : BaseRepository() {
@@ -24,5 +27,10 @@ class MineRepository @Inject constructor(private val mineApiService: MineApiServ
 
     }
 
+    suspend fun uploadFile(filePaths: MutableMap<String, RequestBody>): MResult<MutableList<String>> {
+        return withContext(Dispatchers.IO) {
+            mineApiService.uploadFile(filePaths)
+        }
+    }
 
 }

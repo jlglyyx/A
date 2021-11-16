@@ -1,5 +1,6 @@
 package com.yang.module_mine.ui.obtain.activity
 
+import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.yang.lib_common.base.ui.activity.BaseActivity
@@ -54,12 +55,8 @@ class MineShippingAddressActivity:BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         mAdapter.setOnItemClickListener { adapter, view, position ->
-//            XPopup.Builder(this).asConfirm("确认兑换","抽纸一包",object : OnConfirmListener {
-//                override fun onConfirm() {
-//
-//                }
-//
-//            }).show()
+            setResult(RESULT_OK, Intent().putExtra(AppConstant.Constant.DATA,adapter.getItem(position) as MineShippingAddressData))
+            finish()
         }
     }
 }

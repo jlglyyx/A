@@ -40,6 +40,7 @@ class LoginActivity : BaseActivity() {
 
     override fun initView() {
         //initVideoView()
+        lifecycle.addObserver(isv_image)
         bt_login.clicks().subscribe {
             checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()

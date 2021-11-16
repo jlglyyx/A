@@ -74,6 +74,9 @@ class LeftFragment : BaseFragment() {
                 R.anim.fade_out
             ).navigation(requireActivity())
         }
+        tv_webView.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.WEB_VIEW_ACTIVITY).navigation()
+        }
     }
 
     override fun initViewModel() {

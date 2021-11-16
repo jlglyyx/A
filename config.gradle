@@ -74,6 +74,7 @@ ext {
             "XPopup"                       : "com.github.li-xiaojun:XPopup:2.4.0",
             "location"                     : "com.amap.api:location:5.0.0",
             "flowlayout"                   : "com.hyman:flowlayout-lib:1.1.2",
+            "tbs"                          : "com.tencent.tbs:tbssdk:44085",
     ]
     kaptDependencies = [
             "arouter-compiler": "com.alibaba:arouter-compiler:1.5.2",

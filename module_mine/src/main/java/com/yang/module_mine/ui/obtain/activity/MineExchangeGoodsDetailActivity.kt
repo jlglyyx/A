@@ -49,7 +49,7 @@ class MineExchangeGoodsDetailActivity :BaseActivity() {
         initAppBarLayout()
 
         tv_exchange.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_ORDER_DETAIL_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_CREATE_ORDER_DETAIL_ACTIVITY).navigation()
         }
     }
 

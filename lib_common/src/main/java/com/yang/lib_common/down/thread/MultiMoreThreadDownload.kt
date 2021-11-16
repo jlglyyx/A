@@ -34,7 +34,8 @@ class MultiMoreThreadDownload(
     private var threadNum: Int = 10,
     private var parentFilePath: String,
     private var filePath: String,
-    private var fileUrl: String
+    private var fileUrl: String,
+    private var showNotice: Boolean
 ) : Thread() {
 
     private var fileSize: Int = 0
@@ -54,16 +55,12 @@ class MultiMoreThreadDownload(
         private const val TAG = "MultiMoreThreadDownload"
     }
 
-    class Builder {
-        private var mContext: Context
+    class Builder(private var mContext: Context) {
         private var threadNum: Int = 10
         private lateinit var parentFilePath: String
         private lateinit var filePath: String
         private lateinit var fileUrl: String
-
-        constructor(mContext: Context) {
-            this.mContext = mContext
-        }
+        private var showNotice: Boolean = true
 
 
         /**
@@ -98,8 +95,16 @@ class MultiMoreThreadDownload(
             return this
         }
 
+        /**
+         * 展示通知
+         */
+        fun showNotice(showNotice: Boolean): Builder {
+            this.showNotice = showNotice
+            return this
+        }
+
         fun build(): MultiMoreThreadDownload {
-            return MultiMoreThreadDownload(mContext,threadNum,parentFilePath,filePath,fileUrl)
+            return MultiMoreThreadDownload(mContext,threadNum,parentFilePath,filePath,fileUrl,showNotice)
         }
 
     }
@@ -183,21 +188,27 @@ class MultiMoreThreadDownload(
                             "run:  下载进度：$downloadPercent%  用时：$usedTimeMillis/s  下载速度：$downloadSpeed Kb/s"
                         )
                         currentPercent = downloadPercent
-                        showDownLoadNotification(downloadPercent, usedTimeMillis, downloadSpeed)
+                        if (showNotice){
+                            showDownLoadNotification(downloadPercent, usedTimeMillis, downloadSpeed)
+                        }
                     }
 
                 }
 
                 GlobalScope.launch(Dispatchers.Main) {
-                    showShort("下载完成：${file.absolutePath}")
-                    showCompleteNotification(file)
+                    if (showNotice){
+                        showShort("下载完成：${file.absolutePath}")
+                        showCompleteNotification(file)
+                    }
                 }
 
             }
 
         } catch (e: Exception) {
             GlobalScope.launch(Dispatchers.Main) {
-                showShort("下载失败：${e.message}")
+                if (showNotice){
+                    showShort("下载失败：${e.message}")
+                }
             }
             Log.i(TAG, "run: ${e.message}")
         }

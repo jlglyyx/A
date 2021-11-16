@@ -21,7 +21,7 @@ class LoginViewModel @Inject constructor(
 
     var mUserInfoData = MutableLiveData<UserInfoData>()
 
-    fun login(userAccount: String, password: String,isSplash: Boolean = false) {
+    fun login(userAccount: String, password: String) {
         launch({
             loginRepository.login(userAccount, password)
         }, {
@@ -30,10 +30,20 @@ class LoginViewModel @Inject constructor(
             delayShowDialog()
             dismissDialog()
         },{
-            if (isSplash){
-                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
-            }
         }, messages = *arrayOf("请求中..."))
+    }
+    fun splashLogin(userAccount: String, password: String) {
+        launch({
+            loginRepository.login(userAccount, password)
+        }, {
+            mUserInfoData.postValue(it.data)
+            showDialog(it.message)
+            delayShowDialog()
+            dismissDialog()
+        },{
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            finishActivity()
+        })
     }
 
     fun register(userInfoData: UserInfoData) {

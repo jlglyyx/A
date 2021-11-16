@@ -29,11 +29,9 @@
 
             <include layout="@layout/item_main_title" />
 
-            <include layout="@layout/item_main_content_text" />
+            <include layout="@layout/item_main_content_text" android:id="@+id/item_main_content_text" />
 
             <include layout="@layout/item_main_content_image" />
-
-            <include layout="@layout/item_main_content_video" />
 
             <include layout="@layout/item_main_identification" />
 
@@ -42,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never"
+                android:nestedScrollingEnabled="false"
                 android:paddingBottom="@dimen/dp_30" />
 
         </LinearLayout>

@@ -8,7 +8,7 @@ interface AppConstant {
 
         const val BASE_PORT = "20000"
 
-        const val BASE_URL = "https://www.baidu.com/"
+        const val BASE_URL = "http://jlgl.free.idcfengye.com/"
 //        const val BASE_URL = "http://10.16.242.28:20000/"
 
         const val TAG = "RemoteModule"
@@ -51,6 +51,7 @@ interface AppConstant {
         const val ACCESSIBILITY_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AccessibilityActivity"
         const val SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/SettingActivity"
         const val ABOUT_AND_HELP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AboutAndHelpActivity"
+        const val WEB_VIEW_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/WebViewActivity"
 
 
 
@@ -123,6 +124,8 @@ interface AppConstant {
         const val MINE_EARN_OBTAIN_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineEarnObtainActivity"
 
         const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineOrderDetailActivity"
+
+        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
 
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"

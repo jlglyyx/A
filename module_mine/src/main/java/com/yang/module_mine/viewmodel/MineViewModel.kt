@@ -7,6 +7,10 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_mine.repository.MineRepository
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import java.io.File
+import java.net.URLEncoder
 import javax.inject.Inject
 
 /**
@@ -20,6 +24,7 @@ class MineViewModel @Inject constructor(
 ) : BaseViewModel(application) {
 
     var mUserInfoData = MutableLiveData<UserInfoData>()
+    var pictureListLiveData = MutableLiveData<MutableList<String>>()
 
     fun login(userAccount: String, password: String) {
         launch({
@@ -43,6 +48,22 @@ class MineViewModel @Inject constructor(
             delayShowDialog()
             dismissDialog()
         }, messages = *arrayOf("请求中..."))
+    }
+
+    fun uploadFile(filePaths: MutableList<String>) {
+        launch({
+            val mutableMapOf = mutableMapOf<String, RequestBody>()
+            filePaths.forEach {
+                val file = File(it)
+                val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                val encode =
+                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+                mutableMapOf["file\";filename=\"$encode"] = requestBody
+            }
+            mineRepository.uploadFile(mutableMapOf)
+        }, {
+            pictureListLiveData.postValue(it.data)
+        }, messages = *arrayOf("上传中", "添加成功"))
     }
 
 }

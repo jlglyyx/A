@@ -49,6 +49,14 @@
         </provider>
 
         <service android:name="com.amap.api.location.APSService"/>
+
+
+
+        <service
+            android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+            android:label="dexopt"
+            android:process=":dexopt" >
+        </service>
     </application>
 
 </manifest>

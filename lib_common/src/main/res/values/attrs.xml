@@ -21,4 +21,7 @@
         <attr name="itemRightContentVisible" format="boolean"/>
         <attr name="itemBg" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="ImageScrollView">
+        <attr name="imageName" format="string"/>
+    </declare-styleable>
 </resources>

@@ -1,21 +1,15 @@
 package com.yang.module_picture.ui.activity
 
-import android.graphics.Rect
 import android.view.View
-import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.android.material.tabs.TabLayout
 import com.lxj.xpopup.XPopup
-import com.yang.lib_common.adapter.ImageViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -25,6 +19,7 @@ import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.dip2px
 import com.yang.module_picture.R
+import com.yang.module_picture.data.model.CommonData
 import com.yang.module_picture.data.CommonData
 import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.viewmodel.PictureViewModel
@@ -64,7 +59,7 @@ class PictureItemActivity : BaseActivity() {
                     override fun getComment(s: String) {
                         mCommentAdapter.addData(0, CommonData(s))
 
-                        recyclerView.smoothScrollToPosition(0)
+                        nestedScrollView.fullScroll(View.FOCUS_UP)
                     }
 
                 }
@@ -109,9 +104,7 @@ class PictureItemActivity : BaseActivity() {
                 it.setOnItemChildClickListener { adapter, view, position ->
                     when (view.id) {
                         R.id.siv_img -> {
-                            buildARouter(
-                                AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY
-                            ).navigation()
+                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
                         }
                     }
                 }
@@ -189,7 +182,7 @@ class PictureItemActivity : BaseActivity() {
         })
 
         val pageRecyclerView = viewPager.getChildAt(0) as RecyclerView
-        pageRecyclerView.setPadding(10f.dip2px(this),0,10f.dip2px(this),0)
+        pageRecyclerView.setPadding(10f.dip2px(this), 0, 10f.dip2px(this), 0)
         pageRecyclerView.clipToPadding = false
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(MarginPageTransformer(5f.dip2px(this)))

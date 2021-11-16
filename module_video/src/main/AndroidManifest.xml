@@ -6,7 +6,6 @@
         <activity
             android:name="com.yang.module_video.ui.activity.VideoItemActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.VideoSearchActivity"/>
     </application>

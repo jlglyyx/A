@@ -33,6 +33,7 @@ class RegisterActivity : BaseActivity() {
     }
 
     override fun initView() {
+        lifecycle.addObserver(isv_image)
         bt_register.clicks().subscribe {
             checkForm()
         }
