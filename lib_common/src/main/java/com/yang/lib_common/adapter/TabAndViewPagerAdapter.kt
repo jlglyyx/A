@@ -10,6 +10,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.yang.lib_common.R
+import com.yang.lib_common.util.clicks
 
 
 /**
@@ -62,8 +63,8 @@ class ImageViewPagerAdapter(var data: MutableList<String>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: ImageViewPagerAdapter.ImageViewPagerViewHolder, position: Int) {
-        holder.shapeAbleImageView.setOnClickListener {
-            clickListener?.onClickListener(it,position)
+        holder.shapeAbleImageView.clicks().subscribe {
+            clickListener?.onClickListener(holder.shapeAbleImageView,position)
         }
         Glide.with(holder.shapeAbleImageView)
             .load(data[position])
