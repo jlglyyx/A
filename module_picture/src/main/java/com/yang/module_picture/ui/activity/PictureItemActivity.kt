@@ -1,15 +1,22 @@
 package com.yang.module_picture.ui.activity
 
+import android.graphics.Rect
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.tabs.TabLayout
 import com.lxj.xpopup.XPopup
+import com.yang.lib_common.adapter.ImageViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -20,7 +27,6 @@ import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.dip2px
 import com.yang.module_picture.R
 import com.yang.module_picture.data.model.CommonData
-import com.yang.module_picture.data.CommonData
 import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.viewmodel.PictureViewModel
 import com.youth.banner.transformer.ScaleInTransformer

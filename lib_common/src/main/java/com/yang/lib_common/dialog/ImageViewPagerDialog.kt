@@ -157,7 +157,10 @@ class ImageViewPagerDialog(
                     imageView.setOnClickListener {
                         dismiss()
                     }
-                    Glide.with(imageView).setDefaultRequestOptions(RequestOptions().frame(1000)).load(data[position]).into(imageView)
+                    Glide.with(imageView)
+                        .setDefaultRequestOptions(RequestOptions().frame(1000))
+                        .load(data[position])
+                        .into(imageView)
                     gsyVideoPlayer.thumbImageView = imageView
                     gsyVideoPlayer.thumbImageViewLayout.visibility = VISIBLE
                 } else {

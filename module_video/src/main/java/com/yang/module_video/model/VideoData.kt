@@ -21,6 +21,7 @@ class VideoDataItem {
     var updateTime: String? = null
     var isLarge: Boolean = false
     var itemId: String? = null
+    var title: String? = null
     var smartVideoUrls: MutableList<VideoDataItem>? = null
 }
 

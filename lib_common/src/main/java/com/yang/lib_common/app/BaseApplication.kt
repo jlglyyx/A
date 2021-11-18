@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.mmkv.MMKV
+import com.tencent.smtt.sdk.QbSdk
+import com.tencent.smtt.sdk.QbSdk.PreInitCallback
 import com.yang.lib_common.BuildConfig
 import com.yang.lib_common.handle.CrashHandle
 import com.yang.lib_common.helper.getRemoteComponent
@@ -41,6 +43,7 @@ class BaseApplication : Application() {
         initMMKV(baseApplication)
         initNetworkStatusListener(baseApplication)
         initVideo()
+        initWebView()
     }
 
     companion object {
@@ -104,6 +107,28 @@ class BaseApplication : Application() {
             delay(3000)
             PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         }
+
+    }
+
+    private fun initWebView(){
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(1000)
+            QbSdk.setDownloadWithoutWifi(true)
+            //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
+            //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
+            val cb: PreInitCallback = object : PreInitCallback {
+                override fun onViewInitFinished(arg0: Boolean) {
+                    //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
+                    Log.i("TAG", "onViewInitFinished: $arg0")
+                }
+
+                override fun onCoreInitFinished() {}
+            }
+            //x5内核初始化接口
+            //x5内核初始化接口
+            QbSdk.initX5Environment(applicationContext, cb)
+        }
+
 
     }
 

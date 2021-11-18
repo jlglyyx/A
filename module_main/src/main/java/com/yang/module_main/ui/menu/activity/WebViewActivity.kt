@@ -6,9 +6,13 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.*
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.module_main.R
+import com.yang.module_main.helper.getMainComponent
+import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_web_view.*
+import javax.inject.Inject
 
 
 /**
@@ -20,12 +24,21 @@ import kotlinx.android.synthetic.main.act_web_view.*
 @Route(path = AppConstant.RoutePath.WEB_VIEW_ACTIVITY)
 class WebViewActivity : BaseActivity() {
 
+    @Inject
+    lateinit var mainViewModel: MainViewModel
+
     override fun getLayout(): Int {
         return R.layout.act_web_view
     }
 
     override fun initData() {
 
+
+    }
+
+    override fun initViewModel() {
+
+        getMainComponent(this).inject(this)
     }
 
     override fun initView() {
@@ -33,10 +46,12 @@ class WebViewActivity : BaseActivity() {
         map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
         map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
         QbSdk.initTbsSettings(map)
-
         initWebView()
     }
 
+    override fun initUIChangeLiveData(): UIChangeLiveData {
+        return mainViewModel.uC
+    }
 
     private fun initWebView() {
         webView.webViewClient = object : WebViewClient() {
@@ -53,6 +68,7 @@ class WebViewActivity : BaseActivity() {
                 super.onPageFinished(p0, p1)
                 mLoadingProgressView.loadStart = false
                 Log.i(TAG, "onPageFinished: 加载完成 $p1")
+
             }
 
             override fun onReceivedError(p0: WebView?, p1: Int, p2: String?, p3: String?) {
@@ -93,9 +109,7 @@ class WebViewActivity : BaseActivity() {
     }
 
 
-    override fun initViewModel() {
 
-    }
 
 
     override fun onResume() {
