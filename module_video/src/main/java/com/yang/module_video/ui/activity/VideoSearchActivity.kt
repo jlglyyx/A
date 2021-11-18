@@ -125,9 +125,9 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
         recyclerView.layoutManager = LinearLayoutManager(this)
         mAdapter = VideoAdapter(R.layout.item_video_image, mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
-                val imageData = adapter.data[position] as VideoDataItem
-                buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
-                    .withString(AppConstant.Constant.ID, imageData.id)
+                val videoData = adapter.data[position] as VideoDataItem
+                buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
+                    .withString(AppConstant.Constant.ID, videoData.id)
                     .navigation()
             }
         }

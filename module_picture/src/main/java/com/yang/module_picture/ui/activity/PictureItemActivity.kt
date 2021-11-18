@@ -154,7 +154,7 @@ class PictureItemActivity : BaseActivity() {
 
         val imageViewPagerAdapter = ImageViewPagerAdapter(mutableListOf)
         viewPager.adapter = imageViewPagerAdapter
-        viewPager.offscreenPageLimit = mutableListOf.size
+        //viewPager.offscreenPageLimit = mutableListOf.size
 
         imageViewPagerAdapter.clickListener = object : ImageViewPagerAdapter.ClickListener {
             override fun onClickListener(view: View, position: Int) {
