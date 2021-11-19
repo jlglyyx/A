@@ -17,4 +17,8 @@ interface MainApiService:BaseApiService {
     @Multipart
     @POST("/uploadFile")
     suspend fun uploadFile(@PartMap file: MutableMap<String, RequestBody>): MResult<MutableList<String>>
+
+    @Multipart
+    @POST("/uploadFile")
+    suspend fun uploadFileAndParam(@Body file: MutableList<RequestBody>): MResult<MutableList<String>>
 }

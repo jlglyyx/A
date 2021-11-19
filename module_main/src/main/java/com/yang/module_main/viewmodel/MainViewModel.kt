@@ -118,7 +118,7 @@ class MainViewModel @Inject constructor(
     }
     fun uploadFileAndParam(filePaths: MutableList<MediaInfoBean>) {
         launch({
-            val mutableMapOf = mutableMapOf<String, RequestBody>()
+            val mutableListOf = mutableListOf<RequestBody>()
             filePaths.forEach {
                 val file = File(it.filePath.toString())
                 val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
@@ -126,10 +126,10 @@ class MainViewModel @Inject constructor(
                 val build = MultipartBody.Builder()
                     .addFormDataPart("param","".toJson())
                     .addFormDataPart("file",encode,requestBody).build()
-                mutableMapOf["file\";filename=\"$encode"] = build
+                mutableListOf.add(build)
             }
 
-            mainRepository.uploadFile(mutableMapOf)
+            mainRepository.uploadFileAndParam(mutableListOf)
         }, {
             pictureListLiveData.postValue(it.data)
         }, messages = *arrayOf("上传中", "添加成功"))
