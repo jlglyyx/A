@@ -39,16 +39,30 @@ class PictureSelectActivity : BaseActivity() {
 
     private var mPositionMap = mutableMapOf<MediaInfoBean, Int>()
 
+    private var maxSelect = 9
+
+    /**
+     * 0 展示全部
+     * 1 展示图片
+     * 2 展示视频
+     */
+    private var showType = AppConstant.Constant.NUM_ZERO
+
     override fun getLayout(): Int {
         return R.layout.act_picture_select
     }
 
     override fun initData() {
-        val selectData =
-            intent.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
-        selectData?.let {
-            data.addAll(it)
+        intent?.let {
+            val selectData =  it.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)?.apply {
+                data.addAll(this)
+            }
+
+            showType = it.getIntExtra(AppConstant.Constant.TYPE,showType)
+
+            maxSelect = it.getIntExtra(AppConstant.Constant.NUM,maxSelect)
         }
+
     }
 
     override fun initView() {
@@ -86,11 +100,14 @@ class PictureSelectActivity : BaseActivity() {
                 R.id.cl_cb -> {
                     val element = adapter.data[position] as MediaInfoBean
                     if (element.isSelect) {
+                        val findLast = data.findLast {
+                            TextUtils.equals(it.filePath, element.filePath)
+                        }
+                        data.remove(findLast)
+                        mPositionMap.remove(findLast)
                         element.isSelect = false
-                        data.remove(element)
-                        mPositionMap.remove(element)
                     } else {
-                        if (data.size < 9) {
+                        if (data.size < maxSelect) {
                             element.isSelect = true
                             data.add(element)
                             mPositionMap[element] = position
@@ -104,6 +121,7 @@ class PictureSelectActivity : BaseActivity() {
                     for (a in data.withIndex()) {
                         for ((key, value) in mPositionMap) {
                             if (TextUtils.equals(a.value.filePath, key.filePath)) {
+                                /*获取最大的位置 然后更新这部分数据就行*/
                                 max = maxOf(max, value)
                                 pictureSelectAdapter.data[value].selectPosition = a.index + 1
                                 //adapter.notifyItemChanged(value, false)
@@ -120,25 +138,71 @@ class PictureSelectActivity : BaseActivity() {
 
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val allPictureAndVideo = getAllPictureAndVideo()
-            val allVideo = getAllVideo()
-            val sortedByDescending = (allPictureAndVideo + allVideo).sortedByDescending {
-                it.fileCreateTime
-            }.apply {
-                for (i in data) {
-                    this.findLast {
-                        TextUtils.equals(i.filePath, it.filePath)
+            when (showType) {
+                AppConstant.Constant.NUM_ZERO -> {
+                    val allPictureAndVideo = getAllPictureAndVideo()
+                    val allVideo = getAllVideo()
+                    val sortedByDescending = (allPictureAndVideo + allVideo).sortedByDescending {
+                        it.fileCreateTime
                     }.apply {
-                        this?.isSelect = true
-                        this?.selectPosition = i.selectPosition
+                        for (i in data) {
+                            this.findLast {
+                                TextUtils.equals(i.filePath, it.filePath)
+                            }.apply {
+                                /*遍历选中的数据与总数据匹配 设置匹配到的数据选中 */
+                                /*位置map 持有数据和数据的位置 */
+                                this?.let {
+                                    it.isSelect = true
+                                    it.selectPosition = i.selectPosition
+                                    mPositionMap[i] = indexOf(it)
+                                }
+                            }
+                        }
+                    }
+                    withContext(Dispatchers.Main) {
+                        pictureSelectAdapter.setNewData(sortedByDescending)
+                    }
+                }
+                AppConstant.Constant.NUM_ONE -> {
+                    val allPictureAndVideo = getAllPictureAndVideo()
+                    for (i in data) {
+                        allPictureAndVideo.findLast {
+                            TextUtils.equals(i.filePath, it.filePath)
+                        }.apply {
+                            this?.let {
+                                it.isSelect = true
+                                it.selectPosition = i.selectPosition
+                                mPositionMap[i] = allPictureAndVideo.indexOf(it)
+                            }
+                        }
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        pictureSelectAdapter.setNewData(allPictureAndVideo)
+                    }
+                }
+                else -> {
+                    val allVideo = getAllVideo()
+                    for (i in data) {
+                        allVideo.findLast {
+                            TextUtils.equals(i.filePath, it.filePath)
+                        }.apply {
+                            this?.let {
+                                it.isSelect = true
+                                it.selectPosition = i.selectPosition
+                                mPositionMap[i] = allVideo.indexOf(it)
+                            }
+                        }
+                    }
+                    withContext(Dispatchers.Main) {
+                        pictureSelectAdapter.setNewData(allVideo)
                     }
                 }
             }
-            withContext(Dispatchers.Main) {
-                pictureSelectAdapter.setNewData(sortedByDescending)
-            }
+
         }
     }
+
 
     private fun getAllPictureAndVideo(): MutableList<MediaInfoBean> {
         val mutableListOf = mutableListOf<MediaInfoBean>()
@@ -152,7 +216,7 @@ class PictureSelectActivity : BaseActivity() {
         var i = 0
         while (query?.moveToNext()!!) {
             val mediaInfoBean = MediaInfoBean()
-            var path = query.getString(query.getColumnIndex(MediaStore.Images.Media.DATA))
+            val path = query.getString(query.getColumnIndex(MediaStore.Images.Media.DATA))
             val duration = query.getString(query.getColumnIndex(MediaStore.Images.Media.DURATION))
             val size = query.getString(query.getColumnIndex(MediaStore.Images.Media.SIZE))
             val name = query.getString(query.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME))
@@ -182,7 +246,7 @@ class PictureSelectActivity : BaseActivity() {
 
         while (query?.moveToNext()!!) {
             val mediaInfoBean = MediaInfoBean()
-            var path = query.getString(query.getColumnIndex(MediaStore.Video.Media.DATA))
+            val path = query.getString(query.getColumnIndex(MediaStore.Video.Media.DATA))
             val duration = query.getString(query.getColumnIndex(MediaStore.Video.Media.DURATION))
             val size = query.getString(query.getColumnIndex(MediaStore.Video.Media.SIZE))
             val name = query.getString(query.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME))

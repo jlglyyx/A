@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/dp_15"
         android:paddingVertical="@dimen/dp_18"
+        android:maxLength="7"
         android:textColor="@android:color/black"
         android:textSize="@dimen/sp_15" />
     <TextView
@@ -28,6 +29,10 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/dp_5"
         android:paddingVertical="@dimen/dp_18"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:maxLength="8"
         android:textColor="@android:color/black"
         android:textSize="@dimen/sp_13" />
     <ImageView

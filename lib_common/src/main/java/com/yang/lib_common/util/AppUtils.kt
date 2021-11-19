@@ -73,8 +73,9 @@ fun View.clicks(): Observable<Unit> {
     return this.clicks().throttleFirst(CLICK_TIME, TimeUnit.MILLISECONDS)
 }
 
-fun toJson(src: Any): String {
-    return Gson().toJson(src)
+
+fun Any.toJson(): String {
+    return Gson().toJson(this)
 }
 
 fun <T> fromJson(json: String, t: Class<T>): T {

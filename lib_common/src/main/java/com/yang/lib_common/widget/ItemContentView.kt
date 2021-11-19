@@ -2,6 +2,7 @@ package com.yang.lib_common.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -17,12 +18,29 @@ import com.yang.lib_common.R
  */
 class ItemContentView:LinearLayout {
 
+    private lateinit var tvContent:TextView
+
     private lateinit var tvRightContent:TextView
 
     var rightContent:String? = null
     set(value) {
          field = value
         tvRightContent.text = field
+    }
+    var rightContentFontSize:Float = 13f
+    set(value) {
+         field = value
+        tvRightContent.setTextSize(TypedValue.COMPLEX_UNIT_SP,field)
+    }
+    var content:String? = null
+    set(value) {
+         field = value
+        tvContent.text = field
+    }
+    var contentFontSize:Float = 15f
+    set(value) {
+         field = value
+        tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP,field)
     }
 
     constructor(context: Context) : this(context,null)
@@ -42,7 +60,7 @@ class ItemContentView:LinearLayout {
         val llLl = view.findViewById<LinearLayout>(R.id.ll_ll)
         val ivLeft = view.findViewById<ImageView>(R.id.iv_left)
         val ivRight = view.findViewById<ImageView>(R.id.iv_right)
-        val tvContent = view.findViewById<TextView>(R.id.tv_content)
+        tvContent = view.findViewById<TextView>(R.id.tv_content)
         tvRightContent = view.findViewById(R.id.tv_rightContent)
         val obtainStyledAttributes = context.obtainStyledAttributes(attrs, R.styleable.ItemContentView)
         val leftContent = obtainStyledAttributes.getString(R.styleable.ItemContentView_itemLeftContent)

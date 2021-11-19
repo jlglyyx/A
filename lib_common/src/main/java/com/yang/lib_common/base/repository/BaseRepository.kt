@@ -12,7 +12,7 @@ open class BaseRepository {
         }
     }
 
-    private inline fun <T : MResult<*>> T.isSuccess(): T {
+    private fun <T : MResult<*>> T.isSuccess(): T {
         if (!this.success) {
             throw Exception(this.message)
         }

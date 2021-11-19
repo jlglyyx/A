@@ -29,6 +29,11 @@ class MainRepository @Inject constructor(private val mainApiService: MainApiServ
             mainApiService.uploadFile(filePaths)
         }
     }
+    suspend fun uploadFileAndParam(filePaths: MutableList<RequestBody>): MResult<MutableList<String>> {
+        return withContext(Dispatchers.IO) {
+            mainApiService.uploadFileAndParam(filePaths)
+        }
+    }
 
 
 }
