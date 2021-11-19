@@ -52,6 +52,7 @@ interface AppConstant {
         const val SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/SettingActivity"
         const val ABOUT_AND_HELP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AboutAndHelpActivity"
         const val WEB_VIEW_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/WebViewActivity"
+        const val UPLOAD_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/UploadActivity"
 
 
 
@@ -153,6 +154,8 @@ interface AppConstant {
 
         const val NAME = "name"
 
+        const val NUM = "num"
+
         const val CONTENT = "content"
 
         const val PAGE_SIZE_COUNT = 10
@@ -170,6 +173,8 @@ interface AppConstant {
         const val KEYWORD = "keyword"
 
         const val LOCATION = "location"
+
+        const val NUM_MINUS_ONE = -1
 
         const val NUM_ZERO = 0
 

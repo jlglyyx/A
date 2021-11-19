@@ -77,6 +77,9 @@ class LeftFragment : BaseFragment() {
         tv_webView.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.WEB_VIEW_ACTIVITY).navigation()
         }
+        tv_upload.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.UPLOAD_ACTIVITY).navigation()
+        }
     }
 
     override fun initViewModel() {

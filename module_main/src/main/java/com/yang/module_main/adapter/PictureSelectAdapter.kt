@@ -28,8 +28,11 @@ class PictureSelectAdapter(
         if (showSelect) {
             helper.addOnClickListener(R.id.cl_cb)
             if (item.fileType == 1) {
-                helper.setText(R.id.tv_time, secToTime(item.fileDurationTime.toString()))
-                helper.setVisible(R.id.tv_time, true)
+                item.fileDurationTime?.let {
+                    helper.setText(R.id.tv_time, secToTime(it))
+                    helper.setVisible(R.id.tv_time, true)
+                }
+
             } else {
                 helper.setVisible(R.id.tv_time, false)
             }
@@ -65,9 +68,9 @@ class PictureSelectAdapter(
 
     }
 
-    private fun secToTime(data: String): String? {
+    private fun secToTime(data: String): String {
         val time = data.toInt() / 1000
-        var timeStr: String?
+        val timeStr: String?
         if (time <= 0) return "00:00:00" else {
             timeStr =
                 "${unitFormat(time / 60 / 60 % 60)}:${unitFormat(time / 60 % 60)}:${unitFormat(time % 60)}"

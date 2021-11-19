@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.data.MediaInfoBean
+import com.yang.lib_common.util.toJson
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.repository.MainRepository
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import java.net.URLEncoder
@@ -106,10 +108,27 @@ class MainViewModel @Inject constructor(
             filePaths.forEach {
                 val file = File(it.filePath.toString())
                 val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-                val encode =
-                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+                val encode = URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
                 mutableMapOf["file\";filename=\"$encode"] = requestBody
             }
+            mainRepository.uploadFile(mutableMapOf)
+        }, {
+            pictureListLiveData.postValue(it.data)
+        }, messages = *arrayOf("上传中", "添加成功"))
+    }
+    fun uploadFileAndParam(filePaths: MutableList<MediaInfoBean>) {
+        launch({
+            val mutableMapOf = mutableMapOf<String, RequestBody>()
+            filePaths.forEach {
+                val file = File(it.filePath.toString())
+                val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                val encode = URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+                val build = MultipartBody.Builder()
+                    .addFormDataPart("param","".toJson())
+                    .addFormDataPart("file",encode,requestBody).build()
+                mutableMapOf["file\";filename=\"$encode"] = build
+            }
+
             mainRepository.uploadFile(mutableMapOf)
         }, {
             pictureListLiveData.postValue(it.data)

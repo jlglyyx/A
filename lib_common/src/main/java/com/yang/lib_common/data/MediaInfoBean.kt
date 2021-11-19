@@ -20,6 +20,10 @@ class MediaInfoBean() :Parcelable {
      */
     var fileType:Int = -1
     var isSelect = false
+
+    /**
+     * 用于排序的position
+     */
     var selectPosition:Int = 0
 
     constructor(parcel: Parcel) : this() {
