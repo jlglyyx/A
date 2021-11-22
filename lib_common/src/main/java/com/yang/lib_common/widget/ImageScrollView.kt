@@ -12,11 +12,8 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.yang.lib_common.R
 import com.yang.lib_common.util.getScreenPx
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 /**
  * ClassName: ImageScrollView.
@@ -27,6 +24,18 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
 
     companion object {
         private const val TAG = "ImageScrollView"
+
+        const val HORIZONTAL = 0
+
+        const val VERTICAL = 1
+
+        const val LOOP_VERTICAL = 2
+
+        const val NORMAL_VERTICAL = 3
+
+        const val UP = 4
+
+        const val DOWN = 5
     }
 
     private var bitmap: Bitmap? = null
@@ -35,10 +44,20 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
     private var mMatrix = Matrix()
     private var mBitmapCount = 0
     private var mPanDistance = 0f
-    private var mJob: Job? = null
 
     private var w: Int = 0
     private var h: Int = 0
+
+    var speed = 0.5f
+
+    var imageUrl =
+        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic2.zhimg.com%2Fv2-583a86cd154739160d2e17e185dcc8f2_r.jpg%3Fsource%3D1940ef5c&refer=http%3A%2F%2Fpic2.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638427892&t=e2a584b32bb0b6f820613078d552716c"
+
+    var scrollType = LOOP_VERTICAL
+
+    private var direction = UP
+
+    private var isPause = false
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -48,19 +67,13 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         defStyleAttr
     ) {
         setWillNotDraw(false)
-//        val obtainStyledAttributes = context.obtainStyledAttributes(attrs, R.styleable.ImageScrollView)
-//        val string = obtainStyledAttributes.getString(R.styleable.ImageScrollView_imageName)
-//        val file = File("${Environment.getExternalStorageDirectory()}/MFiles/picture/${string}.png")
-//        if (file.exists()){
-//            bitmap = BitmapFactory.decodeFile("${Environment.getExternalStorageDirectory()}/MFiles/picture/${string}.png")
-//        }else{
-//            bitmap = Bitmap.createBitmap(getScreenPx(context)[0], getScreenPx(context)[1], Bitmap.Config.RGB_565)
-//            val canvas = Canvas(bitmap)
-//            canvas.drawColor(Color.WHITE)
-//        }
-//        obtainStyledAttributes.recycle()
-
-
+        val obtainStyledAttributes =
+            context.obtainStyledAttributes(attrs, R.styleable.ImageScrollView)
+        speed = obtainStyledAttributes.getFloat(R.styleable.ImageScrollView_speed, speed)
+        scrollType =
+            obtainStyledAttributes.getInt(R.styleable.ImageScrollView_scrollType, LOOP_VERTICAL)
+        obtainStyledAttributes.recycle()
+        Log.i(TAG, "constructor: $w  $h")
     }
 
 
@@ -68,8 +81,9 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         super.onSizeChanged(w, h, oldw, oldh)
         this.w = w
         this.h = h
+        Log.i(TAG, "onSizeChanged: $w  $h  $imageUrl")
         Glide.with(this).asBitmap()
-            .load("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic2.zhimg.com%2Fv2-583a86cd154739160d2e17e185dcc8f2_r.jpg%3Fsource%3D1940ef5c&refer=http%3A%2F%2Fpic2.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638427892&t=e2a584b32bb0b6f820613078d552716c")
+            .load(imageUrl)
             .into(
                 object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(
@@ -93,7 +107,6 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
                     }
 
                 })
-
     }
 
     private fun init(bitmap: Bitmap) {
@@ -121,32 +134,59 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
         super.onDraw(canvas)
         scaleBitmap?.let { scaleBitmap ->
             val height = scaleBitmap.height
-            if (height + mPanDistance != 0f) {
-                mMatrix.reset()
-                mMatrix.postTranslate(0f, mPanDistance)
-                canvas.drawBitmap(scaleBitmap, mMatrix, mPaint)
-            }
-            if (height + mPanDistance < measuredHeight) {
-                for (i in 0 until mBitmapCount) {
+            when (scrollType) {
+                LOOP_VERTICAL -> {
+                    if (height + mPanDistance != 0f) {
+                        mMatrix.reset()
+                        mMatrix.postTranslate(0f, mPanDistance)
+                        canvas.drawBitmap(scaleBitmap, mMatrix, mPaint)
+                    }
+                    if (height + mPanDistance < measuredHeight) {
+                        for (i in 0 until mBitmapCount) {
+                            mMatrix.reset()
+                            mMatrix.postTranslate(0f, (i + 1) * scaleBitmap.height + mPanDistance)
+                            canvas.drawBitmap(scaleBitmap, mMatrix, mPaint)
+                        }
+                    }
+                }
+                NORMAL_VERTICAL -> {
                     mMatrix.reset()
-                    mMatrix.postTranslate(0f, (i + 1) * scaleBitmap.height + mPanDistance)
+                    mMatrix.postTranslate(0f, mPanDistance)
                     canvas.drawBitmap(scaleBitmap, mMatrix, mPaint)
                 }
             }
+
             invalidateView()
         }
-
     }
 
 
     private fun invalidateView() {
         scaleBitmap?.let { scaleBitmap ->
-            mJob = GlobalScope.launch(Dispatchers.IO) {
-                val length = scaleBitmap.height
-                if (length + mPanDistance <= 0f) {
-                    mPanDistance = 0f
+            val length = scaleBitmap.height
+            when (scrollType) {
+                LOOP_VERTICAL -> {
+                    if (length + mPanDistance <= 0f) {
+                        mPanDistance = 0f
+                    }
+                    mPanDistance -= speed
                 }
-                mPanDistance -= 0.5f
+                NORMAL_VERTICAL -> {
+                    if (length + mPanDistance <= h) {
+                        direction = DOWN
+                    }
+                    if (length + mPanDistance == length.toFloat()) {
+                        direction = UP
+                    }
+                    if (direction == UP) {
+                        mPanDistance -= speed
+                    }
+                    if (direction == DOWN) {
+                        mPanDistance += speed
+                    }
+                }
+            }
+            if (!isPause) {
                 postInvalidate()
             }
         }
@@ -164,33 +204,24 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-        if (mJob != null) {
-            if (!mJob?.isActive!!) {
-                mJob?.start()
-            }
+        if(isPause){
+            isPause = false
+            invalidateView()
         }
-
         Log.i(TAG, "onResume: ")
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
-        if (mJob != null) {
-            if (mJob?.isActive!!) {
-                mJob?.cancel()
-            }
+        if(!isPause){
+            isPause = true
         }
         Log.i(TAG, "onPause: ")
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
-        if (mJob != null) {
-            if (mJob?.isActive!!) {
-                mJob?.cancel()
-            }
-        }
-        mJob = null
+        isPause = true
         Log.i(TAG, "onDestroy: ")
     }
 

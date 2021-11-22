@@ -6,7 +6,6 @@
     <com.yang.lib_common.widget.ImageScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:imageName = "register"
         android:id="@+id/isv_image"/>
     <EditText
         android:id="@+id/et_user"

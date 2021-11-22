@@ -1,6 +1,9 @@
 package com.yang.module_main.ui.main.activity
 
 import android.Manifest
+import android.content.res.ColorStateList
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -131,16 +134,18 @@ class MainActivity : BaseActivity() {
             tabLayout,
             viewPager,
             true,
-            false,
-            TabLayoutMediator.TabConfigurationStrategy { tab, position ->
-                tab.text = titles[position]
+            false
+        ) { tab, position ->
+            tab.text = titles[position]
+            tab.setIcon(icon[position])
+            if (position == 0) {
+                tab.setIcon(selectIcon[position])
+                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.plum))
+            } else {
                 tab.setIcon(icon[position])
-                if (position == 0) {
-                    tab.setIcon(selectIcon[position])
-                } else {
-                    tab.setIcon(icon[position])
-                }
-            }).attach()
+                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.grey))
+            }
+        }.attach()
 
         tabLayout.post {
             viewPager.setPadding(0, 0, 0, tabLayout.height + 10f.px2dip(this))
@@ -153,10 +158,13 @@ class MainActivity : BaseActivity() {
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
                 tab.setIcon(icon[tab.position])
+                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.grey))
             }
 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 tab.setIcon(selectIcon[tab.position])
+                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.plum))
+
             }
 
         })

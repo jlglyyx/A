@@ -35,6 +35,8 @@ class LeftFragment : BaseFragment() {
         }.startLocation()
 
 
+        lifecycle.addObserver(isv_image)
+
         siv_head.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,userInfo?.id).navigation()
         }
