@@ -73,6 +73,8 @@ ext {
             "photoview"                    : "com.github.chrisbanes.photoview:library:1.2.4",
             "XPopup"                       : "com.github.li-xiaojun:XPopup:2.4.0",
             "location"                     : "com.amap.api:location:5.0.0",
+            "3dmap"                        : 'com.amap.api:3dmap:5.0.0',
+            "search"                       : 'com.amap.api:search:5.0.0',
             "flowlayout"                   : "com.hyman:flowlayout-lib:1.1.2",
             "tbs"                          : "com.tencent.tbs:tbssdk:44085",
     ]

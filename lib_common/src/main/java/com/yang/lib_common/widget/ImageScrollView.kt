@@ -59,6 +59,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
 
     private var isPause = false
 
+
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -107,6 +108,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
                     }
 
                 })
+
     }
 
     private fun init(bitmap: Bitmap) {
@@ -175,7 +177,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
                     if (length + mPanDistance <= h) {
                         direction = DOWN
                     }
-                    if (length + mPanDistance == length.toFloat()) {
+                    if (length + mPanDistance >= length.toFloat()) {
                         direction = UP
                     }
                     if (direction == UP) {
@@ -204,7 +206,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-        if(isPause){
+        if (isPause) {
             isPause = false
             invalidateView()
         }
@@ -213,7 +215,7 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
-        if(!isPause){
+        if (!isPause) {
             isPause = true
         }
         Log.i(TAG, "onPause: ")
