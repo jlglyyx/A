@@ -24,7 +24,7 @@ class LeftFragment : BaseFragment() {
             .placeholder(R.drawable.iv_image_placeholder).into(siv_head)
         tv_name.text = userInfo?.userName?:"张三"
 
-        LocationUtil().apply {
+        LocationUtil(requireContext()).apply {
             lifecycle.addObserver(this)
             locationListener = object :LocationUtil.LocationListener{
                 override fun onLocationListener(aMapLocation: AMapLocation) {

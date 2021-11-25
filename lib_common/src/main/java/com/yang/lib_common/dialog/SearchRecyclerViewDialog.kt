@@ -2,15 +2,18 @@ package com.yang.lib_common.dialog
 
 import android.content.Context
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.amap.api.location.AMapLocation
 import com.amap.api.services.help.Inputtips
 import com.amap.api.services.help.InputtipsQuery
-import com.amap.api.services.help.Tip
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.lxj.xpopup.core.BottomPopupView
 import com.yang.lib_common.R
+import com.yang.lib_common.util.LocationUtil
 import com.yang.lib_common.util.getScreenPx
 import kotlinx.android.synthetic.main.dialog_search_recycler_view.view.*
 
@@ -20,7 +23,7 @@ import kotlinx.android.synthetic.main.dialog_search_recycler_view.view.*
  * @Description
  * @Date 2021/11/23 11:59
  */
-class SearchRecyclerViewDialog(context: Context) : BottomPopupView(context),Inputtips.InputtipsListener {
+class SearchRecyclerViewDialog(context: Context) : BottomPopupView(context) {
 
 
     private lateinit var itemAdapter:ItemAdapter
@@ -28,6 +31,11 @@ class SearchRecyclerViewDialog(context: Context) : BottomPopupView(context),Inpu
     var searchRecyclerViewDialogCallBack:SearchRecyclerViewDialogCallBack? = null
 
     private var list = mutableListOf<String>()
+
+    private var  inputTipsListener : Inputtips.InputtipsListener? = null
+
+    private var locationUtil:LocationUtil? = null
+
 
     interface SearchRecyclerViewDialogCallBack {
 
@@ -42,6 +50,16 @@ class SearchRecyclerViewDialog(context: Context) : BottomPopupView(context),Inpu
         super.onCreate()
         initRecyclerView()
         initInput()
+        locationUtil = LocationUtil(context)
+        locationUtil?.apply {
+            locationListener = object : LocationUtil.LocationListener{
+                override fun onLocationListener(aMapLocation: AMapLocation) {
+                    itemAdapter.addData(aMapLocation.district+aMapLocation.address)
+                }
+
+            }
+            startLocation()
+        }
     }
 
     override fun getMaxHeight(): Int {
@@ -61,22 +79,36 @@ class SearchRecyclerViewDialog(context: Context) : BottomPopupView(context),Inpu
     }
 
     private fun initInput(){
-        et_search.addTextChangedListener(object : TextWatcher{
+         if (inputTipsListener == null){
+             inputTipsListener = Inputtips.InputtipsListener { p0, p1 ->
+                 list.clear()
+                 p0?.forEach {
+                     list.add("${it.district}${it.address}")
+                 }
+                 itemAdapter.replaceData(list)
+             }
+         }
+        et_search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (TextUtils.isEmpty(s.toString())){
+                    return
+                }
                 //第二个参数传入null或者“”代表在全国进行检索，否则按照传入的city进行检索
                 val inputTipsQuery = InputtipsQuery(s.toString(), null)
                 //限制在当前城市
                 //inputTipsQuery.cityLimit = true
                 val inputTips = Inputtips(context, inputTipsQuery)
-                inputTips.setInputtipsListener(this@SearchRecyclerViewDialog)
+                inputTips.setInputtipsListener(inputTipsListener)
                 inputTips.requestInputtipsAsyn()
+                Log.i("TAG", "onTextChanged: $s")
             }
 
             override fun afterTextChanged(s: Editable) {
 
+                Log.i("TAG", "afterTextChanged: $s")
             }
 
         })
@@ -94,12 +126,14 @@ class SearchRecyclerViewDialog(context: Context) : BottomPopupView(context),Inpu
 
     }
 
-    override fun onGetInputtips(p0: MutableList<Tip>, p1: Int) {
-        list.clear()
-        p0.forEach {
-            list.add("${it.district}${it.address}")
-        }
-        itemAdapter.replaceData(list)
 
+    override fun onDismiss() {
+        super.onDismiss()
+        inputTipsListener = null
+        locationUtil?.stopLocation()
+        locationUtil?.onDestroy()
+        locationUtil = null
     }
+
+
 }

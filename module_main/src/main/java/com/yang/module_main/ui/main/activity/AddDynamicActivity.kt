@@ -154,7 +154,7 @@ class AddDynamicActivity : BaseActivity() {
             return@setOnItemLongClickListener false
         }
         pictureSelectAdapter.setOnItemClickListener { adapter, view, position ->
-            var imageList =(adapter.data as MutableList<MediaInfoBean>).map {
+            val imageList =(adapter.data as MutableList<MediaInfoBean>).map {
                 it.filePath
             } as MutableList<String>
             val imageViewPagerDialog =

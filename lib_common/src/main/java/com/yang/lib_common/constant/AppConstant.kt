@@ -2,7 +2,7 @@ package com.yang.lib_common.constant
 
 interface AppConstant {
 
-    object ClientInfo{
+    object ClientInfo {
 
         const val BASE_IP = "http://192.168.81.200"
 
@@ -55,7 +55,6 @@ interface AppConstant {
         const val UPLOAD_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/UploadActivity"
 
 
-
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
         const val LEFT_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/LeftFragment"
         const val MY_COLLECTION_PICTURE_FRAGMENT =
@@ -87,7 +86,8 @@ interface AppConstant {
         const val VIDEO_ITEM_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/VideoItemFragment"
 
 
-        const val ADVERTISEMENT_VIDEO_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
+        const val ADVERTISEMENT_VIDEO_ACTIVITY =
+            "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
         const val VIDEO_MAIN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/MainActivity"
 
         const val VIDEO_ITEM_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoItemActivity"
@@ -106,19 +106,23 @@ interface AppConstant {
 
         const val MINE_OBTAIN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainActivity"
 
-        const val MINE_OBTAIN_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainExchangeActivity"
+        const val MINE_OBTAIN_EXCHANGE_ACTIVITY =
+            "/$MODULE_MINE/$ACTIVITY/MineObtainExchangeActivity"
 
         const val MINE_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeActivity"
 
-        const val MINE_EXCHANGE_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeDetailActivity"
+        const val MINE_EXCHANGE_DETAIL_ACTIVITY =
+            "/$MODULE_MINE/$ACTIVITY/MineExchangeDetailActivity"
 
         const val MINE_SIGN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineSignActivity"
 
         const val MINE_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionActivity"
 
-        const val MINE_LIMIT_TIME_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineLimitTimeExtensionActivity"
+        const val MINE_LIMIT_TIME_EXTENSION_ACTIVITY =
+            "/$MODULE_MINE/$ACTIVITY/MineLimitTimeExtensionActivity"
 
-        const val MINE_SHIPPING_ADDRESS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineShippingAddressActivity"
+        const val MINE_SHIPPING_ADDRESS_ACTIVITY =
+            "/$MODULE_MINE/$ACTIVITY/MineShippingAddressActivity"
 
         const val MINE_ADD_ADDRESS_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineAddAddressActivity"
 
@@ -126,13 +130,14 @@ interface AppConstant {
 
         const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineOrderDetailActivity"
 
-        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
+        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY =
+            "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
 
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
-        const val MINE_EXCHANGE_STATUS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
-
+        const val MINE_EXCHANGE_STATUS_FRAGMENT =
+            "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
 
 
     }
@@ -208,6 +213,15 @@ interface AppConstant {
         const val ITEM_VIDEO_RECOMMEND_TYPE = 0
         const val ITEM_VIDEO_SMART_IMAGE = 1
         const val ITEM_VIDEO_BIG_IMAGE = 2
+
+        /**
+         * 评论布局类型
+         */
+        const val PARENT_COMMENT_TYPE = 0
+
+        const val CHILD_COMMENT_TYPE = 1
+
+        const val CHILD_REPLY_COMMENT_TYPE = 2
     }
 
 

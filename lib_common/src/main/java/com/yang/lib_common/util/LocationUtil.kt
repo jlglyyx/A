@@ -1,5 +1,6 @@
 package com.yang.lib_common.util
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -16,7 +17,7 @@ import com.yang.lib_common.app.BaseApplication
  * @Description
  * @Date 2021/8/20 11:40
  */
-class LocationUtil : LifecycleObserver {
+class LocationUtil constructor(val context: Context): LifecycleObserver {
 
     private val TAG = "LocationUtil"
     private lateinit var aMapLocationClientOption: AMapLocationClientOption
@@ -29,9 +30,10 @@ class LocationUtil : LifecycleObserver {
     }
 
     fun startLocation() {
+        AMapLocationClient.updatePrivacyAgree(context,true)
+        AMapLocationClient.updatePrivacyShow(context,true,true)
         aMapLocationClientOption = AMapLocationClientOption()
         aMapLocationClient = AMapLocationClient(BaseApplication.baseApplication)
-
         //回调监听
         mLocationListener = AMapLocationListener {
             locationListener?.onLocationListener(it)
@@ -40,7 +42,7 @@ class LocationUtil : LifecycleObserver {
             } else {
                 Log.e(TAG, "location Error, ErrCode:${it.errorCode}, errInfo:${it.errorInfo}")
             }
-
+            aMapLocationClient.stopLocation()
         }
         aMapLocationClient.setLocationListener(mLocationListener)
 
@@ -48,7 +50,6 @@ class LocationUtil : LifecycleObserver {
         aMapLocationClientOption.locationPurpose =
             AMapLocationClientOption.AMapLocationPurpose.SignIn
         aMapLocationClient.stopLocation()
-        aMapLocationClient.startLocation()
 
         //定位模式
 
