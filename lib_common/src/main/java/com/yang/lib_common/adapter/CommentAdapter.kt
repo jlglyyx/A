@@ -40,11 +40,15 @@ class CommentAdapter(data: MutableList<CommentData>?) :
         when (item.mLevel) {
             AppConstant.Constant.PARENT_COMMENT_TYPE -> {
                 helper.setGone(R.id.tv_open_comment, !item.isExpanded)
-                helper.setText(R.id.tv_open_comment,"-----${item.subItems?.size}-----")
+                helper.setGone(
+                    R.id.tv_open_comment,
+                    !(null == item.subItems || item.subItems.size == 0 || item.isExpanded)
+                )
+                helper.setText(R.id.tv_open_comment, "-----展开${item.subItems?.size}条评论-----")
                 helper.itemView.setOnClickListener {
-                    if (item.isExpanded){
+                    if (item.isExpanded) {
                         collapse(helper.layoutPosition)
-                    }else{
+                    } else {
                         expand(helper.layoutPosition)
                     }
                 }
@@ -58,7 +62,7 @@ class CommentAdapter(data: MutableList<CommentData>?) :
                         helper.addOnClickListener(R.id.siv_reply_img)
                         val sivReplyImg = helper.getView<ShapeableImageView>(R.id.siv_reply_img)
                         Glide.with(sivReplyImg)
-                            .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=1.jpg")
+                            .load("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F17%2F20201117105437_45d41.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640489453&t=5685c55865958fe47ba34bbfe0b91405")
                             .error(R.drawable.iv_image_error)
                             .placeholder(R.drawable.iv_image_placeholder)
                             .into(sivReplyImg)

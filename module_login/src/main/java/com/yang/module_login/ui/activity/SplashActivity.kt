@@ -10,7 +10,6 @@ import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
-import com.yang.lib_common.interceptor.UrlInterceptor
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getDefaultMMKV
@@ -52,7 +51,6 @@ class SplashActivity : BaseActivity() {
 //            AppConstant.ClientInfo.BASE_PORT
 //        )
 //        UrlInterceptor.url = "$ip:$port/"
-
         val userInfo = getUserInfo()
         if (null == userInfo) {
             val launch = lifecycleScope.launch {

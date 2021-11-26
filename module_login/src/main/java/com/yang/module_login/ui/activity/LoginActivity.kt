@@ -46,6 +46,7 @@ class LoginActivity : BaseActivity() {
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
+            getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_NO_PERMISSION)
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                 ActivityOptionsCompat.makeCustomAnimation(
                     this@LoginActivity,
@@ -86,6 +87,7 @@ class LoginActivity : BaseActivity() {
         }
         loginViewModel.login(et_user.text.toString(), et_password.text.toString())
         loginViewModel.mUserInfoData.observe(this, Observer {
+            getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
             getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                 ActivityOptionsCompat.makeCustomAnimation(

@@ -6,6 +6,9 @@ import com.alibaba.android.arouter.facade.Postcard
 import com.alibaba.android.arouter.facade.annotation.Interceptor
 import com.alibaba.android.arouter.facade.callback.InterceptorCallback
 import com.alibaba.android.arouter.facade.template.IInterceptor
+import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.getDefaultMMKV
 
 
 /**
@@ -27,10 +30,22 @@ class LoginInterceptor : IInterceptor {
     }
 
     override fun process(postcard: Postcard, callback: InterceptorCallback) {
-
-
-        Log.i(TAG, "process: 拦截器====$postcard=====")
-        callback.onContinue(postcard)
+        when (getDefaultMMKV().decodeInt(AppConstant.Constant.LOGIN_STATUS, -1)) {
+            AppConstant.Constant.LOGIN_SUCCESS -> {
+                callback.onContinue(postcard)
+            }
+            AppConstant.Constant.LOGIN_FAIL -> {
+                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            }
+            AppConstant.Constant.LOGIN_NO_PERMISSION -> {
+                callback.onContinue(postcard)
+            }
+            else -> {
+                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+            }
+        }
+        Log.i(TAG, "process: 拦截器====${postcard.path}=====")
+//        Log.i(TAG, "process: 拦截器====$postcard=====")
     }
 
     override fun init(context: Context) {

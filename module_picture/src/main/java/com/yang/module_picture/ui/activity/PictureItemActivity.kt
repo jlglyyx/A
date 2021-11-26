@@ -1,32 +1,29 @@
 package com.yang.module_picture.ui.activity
 
 import android.graphics.Rect
+import android.text.TextUtils
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
-import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayout
 import com.lxj.xpopup.XPopup
+import com.yang.lib_common.adapter.CommentAdapter
 import com.yang.lib_common.adapter.ImageViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.dialog.EditBottomDialog
 import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.dip2px
 import com.yang.module_picture.R
-import com.yang.module_picture.data.model.CommonData
 import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.viewmodel.PictureViewModel
 import com.youth.banner.transformer.ScaleInTransformer
@@ -38,7 +35,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
 class PictureItemActivity : BaseActivity() {
 
-    private lateinit var mCommentAdapter: MCommentAdapter
+    private lateinit var commentAdapter: CommentAdapter
 
     @Inject
     lateinit var pictureViewModel: PictureViewModel
@@ -63,9 +60,17 @@ class PictureItemActivity : BaseActivity() {
             XPopup.Builder(this).autoOpenSoftInput(true).asCustom(EditBottomDialog(this).apply {
                 dialogCallBack = object : EditBottomDialog.DialogCallBack {
                     override fun getComment(s: String) {
-                        mCommentAdapter.addData(0, CommonData(s))
-
-                        nestedScrollView.fullScroll(View.FOCUS_UP)
+                        commentAdapter.addData(0, CommentData(0, 0).apply {
+                            comment = s
+                        })
+                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
+                        commentAdapter.getViewByPosition(
+                            recyclerView,
+                            0,
+                            com.yang.lib_common.R.id.siv_img
+                        )?.let { it1 ->
+                            scrollToPosition(it1)
+                        }
                     }
 
                 }
@@ -81,6 +86,12 @@ class PictureItemActivity : BaseActivity() {
         getPictureComponent(this).inject(this)
     }
 
+    private fun scrollToPosition(view: View) {
+        val intArray = IntArray(2)
+        view.getLocationOnScreen(intArray)
+        nestedScrollView.scrollTo(intArray[0], intArray[1])
+    }
+
     override fun initUIChangeLiveData(): UIChangeLiveData? {
         return pictureViewModel.uC
     }
@@ -88,34 +99,69 @@ class PictureItemActivity : BaseActivity() {
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        mCommentAdapter =
-            MCommentAdapter(mutableListOf<CommonData>().apply {
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-                this.add(CommonData("今天天气很好啊"))
-            }, R.layout.item_picture_comment).also {
+        commentAdapter =
+            CommentAdapter(mutableListOf()).also {
                 it.setOnItemChildClickListener { adapter, view, position ->
-                    when (view.id) {
-                        R.id.siv_img -> {
-                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
+                    val item = commentAdapter.getItem(position)
+                    item?.let {
+                        when (view.id) {
+                            com.yang.lib_common.R.id.siv_img -> {
+                                buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
+                                    AppConstant.Constant.ID,
+                                    ""
+                                ).navigation()
+                            }
+                            com.yang.lib_common.R.id.siv_reply_img -> {
+                                buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
+                                    AppConstant.Constant.ID,
+                                    ""
+                                ).navigation()
+                            }
+                            com.yang.lib_common.R.id.tv_reply -> {
+                                XPopup.Builder(this@PictureItemActivity)
+                                    .autoOpenSoftInput(true)
+                                    .asCustom(EditBottomDialog(this@PictureItemActivity).apply {
+                                        dialogCallBack = object : EditBottomDialog.DialogCallBack {
+                                            override fun getComment(s: String) {
+                                                when (it.itemType) {
+                                                    0 -> {
+                                                        it.addSubItem(CommentData(1, 1).apply {
+                                                            comment = s
+                                                            parentId = it.id
+
+                                                        })
+                                                        commentAdapter.collapse(position)
+                                                        commentAdapter.expand(position)
+                                                    }
+                                                    1, 2 -> {
+                                                        it.parentId?.let { mParentId ->
+                                                            val mPosition = commentAdapter.data.indexOf(commentAdapter.data.findLast {
+                                                                TextUtils.equals(it.parentId,mParentId)
+                                                            }?.apply {
+                                                                addSubItem(CommentData(1, 2).apply {
+                                                                    comment = s
+                                                                    parentId = mParentId
+                                                                })
+                                                            })
+
+                                                            commentAdapter.collapse(mPosition)
+                                                            commentAdapter.expand(mPosition)
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                        }
+                                    }).show()
+                            }
+                            else -> {
+
+                            }
                         }
                     }
                 }
             }
-        recyclerView.adapter = mCommentAdapter
+        recyclerView.adapter = commentAdapter
 
 
         nestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
@@ -236,19 +282,5 @@ class PictureItemActivity : BaseActivity() {
     }
 
 
-    inner class MCommentAdapter(list: MutableList<CommonData>, layoutResId: Int) :
-        BaseQuickAdapter<CommonData, BaseViewHolder>(layoutResId, list) {
-
-        override fun convert(helper: BaseViewHolder, item: CommonData) {
-            helper.addOnClickListener(R.id.siv_img)
-            helper.setText(R.id.tv_comment, item.content)
-            val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            Glide.with(sivImg)
-                .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
-                .error(R.drawable.iv_image_error)
-                .placeholder(R.drawable.iv_image_placeholder)
-                .into(sivImg)
-        }
-    }
 
 }
