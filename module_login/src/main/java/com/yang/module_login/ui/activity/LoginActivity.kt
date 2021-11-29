@@ -1,6 +1,11 @@
 package com.yang.module_login.ui.activity
 
+import android.media.MediaPlayer
+import android.net.Uri
+import android.os.Environment
 import android.text.TextUtils
+import android.util.Log
+import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -9,6 +14,7 @@ import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getDefaultMMKV
@@ -20,6 +26,7 @@ import kotlinx.android.synthetic.main.act_login.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.LOGIN_ACTIVITY)
@@ -39,19 +46,22 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initView() {
-        //initVideoView()
-        lifecycle.addObserver(isv_image)
+        initVideoView()
+        lifecycle.addObserver(surfaceView)
         bt_login.clicks().subscribe {
             checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
-            getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_NO_PERMISSION)
+            getDefaultMMKV().encode(
+                AppConstant.Constant.LOGIN_STATUS,
+                AppConstant.Constant.LOGIN_NO_PERMISSION
+            )
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                 ActivityOptionsCompat.makeCustomAnimation(
                     this@LoginActivity,
-                    R.anim.fade_in,
-                    R.anim.fade_out
+                    R.anim.bottom_in,
+                    R.anim.bottom_out
                 )
             ).navigation()
             finish()
@@ -61,7 +71,14 @@ class LoginActivity : BaseActivity() {
             initTimer()
         }
         tv_to_register.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.REGISTER_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.REGISTER_ACTIVITY).withOptionsCompat(
+                ActivityOptionsCompat.makeCustomAnimation(
+                    this@LoginActivity, R.anim.fade_in,
+                    R.anim.fade_out
+                )
+            ).navigation()
+
+
         }
         iv_icon.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.CONNECT_ADDRESS_ACTIVITY).navigation()
@@ -87,13 +104,16 @@ class LoginActivity : BaseActivity() {
         }
         loginViewModel.login(et_user.text.toString(), et_password.text.toString())
         loginViewModel.mUserInfoData.observe(this, Observer {
-            getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
+            getDefaultMMKV().encode(
+                AppConstant.Constant.LOGIN_STATUS,
+                AppConstant.Constant.LOGIN_SUCCESS
+            )
             getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                 ActivityOptionsCompat.makeCustomAnimation(
                     this@LoginActivity,
-                    R.anim.fade_in,
-                    R.anim.fade_out
+                    R.anim.bottom_in,
+                    R.anim.bottom_out
                 )
             ).navigation()
             finish()
@@ -109,6 +129,37 @@ class LoginActivity : BaseActivity() {
             }
             tv_verification_code.isClickable = true
             tv_verification_code.text = "重新获取验证码"
+        }
+    }
+
+    private fun initVideoView() {
+        lifecycle.addObserver(videoView)
+
+        MultiMoreThreadDownload.Builder(this)
+            .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
+            .filePath("register.mp4")
+            .threadNum(10)
+            .fileUrl("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
+            .showNotice(false)
+            .downListener(object : MultiMoreThreadDownload.DownListener {
+                override fun downSuccess(fileUrl: String) {
+                    videoView.setVideoURI(Uri.fromFile(File(fileUrl)))
+                    Log.i(TAG, "downSuccess: $fileUrl")
+                    videoView.start()
+                }
+
+            })
+            .build()
+            .start()
+
+        videoView.setOnInfoListener { mp, what, extra ->
+
+            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START){
+                iv_cover.visibility = View.GONE
+            }
+
+            Log.i(TAG, "setOnInfoListener: $mp   $what   $extra")
+            return@setOnInfoListener false
         }
     }
 

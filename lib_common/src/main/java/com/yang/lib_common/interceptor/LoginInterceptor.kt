@@ -2,10 +2,12 @@ package com.yang.lib_common.interceptor
 
 import android.content.Context
 import android.util.Log
+import androidx.core.app.ActivityOptionsCompat
 import com.alibaba.android.arouter.facade.Postcard
 import com.alibaba.android.arouter.facade.annotation.Interceptor
 import com.alibaba.android.arouter.facade.callback.InterceptorCallback
 import com.alibaba.android.arouter.facade.template.IInterceptor
+import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getDefaultMMKV
@@ -29,6 +31,11 @@ class LoginInterceptor : IInterceptor {
         private const val TAG = "LoginInterceptor"
     }
 
+    /**
+     * 需要登录操作页面
+     */
+    private var toLoginList = arrayListOf(AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY)
+
     override fun process(postcard: Postcard, callback: InterceptorCallback) {
         when (getDefaultMMKV().decodeInt(AppConstant.Constant.LOGIN_STATUS, -1)) {
             AppConstant.Constant.LOGIN_SUCCESS -> {
@@ -38,10 +45,17 @@ class LoginInterceptor : IInterceptor {
                 buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
             }
             AppConstant.Constant.LOGIN_NO_PERMISSION -> {
-                callback.onContinue(postcard)
+                val indexOf = toLoginList.indexOf(postcard.path)
+                if (indexOf != -1){
+                    buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                        .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(mContext,R.anim.bottom_in, R.anim.bottom_out))
+                        .navigation(mContext)
+                }else{
+                    callback.onContinue(postcard)
+                }
             }
             else -> {
-                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
+                callback.onContinue(postcard)
             }
         }
         Log.i(TAG, "process: 拦截器====${postcard.path}=====")

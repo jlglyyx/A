@@ -41,16 +41,6 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun initView() {
-
-//        val ip = getDefaultMMKV().decodeString(
-//            AppConstant.Constant.IP,
-//            AppConstant.ClientInfo.BASE_IP
-//        )
-//        val port = getDefaultMMKV().decodeString(
-//            AppConstant.Constant.PORT,
-//            AppConstant.ClientInfo.BASE_PORT
-//        )
-//        UrlInterceptor.url = "$ip:$port/"
         val userInfo = getUserInfo()
         if (null == userInfo) {
             val launch = lifecycleScope.launch {
@@ -89,6 +79,7 @@ class SplashActivity : BaseActivity() {
 
             loginViewModel.splashLogin(userInfo.userAccount, userInfo.userPassword)
             loginViewModel.mUserInfoData.observe(this, Observer {
+                getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
                 getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                     ActivityOptionsCompat.makeCustomAnimation(
@@ -101,6 +92,7 @@ class SplashActivity : BaseActivity() {
             })
 
             tv_timer.clicks().subscribe {
+                getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_NO_PERMISSION)
                 buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                     ActivityOptionsCompat.makeCustomAnimation(
                         this@SplashActivity,
