@@ -8,24 +8,17 @@
         android:id="@+id/surfaceView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.yang.lib_common.widget.LifecycleVideoView
-        android:id="@+id/videoView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
     <ImageView
         android:id="@+id/iv_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:visibility="gone" />
+        android:background="@color/white" />
 
     <ImageView
         android:id="@+id/iv_image"
@@ -113,27 +106,9 @@
             android:text="获取验证码" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_to_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/dp_10"
-        android:text="没有账号，立即注册"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_not_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/dp_10"
-        android:text="暂不登录"
-        app:layout_constraintBottom_toTopOf="@+id/tv_to_register"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+
+
 
     <Button
         android:id="@+id/bt_login"
@@ -147,4 +122,24 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_verification_code" />
 
+
+    <TextView
+        android:id="@+id/tv_not_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
+        android:text="暂不登录"
+        app:layout_constraintTop_toBottomOf="@+id/bt_login"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_to_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
+        android:text="没有账号?立即注册"
+        app:layout_constraintTop_toBottomOf="@+id/bt_login"
+        app:layout_constraintRight_toRightOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

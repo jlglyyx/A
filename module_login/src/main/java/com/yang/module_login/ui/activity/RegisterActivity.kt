@@ -42,9 +42,10 @@ class RegisterActivity : BaseActivity() {
         }
         tv_to_login.clicks().subscribe {
             finish()
+            overridePendingTransition(R.anim.fade_in,R.anim.fade_out)
         }
     }
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
+    override fun initUIChangeLiveData(): UIChangeLiveData {
         return loginViewModel.uC
     }
 

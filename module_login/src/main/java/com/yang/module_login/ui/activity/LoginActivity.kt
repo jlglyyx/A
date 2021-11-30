@@ -1,7 +1,6 @@
 package com.yang.module_login.ui.activity
 
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
@@ -14,7 +13,7 @@ import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.down.thread.MultiMoreThreadDownload
+import com.yang.lib_common.down.a.DownManager
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getDefaultMMKV
@@ -26,7 +25,6 @@ import kotlinx.android.synthetic.main.act_login.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.LOGIN_ACTIVITY)
@@ -43,11 +41,11 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initData() {
+        DownManager().getContentLength()
     }
 
     override fun initView() {
         initVideoView()
-        lifecycle.addObserver(surfaceView)
         bt_login.clicks().subscribe {
             checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
@@ -133,31 +131,35 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun initVideoView() {
-        lifecycle.addObserver(videoView)
+        lifecycle.addObserver(surfaceView)
+//        MultiMoreThreadDownload.Builder(this)
+//            .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
+//            .filePath("register.mp4")
+//            .threadNum(10)
+//            .fileUrl("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
+//            .showNotice(false)
+//            .downListener(object : MultiMoreThreadDownload.DownListener {
+//                override fun downSuccess(fileUrl: String) {
+//                    val mediaPlayer = surfaceView.initMediaPlayer(fileUrl)
+//                    mediaPlayer?.setOnInfoListener { mp, what, extra ->
+//                        if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+//                            iv_cover.visibility = View.GONE
+//                        }
+//                        Log.i(TAG, "setOnInfoListener: $mp   $what   $extra")
+//                        return@setOnInfoListener false
+//                    }
+//                    Log.i(TAG, "downSuccess: $fileUrl")
+//                }
+//
+//            })
+//            .build()
+//            .start()
 
-        MultiMoreThreadDownload.Builder(this)
-            .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
-            .filePath("register.mp4")
-            .threadNum(10)
-            .fileUrl("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
-            .showNotice(false)
-            .downListener(object : MultiMoreThreadDownload.DownListener {
-                override fun downSuccess(fileUrl: String) {
-                    videoView.setVideoURI(Uri.fromFile(File(fileUrl)))
-                    Log.i(TAG, "downSuccess: $fileUrl")
-                    videoView.start()
-                }
-
-            })
-            .build()
-            .start()
-
-        videoView.setOnInfoListener { mp, what, extra ->
-
-            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START){
+        val mediaPlayer = surfaceView.initMediaPlayer("${Environment.getExternalStorageDirectory()}/MFiles/video/aaa.mp4")
+        mediaPlayer?.setOnInfoListener { mp, what, extra ->
+            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                 iv_cover.visibility = View.GONE
             }
-
             Log.i(TAG, "setOnInfoListener: $mp   $what   $extra")
             return@setOnInfoListener false
         }

@@ -157,7 +157,7 @@ class MultiMoreThreadDownload(
 
                 val randomAccessFile = RandomAccessFile(file, "rwd")
 
-                //randomAccessFile.setLength(fileSize.toLong())
+                randomAccessFile.setLength(fileSize.toLong())
 
                 randomAccessFile.close()
 

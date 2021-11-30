@@ -22,11 +22,19 @@ class LifecycleMediaPlayer : SurfaceView, SurfaceHolder.Callback, ILifecycleObse
         private const val TAG = "LifecycleMediaPlayer"
     }
 
-    private var mediaPlayer: MediaPlayer? = null
+    var mediaPlayer: MediaPlayer? = null
 
     private var mHolder: SurfaceHolder = holder
 
-    private var first = true
+    private var isSurfaceCreated = true
+
+    var position = 0
+
+    private var isReset = false
+
+    private var mWidth = 0f
+
+    private var mHeight = 0f
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -37,67 +45,110 @@ class LifecycleMediaPlayer : SurfaceView, SurfaceHolder.Callback, ILifecycleObse
     ) {
         mHolder.addCallback(this@LifecycleMediaPlayer)
         mediaPlayer = MediaPlayer()
-        initMediaPlayer()
     }
 
-    private fun initMediaPlayer() {
-        mediaPlayer?.apply {
+    fun initMediaPlayer(path: String): MediaPlayer? {
+        return mediaPlayer?.apply {
             setAudioAttributes(
                 AudioAttributes.Builder().setLegacyStreamType(AudioManager.STREAM_MUSIC)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .setUsage(AudioAttributes.USAGE_MEDIA).build()
             )
-            mediaPlayer?.setDataSource("/storage/emulated/0/MFiles/video/register.mp4")
+            mediaPlayer?.setDataSource(path)
             isLooping = true
             setOnPreparedListener {
                 start()
+                if (isReset) {
+                    mediaPlayer?.seekTo(position)
+                    Log.i(TAG, "setOnPreparedListener: $position")
+                    isReset = false
+                }
+                val videoWidth = it.videoWidth
+                val videoHeight = it.videoHeight
+                Log.i(TAG, "onMeasure===: ${mediaPlayer?.videoWidth} ${mediaPlayer?.videoHeight}  $mWidth $mHeight")
+                if (videoHeight <= mHeight/5*4){
+                    setMeasuredDimension(mWidth.toInt(), (videoHeight * mWidth /videoWidth).toInt())
+                }
+            }
+            setOnInfoListener { mp, what, extra ->
+                Log.i(TAG, "setOnInfoListener: $mp   $what   $extra")
+                return@setOnInfoListener false
+            }
+            setOnErrorListener { mp, what, extra ->
+                Log.i(TAG, "setOnErrorListener: $mp   $what   $extra")
+                if (what == -38) {
+                    mp.reset()
+                    isReset = true
+                    initMediaPlayer(path)
+                }
+                return@setOnErrorListener true
             }
             prepareAsync()
         }
-
     }
 
-    private fun stop(){
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        mWidth = w.toFloat()
+        mHeight = h.toFloat()
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
+
+//    override fun onDraw(canvas: Canvas) {
+//        super.onDraw(canvas)
+//        canvas.save()
+//        canvas.drawColor((0xcc1c093e).toInt())
+//        canvas.restore()
+//    }
+
+
+    private fun stop() {
         mediaPlayer?.let {
-            if (it.isPlaying){
+            if (it.isPlaying) {
                 it.stop()
             }
         }
     }
 
 
-    private var isSurfaceCreated = false
-
     override fun surfaceCreated(holder: SurfaceHolder?) {
+        if (!isSurfaceCreated) {
+            mediaPlayer?.start()
+        }
         mediaPlayer?.setDisplay(holder)
         isSurfaceCreated = true
-        mediaPlayer?.seekTo(mediaPlayer?.currentPosition!!)
-        onResume()
-        Log.i(TAG, "surfaceCreated: ")
+        Log.i(TAG, "surfaceCreated: $position")
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-        mediaPlayer?.setDisplay(holder)
-        Log.i(TAG, "surfaceChanged: ")
+
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
         isSurfaceCreated = false
-        Log.i(TAG, "surfaceDestroyed: ")
+        mediaPlayer?.let {
+            position = it.currentPosition
+            it.pause()
+            Log.i(TAG, "surfaceDestroyed: $position")
+        }
     }
 
 
     override fun onResume() {
-        mediaPlayer?.let {
-            if (!it.isPlaying){
-                it.start()
-            }
-        }
+//        mediaPlayer?.let {
+//            if (!it.isPlaying) {
+//                it.start()
+//            }
+//        }
     }
 
     override fun onPause() {
         mediaPlayer?.let {
-            if (it.isPlaying){
+            if (it.isPlaying) {
                 it.pause()
             }
         }
@@ -105,11 +156,12 @@ class LifecycleMediaPlayer : SurfaceView, SurfaceHolder.Callback, ILifecycleObse
 
     override fun onDestroy() {
         mediaPlayer?.let {
-            if (it.isPlaying){
+            if (it.isPlaying) {
                 it.stop()
             }
             it.release()
         }
         mediaPlayer = null
     }
+
 }
