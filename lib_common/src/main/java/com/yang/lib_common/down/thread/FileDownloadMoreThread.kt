@@ -35,7 +35,8 @@ class FileDownloadMoreThread(
     private var currentPosition: Int = 0
     var downloadSize: Long = 0
     var finishDown = false
-    var byte = byteArrayOf(BUFF_SIZE.toByte())
+    var byte = ByteArray(BUFF_SIZE)
+    
 
     init {
         currentPosition = startPosition

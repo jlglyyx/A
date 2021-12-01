@@ -13,7 +13,6 @@ import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.down.a.DownManager
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getDefaultMMKV
@@ -41,7 +40,9 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initData() {
-        DownManager().getContentLength()
+        //DownLoadManager().start()
+//        A().a()
+//        A().b()
     }
 
     override fun initView() {
