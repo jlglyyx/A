@@ -35,14 +35,13 @@ class LoginActivity : BaseActivity() {
     @Inject
     lateinit var loginViewModel: LoginViewModel
 
+
     override fun getLayout(): Int {
         return R.layout.act_login
     }
 
     override fun initData() {
-        //DownLoadManager().start()
-//        A().a()
-//        A().b()
+
     }
 
     override fun initView() {
@@ -133,29 +132,6 @@ class LoginActivity : BaseActivity() {
 
     private fun initVideoView() {
         lifecycle.addObserver(surfaceView)
-//        MultiMoreThreadDownload.Builder(this)
-//            .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
-//            .filePath("register.mp4")
-//            .threadNum(10)
-//            .fileUrl("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
-//            .showNotice(false)
-//            .downListener(object : MultiMoreThreadDownload.DownListener {
-//                override fun downSuccess(fileUrl: String) {
-//                    val mediaPlayer = surfaceView.initMediaPlayer(fileUrl)
-//                    mediaPlayer?.setOnInfoListener { mp, what, extra ->
-//                        if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-//                            iv_cover.visibility = View.GONE
-//                        }
-//                        Log.i(TAG, "setOnInfoListener: $mp   $what   $extra")
-//                        return@setOnInfoListener false
-//                    }
-//                    Log.i(TAG, "downSuccess: $fileUrl")
-//                }
-//
-//            })
-//            .build()
-//            .start()
-
         val mediaPlayer = surfaceView.initMediaPlayer("${Environment.getExternalStorageDirectory()}/MFiles/video/aaa.mp4")
         mediaPlayer?.setOnInfoListener { mp, what, extra ->
             if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {

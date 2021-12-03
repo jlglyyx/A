@@ -1,6 +1,10 @@
 package com.yang.module_login.ui.activity
 
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Environment
+import android.os.IBinder
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -9,6 +13,8 @@ import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.down.DownLoadManager
+import com.yang.lib_common.down.DownLoadManagerService
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
@@ -32,12 +38,34 @@ class SplashActivity : BaseActivity() {
     @Inject
     lateinit var loginViewModel: LoginViewModel
 
+    lateinit var downLoadManagerBinder: DownLoadManagerService.DownLoadManagerBinder
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            downLoadManagerBinder = service as DownLoadManagerService.DownLoadManagerBinder
+            downLoadManagerBinder.startDown(
+                DownLoadManager.Builder()
+                    .threadSize(10)
+                    .filePath("${Environment.getExternalStorageDirectory()}/MFiles/picture/${System.currentTimeMillis()}_a.apk")
+                    .url("https://93d2aeafc06b4b601cbc9bc1fd283894.dlied1.cdntips.net/dlied1.qq.com/qqweb/QQ_1/android_apk/Android_8.8.50.6735_537101929.32.HB2.apk?mkey=61a9c6201b117579&f=0000&cip=27.17.83.140&proto=https&access_type=")
+                    .createNewFile(true)
+            )
+        }
+        override fun onServiceDisconnected(name: ComponentName?) {
+
+        }
+
+    }
+
     override fun getLayout(): Int {
         return R.layout.act_splash
     }
 
     override fun initData() {
         //downPicture()
+        val intent = Intent(this, DownLoadManagerService::class.java)
+        bindService(intent, serviceConnection, BIND_AUTO_CREATE)
+        startService(intent)
     }
 
     override fun initView() {

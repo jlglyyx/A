@@ -58,6 +58,7 @@
             android:label="dexopt"
             android:process=":dexopt" >
         </service>
+        <service android:name=".down.DownLoadManagerService" android:enabled="true" android:exported="true"/>
     </application>
 
 </manifest>
