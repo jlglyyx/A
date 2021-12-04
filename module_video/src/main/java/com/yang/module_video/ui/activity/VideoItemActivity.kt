@@ -3,24 +3,25 @@ package com.yang.module_video.ui.activity
 import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Environment
+import android.text.TextUtils
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayout
 import com.lxj.xpopup.XPopup
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
+import com.yang.lib_common.adapter.CommentAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.dialog.EditBottomDialog
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.util.buildARouter
@@ -30,9 +31,6 @@ import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.model.VideoDataItem
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.act_video_item.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
@@ -87,8 +85,17 @@ class VideoItemActivity : BaseActivity() {
             XPopup.Builder(this).autoOpenSoftInput(true).asCustom(EditBottomDialog(this).apply {
                 dialogCallBack = object : EditBottomDialog.DialogCallBack {
                     override fun getComment(s: String) {
-                        commentAdapter.addData(0, s)
-                        nestedScrollView.fullScroll(View.FOCUS_UP)
+                        commentAdapter.addData(0, CommentData(0, 0).apply {
+                            comment = s
+                        })
+                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
+                        commentAdapter.getViewByPosition(
+                            recyclerView,
+                            0,
+                            com.yang.lib_common.R.id.siv_img
+                        )?.let { it1 ->
+                            scrollToPosition(it1)
+                        }
                     }
 
                 }
@@ -105,6 +112,12 @@ class VideoItemActivity : BaseActivity() {
         }
 
 
+    }
+
+    private fun scrollToPosition(view: View) {
+        val intArray = IntArray(2)
+        view.getLocationOnScreen(intArray)
+        nestedScrollView.scrollTo(intArray[0], intArray[1])
     }
 
     override fun initViewModel() {
@@ -125,20 +138,62 @@ class VideoItemActivity : BaseActivity() {
     private fun initRecyclerView() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        commentAdapter = CommentAdapter(R.layout.item_video_comment, mutableListOf<String>().apply {
-            GlobalScope.launch(Dispatchers.IO) {
-                for (i in 1..20) {
-                    add(
-                        "这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看" +
-                                "这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看这电影真好看"
-                    )
-                }
-            }
-        }).apply {
+        commentAdapter = CommentAdapter(mutableListOf()).apply {
             setOnItemChildClickListener { adapter, view, position ->
-                when (view.id) {
-                    R.id.siv_img -> {
-                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
+                val item = commentAdapter.getItem(position)
+                item?.let {
+                    when (view.id) {
+                        com.yang.lib_common.R.id.siv_img -> {
+                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
+                                AppConstant.Constant.ID,
+                                ""
+                            ).navigation()
+                        }
+                        com.yang.lib_common.R.id.siv_reply_img -> {
+                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
+                                AppConstant.Constant.ID,
+                                ""
+                            ).navigation()
+                        }
+                        com.yang.lib_common.R.id.tv_reply -> {
+                            XPopup.Builder(this@VideoItemActivity)
+                                .autoOpenSoftInput(true)
+                                .asCustom(EditBottomDialog(this@VideoItemActivity).apply {
+                                    dialogCallBack = object : EditBottomDialog.DialogCallBack {
+                                        override fun getComment(s: String) {
+                                            when (it.itemType) {
+                                                0 -> {
+                                                    it.addSubItem(CommentData(1, 1).apply {
+                                                        comment = s
+                                                        parentId = it.id
+
+                                                    })
+                                                    commentAdapter.collapse(position)
+                                                    commentAdapter.expand(position)
+                                                }
+                                                1, 2 -> {
+                                                    it.parentId?.let { mParentId ->
+                                                        val mPosition = commentAdapter.data.indexOf(commentAdapter.data.findLast {
+                                                            TextUtils.equals(it.parentId,mParentId)
+                                                        }?.apply {
+                                                            addSubItem(CommentData(1, 2).apply {
+                                                                comment = s
+                                                                parentId = mParentId
+                                                            })
+                                                        })
+                                                        commentAdapter.collapse(mPosition)
+                                                        commentAdapter.expand(mPosition)
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }).show()
+                        }
+                        else -> {
+
+                        }
                     }
                 }
 
@@ -275,21 +330,6 @@ class VideoItemActivity : BaseActivity() {
 
     }
 
-    inner class CommentAdapter(layoutResId: Int, data: MutableList<String>) :
-        BaseQuickAdapter<String, BaseViewHolder>(layoutResId, data) {
-        override fun convert(helper: BaseViewHolder, item: String) {
-
-            helper.addOnClickListener(R.id.siv_img)
-            helper.setText(R.id.tv_comment, item)
-            val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            Glide.with(sivImg)
-                .load("https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg")
-                .error(R.drawable.iv_image_error)
-                .placeholder(R.drawable.iv_image_placeholder)
-                .into(sivImg)
-        }
-
-    }
 
 
     override fun onBackPressed() {

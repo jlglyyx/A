@@ -1,6 +1,10 @@
 package com.yang.module_login.ui.activity
 
+import android.media.MediaPlayer
+import android.os.Environment
 import android.text.TextUtils
+import android.util.Log
+import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -31,26 +35,31 @@ class LoginActivity : BaseActivity() {
     @Inject
     lateinit var loginViewModel: LoginViewModel
 
+
     override fun getLayout(): Int {
         return R.layout.act_login
     }
 
     override fun initData() {
+
     }
 
     override fun initView() {
-        //initVideoView()
-        lifecycle.addObserver(isv_image)
+        initVideoView()
         bt_login.clicks().subscribe {
             checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
+            getDefaultMMKV().encode(
+                AppConstant.Constant.LOGIN_STATUS,
+                AppConstant.Constant.LOGIN_NO_PERMISSION
+            )
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                 ActivityOptionsCompat.makeCustomAnimation(
                     this@LoginActivity,
-                    R.anim.fade_in,
-                    R.anim.fade_out
+                    R.anim.bottom_in,
+                    R.anim.bottom_out
                 )
             ).navigation()
             finish()
@@ -60,7 +69,14 @@ class LoginActivity : BaseActivity() {
             initTimer()
         }
         tv_to_register.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.REGISTER_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.REGISTER_ACTIVITY).withOptionsCompat(
+                ActivityOptionsCompat.makeCustomAnimation(
+                    this@LoginActivity, R.anim.fade_in,
+                    R.anim.fade_out
+                )
+            ).navigation()
+
+
         }
         iv_icon.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.CONNECT_ADDRESS_ACTIVITY).navigation()
@@ -86,12 +102,16 @@ class LoginActivity : BaseActivity() {
         }
         loginViewModel.login(et_user.text.toString(), et_password.text.toString())
         loginViewModel.mUserInfoData.observe(this, Observer {
+            getDefaultMMKV().encode(
+                AppConstant.Constant.LOGIN_STATUS,
+                AppConstant.Constant.LOGIN_SUCCESS
+            )
             getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                 ActivityOptionsCompat.makeCustomAnimation(
                     this@LoginActivity,
-                    R.anim.fade_in,
-                    R.anim.fade_out
+                    R.anim.bottom_in,
+                    R.anim.bottom_out
                 )
             ).navigation()
             finish()
@@ -107,6 +127,18 @@ class LoginActivity : BaseActivity() {
             }
             tv_verification_code.isClickable = true
             tv_verification_code.text = "重新获取验证码"
+        }
+    }
+
+    private fun initVideoView() {
+        lifecycle.addObserver(surfaceView)
+        val mediaPlayer = surfaceView.initMediaPlayer("${Environment.getExternalStorageDirectory()}/MFiles/video/aaa.mp4")
+        mediaPlayer?.setOnInfoListener { mp, what, extra ->
+            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                iv_cover.visibility = View.GONE
+            }
+            Log.i(TAG, "setOnInfoListener: $mp   $what   $extra")
+            return@setOnInfoListener false
         }
     }
 

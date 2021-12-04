@@ -64,6 +64,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_10"
                             android:text="点击登录"
+                            android:textColor="@color/black"
                             android:textSize="@dimen/sp_16"
                             app:layout_constraintBottom_toBottomOf="@+id/siv_img"
                             app:layout_constraintLeft_toRightOf="@+id/siv_img"
@@ -89,6 +90,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="我的积分"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/sp_14" />
 
                                 <TextView
@@ -115,6 +117,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="我的签到"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/sp_14" />
                                 <TextView
                                     android:layout_width="match_parent"
@@ -140,6 +143,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:text="我的推广"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/sp_14" />
                                 <TextView
                                     android:layout_width="match_parent"
@@ -196,6 +200,7 @@
                         android:layout_marginStart="@dimen/dp_10"
                         android:text="点击登录"
                         android:textSize="@dimen/sp_16"
+                        android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="@+id/siv_toolbar_img"
                         app:layout_constraintLeft_toRightOf="@+id/siv_toolbar_img"
                         app:layout_constraintTop_toTopOf="@+id/siv_toolbar_img" />
@@ -207,6 +212,7 @@
                         android:layout_marginStart="@dimen/dp_10"
                         android:text="我的"
                         android:textSize="@dimen/sp_16"
+                        android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -244,6 +250,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:textColor="@color/black"
                     android:text="观看历史" />
 
                 <TextView

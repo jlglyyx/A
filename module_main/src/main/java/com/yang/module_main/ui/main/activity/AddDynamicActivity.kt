@@ -17,6 +17,7 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.dialog.ImageViewPagerDialog
+import com.yang.lib_common.dialog.SearchRecyclerViewDialog
 import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
@@ -26,6 +27,11 @@ import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_add_dynamic.*
+import kotlinx.android.synthetic.main.act_add_dynamic.commonToolBar
+import kotlinx.android.synthetic.main.act_add_dynamic.recyclerView
+import kotlinx.android.synthetic.main.act_add_dynamic.tv_location
+import kotlinx.android.synthetic.main.act_upload.*
+import kotlinx.android.synthetic.main.fra_left.*
 import java.util.*
 import javax.inject.Inject
 
@@ -64,6 +70,23 @@ class AddDynamicActivity : BaseActivity() {
                 uploadFile(pictureSelectAdapter.data)
             }
         }
+
+        tv_location.clicks().subscribe {
+            val searchRecyclerViewDialog = SearchRecyclerViewDialog(this)
+            searchRecyclerViewDialog.searchRecyclerViewDialogCallBack = object : SearchRecyclerViewDialog.SearchRecyclerViewDialogCallBack{
+                override fun getText(s: String) {
+                    tv_location.text = s
+                }
+            }
+            XPopup.Builder(this).asCustom(searchRecyclerViewDialog).show()
+        }
+        tv_visibility.clicks().subscribe {
+            XPopup.Builder(this).asBottomList("", arrayOf("公开","仅自己")
+            ) { position, text ->
+                tv_visibility.text = text
+            }.show()
+        }
+
         initRecyclerView()
     }
 
@@ -131,7 +154,7 @@ class AddDynamicActivity : BaseActivity() {
             return@setOnItemLongClickListener false
         }
         pictureSelectAdapter.setOnItemClickListener { adapter, view, position ->
-            var imageList =(adapter.data as MutableList<MediaInfoBean>).map {
+            val imageList =(adapter.data as MutableList<MediaInfoBean>).map {
                 it.filePath
             } as MutableList<String>
             val imageViewPagerDialog =

@@ -23,4 +23,5 @@ interface RemoteComponent {
     fun provideGson(): Gson
 
     fun inject(uploadManage: UploadManage)
+
 }

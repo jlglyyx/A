@@ -18,6 +18,7 @@ import java.io.RandomAccessFile
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors
+import kotlin.math.abs
 
 
 /**
@@ -35,7 +36,8 @@ class MultiMoreThreadDownload(
     private var parentFilePath: String,
     private var filePath: String,
     private var fileUrl: String,
-    private var showNotice: Boolean
+    private var showNotice: Boolean,
+    private var downListener: DownListener? = null
 ) : Thread() {
 
     private var fileSize: Int = 0
@@ -51,6 +53,10 @@ class MultiMoreThreadDownload(
     private var fileHasLength: Int = 0
     private var finishDown = false
 
+    interface DownListener {
+        fun downSuccess(fileUrl: String)
+    }
+
     companion object {
         private const val TAG = "MultiMoreThreadDownload"
     }
@@ -61,7 +67,7 @@ class MultiMoreThreadDownload(
         private lateinit var filePath: String
         private lateinit var fileUrl: String
         private var showNotice: Boolean = true
-
+        private var downListener: DownListener? = null
 
         /**
          * 线程数
@@ -103,8 +109,24 @@ class MultiMoreThreadDownload(
             return this
         }
 
+        /**
+         * 展示通知
+         */
+        fun downListener(downListener: DownListener): Builder {
+            this.downListener = downListener
+            return this
+        }
+
         fun build(): MultiMoreThreadDownload {
-            return MultiMoreThreadDownload(mContext,threadNum,parentFilePath,filePath,fileUrl,showNotice)
+            return MultiMoreThreadDownload(
+                mContext,
+                threadNum,
+                parentFilePath,
+                filePath,
+                fileUrl,
+                showNotice,
+                downListener
+            )
         }
 
     }
@@ -122,17 +144,20 @@ class MultiMoreThreadDownload(
             if (openConnection.responseCode == 200 || openConnection.responseCode == 206) {
                 fileSize = openConnection.contentLength
                 if (file.exists()) {
-                    file.delete()
-                    //fileHasLength = file.length().toInt()
+                    //file.delete()
+                    fileHasLength = file.length().toInt()
                 }
-
-//                if (fileSize == fileHasLength) {
-//                    return
-//                }
+//
+                if (abs(fileSize - fileHasLength) <= 10) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        downListener?.downSuccess(file.absolutePath)
+                    }
+                    return
+                }
 
                 val randomAccessFile = RandomAccessFile(file, "rwd")
 
-                //randomAccessFile.setLength(fileSize.toLong())
+                randomAccessFile.setLength(fileSize.toLong())
 
                 randomAccessFile.close()
 
@@ -188,7 +213,7 @@ class MultiMoreThreadDownload(
                             "run:  下载进度：$downloadPercent%  用时：$usedTimeMillis/s  下载速度：$downloadSpeed Kb/s"
                         )
                         currentPercent = downloadPercent
-                        if (showNotice){
+                        if (showNotice) {
                             showDownLoadNotification(downloadPercent, usedTimeMillis, downloadSpeed)
                         }
                     }
@@ -196,17 +221,18 @@ class MultiMoreThreadDownload(
                 }
 
                 GlobalScope.launch(Dispatchers.Main) {
-                    if (showNotice){
+                    if (showNotice) {
                         showShort("下载完成：${file.absolutePath}")
                         showCompleteNotification(file)
                     }
+                    downListener?.downSuccess(file.absolutePath)
                 }
 
             }
 
         } catch (e: Exception) {
             GlobalScope.launch(Dispatchers.Main) {
-                if (showNotice){
+                if (showNotice) {
                     showShort("下载失败：${e.message}")
                 }
             }
@@ -263,6 +289,7 @@ class MultiMoreThreadDownload(
             .build()
         notificationManager.cancel(1)
         notificationManager.notify(2, build)
+        downListener?.downSuccess(file.absolutePath)
     }
 
 

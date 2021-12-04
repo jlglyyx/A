@@ -59,6 +59,7 @@ class UploadActivity : BaseActivity(){
                 icv_file_type.rightContent = selectFileType
                 if (showType != position+1){
                     selectFileList.clear()
+                    siv_image.setImageResource(0)
                 }
                 showType = position+1
             }.show()

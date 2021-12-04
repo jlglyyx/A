@@ -144,6 +144,14 @@ interface AppConstant {
 
     object Constant {
 
+        const val LOGIN_STATUS = "login_status"
+
+        const val LOGIN_SUCCESS = 200
+
+        const val LOGIN_FAIL = 202
+
+        const val LOGIN_NO_PERMISSION = 201
+
         const val CLICK_TIME: Long = 1000
 
         const val SPLASH_VIDEO_URL = "http://192.168.31.60:8080/AdobePhotoshopCS6.rar"
@@ -213,6 +221,15 @@ interface AppConstant {
         const val ITEM_VIDEO_RECOMMEND_TYPE = 0
         const val ITEM_VIDEO_SMART_IMAGE = 1
         const val ITEM_VIDEO_BIG_IMAGE = 2
+
+        /**
+         * 评论布局类型
+         */
+        const val PARENT_COMMENT_TYPE = 0
+
+        const val CHILD_COMMENT_TYPE = 1
+
+        const val CHILD_REPLY_COMMENT_TYPE = 2
     }
 
 

@@ -69,6 +69,9 @@ fun Float.px2dip(context: Context): Int {
     return (this / scale + 0.5f).toInt()
 }
 
+/**
+ * view点击添加防抖动
+ */
 fun View.clicks(): Observable<Unit> {
     return this.clicks().throttleFirst(CLICK_TIME, TimeUnit.MILLISECONDS)
 }

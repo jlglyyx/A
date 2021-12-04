@@ -1,5 +1,6 @@
 package com.yang.module_main.ui.menu.fragment
 
+import androidx.core.app.ActivityOptionsCompat
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.amap.api.location.AMapLocation
 import com.bumptech.glide.Glide
@@ -22,21 +23,27 @@ class LeftFragment : BaseFragment() {
         val userInfo = getUserInfo()
         Glide.with(this).load(userInfo?.userImage).error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder).into(siv_head)
-        tv_name.text = userInfo?.userName?:"张三"
+        tv_name.text = userInfo?.userName ?: "张三"
 
-        LocationUtil().apply {
+        LocationUtil(requireContext()).apply {
             lifecycle.addObserver(this)
-            locationListener = object :LocationUtil.LocationListener{
+            locationListener = object : LocationUtil.LocationListener {
                 override fun onLocationListener(aMapLocation: AMapLocation) {
-                    tv_location.text = "${aMapLocation.city}${aMapLocation.district}${aMapLocation.aoiName}"
+                    tv_location.text =
+                        "${aMapLocation.city}${aMapLocation.district}${aMapLocation.aoiName}"
                 }
 
             }
         }.startLocation()
 
 
+        lifecycle.addObserver(isv_image)
+
         siv_head.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,userInfo?.id).navigation()
+            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
+                AppConstant.Constant.ID,
+                userInfo?.id
+            ).navigation()
         }
         tv_open_vip.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.OPEN_VIP_ACTIVITY).navigation()
@@ -45,10 +52,16 @@ class LeftFragment : BaseFragment() {
             buildARouter(AppConstant.RoutePath.MY_PUSH_ACTIVITY).navigation()
         }
         tv_my_collection.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY).withString(AppConstant.Constant.NAME,"我的收藏").navigation()
+            buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY).withString(
+                AppConstant.Constant.NAME,
+                "我的收藏"
+            ).navigation()
         }
         tv_my_down.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY).withString(AppConstant.Constant.NAME,"我的下载").navigation()
+            buildARouter(AppConstant.RoutePath.MY_COLLECTION_ACTIVITY).withString(
+                AppConstant.Constant.NAME,
+                "我的下载"
+            ).navigation()
         }
         tv_privacy.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.PRIVACY_ACTIVITY).navigation()
@@ -67,11 +80,14 @@ class LeftFragment : BaseFragment() {
         }
 
         tv_login_out.clicks().subscribe {
+            getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS, -1)
             getDefaultMMKV().clearAll()
             removeAllActivity()
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withTransition(
-                R.anim.fade_in,
-                R.anim.fade_out
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).withOptionsCompat(
+                ActivityOptionsCompat.makeCustomAnimation(
+                    requireContext(), R.anim.fade_in,
+                    R.anim.fade_out
+                )
             ).navigation(requireActivity())
         }
         tv_webView.clicks().subscribe {
