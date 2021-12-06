@@ -13,7 +13,6 @@ import com.google.gson.Gson
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.down.DownLoadManager
 import com.yang.lib_common.down.DownLoadManagerService
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.util.buildARouter
@@ -43,13 +42,14 @@ class SplashActivity : BaseActivity() {
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             downLoadManagerBinder = service as DownLoadManagerService.DownLoadManagerBinder
-            downLoadManagerBinder.startDown(
-                DownLoadManager.Builder()
-                    .threadSize(10)
-                    .filePath("${Environment.getExternalStorageDirectory()}/MFiles/picture/${System.currentTimeMillis()}_a.apk")
-                    .url("https://93d2aeafc06b4b601cbc9bc1fd283894.dlied1.cdntips.net/dlied1.qq.com/qqweb/QQ_1/android_apk/Android_8.8.50.6735_537101929.32.HB2.apk?mkey=61a9c6201b117579&f=0000&cip=27.17.83.140&proto=https&access_type=")
-                    .createNewFile(true)
-            )
+//            downLoadManagerBinder.startDown(
+//                DownLoadManager.Builder()
+//                    .threadSize(10)
+//                    .filePath("${Environment.getExternalStorageDirectory()}/MFiles/picture/${System.currentTimeMillis()}_a.jpg")
+//                    .url("https://scpic.chinaz.net/files/pic/pic9/202107/bpic23810.jpg")
+//                    //.url("https://93d2aeafc06b4b601cbc9bc1fd283894.dlied1.cdntips.net/dlied1.qq.com/qqweb/QQ_1/android_apk/Android_8.8.50.6735_537101929.32.HB2.apk?mkey=61a9c6201b117579&f=0000&cip=27.17.83.140&proto=https&access_type=")
+//                    .createNewFile(true)
+//            )
         }
         override fun onServiceDisconnected(name: ComponentName?) {
 
