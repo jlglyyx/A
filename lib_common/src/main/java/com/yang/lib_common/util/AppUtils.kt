@@ -25,26 +25,26 @@ private const val TAG = "AppUtils"
 
 val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd hh:mm:ss")
 
-/*
-* @return 宽高集合
-**/
-fun getScreenPx(context: Context): ArrayList<Int> {
+/**
+ * @return 宽高集合
+ */
+fun getScreenPx(context: Context): IntArray {
     val resources = context.resources
     val displayMetrics = resources.displayMetrics
     val widthPixels = displayMetrics.widthPixels
     val heightPixels = displayMetrics.heightPixels
-    return arrayListOf(widthPixels, heightPixels)
+    return intArrayOf(widthPixels, heightPixels)
 }
 
-/*
-* @return 宽高集合
-**/
-fun getScreenDpi(context: Context): ArrayList<Float> {
+/**
+ * @return 宽高集合
+ */
+fun getScreenDpi(context: Context): FloatArray {
     val resources = context.resources
     val displayMetrics = resources.displayMetrics
     val widthPixels = displayMetrics.xdpi
     val heightPixels = displayMetrics.ydpi
-    return arrayListOf(widthPixels, heightPixels)
+    return floatArrayOf(widthPixels, heightPixels)
 }
 
 fun getStatusBarHeight(context: Context): Int {

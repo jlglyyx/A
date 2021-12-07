@@ -18,7 +18,6 @@ import java.io.RandomAccessFile
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors
-import kotlin.math.abs
 
 
 /**
@@ -148,7 +147,7 @@ class MultiMoreThreadDownload(
                     fileHasLength = file.length().toInt()
                 }
 //
-                if (abs(fileSize - fileHasLength) <= 10) {
+                if (fileSize == fileHasLength) {
                     GlobalScope.launch(Dispatchers.Main) {
                         downListener?.downSuccess(file.absolutePath)
                     }
@@ -163,16 +162,29 @@ class MultiMoreThreadDownload(
 
                 blockSize = fileSize / threadNum
 
+                val i1 = fileSize % threadNum
+
                 Log.i(TAG, "run: $fileSize  $blockSize")
 
                 for (i in 0 until threadNum) {
-                    val fileDownloadMoreThread = FileDownloadMoreThread(
-                        url,
-                        file,
-                        i * blockSize,
-                        (i + 1) * blockSize,
-                        "线程$i"
-                    )
+                    var fileDownloadMoreThread:FileDownloadMoreThread
+                    if (i == threadNum -1){
+                        fileDownloadMoreThread = FileDownloadMoreThread(
+                            url,
+                            file,
+                            i * blockSize,
+                            (i + 1) * blockSize+i1,
+                            "线程$i"
+                        )
+                    }else{
+                        fileDownloadMoreThread = FileDownloadMoreThread(
+                            url,
+                            file,
+                            i * blockSize,
+                            (i + 1) * blockSize,
+                            "线程$i"
+                        )
+                    }
                     executors.submit(fileDownloadMoreThread)
                     fileDownloadMoreThreads.add(fileDownloadMoreThread)
                 }

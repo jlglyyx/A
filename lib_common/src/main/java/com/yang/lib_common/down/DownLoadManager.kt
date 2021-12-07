@@ -87,6 +87,7 @@ class DownLoadManager : Thread() {
                 }
                 val measureTimeMillis = measureTimeMillis {
                     var finish = false
+                    val startTime = System.currentTimeMillis()
                     while (!finish) {
                         downloadSize = 0
                         threadList.forEach {
@@ -95,7 +96,8 @@ class DownLoadManager : Thread() {
                         val fl = downloadSize / contentLength.toFloat()
                         if (downloadPercent != fl) {
                             downloadPercent = fl
-                            downLoadManagerListener?.onProgress(downloadPercent)
+                            val useTime =  System.currentTimeMillis() - startTime
+                            downLoadManagerListener?.onProgress(downloadPercent,useTime,downloadSize/useTime)
                         }
                         if (downloadSize >= contentLength) {
                             finish = true
@@ -145,6 +147,7 @@ class DownLoadManager : Thread() {
                 val bufferedInputStream = BufferedInputStream(inputStream, bytes.size)
                 randomAccessFile.seek(startIndex)
                 val measureTimeMillis = measureTimeMillis {
+                    val startTime = System.currentTimeMillis()
                     while (currentIndex < endIndex) {
                         val read = bufferedInputStream.read(bytes)
                         if (read == -1) {
@@ -153,7 +156,8 @@ class DownLoadManager : Thread() {
                         randomAccessFile.write(bytes, 0, read)
                         currentIndex += read
                         downSize += read
-                        downLoadManagerListener?.onChildProgress(this@DownLoadTask.name, downSize / (endIndex - startIndex).toFloat())
+                        val useTime = System.currentTimeMillis() - startTime
+                        downLoadManagerListener?.onChildProgress(this@DownLoadTask.name, downSize / (endIndex - startIndex).toFloat(),useTime,downSize/useTime)
                     }
                 }
                 Log.i(TAG, "${this@DownLoadTask.name}===measureTimeMillis: $measureTimeMillis")

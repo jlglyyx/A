@@ -20,7 +20,7 @@ interface DownLoadManagerListener {
 
     fun onCanceled()
 
-    fun onProgress(progress:Float)
+    fun onProgress(progress:Float,time: Long,speed:Long)
 
-    fun onChildProgress(name:String,progress:Float)
+    fun onChildProgress(name:String,progress:Float,time: Long,speed:Long)
 }

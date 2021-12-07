@@ -25,13 +25,13 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
         private const val TAG = "LifecycleMediaPlayer"
     }
 
-    var mediaPlayer: MediaPlayer? = null
+    private var mediaPlayer: MediaPlayer? = null
 
     private lateinit var mHolder: SurfaceHolder
 
     private var isSurfaceCreated = true
 
-    var position = 0
+    private var position = 0
 
     private var isReset = false
 
@@ -45,7 +45,7 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
 
     private var mContext:Context
 
-    private var screenPx : ArrayList<Int>
+    private var screenPx : IntArray
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)

@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 app:itemLeftContent="账号设置"
                 app:itemLeftImgVisible="false"
+                android:id="@+id/icv_account_setting"
                 android:layout_marginTop="@dimen/dp_10"
                 app:itemRightContentVisible="false"/>
             <com.yang.lib_common.widget.ItemContentView
@@ -31,6 +32,7 @@
                 android:layout_height="wrap_content"
                 app:itemLeftContent="下载设置"
                 app:itemLeftImgVisible="false"
+                android:id="@+id/icv_download_setting"
                 app:itemRightContentVisible="false" />
             <com.yang.lib_common.widget.ItemContentView
                 android:layout_width="match_parent"

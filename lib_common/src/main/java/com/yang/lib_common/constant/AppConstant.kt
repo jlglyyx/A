@@ -47,12 +47,14 @@ interface AppConstant {
         const val PICTURE_SELECT_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/PictureSelectActivity"
         const val OPEN_VIP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/OpenVipActivity"
         const val PRIVACY_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/PrivacyActivity"
-        const val UNIVERSAL_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/UniversalActivity"
         const val ACCESSIBILITY_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AccessibilityActivity"
         const val SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/SettingActivity"
+        const val ACCOUNT_SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AccountSettingActivity"
+        const val DOWNLOAD_SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/DownloadSettingActivity"
         const val ABOUT_AND_HELP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AboutAndHelpActivity"
         const val WEB_VIEW_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/WebViewActivity"
         const val UPLOAD_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/UploadActivity"
+        const val CHANGE_PASSWORD_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/ChangePasswordActivity"
 
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
@@ -160,6 +162,10 @@ interface AppConstant {
         const val SPLASH_VIDEO_PATH = "/storage/emulated/0/A/splash.mp4"
 
         const val ID = "id"
+
+        const val URL = "url"
+
+        const val TITLE = "title"
 
         const val TYPE = "type"
 

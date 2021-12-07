@@ -67,7 +67,9 @@ class MyCollectionVideoFragment : BaseFragment(), OnRefreshLoadMoreListener {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = MAdapter(R.layout.item_menu_my_collection_picture, mutableListOf()).apply {
             setOnItemClickListener { adapter, view, position ->
+                val item = mAdapter.getItem(position)
                 buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
+                    .withString(AppConstant.Constant.URL,item)
                     .navigation()
             }
         }

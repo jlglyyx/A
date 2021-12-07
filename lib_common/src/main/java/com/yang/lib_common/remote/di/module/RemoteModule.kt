@@ -56,22 +56,6 @@ class RemoteModule {
     @RemoteScope
     @Provides
     fun provideLogInterceptor(): Interceptor {
-
-//        return Interceptor { chain ->
-//            val request = chain.request()
-//            Log.i(TAG_LOG, "${request.url()}")
-//            var response = chain.proceed(request)
-//            response.body()?.also {
-//                val let = it.string().apply {
-//                    Log.i(TAG_LOG, this)
-//                }
-//                response = response.newBuilder().body(ResponseBody.create(it.contentType(),let)).build()
-//            }
-//
-//            response
-//        }
-
-
         return Interceptor { chain ->
             val request = chain.request()
             var response = chain.proceed(request)
