@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.handle.ErrorHandle
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -143,24 +142,6 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
-
-    fun <T> async(
-        onRequest: suspend () -> T,
-        onSuccess: (t: T) -> Unit = {},
-        error: (t: Throwable) -> Unit = {}
-    ) {
-        viewModelScope.launch {
-            val async = viewModelScope.async {
-                onRequest()
-            }
-            try {
-                onSuccess(async.await())
-            } catch (t: Throwable) {
-                error(t)
-            }
-        }
-    }
-
 
     override fun onCleared() {
         super.onCleared()

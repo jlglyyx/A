@@ -50,41 +50,41 @@ class VideoViewModel @Inject constructor(
                 val mutableListOf = mutableListOf<VideoDataItem>()
                 mutableListOf.add(VideoDataItem())
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
+                    videoTitle = "这是标题"
                     videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
-                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                                "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F17%2F20201117105437_45d41.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640489453&t=5685c55865958fe47ba34bbfe0b91405"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
+                    videoTitle = "这是标题"
                     videoUrl =
                         "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
                     isLarge = true
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                             isLarge = false
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                             isLarge = false
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                             isLarge = false
@@ -92,67 +92,67 @@ class VideoViewModel @Inject constructor(
                     }
                 })
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
+                    videoTitle = "这是标题"
                     videoUrl =
                         "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
+                    videoTitle = "这是标题"
                     videoUrl = "https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"
                 })
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
+                    videoTitle = "这是标题"
                     videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
@@ -179,107 +179,112 @@ class VideoViewModel @Inject constructor(
                 showRecyclerViewErrorEvent()
                 cancelRefreshLoadMore()
                 val mutableListOf = mutableListOf<VideoDataItem>()
-                mutableListOf.add(VideoDataItem())
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
-                    videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                    videoUrl = "https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"
+                    videoType = "这是类型"
+                    videoTitle = "这是标题"
+                })
+                mutableListOf.add(VideoDataItem().apply {
+                    videoTitle = "这是标题"
+                    videoUrl = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F17%2F20201117105437_45d41.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640489453&t=5685c55865958fe47ba34bbfe0b91405"
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
-                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                                "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
                         })
+                        videoType = "这是类型"
                     }
                 })
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
+                    videoTitle = "这是标题"
                     videoUrl =
-                        "https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"
+                        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F17%2F20201117105437_45d41.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640489453&t=5685c55865958fe47ba34bbfe0b91405"
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
-                                "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
+                                "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F17%2F20201117105437_45d41.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640489453&t=5685c55865958fe47ba34bbfe0b91405"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
+                    videoTitle = "这是标题"
                     videoUrl =
-                        "https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"
+                        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202011%2F17%2F20201117105437_45d41.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640489453&t=5685c55865958fe47ba34bbfe0b91405"
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                     }
                 })
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
+                    videoTitle = "这是标题"
                     videoUrl = "https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"
                 })
                 mutableListOf.add(VideoDataItem().apply {
-                    videoTitle = "1=="
+                    videoTitle = "这是标题"
                     videoUrl = "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4166_s.jpg"
                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })
                         add(VideoDataItem().apply {
-                            videoTitle = "1=="
+                            videoTitle = "这是标题"
                             videoUrl =
                                 "https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg"
                         })

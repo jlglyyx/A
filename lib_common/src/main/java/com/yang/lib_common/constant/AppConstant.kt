@@ -17,9 +17,9 @@ interface AppConstant {
 
         const val CONNECT_TIMEOUT: Long = 1800
 
-        const val READ_TIMEOUT: Long = 18000
+        const val READ_TIMEOUT: Long = 1800
 
-        const val WRITE_TIMEOUT: Long = 18000
+        const val WRITE_TIMEOUT: Long = 1800
     }
 
     object RoutePath {
@@ -28,12 +28,12 @@ interface AppConstant {
         private const val SERVICE = "service"
         private const val PROVIDE = "provide"
 
-        private const val MODULE_MAIN = "module_main"
-        private const val MODULE_HOME = "module_home"
-        private const val MODULE_MINE = "module_mine"
-        private const val MODULE_VIDEO = "module_video"
-        private const val MODULE_PICTURE = "module_picture"
-        private const val MODULE_LOGIN = "module_login"
+        const val MODULE_MAIN = "module_main"
+        const val MODULE_HOME = "module_home"
+        const val MODULE_MINE = "module_mine"
+        const val MODULE_VIDEO = "module_video"
+        const val MODULE_PICTURE = "module_picture"
+        const val MODULE_LOGIN = "module_login"
 
         /**
          * main

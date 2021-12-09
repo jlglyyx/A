@@ -14,6 +14,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.apt_annotation.InjectViewModel
 import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
@@ -28,6 +29,7 @@ import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.fra_item_video.*
 import javax.inject.Inject
 
+@InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
 class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
@@ -69,7 +71,6 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initViewModel() {
         getVideoComponent(this).inject(this)
-
     }
 
 
@@ -157,7 +158,10 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         override fun convert(helper: BaseViewHolder, item: VideoDataItem) {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             val recyclerView = helper.getView<RecyclerView>(R.id.recyclerView)
-            helper.setText(R.id.tv_title, item.videoTitle).addOnClickListener(R.id.item_video_big_image).addOnClickListener(R.id.item_video_recommend_type)
+            helper.setText(R.id.tv_title, item.videoTitle)
+                .setText(R.id.tv_type,item.videoType)
+                .addOnClickListener(R.id.item_video_big_image)
+                .addOnClickListener(R.id.item_video_recommend_type)
 
 
             item.videoUrl?.let {

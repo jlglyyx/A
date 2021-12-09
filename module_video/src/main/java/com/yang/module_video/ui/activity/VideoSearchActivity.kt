@@ -126,7 +126,7 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
         mAdapter = VideoAdapter(R.layout.item_video_image, mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
                 val imageData = adapter.data[position] as VideoDataItem
-                buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
+                buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
                     .withString(AppConstant.Constant.ID, imageData.id)
                     .navigation()
             }

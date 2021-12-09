@@ -145,6 +145,7 @@ class MainActivity : BaseActivity() {
                 tab.setIcon(icon[position])
                 (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.grey))
             }
+            tab.view.setOnLongClickListener { true }
         }.attach()
 
         tabLayout.post {

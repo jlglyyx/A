@@ -56,9 +56,9 @@ class VideoItemActivity : BaseActivity() {
 
     override fun initData() {
         val intent = intent
-        val sid = intent.getStringExtra(AppConstant.Constant.ID)
+        val id = intent.getStringExtra(AppConstant.Constant.ID)
         val url = intent.getStringExtra(AppConstant.Constant.URL)
-        sid?.let {
+        id?.let {
             videoModule.getVideoItemData(it)
         }
         url?.let {
