@@ -85,22 +85,49 @@ fun <T> fromJson(json: String, t: Class<T>): T {
     return Gson().fromJson<T>(json, t)
 }
 
-fun getFilePath(path: String = "/MFiles/picture"): MutableList<String> {
-    val mutableListOf = mutableListOf<String>()
+fun getFilePath(
+    path: String = "${Environment.getExternalStorageDirectory()}/MFiles/picture",
+    mutableListOf: MutableList<String> = mutableListOf()
+): MutableList<String> {
     //val file = File("${Environment.getExternalStorageDirectory()}/DCIM/Camera")
-    val file = File("${Environment.getExternalStorageDirectory()}$path")
+    val file = File(path)
     if (file.isDirectory) {
         val listFiles = file.listFiles()
         listFiles?.let {
             for (mFiles in listFiles) {
-                Log.i(TAG, "getFilePath: ${mFiles.absolutePath}")
-                mutableListOf.add(mFiles.absolutePath)
+                if (mFiles.isDirectory) {
+                    getFilePath(mFiles.absolutePath, mutableListOf)
+                } else {
+                    mutableListOf.add(mFiles.absolutePath)
+                }
+
             }
         }
+    } else {
+        mutableListOf.add(file.absolutePath)
     }
 
     return mutableListOf
 }
+
+fun getDirectoryName(
+    path: String = "${Environment.getExternalStorageDirectory()}/MFiles/picture/A",
+    mutableListOf: MutableList<File> = mutableListOf()
+): MutableList<File> {
+    val file = File(path)
+    if (file.isDirectory) {
+        val listFiles = file.listFiles()
+        listFiles?.forEach {
+            if (it.isDirectory){
+                getDirectoryName(it.path, mutableListOf)
+                Log.i(TAG, "getDirectoryName: ${it.name}  ${it.path}")
+                mutableListOf.add(it)
+            }
+        }
+    }
+    return mutableListOf
+}
+
 
 /**
  * 获取getDefaultMMKV

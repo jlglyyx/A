@@ -24,11 +24,11 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.dialog.EditBottomDialog
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
+import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.module_video.R
 import com.yang.module_video.helper.getVideoComponent
-import com.yang.module_video.model.VideoDataItem
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.act_video_item.*
 import javax.inject.Inject

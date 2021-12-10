@@ -5,12 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.yang.lib_common.app.BaseApplication
-import com.yang.lib_common.room.dao.ImageTypeDao
-import com.yang.lib_common.room.dao.SearchHistoryDao
-import com.yang.lib_common.room.dao.VideoTypeDao
-import com.yang.lib_common.room.entity.ImageTypeData
-import com.yang.lib_common.room.entity.SearchData
-import com.yang.lib_common.room.entity.VideoTypeData
+import com.yang.lib_common.room.dao.*
+import com.yang.lib_common.room.entity.*
 import java.io.File
 
 
@@ -20,7 +16,7 @@ import java.io.File
  * @Description
  * @Date 2021/8/5 14:22
  */
-@Database(entities = [ImageTypeData::class,VideoTypeData::class,SearchData::class],version = 1,exportSchema = true)
+@Database(entities = [ImageTypeData::class,VideoTypeData::class,SearchData::class, ImageDataItem::class, VideoDataItem::class],version = 1,exportSchema = true)
 abstract class BaseAppDatabase : RoomDatabase() {
 
     abstract fun imageTypeDao(): ImageTypeDao
@@ -28,6 +24,10 @@ abstract class BaseAppDatabase : RoomDatabase() {
     abstract fun videoTypeDao(): VideoTypeDao
 
     abstract fun searchHistoryDao(): SearchHistoryDao
+
+    abstract fun imageDataDao(): ImageDataDao
+
+    abstract fun videoDataDao(): VideoDataDao
 
     companion object {
         val instance: BaseAppDatabase by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {

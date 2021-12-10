@@ -22,7 +22,7 @@ import com.yang.lib_common.util.simpleDateFormat
 import com.yang.module_video.R
 import com.yang.module_video.adapter.VideoAdapter
 import com.yang.module_video.helper.getVideoComponent
-import com.yang.module_video.model.VideoDataItem
+import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.module_video.viewmodel.VideoViewModel
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter

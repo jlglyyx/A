@@ -6,9 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.room.BaseAppDatabase
+import com.yang.lib_common.room.entity.ImageData
+import com.yang.lib_common.room.entity.ImageDataItem
 import com.yang.lib_common.room.entity.ImageTypeData
-import com.yang.module_picture.data.model.ImageData
-import com.yang.module_picture.data.model.ImageDataItem
+import com.yang.lib_common.util.getDirectoryName
 import com.yang.module_picture.repository.PictureRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -48,11 +49,36 @@ class PictureViewModel @Inject constructor(
             },{
                 showRecyclerViewErrorEvent()
                 cancelRefreshLoadMore()
-                val mutableListOf = mutableListOf<ImageDataItem>()
-                for (i in 0..9){
-                    mutableListOf.add(ImageDataItem(null,null,"","","https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg","","","",""))
+                withContext(Dispatchers.IO) {
+                    if (BaseAppDatabase.instance.imageDataDao().queryData().size == 0) {
+                        val directoryName = getDirectoryName()
+                        val mutableListOf = mutableListOf<ImageDataItem>()
+                        var count = 0
+                        directoryName.forEachIndexed { index, file ->
+                            val listFiles = file.listFiles()
+                            listFiles.forEachIndexed { chilldIndex, chilldFile ->
+                                mutableListOf.add(
+                                    ImageDataItem(
+                                        System.currentTimeMillis().toString(),
+                                        "${count++}",
+                                        chilldFile.name,
+                                        "$index",
+                                        chilldFile.absolutePath,
+                                        chilldFile.name,
+                                        chilldFile.name,
+                                        "",
+                                        System.currentTimeMillis().toString()
+                                    )
+                                )
+                            }
+                        }
+                        BaseAppDatabase.instance.imageDataDao().insertData(mutableListOf)
+                        mImageData.postValue(ImageData(BaseAppDatabase.instance.imageDataDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT),null,null,null,null))
+                    }else{
+                        mImageData.postValue(ImageData(BaseAppDatabase.instance.imageDataDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT),null,null,null,null))
+                    }
+
                 }
-                mImageData.postValue(ImageData(mutableListOf,null,null,null,null))
             }, messages = *arrayOf("加载中"))
         }else{
             launch({
@@ -69,13 +95,38 @@ class PictureViewModel @Inject constructor(
             }, {
                 mImageData.postValue(it.data)
             },{
-                showRecyclerViewErrorEvent()
-                cancelRefreshLoadMore()
-                val mutableListOf = mutableListOf<ImageDataItem>()
-                for (i in 0..9){
-                    mutableListOf.add(ImageDataItem(null,null,"","","https://scpic3.chinaz.net/Files/pic/pic9/202107/hpic4186_s.jpg","描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述","标题","",""))
+//                showRecyclerViewErrorEvent()
+//                cancelRefreshLoadMore()
+                withContext(Dispatchers.IO) {
+                    if (BaseAppDatabase.instance.imageDataDao().queryData().size == 0) {
+                        val directoryName = getDirectoryName()
+                        val mutableListOf = mutableListOf<ImageDataItem>()
+                        var count = 0
+                        directoryName.forEachIndexed { index, file ->
+                            val listFiles = file.listFiles()
+                            listFiles.forEachIndexed { chilldIndex, chilldFile ->
+                                mutableListOf.add(
+                                    ImageDataItem(
+                                        System.currentTimeMillis().toString(),
+                                        "${count++}",
+                                        chilldFile.name,
+                                        "$index",
+                                        chilldFile.absolutePath,
+                                        chilldFile.name,
+                                        chilldFile.name,
+                                        "",
+                                        System.currentTimeMillis().toString()
+                                    )
+                                )
+                            }
+                        }
+                        BaseAppDatabase.instance.imageDataDao().insertData(mutableListOf)
+                        mImageData.postValue(ImageData(BaseAppDatabase.instance.imageDataDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT),null,null,null,null))
+                    }else{
+                        mImageData.postValue(ImageData(BaseAppDatabase.instance.imageDataDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT),null,null,null,null))
+                    }
+
                 }
-                mImageData.postValue(ImageData(mutableListOf,null,null,null,null))
             },errorDialog = false)
         }
 
@@ -96,17 +147,19 @@ class PictureViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 if (BaseAppDatabase.instance.imageTypeDao().queryData().size == 0) {
                     val mutableListOf = mutableListOf<ImageTypeData>()
-                    for (i in 1..10) {
+                    val directoryName = getDirectoryName()
+                    directoryName.forEachIndexed { index, s ->
                         mutableListOf.add(
                             ImageTypeData(
-                                i,
-                                "推=${i}=荐",
-                                "1",
+                                index,
+                                s.name,
+                                "$index",
                                 ""
                             )
                         )
                     }
-                    mImageTypeData.postValue(mutableListOf)
+                    BaseAppDatabase.instance.imageTypeDao().insertData(mutableListOf)
+                    mImageTypeData.postValue(BaseAppDatabase.instance.imageTypeDao().queryData())
                 }else{
                     mImageTypeData.postValue(BaseAppDatabase.instance.imageTypeDao().queryData())
                 }

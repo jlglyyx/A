@@ -4,8 +4,8 @@ import com.yang.lib_common.base.repository.BaseRepository
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.VideoTypeData
 import com.yang.module_video.api.VideoApiService
-import com.yang.module_video.model.VideoData
-import com.yang.module_video.model.VideoDataItem
+import com.yang.lib_common.room.entity.VideoData
+import com.yang.lib_common.room.entity.VideoDataItem
 import javax.inject.Inject
 
 class VideoRepository @Inject constructor(private val videoApiService: VideoApiService):BaseRepository() {

@@ -11,11 +11,11 @@ import javax.lang.model.element.TypeElement
 import javax.tools.Diagnostic
 
 @AutoService(Processor::class)
-class MyClass : AbstractProcessor(){
+class Processor : AbstractProcessor() {
 
     override fun init(processingEnv: ProcessingEnvironment) {
         super.init(processingEnv)
-        processingEnv.messager.printMessage(Diagnostic.Kind.NOTE,"==============")
+        processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, "==============")
     }
 
     override fun getSupportedAnnotationTypes(): MutableSet<String> {
@@ -33,21 +33,17 @@ class MyClass : AbstractProcessor(){
         roundEnv: RoundEnvironment
     ): Boolean {
         try {
-            //val classBuilder = TypeSpec.classBuilder("AAAA").addModifiers(Modifier.PUBLIC,Modifier.FINAL)
-            val createSourceFile = processingEnv.filer.createSourceFile("com.yang.aaa.AAA")
-            val elementsAnnotatedWith = roundEnv.getElementsAnnotatedWith(InjectViewModel::class.java)
-            elementsAnnotatedWith.forEach {
-
-            }
-            val openWriter = createSourceFile.openWriter()
-            openWriter.write("sssss")
-            openWriter.flush()
-            openWriter.close()
+//            val classBuilder = TypeSpec.classBuilder("AAAA").addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+//            val get = ClassName.get("com.yang.module_video.ui.fragment", "VideoItemFragment")
 //            classBuilder.addMethod(MethodSpec.constructorBuilder().build())
-//            val builder = JavaFile.builder("com.a.b", classBuilder.build()).build()
+//            classBuilder.addMethod(MethodSpec.methodBuilder("test")
+//                .addParameter(ParameterSpec.builder(get, "fragment", Modifier.FINAL).build())
+//                .addCode("getVideoComponent(fragment).inject(fragment);")
+//                .build())
+//            val builder = JavaFile.builder("com.yang.processor", classBuilder.build()).build()
 //            builder.writeTo(processingEnv.filer)
-        }catch (e:Exception){
-            processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,"==============${e.message}")
+        } catch (e: Exception) {
+            processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, "==============${e.message}")
         }
 
         return false

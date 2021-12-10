@@ -15,7 +15,6 @@ import dagger.Component
 interface VideoComponent {
     fun inject(videoFragment: VideoFragment)
     fun inject(videoItemFragment: VideoItemFragment)
-
     fun inject(videoItemActivity: VideoItemActivity)
     fun inject(videoSearchActivity: VideoSearchActivity)
 }
