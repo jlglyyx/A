@@ -115,29 +115,29 @@ class VideoViewModel @Inject constructor(
                         var count = 0
                         directoryName.forEachIndexed { index, file ->
                             val listFiles = file.listFiles()
-                            listFiles.forEachIndexed { chilldIndex, chilldFile ->
+                            listFiles?.forEachIndexed { childIndex, childFile ->
                                 mutableListOf.add(VideoDataItem().apply {
                                     id = "${count++}"
-                                    videoTitle = chilldFile.name
-                                    videoUrl = chilldFile.absolutePath
+                                    videoTitle = childFile.name
+                                    videoUrl = childFile.absolutePath
                                     videoType = "$index"
                                     smartVideoUrls = mutableListOf<VideoDataItem>().apply {
                                         add(VideoDataItem().apply {
                                             id = "${count++}"
-                                            videoTitle = chilldFile.name
-                                            videoUrl = chilldFile.absolutePath
+                                            videoTitle = childFile.name
+                                            videoUrl = childFile.absolutePath
                                             videoType = "$index"
                                         })
                                         add(VideoDataItem().apply {
                                             id = "${count++}"
-                                            videoTitle = chilldFile.name
-                                            videoUrl = chilldFile.absolutePath
+                                            videoTitle = childFile.name
+                                            videoUrl = childFile.absolutePath
                                             videoType = "$index"
                                         })
                                         add(VideoDataItem().apply {
                                             id = "${count++}"
-                                            videoTitle = chilldFile.name
-                                            videoUrl = chilldFile.absolutePath
+                                            videoTitle = childFile.name
+                                            videoUrl = childFile.absolutePath
                                             videoType = "$index"
                                         })
                                     }

@@ -1,5 +1,6 @@
 package com.yang.module_video.ui.fragment
 
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -62,9 +63,17 @@ class VideoFragment : BaseLazyFragment() {
 
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack{
             override fun imageAddClickListener() {
-                buildARouter(AppConstant.RoutePath.VIDEO_SEARCH_ACTIVITY).withInt(AppConstant.Constant.TYPE,AppConstant.Constant.NUM_ONE).navigation()
+                buildARouter(AppConstant.RoutePath.VIDEO_UPLOAD_ACTIVITY).withInt(AppConstant.Constant.TYPE,AppConstant.Constant.NUM_ONE).navigation()
             }
         }
+        commonToolBar.imageSearchCallBack = object : CommonToolBar.ImageSearchCallBack{
+            override fun imageSearchClickListener() {
+                buildARouter(AppConstant.RoutePath.VIDEO_SEARCH_ACTIVITY).withInt(AppConstant.Constant.TYPE,AppConstant.Constant.NUM_ONE).navigation()
+
+            }
+
+        }
+        commonToolBar.ivSearch.visibility = View.VISIBLE
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {

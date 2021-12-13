@@ -100,7 +100,7 @@ class DownLoadManagerService : Service() {
         usedTimeMillis: Int,
         downloadSpeed: Int
     ): Notification {
-        return NotificationCompat.Builder(this, "download")
+        return NotificationCompat.Builder(this, AppConstant.NoticeChannel.DOWNLOAD)
             .setContentIntent(
                 PendingIntent.getActivity(
                     this,
@@ -122,7 +122,7 @@ class DownLoadManagerService : Service() {
      */
     private fun showCompleteNotification(file: File) {
         val systemService = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val build = NotificationCompat.Builder(this, "download")
+        val build = NotificationCompat.Builder(this, AppConstant.NoticeChannel.DOWNLOAD)
             .setContentText("下载完成：${file.absolutePath}")
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.mipmap.ic_launcher)

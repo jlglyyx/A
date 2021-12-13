@@ -119,16 +119,12 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
         }else{
             childAt.layout(0, (screenPx[1]/2 - childAt.measuredHeight/2), childAt.measuredWidth, screenPx[1]/2 + childAt.measuredHeight/2)
         }
-        Log.i(TAG, "onLayout: ${childAt.measuredWidth}  ${childAt.measuredHeight}")
     }
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         measureChildren(widthMeasureSpec,heightMeasureSpec)
-        Log.i(TAG, "onMeasure: $measuredWidth  $measuredHeight")
-        val childAt = getChildAt(0)
-        Log.i(TAG, "onMeasuresssss: ${childAt.measuredWidth}  ${childAt.measuredHeight}")
     }
 
 
@@ -152,7 +148,6 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
         }
         mediaPlayer?.setDisplay(holder)
         isSurfaceCreated = true
-        Log.i(TAG, "surfaceCreated: $position")
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
@@ -164,7 +159,6 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
         mediaPlayer?.let {
             position = it.currentPosition
             it.pause()
-            Log.i(TAG, "surfaceDestroyed: $position")
         }
     }
 

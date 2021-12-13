@@ -211,7 +211,9 @@ class MainActivity : BaseActivity() {
             val currentTimeMillis = System.currentTimeMillis()
             if (currentTimeMillis - firstClickTime < 1500) {
                 firstClickTime = 0L
-                super.onBackPressed()
+                /*进入后台不退出*/
+                moveTaskToBack(true)
+                //super.onBackPressed()
             } else {
                 firstClickTime = currentTimeMillis
                 showShort("再按一次退出")

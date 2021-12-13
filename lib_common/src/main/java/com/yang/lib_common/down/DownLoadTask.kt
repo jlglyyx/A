@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.yang.lib_common.constant.AppConstant
 
 
 /**
@@ -53,7 +54,7 @@ class DownLoadTask constructor(private val service: DownLoadService) :
 
 
     private fun sendNotification(contentText:String, contentTitle:String): Notification {
-        return NotificationCompat.Builder(service,"download")
+        return NotificationCompat.Builder(service, AppConstant.NoticeChannel.DOWNLOAD)
             .setContentText(contentText)
             .setContentTitle(contentTitle)
             .setWhen(System.currentTimeMillis())
@@ -64,7 +65,7 @@ class DownLoadTask constructor(private val service: DownLoadService) :
 
     }
     private fun sendNotification(progress:Int, contentTitle:String): Notification {
-        return NotificationCompat.Builder(service,"download")
+        return NotificationCompat.Builder(service,AppConstant.NoticeChannel.DOWNLOAD)
             .setContentText("$progress%")
             .setContentTitle(contentTitle)
             .setWhen(System.currentTimeMillis())

@@ -5,6 +5,7 @@ import com.yang.lib_common.scope.ActivityScope
 import com.yang.module_video.di.module.VideoModule
 import com.yang.module_video.ui.activity.VideoItemActivity
 import com.yang.module_video.ui.activity.VideoSearchActivity
+import com.yang.module_video.ui.activity.VideoUploadActivity
 import com.yang.module_video.ui.fragment.VideoFragment
 import com.yang.module_video.ui.fragment.VideoItemFragment
 import dagger.Component
@@ -17,4 +18,5 @@ interface VideoComponent {
     fun inject(videoItemFragment: VideoItemFragment)
     fun inject(videoItemActivity: VideoItemActivity)
     fun inject(videoSearchActivity: VideoSearchActivity)
+    fun inject(videoUploadActivity: VideoUploadActivity)
 }

@@ -21,26 +21,34 @@ class CommonToolBar : ConstraintLayout {
 
     var tVRightCallBack: TVRightCallBack? = null
 
+    var imageSearchCallBack: ImageSearchCallBack? = null
+
     var centerContent: String? = null
-    set(value) {
-        field = value
-        tvCenterContent.text = field
-    }
+        set(value) {
+            field = value
+            tvCenterContent.text = field
+        }
 
     lateinit var tvCenterContent: TextView
 
     lateinit var ivBack: ShapeableImageView
 
-    private lateinit var tvRightContent:TextView
+    lateinit var ivSearch: ImageView
 
-    var rightContentVisible:Boolean = false
-    set(value) {
-        field = value
-        if (field) {
-            tvRightContent.visibility = View.VISIBLE
-        } else {
-            tvRightContent.visibility = View.GONE
+    private lateinit var tvRightContent: TextView
+
+    var rightContentVisible: Boolean = false
+        set(value) {
+            field = value
+            if (field) {
+                tvRightContent.visibility = View.VISIBLE
+            } else {
+                tvRightContent.visibility = View.GONE
+            }
         }
+
+    interface ImageSearchCallBack {
+        fun imageSearchClickListener()
     }
 
     interface ImageBackCallBack {
@@ -71,9 +79,10 @@ class CommonToolBar : ConstraintLayout {
         clToolbar.setPadding(0, getStatusBarHeight(context), 0, 0)
         tvCenterContent = inflate.findViewById(R.id.tv_centerContent)
         val tvLeftContent = inflate.findViewById<TextView>(R.id.tv_leftContent)
-        tvRightContent = inflate.findViewById<TextView>(R.id.tv_rightContent)
+        tvRightContent = inflate.findViewById(R.id.tv_rightContent)
         ivBack = inflate.findViewById(R.id.iv_back)
         val ivAdd = inflate.findViewById<ImageView>(R.id.iv_add)
+        ivSearch = inflate.findViewById(R.id.iv_search)
         val obtainStyledAttributes =
             context.obtainStyledAttributes(attrs, R.styleable.CommonToolBar)
         centerContent =
@@ -106,7 +115,7 @@ class CommonToolBar : ConstraintLayout {
             ivBack.visibility = View.GONE
         }
 
-        if (leftImgSrc != 0){
+        if (leftImgSrc != 0) {
             ivBack.setImageResource(leftImgSrc)
         }
         if (rightImgVisible) {
@@ -114,7 +123,7 @@ class CommonToolBar : ConstraintLayout {
         } else {
             ivAdd.visibility = View.GONE
         }
-        if (rightImgSrc != 0){
+        if (rightImgSrc != 0) {
             ivAdd.setImageResource(rightImgSrc)
         }
 
@@ -123,17 +132,20 @@ class CommonToolBar : ConstraintLayout {
         } else {
             tvRightContent.visibility = View.GONE
         }
-        ivBack.clicks().subscribe{
+        ivBack.clicks().subscribe {
             if (null != imageBackCallBack) {
                 imageBackCallBack?.imageBackClickListener()
             } else {
                 (context as Activity).finish()
             }
         }
-        tvRightContent.clicks().subscribe{
+        ivSearch.clicks().subscribe {
+            imageSearchCallBack?.imageSearchClickListener()
+        }
+        tvRightContent.clicks().subscribe {
             tVRightCallBack?.tvRightClickListener()
         }
-        ivAdd.clicks().subscribe{
+        ivAdd.clicks().subscribe {
             imageAddCallBack?.imageAddClickListener()
         }
 

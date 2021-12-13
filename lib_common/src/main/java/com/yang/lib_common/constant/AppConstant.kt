@@ -8,18 +8,19 @@ interface AppConstant {
 
         const val BASE_PORT = "20000"
 
-        const val BASE_URL = "http://jlgl.free.idcfengye.com/"
+        const val BASE_URL = "http://www.baidu.com/"
+//        const val BASE_URL = "http://jlgl.free.idcfengye.com/"
 //        const val BASE_URL = "http://10.16.242.28:20000/"
 
         const val TAG = "RemoteModule"
 
         const val TAG_LOG = "httpLog"
 
-        const val CONNECT_TIMEOUT: Long = 1800
+        const val CONNECT_TIMEOUT: Long = 1000
 
-        const val READ_TIMEOUT: Long = 1800
+        const val READ_TIMEOUT: Long = 1000
 
-        const val WRITE_TIMEOUT: Long = 1800
+        const val WRITE_TIMEOUT: Long = 1000
     }
 
     object RoutePath {
@@ -59,8 +60,7 @@ interface AppConstant {
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
         const val LEFT_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/LeftFragment"
-        const val MY_COLLECTION_PICTURE_FRAGMENT =
-            "/$MODULE_MAIN/$FRAGMENT/MyCollectionPictureFragment"
+        const val MY_COLLECTION_PICTURE_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionPictureFragment"
         const val MY_COLLECTION_VIDEO_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionVideoFragment"
 
 
@@ -88,12 +88,13 @@ interface AppConstant {
         const val VIDEO_ITEM_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/VideoItemFragment"
 
 
-        const val ADVERTISEMENT_VIDEO_ACTIVITY =
-            "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
+        const val ADVERTISEMENT_VIDEO_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
         const val VIDEO_MAIN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/MainActivity"
 
         const val VIDEO_ITEM_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoItemActivity"
         const val VIDEO_SEARCH_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/SearchActivity"
+
+        const val VIDEO_UPLOAD_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoUploadActivity"
 
         /**
          * mine
@@ -108,23 +109,19 @@ interface AppConstant {
 
         const val MINE_OBTAIN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainActivity"
 
-        const val MINE_OBTAIN_EXCHANGE_ACTIVITY =
-            "/$MODULE_MINE/$ACTIVITY/MineObtainExchangeActivity"
+        const val MINE_OBTAIN_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainExchangeActivity"
 
         const val MINE_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeActivity"
 
-        const val MINE_EXCHANGE_DETAIL_ACTIVITY =
-            "/$MODULE_MINE/$ACTIVITY/MineExchangeDetailActivity"
+        const val MINE_EXCHANGE_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeDetailActivity"
 
         const val MINE_SIGN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineSignActivity"
 
         const val MINE_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionActivity"
 
-        const val MINE_LIMIT_TIME_EXTENSION_ACTIVITY =
-            "/$MODULE_MINE/$ACTIVITY/MineLimitTimeExtensionActivity"
+        const val MINE_LIMIT_TIME_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineLimitTimeExtensionActivity"
 
-        const val MINE_SHIPPING_ADDRESS_ACTIVITY =
-            "/$MODULE_MINE/$ACTIVITY/MineShippingAddressActivity"
+        const val MINE_SHIPPING_ADDRESS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineShippingAddressActivity"
 
         const val MINE_ADD_ADDRESS_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineAddAddressActivity"
 
@@ -132,14 +129,13 @@ interface AppConstant {
 
         const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineOrderDetailActivity"
 
-        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY =
-            "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
+        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
+
 
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
-        const val MINE_EXCHANGE_STATUS_FRAGMENT =
-            "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
+        const val MINE_EXCHANGE_STATUS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
 
 
     }
@@ -244,5 +240,9 @@ interface AppConstant {
         const val EMPTY_VIEW = 0
 
         const val ERROR_VIEW = 1
+    }
+
+    object NoticeChannel{
+        const val DOWNLOAD = "download"
     }
 }

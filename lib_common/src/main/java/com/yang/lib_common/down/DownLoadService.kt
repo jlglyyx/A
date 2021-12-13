@@ -6,8 +6,12 @@ import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.*
+import android.os.Binder
+import android.os.Build
+import android.os.Environment
+import android.os.IBinder
 import android.util.Log
+import com.yang.lib_common.constant.AppConstant
 import java.io.File
 
 
@@ -148,7 +152,7 @@ class DownLoadService : Service() {
     override fun onCreate() {
         super.onCreate()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            createNotificationChannel("download", "下载通知", IMPORTANCE_HIGH)
+            createNotificationChannel(AppConstant.NoticeChannel.DOWNLOAD, "下载通知", IMPORTANCE_HIGH)
         }
     }
 

@@ -29,8 +29,7 @@ class LeftFragment : BaseFragment() {
             lifecycle.addObserver(this)
             locationListener = object : LocationUtil.LocationListener {
                 override fun onLocationListener(aMapLocation: AMapLocation) {
-                    tv_location.text =
-                        "${aMapLocation.city}${aMapLocation.district}${aMapLocation.aoiName}"
+                    tv_location.text = aMapLocation.city +aMapLocation.district+aMapLocation.aoiName
                 }
 
             }

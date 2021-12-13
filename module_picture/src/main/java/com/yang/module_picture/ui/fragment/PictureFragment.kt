@@ -1,5 +1,6 @@
 package com.yang.module_picture.ui.fragment
 
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -53,12 +54,20 @@ class PictureFragment : BaseLazyFragment() {
         })
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener() {
+                buildARouter(AppConstant.RoutePath.UPLOAD_ACTIVITY).withInt(AppConstant.Constant.TYPE,AppConstant.Constant.NUM_ONE).navigation()
+            }
+        }
+
+        commonToolBar.imageSearchCallBack = object : CommonToolBar.ImageSearchCallBack{
+            override fun imageSearchClickListener() {
                 buildARouter(AppConstant.RoutePath.PICTURE_SEARCH_ACTIVITY).withInt(
                     AppConstant.Constant.TYPE,
                     AppConstant.Constant.NUM_ZERO
                 ).navigation()
+
             }
         }
+        commonToolBar.ivSearch.visibility = View.VISIBLE
 
     }
 

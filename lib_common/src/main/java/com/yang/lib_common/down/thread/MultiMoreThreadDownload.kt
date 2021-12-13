@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import com.yang.lib_common.R
+import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.showShort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -260,7 +261,7 @@ class MultiMoreThreadDownload(
     private fun showDownLoadNotification(progress: Int, usedTimeMillis: Int, downloadSpeed: Int) {
         val notificationManager =
             mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val build = NotificationCompat.Builder(mContext, "download")
+        val build = NotificationCompat.Builder(mContext, AppConstant.NoticeChannel.DOWNLOAD)
             .setContentTitle("下载速度：$downloadSpeed Kb/s $progress% 用时：$usedTimeMillis/s")
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.mipmap.ic_launcher)
@@ -276,7 +277,7 @@ class MultiMoreThreadDownload(
     private fun showCompleteNotification(file: File) {
         val notificationManager =
             mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val build = NotificationCompat.Builder(mContext, "download")
+        val build = NotificationCompat.Builder(mContext, AppConstant.NoticeChannel.DOWNLOAD)
             .setContentText("下载完成：${file.absolutePath}")
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.mipmap.ic_launcher)

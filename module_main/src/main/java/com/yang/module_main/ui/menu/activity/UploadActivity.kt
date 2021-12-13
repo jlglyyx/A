@@ -47,6 +47,8 @@ class UploadActivity : BaseActivity(){
     }
 
     override fun initData() {
+
+
     }
 
     override fun initView() {
