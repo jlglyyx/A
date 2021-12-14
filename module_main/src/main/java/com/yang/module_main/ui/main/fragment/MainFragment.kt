@@ -65,67 +65,11 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     override fun initData() {
         smartRefreshLayout.autoRefresh()
         initSmartRefreshLayout()
-    }
 
-    override fun initView() {
-        initRecyclerView()
+        LiveDataBus.instance.with("refresh_dynamic").observe(this, Observer {
 
-        val registerForActivityResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode != AppCompatActivity.RESULT_OK) {
-                    return@registerForActivityResult
-                }
-                val images = it.data?.getStringArrayListExtra(AppConstant.Constant.DATA)
-                val content = it.data?.getStringExtra(AppConstant.Constant.CONTENT)
-                val mutableListOf = mutableListOf<DynamicData>().apply {
-                    if (!content.isNullOrEmpty()) {
-                        add(DynamicData().apply {
-                            this.content = content
-                        })
-                    }
-                    if (!images.isNullOrEmpty()) {
-                        add((DynamicData().apply {
-                            imageUrls = images.formatWithSymbol("#")
-                        }))
-                    }
-                }
-                mAdapter.addData(0, mutableListOf)
-                recyclerView.scrollToPosition(0)
-            }
-        commonToolBar.ivBack.let {
-
-            val mLayoutParams = it.layoutParams as ConstraintLayout.LayoutParams
-            it.setPadding(
-                0f.dip2px(requireContext()),
-                0f.dip2px(requireContext()),
-                0f.dip2px(requireContext()),
-                0f.dip2px(requireContext())
-            )
-            mLayoutParams.marginStart = 15f.dip2px(requireContext())
-            it.shapeAppearanceModel = ShapeAppearanceModel.builder()
-                .setAllCornerSizes(ShapeAppearanceModel.PILL)
-                .build()
-        }
-
-        val userInfo = getUserInfo()
-        Glide.with(this)
-            .load(userInfo?.userImage)
-            .error(R.drawable.iv_image_error)
-            .placeholder(R.drawable.iv_image_placeholder)
-            .into(commonToolBar.ivBack)
-        commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
-            override fun imageAddClickListener() {
-                registerForActivityResult.launch(
-                    Intent(requireContext(), AddDynamicActivity::class.java)
-                )
-            }
-        }
-        commonToolBar.imageBackCallBack = object : CommonToolBar.ImageBackCallBack {
-            override fun imageBackClickListener() {
-                (activity as MainActivity).drawerLayout.openDrawer(GravityCompat.START)
-            }
-
-        }
+            onRefresh(smartRefreshLayout)
+        })
 
         mainViewModel.dynamicListLiveData.observe(this, Observer {
             when {
@@ -155,11 +99,65 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 }
             }
         })
+    }
 
-        LiveDataBus.instance.with("refresh_dynamic").observe(this, Observer {
+    override fun initView() {
+        initRecyclerView()
+        val registerForActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode != AppCompatActivity.RESULT_OK) {
+                    return@registerForActivityResult
+                }
+                val images = it.data?.getStringArrayListExtra(AppConstant.Constant.DATA)
+                val content = it.data?.getStringExtra(AppConstant.Constant.CONTENT)
+                val mutableListOf = mutableListOf<DynamicData>().apply {
+                    if (!content.isNullOrEmpty()) {
+                        add(DynamicData().apply {
+                            this.content = content
+                        })
+                    }
+                    if (!images.isNullOrEmpty()) {
+                        add((DynamicData().apply {
+                            imageUrls = images.formatWithSymbol("#")
+                        }))
+                    }
+                }
+                mAdapter.addData(0, mutableListOf)
+                recyclerView.scrollToPosition(0)
+            }
+        commonToolBar.ivBack.let {
+            val mLayoutParams = it.layoutParams as ConstraintLayout.LayoutParams
+            it.setPadding(
+                0f.dip2px(requireContext()),
+                0f.dip2px(requireContext()),
+                0f.dip2px(requireContext()),
+                0f.dip2px(requireContext())
+            )
+            mLayoutParams.marginStart = 15f.dip2px(requireContext())
+            it.shapeAppearanceModel = ShapeAppearanceModel.builder()
+                .setAllCornerSizes(ShapeAppearanceModel.PILL)
+                .build()
+        }
+        val userInfo = getUserInfo()
+        Glide.with(this)
+            .load(userInfo?.userImage)
+            .error(R.drawable.iv_image_error)
+            .placeholder(R.drawable.iv_image_placeholder)
+            .into(commonToolBar.ivBack)
 
-            onRefresh(smartRefreshLayout)
-        })
+        commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
+            override fun imageAddClickListener() {
+                registerForActivityResult.launch(
+                    Intent(requireContext(), AddDynamicActivity::class.java)
+                )
+            }
+        }
+        commonToolBar.imageBackCallBack = object : CommonToolBar.ImageBackCallBack {
+            override fun imageBackClickListener() {
+                (activity as MainActivity).drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+
+
     }
 
     private fun initSmartRefreshLayout() {

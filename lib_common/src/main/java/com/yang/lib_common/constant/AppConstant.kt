@@ -67,11 +67,13 @@ interface AppConstant {
         /**
          * picture
          */
-        const val PICTURE_ITEM_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/PictureItemActivity"
-        const val PICTURE_SEARCH_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/SearchActivity"
 
         const val PICTURE_FRAGMENT = "/$MODULE_PICTURE/$FRAGMENT/PictureFragment"
         const val PICTURE_ITEM_FRAGMENT = "/$MODULE_PICTURE/$FRAGMENT/PictureItemFragment"
+
+        const val PICTURE_ITEM_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/PictureItemActivity"
+        const val PICTURE_SEARCH_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/SearchActivity"
+        const val PICTURE_UPLOAD_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/PictureUploadActivity"
 
         /**
          * login
@@ -95,6 +97,10 @@ interface AppConstant {
         const val VIDEO_SEARCH_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/SearchActivity"
 
         const val VIDEO_UPLOAD_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoUploadActivity"
+
+        const val VIDEO_UPLOAD_TASK_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoUploadTaskActivity"
+
+        const val VIDEO_SCREEN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoScreenActivity"
 
         /**
          * mine

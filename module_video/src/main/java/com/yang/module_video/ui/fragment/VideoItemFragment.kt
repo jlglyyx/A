@@ -92,11 +92,11 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                         ).navigation()
                     }
                     R.id.item_video_recommend_type ->{
-//                        val videoDataItem = adapter.data[position] as VideoDataItem
-//                        buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).withString(
-//                            AppConstant.Constant.ID,
-//                            videoDataItem.id
-//                        ).navigation()
+                        val videoDataItem = adapter.data[position] as VideoDataItem
+                        buildARouter(AppConstant.RoutePath.VIDEO_SCREEN_ACTIVITY).withString(
+                            AppConstant.Constant.ID,
+                            videoDataItem.id
+                        ).navigation()
                     }
                 }
 

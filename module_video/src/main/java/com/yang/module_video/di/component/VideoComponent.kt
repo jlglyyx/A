@@ -3,9 +3,7 @@ package com.yang.module_video.di.component
 import com.yang.lib_common.remote.di.component.RemoteComponent
 import com.yang.lib_common.scope.ActivityScope
 import com.yang.module_video.di.module.VideoModule
-import com.yang.module_video.ui.activity.VideoItemActivity
-import com.yang.module_video.ui.activity.VideoSearchActivity
-import com.yang.module_video.ui.activity.VideoUploadActivity
+import com.yang.module_video.ui.activity.*
 import com.yang.module_video.ui.fragment.VideoFragment
 import com.yang.module_video.ui.fragment.VideoItemFragment
 import dagger.Component
@@ -19,4 +17,6 @@ interface VideoComponent {
     fun inject(videoItemActivity: VideoItemActivity)
     fun inject(videoSearchActivity: VideoSearchActivity)
     fun inject(videoUploadActivity: VideoUploadActivity)
+    fun inject(videoUploadTaskActivity: VideoUploadTaskActivity)
+    fun inject(videoScreenActivity: VideoScreenActivity)
 }

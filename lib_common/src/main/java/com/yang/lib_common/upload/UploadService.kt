@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
+import okhttp3.Call
 import kotlin.random.Random
 
 /**
@@ -29,8 +30,12 @@ class UploadService : Service(), UploadListener {
 
     inner class UploadServiceBinder : Binder() {
 
-        fun startUpload(filePath: MutableList<String>) {
-            UploadManage.instance.startUpload(filePath)
+        fun startUpload(filePath: MutableList<String>):Call {
+            return UploadManage.instance.startUpload(filePath)
+        }
+
+        fun cancelUpload(uploadCall: Call){
+            UploadManage.instance.cancelUpload(uploadCall)
         }
     }
 
@@ -49,7 +54,7 @@ class UploadService : Service(), UploadListener {
 
     override fun onCreate() {
         super.onCreate()
-        UploadManage.instance.uploadListener = this@UploadService
+        UploadManage.instance.addUploadListener(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -71,7 +76,6 @@ class UploadService : Service(), UploadListener {
             .setAutoCancel(true)
             .build()
         systemService.notify(noticeId, build)
-
     }
 
     private fun showCompleteNotice(noticeId: Int) {
@@ -83,7 +87,7 @@ class UploadService : Service(), UploadListener {
             .setContentTitle("上传完成")
             .setAutoCancel(true)
             .build()
-        systemService.notify(noticeId*Random.nextInt(noticeId, Int.MAX_VALUE), build)
+        systemService.notify(Random.nextInt(noticeId, Int.MAX_VALUE), build)
     }
 
 

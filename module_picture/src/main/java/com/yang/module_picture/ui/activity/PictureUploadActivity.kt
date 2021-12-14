@@ -1,4 +1,4 @@
-package com.yang.module_video.ui.activity
+package com.yang.module_picture.ui.activity
 
 import android.content.ComponentName
 import android.content.Intent
@@ -22,10 +22,10 @@ import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.dip2px
 import com.yang.lib_common.widget.CommonToolBar
-import com.yang.module_video.R
-import com.yang.module_video.helper.getVideoComponent
-import com.yang.module_video.viewmodel.VideoViewModel
-import kotlinx.android.synthetic.main.act_video_upload.*
+import com.yang.module_picture.R
+import com.yang.module_picture.helper.getPictureComponent
+import com.yang.module_picture.viewmodel.PictureViewModel
+import kotlinx.android.synthetic.main.act_picture_upload.*
 import java.util.*
 import javax.inject.Inject
 
@@ -35,11 +35,11 @@ import javax.inject.Inject
  * @Description
  * @Date 2021/11/19 11:08
  */
-@Route(path = AppConstant.RoutePath.VIDEO_UPLOAD_ACTIVITY)
-class VideoUploadActivity : BaseActivity() {
+@Route(path = AppConstant.RoutePath.PICTURE_UPLOAD_ACTIVITY)
+class PictureUploadActivity : BaseActivity() {
 
     @Inject
-    lateinit var videoViewModel: VideoViewModel
+    lateinit var pictureViewModel: PictureViewModel
 
     private var selectType = ""
 
@@ -47,9 +47,9 @@ class VideoUploadActivity : BaseActivity() {
 
     private val FILE_CODE = 1002
 
-    private var videoTypeList = mutableListOf<String>()
+    private var pictureTypeList = mutableListOf<String>()
 
-    private lateinit var videoUploadAdapter:VideoUploadAdapter
+    private lateinit var pictureUploadAdapter:PictureUploadAdapter
 
     private var uploadServiceBinder: UploadService.UploadServiceBinder? = null
 
@@ -63,29 +63,29 @@ class VideoUploadActivity : BaseActivity() {
     }
 
     override fun getLayout(): Int {
-        return R.layout.act_video_upload
+        return R.layout.act_picture_upload
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
-        return videoViewModel.uC
+        return pictureViewModel.uC
     }
 
     override fun initData() {
         bindService(Intent(this,UploadService::class.java),uploadServiceConnection, BIND_AUTO_CREATE)
-        videoViewModel.getVideoTypeData()
-        videoViewModel.mVideoTypeData.observe(this, Observer {
+        pictureViewModel.getImageTypeData()
+        pictureViewModel.mImageTypeData.observe(this, Observer {
             it?.map { bean ->
                 bean.name
-            }?.let { map -> videoTypeList.addAll(map) }
+            }?.let { map -> pictureTypeList.addAll(map) }
         })
     }
 
     override fun initView() {
         icv_type.clicks().subscribe {
             val asBottomList = XPopup.Builder(this).asBottomList(
-                "", videoTypeList.toTypedArray()
+                "", pictureTypeList.toTypedArray()
             ) { position, text ->
-                selectType = videoTypeList[position]
+                selectType = pictureTypeList[position]
                 icv_type.rightContentFontSize = 15f
                 icv_type.rightContent = selectType
             }
@@ -102,7 +102,7 @@ class VideoUploadActivity : BaseActivity() {
         ll_image.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.PICTURE_SELECT_ACTIVITY)
                 .withParcelableArrayList(AppConstant.Constant.DATA, selectFileList as ArrayList)
-                .withInt(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_TWO)
+                .withInt(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_ONE)
                 .withInt(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
                 .navigation(this, FILE_CODE)
         }
@@ -112,26 +112,24 @@ class VideoUploadActivity : BaseActivity() {
                 if (TextUtils.isEmpty(selectType)){
                     return
                 }
-                if (videoUploadAdapter.data.isEmpty()){
+                if (pictureUploadAdapter.data.isEmpty()){
                     return
                 }
-                uploadServiceBinder?.startUpload(videoUploadAdapter.data)
-                buildARouter(AppConstant.RoutePath.VIDEO_UPLOAD_TASK_ACTIVITY).navigation()
+                uploadServiceBinder?.startUpload(pictureUploadAdapter.data)
+                //buildARouter(AppConstant.RoutePath.VIDEO_UPLOAD_TASK_ACTIVITY).navigation()
             }
         }
         initRecyclerView()
     }
 
     override fun initViewModel() {
-        getVideoComponent(this).inject(this)
+        getPictureComponent(this).inject(this)
     }
 
     private fun initRecyclerView(){
         recyclerView.layoutManager = LinearLayoutManager(this)
-        videoUploadAdapter = VideoUploadAdapter(R.layout.item_upload,mutableListOf())
-        recyclerView.adapter = videoUploadAdapter
-        videoUploadAdapter.addData("/storage/emulated/0/MFiles/video/B/舞蹈/aaa.mp4")
-        videoUploadAdapter.addData("/storage/emulated/0/MFiles/video/B/跳舞/aaa.mp4")
+        pictureUploadAdapter = PictureUploadAdapter(R.layout.item_upload,mutableListOf())
+        recyclerView.adapter = pictureUploadAdapter
     }
 
 
@@ -142,7 +140,7 @@ class VideoUploadActivity : BaseActivity() {
                 it.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
                     ?.let { beans ->
                         selectFileList = beans
-                        videoUploadAdapter.setNewData(beans.map { bean ->
+                        pictureUploadAdapter.setNewData(beans.map { bean ->
                             Log.i(TAG, "onActivityResult: ${ bean.filePath}")
                             bean.filePath
                         })
@@ -151,7 +149,7 @@ class VideoUploadActivity : BaseActivity() {
         }
     }
 
-    inner class VideoUploadAdapter(layoutResId: Int, data: MutableList<String>?) :
+    inner class PictureUploadAdapter(layoutResId: Int, data: MutableList<String>?) :
         BaseQuickAdapter<String, BaseViewHolder>(layoutResId, data) {
         override fun convert(helper: BaseViewHolder, item: String) {
             helper.setText(R.id.tv_content,item)

@@ -46,15 +46,12 @@ class PictureFragment : BaseLazyFragment() {
                         .navigation() as Fragment
                 )
             }
-//            lifecycleScope.launch(Dispatchers.IO){
-//                BaseAppDatabase.instance.imageTypeDao().updateData(it)
-//            }
             initViewPager()
             initTabLayout()
         })
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener() {
-                buildARouter(AppConstant.RoutePath.UPLOAD_ACTIVITY).withInt(AppConstant.Constant.TYPE,AppConstant.Constant.NUM_ONE).navigation()
+                buildARouter(AppConstant.RoutePath.PICTURE_UPLOAD_ACTIVITY).navigation()
             }
         }
 

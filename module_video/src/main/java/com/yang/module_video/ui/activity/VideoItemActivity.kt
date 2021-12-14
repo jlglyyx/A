@@ -128,6 +128,9 @@ class VideoItemActivity : BaseActivity() {
     override fun initViewModel() {
         getVideoComponent(this).inject(this)
         videoModule.mVideoItemData.observe(this, Observer {
+            if (it.size == 0){
+                return@Observer
+            }
             for ((index,videoDataItem) in it.withIndex()){
                 if (index == 0){
                     videoDataItem.select = true
