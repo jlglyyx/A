@@ -5,6 +5,7 @@
     <application>
         <activity android:name="com.yang.module_picture.ui.activity.PictureItemActivity"/>
         <activity android:name="com.yang.module_picture.ui.activity.PictureSearchActivity"/>
+        <activity android:name="com.yang.module_picture.ui.activity.PictureUploadActivity"/>
     </application>
 
 </manifest>

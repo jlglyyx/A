@@ -1,5 +1,6 @@
 package com.yang.module_main.ui.menu.fragment
 
+import android.os.Environment
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -67,12 +68,14 @@ class MyCollectionVideoFragment : BaseFragment(), OnRefreshLoadMoreListener {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = MAdapter(R.layout.item_menu_my_collection_picture, mutableListOf()).apply {
             setOnItemClickListener { adapter, view, position ->
+                val item = mAdapter.getItem(position)
                 buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
+                    .withString(AppConstant.Constant.URL,item)
                     .navigation()
             }
         }
         recyclerView.adapter = mAdapter
-        val filePath = getFilePath("/MFiles/video")
+        val filePath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
         if (filePath.size == 0){
             mainViewModel.showRecyclerViewEmptyEvent()
         }else{

@@ -132,7 +132,7 @@ class LoginActivity : BaseActivity() {
 
     private fun initVideoView() {
         lifecycle.addObserver(surfaceView)
-        val mediaPlayer = surfaceView.initMediaPlayer("${Environment.getExternalStorageDirectory()}/MFiles/video/aaa.mp4")
+        val mediaPlayer = surfaceView.initMediaPlayer("${Environment.getExternalStorageDirectory()}/MFiles/video/register.mp4")
         mediaPlayer?.setOnInfoListener { mp, what, extra ->
             if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                 iv_cover.visibility = View.GONE

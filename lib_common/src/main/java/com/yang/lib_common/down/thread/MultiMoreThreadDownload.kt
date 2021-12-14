@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import com.yang.lib_common.R
+import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.showShort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,7 +19,6 @@ import java.io.RandomAccessFile
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors
-import kotlin.math.abs
 
 
 /**
@@ -148,7 +148,7 @@ class MultiMoreThreadDownload(
                     fileHasLength = file.length().toInt()
                 }
 //
-                if (abs(fileSize - fileHasLength) <= 10) {
+                if (fileSize == fileHasLength) {
                     GlobalScope.launch(Dispatchers.Main) {
                         downListener?.downSuccess(file.absolutePath)
                     }
@@ -163,16 +163,29 @@ class MultiMoreThreadDownload(
 
                 blockSize = fileSize / threadNum
 
+                val i1 = fileSize % threadNum
+
                 Log.i(TAG, "run: $fileSize  $blockSize")
 
                 for (i in 0 until threadNum) {
-                    val fileDownloadMoreThread = FileDownloadMoreThread(
-                        url,
-                        file,
-                        i * blockSize,
-                        (i + 1) * blockSize,
-                        "线程$i"
-                    )
+                    var fileDownloadMoreThread:FileDownloadMoreThread
+                    if (i == threadNum -1){
+                        fileDownloadMoreThread = FileDownloadMoreThread(
+                            url,
+                            file,
+                            i * blockSize,
+                            (i + 1) * blockSize+i1,
+                            "线程$i"
+                        )
+                    }else{
+                        fileDownloadMoreThread = FileDownloadMoreThread(
+                            url,
+                            file,
+                            i * blockSize,
+                            (i + 1) * blockSize,
+                            "线程$i"
+                        )
+                    }
                     executors.submit(fileDownloadMoreThread)
                     fileDownloadMoreThreads.add(fileDownloadMoreThread)
                 }
@@ -248,7 +261,7 @@ class MultiMoreThreadDownload(
     private fun showDownLoadNotification(progress: Int, usedTimeMillis: Int, downloadSpeed: Int) {
         val notificationManager =
             mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val build = NotificationCompat.Builder(mContext, "download")
+        val build = NotificationCompat.Builder(mContext, AppConstant.NoticeChannel.DOWNLOAD)
             .setContentTitle("下载速度：$downloadSpeed Kb/s $progress% 用时：$usedTimeMillis/s")
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.mipmap.ic_launcher)
@@ -264,7 +277,7 @@ class MultiMoreThreadDownload(
     private fun showCompleteNotification(file: File) {
         val notificationManager =
             mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val build = NotificationCompat.Builder(mContext, "download")
+        val build = NotificationCompat.Builder(mContext, AppConstant.NoticeChannel.DOWNLOAD)
             .setContentText("下载完成：${file.absolutePath}")
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.mipmap.ic_launcher)

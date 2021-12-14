@@ -8,6 +8,9 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.VideoSearchActivity"/>
+        <activity android:name=".ui.activity.VideoUploadActivity"/>
+        <activity android:name=".ui.activity.VideoUploadTaskActivity"/>
+        <activity android:name=".ui.activity.VideoScreenActivity"/>
     </application>
 
 </manifest>

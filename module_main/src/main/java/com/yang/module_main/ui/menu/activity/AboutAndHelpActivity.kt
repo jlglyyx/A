@@ -3,7 +3,10 @@ package com.yang.module_main.ui.menu.activity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getVersionName
+import com.yang.lib_common.util.showShort
 import com.yang.module_main.R
 import kotlinx.android.synthetic.main.act_about_and_help.*
 
@@ -24,8 +27,24 @@ class AboutAndHelpActivity:BaseActivity() {
 
     override fun initView() {
         icv_version.rightContent = getVersionName(this)
+        icv_help.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.WEB_VIEW_ACTIVITY)
+                .withString(AppConstant.Constant.TITLE,"使用帮助")
+                .withString(AppConstant.Constant.URL,"https://www.baidu.com/")
+                .navigation()
+        }
+        icv_feed_back.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.WEB_VIEW_ACTIVITY)
+                .withString(AppConstant.Constant.TITLE,"意见反馈")
+                .withString(AppConstant.Constant.URL,"https://www.baidu.com/")
+                .navigation()
+        }
+        icv_version.clicks().subscribe {
+           showShort("已是最新版本")
+        }
     }
 
     override fun initViewModel() {
+
     }
 }

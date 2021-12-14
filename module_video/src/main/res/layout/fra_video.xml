@@ -26,7 +26,6 @@
                     android:id="@id/commonToolBar"
                     app:leftImgVisible="false"
                     app:rightImgVisible="true"
-                    app:rightImgSrc="@drawable/iv_search"
                     app:centerContent="视频"/>
             </LinearLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>

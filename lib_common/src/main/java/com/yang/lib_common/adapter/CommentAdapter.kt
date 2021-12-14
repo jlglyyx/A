@@ -16,7 +16,7 @@ import com.yang.lib_common.data.CommentData
  */
 class CommentAdapter(data: MutableList<CommentData>?) :
     BaseMultiItemQuickAdapter<CommentData, BaseViewHolder>(data) {
-
+    private var childSize = 0
     init {
         addItemType(AppConstant.Constant.PARENT_COMMENT_TYPE, R.layout.item_comment)
         addItemType(AppConstant.Constant.CHILD_COMMENT_TYPE, R.layout.item_child_comment)
@@ -44,7 +44,9 @@ class CommentAdapter(data: MutableList<CommentData>?) :
                     R.id.tv_open_comment,
                     !(null == item.subItems || item.subItems.size == 0 || item.isExpanded)
                 )
-                helper.setText(R.id.tv_open_comment, "-----展开${item.subItems?.size}条评论-----")
+                childSize = 0
+                getSubItemsSize(item)
+                helper.setText(R.id.tv_open_comment, "-----展开${childSize}条评论-----")
                 helper.itemView.setOnClickListener {
                     if (item.isExpanded) {
                         collapse(helper.layoutPosition)
@@ -73,5 +75,16 @@ class CommentAdapter(data: MutableList<CommentData>?) :
 
         helper.addOnClickListener(R.id.siv_img)
             .addOnClickListener(R.id.tv_reply)
+    }
+
+    private fun getSubItemsSize(item: CommentData){
+        if (item.hasSubItem()){
+            childSize += item.subItems.size
+            item.subItems.forEach {
+                if (it.hasSubItem()){
+                    getSubItemsSize(it)
+                }
+            }
+        }
     }
 }

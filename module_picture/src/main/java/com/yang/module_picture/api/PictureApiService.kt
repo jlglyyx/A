@@ -3,8 +3,8 @@ package com.yang.module_picture.api
 import com.yang.lib_common.api.BaseApiService
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.ImageTypeData
-import com.yang.module_picture.data.model.ImageData
-import com.yang.module_picture.data.model.ImageDataItem
+import com.yang.lib_common.room.entity.ImageData
+import com.yang.lib_common.room.entity.ImageDataItem
 import retrofit2.http.POST
 import retrofit2.http.Query
 import retrofit2.http.QueryMap

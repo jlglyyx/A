@@ -5,10 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.deleteDirectory
-import com.yang.lib_common.util.formatSize
-import com.yang.lib_common.util.getAllFileSize
+import com.yang.lib_common.util.*
 import com.yang.module_main.R
 import kotlinx.android.synthetic.main.act_setting.*
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +37,12 @@ class SettingActivity:BaseActivity() {
                 }
                 icv_cache.rightContent = formatSize(getAllFileSize(File("${Environment.getExternalStorageDirectory()}/MFiles")))
             }
-
+        }
+        icv_account_setting.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.ACCOUNT_SETTING_ACTIVITY).navigation()
+        }
+        icv_download_setting.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.DOWNLOAD_SETTING_ACTIVITY).navigation()
         }
     }
 

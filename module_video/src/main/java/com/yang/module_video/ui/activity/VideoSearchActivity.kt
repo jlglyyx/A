@@ -22,7 +22,7 @@ import com.yang.lib_common.util.simpleDateFormat
 import com.yang.module_video.R
 import com.yang.module_video.adapter.VideoAdapter
 import com.yang.module_video.helper.getVideoComponent
-import com.yang.module_video.model.VideoDataItem
+import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.module_video.viewmodel.VideoViewModel
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
@@ -125,9 +125,9 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
         recyclerView.layoutManager = LinearLayoutManager(this)
         mAdapter = VideoAdapter(R.layout.item_video_image, mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
-                val videoData = adapter.data[position] as VideoDataItem
+                val imageData = adapter.data[position] as VideoDataItem
                 buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
-                    .withString(AppConstant.Constant.ID, videoData.id)
+                    .withString(AppConstant.Constant.ID, imageData.id)
                     .navigation()
             }
         }

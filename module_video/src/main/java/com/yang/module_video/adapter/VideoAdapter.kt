@@ -5,7 +5,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
 import com.yang.module_video.R
-import com.yang.module_video.model.VideoDataItem
+import com.yang.lib_common.room.entity.VideoDataItem
 
 /**
  * @Author Administrator

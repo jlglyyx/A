@@ -27,6 +27,8 @@ class WebViewActivity : BaseActivity() {
     @Inject
     lateinit var mainViewModel: MainViewModel
 
+    private var url = "https://www.baidu.com/"
+
     override fun getLayout(): Int {
         return R.layout.act_web_view
     }
@@ -46,6 +48,15 @@ class WebViewActivity : BaseActivity() {
         map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
         map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
         QbSdk.initTbsSettings(map)
+        val intent = intent
+        val title = intent.getStringExtra(AppConstant.Constant.TITLE)
+        val url = intent.getStringExtra(AppConstant.Constant.URL)
+        title?.let {
+            commonToolBar.centerContent = it
+        }
+        url?.let {
+            this.url = it
+        }
         initWebView()
     }
 
@@ -86,7 +97,7 @@ class WebViewActivity : BaseActivity() {
 
 
 
-        webView.loadUrl("https://www.baidu.com/")
+        webView.loadUrl(url)
         webView.settings.apply {
             javaScriptEnabled = true
             useWideViewPort = true

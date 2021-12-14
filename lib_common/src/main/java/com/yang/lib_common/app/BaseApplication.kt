@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ComponentCallbacks2
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkRequest
 import android.os.Build
@@ -17,8 +18,11 @@ import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.QbSdk.PreInitCallback
 import com.yang.lib_common.BuildConfig
+import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.handle.CrashHandle
 import com.yang.lib_common.helper.getRemoteComponent
+import com.yang.lib_common.service.DaemonRemoteService
+import com.yang.lib_common.service.DaemonService
 import com.yang.lib_common.util.NetworkUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -44,10 +48,16 @@ class BaseApplication : Application() {
         initNetworkStatusListener(baseApplication)
         initVideo()
         initWebView()
+        initService()
     }
 
     companion object {
         lateinit var baseApplication: BaseApplication
+    }
+
+    private fun initService(){
+        startService(Intent(this, DaemonRemoteService::class.java))
+        startService(Intent(this, DaemonService::class.java))
     }
 
     private fun initARouter(application: BaseApplication) {
@@ -72,7 +82,7 @@ class BaseApplication : Application() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel =
-                NotificationChannel("download", "下载通知", NotificationManager.IMPORTANCE_HIGH)
+                NotificationChannel(AppConstant.NoticeChannel.DOWNLOAD, "下载通知", NotificationManager.IMPORTANCE_HIGH)
             val systemService =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             systemService.createNotificationChannel(notificationChannel)

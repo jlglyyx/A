@@ -29,8 +29,7 @@ class LeftFragment : BaseFragment() {
             lifecycle.addObserver(this)
             locationListener = object : LocationUtil.LocationListener {
                 override fun onLocationListener(aMapLocation: AMapLocation) {
-                    tv_location.text =
-                        "${aMapLocation.city}${aMapLocation.district}${aMapLocation.aoiName}"
+                    tv_location.text = aMapLocation.city +aMapLocation.district+aMapLocation.aoiName
                 }
 
             }
@@ -66,9 +65,6 @@ class LeftFragment : BaseFragment() {
         tv_privacy.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.PRIVACY_ACTIVITY).navigation()
         }
-        tv_universal.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.UNIVERSAL_ACTIVITY).navigation()
-        }
         tv_accessibility.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.ACCESSIBILITY_ACTIVITY).navigation()
         }
@@ -89,9 +85,6 @@ class LeftFragment : BaseFragment() {
                     R.anim.fade_out
                 )
             ).navigation(requireActivity())
-        }
-        tv_webView.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.WEB_VIEW_ACTIVITY).navigation()
         }
         tv_upload.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.UPLOAD_ACTIVITY).navigation()

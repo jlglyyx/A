@@ -8,18 +8,19 @@ interface AppConstant {
 
         const val BASE_PORT = "20000"
 
-        //  const val BASE_URL = "http://jlgl.free.idcfengye.com/"
-        const val BASE_URL = "http://10.16.242.28:20000/"
+        const val BASE_URL = "http://www.baidu.com/"
+//        const val BASE_URL = "http://jlgl.free.idcfengye.com/"
+//        const val BASE_URL = "http://10.16.242.28:20000/"
 
         const val TAG = "RemoteModule"
 
         const val TAG_LOG = "httpLog"
 
-        const val CONNECT_TIMEOUT: Long = 1800
+        const val CONNECT_TIMEOUT: Long = 1000
 
-        const val READ_TIMEOUT: Long = 18000
+        const val READ_TIMEOUT: Long = 1000
 
-        const val WRITE_TIMEOUT: Long = 18000
+        const val WRITE_TIMEOUT: Long = 1000
     }
 
     object RoutePath {
@@ -28,12 +29,12 @@ interface AppConstant {
         private const val SERVICE = "service"
         private const val PROVIDE = "provide"
 
-        private const val MODULE_MAIN = "module_main"
-        private const val MODULE_HOME = "module_home"
-        private const val MODULE_MINE = "module_mine"
-        private const val MODULE_VIDEO = "module_video"
-        private const val MODULE_PICTURE = "module_picture"
-        private const val MODULE_LOGIN = "module_login"
+        const val MODULE_MAIN = "module_main"
+        const val MODULE_HOME = "module_home"
+        const val MODULE_MINE = "module_mine"
+        const val MODULE_VIDEO = "module_video"
+        const val MODULE_PICTURE = "module_picture"
+        const val MODULE_LOGIN = "module_login"
 
         /**
          * main
@@ -47,29 +48,32 @@ interface AppConstant {
         const val PICTURE_SELECT_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/PictureSelectActivity"
         const val OPEN_VIP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/OpenVipActivity"
         const val PRIVACY_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/PrivacyActivity"
-        const val UNIVERSAL_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/UniversalActivity"
         const val ACCESSIBILITY_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AccessibilityActivity"
         const val SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/SettingActivity"
+        const val ACCOUNT_SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AccountSettingActivity"
+        const val DOWNLOAD_SETTING_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/DownloadSettingActivity"
         const val ABOUT_AND_HELP_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/AboutAndHelpActivity"
         const val WEB_VIEW_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/WebViewActivity"
         const val UPLOAD_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/UploadActivity"
+        const val CHANGE_PASSWORD_ACTIVITY = "/$MODULE_MAIN/$ACTIVITY/ChangePasswordActivity"
 
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
         const val LEFT_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/LeftFragment"
-        const val MY_COLLECTION_PICTURE_FRAGMENT =
-            "/$MODULE_MAIN/$FRAGMENT/MyCollectionPictureFragment"
+        const val MY_COLLECTION_PICTURE_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionPictureFragment"
         const val MY_COLLECTION_VIDEO_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionVideoFragment"
 
 
         /**
          * picture
          */
-        const val PICTURE_ITEM_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/PictureItemActivity"
-        const val PICTURE_SEARCH_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/SearchActivity"
 
         const val PICTURE_FRAGMENT = "/$MODULE_PICTURE/$FRAGMENT/PictureFragment"
         const val PICTURE_ITEM_FRAGMENT = "/$MODULE_PICTURE/$FRAGMENT/PictureItemFragment"
+
+        const val PICTURE_ITEM_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/PictureItemActivity"
+        const val PICTURE_SEARCH_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/SearchActivity"
+        const val PICTURE_UPLOAD_ACTIVITY = "/$MODULE_PICTURE/$ACTIVITY/PictureUploadActivity"
 
         /**
          * login
@@ -86,12 +90,17 @@ interface AppConstant {
         const val VIDEO_ITEM_FRAGMENT = "/$MODULE_VIDEO/$FRAGMENT/VideoItemFragment"
 
 
-        const val ADVERTISEMENT_VIDEO_ACTIVITY =
-            "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
+        const val ADVERTISEMENT_VIDEO_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/AdvertisementVideoActivity"
         const val VIDEO_MAIN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/MainActivity"
 
         const val VIDEO_ITEM_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoItemActivity"
         const val VIDEO_SEARCH_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/SearchActivity"
+
+        const val VIDEO_UPLOAD_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoUploadActivity"
+
+        const val VIDEO_UPLOAD_TASK_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoUploadTaskActivity"
+
+        const val VIDEO_SCREEN_ACTIVITY = "/$MODULE_VIDEO/$ACTIVITY/VideoScreenActivity"
 
         /**
          * mine
@@ -106,23 +115,19 @@ interface AppConstant {
 
         const val MINE_OBTAIN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainActivity"
 
-        const val MINE_OBTAIN_EXCHANGE_ACTIVITY =
-            "/$MODULE_MINE/$ACTIVITY/MineObtainExchangeActivity"
+        const val MINE_OBTAIN_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainExchangeActivity"
 
         const val MINE_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeActivity"
 
-        const val MINE_EXCHANGE_DETAIL_ACTIVITY =
-            "/$MODULE_MINE/$ACTIVITY/MineExchangeDetailActivity"
+        const val MINE_EXCHANGE_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeDetailActivity"
 
         const val MINE_SIGN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineSignActivity"
 
         const val MINE_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionActivity"
 
-        const val MINE_LIMIT_TIME_EXTENSION_ACTIVITY =
-            "/$MODULE_MINE/$ACTIVITY/MineLimitTimeExtensionActivity"
+        const val MINE_LIMIT_TIME_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineLimitTimeExtensionActivity"
 
-        const val MINE_SHIPPING_ADDRESS_ACTIVITY =
-            "/$MODULE_MINE/$ACTIVITY/MineShippingAddressActivity"
+        const val MINE_SHIPPING_ADDRESS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineShippingAddressActivity"
 
         const val MINE_ADD_ADDRESS_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineAddAddressActivity"
 
@@ -130,14 +135,13 @@ interface AppConstant {
 
         const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineOrderDetailActivity"
 
-        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY =
-            "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
+        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
+
 
 
         const val MINE_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineFragment"
 
-        const val MINE_EXCHANGE_STATUS_FRAGMENT =
-            "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
+        const val MINE_EXCHANGE_STATUS_FRAGMENT = "/$MODULE_MINE/$FRAGMENT/MineExchangeStatusFragment"
 
 
     }
@@ -161,6 +165,10 @@ interface AppConstant {
 
         const val ID = "id"
 
+        const val URL = "url"
+
+        const val TITLE = "title"
+
         const val TYPE = "type"
 
         const val DATA = "data"
@@ -171,7 +179,7 @@ interface AppConstant {
 
         const val CONTENT = "content"
 
-        const val PAGE_SIZE_COUNT = 10
+        const val PAGE_SIZE_COUNT = 2
 
         const val TAB_HEIGHT = "TAB_HEIGHT"
 
@@ -238,5 +246,9 @@ interface AppConstant {
         const val EMPTY_VIEW = 0
 
         const val ERROR_VIEW = 1
+    }
+
+    object NoticeChannel{
+        const val DOWNLOAD = "download"
     }
 }

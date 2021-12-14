@@ -122,8 +122,8 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
 
         mPaint.colorFilter = ColorMatrixColorFilter(
             floatArrayOf(
-                2f, 0f, 0f, 0f, 0f,
-                0f, 1f, 0f, 0f, 0f,
+                1f, 0f, 0f, 0f, 0f,
+                0f, 2f, 0f, 0f, 0f,
                 0f, 0f, 2f, 0f, 0f,
                 0f, 0f, 0f, 1f, 0f
             )

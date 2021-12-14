@@ -34,7 +34,8 @@ class LoginInterceptor : IInterceptor {
     /**
      * 需要登录操作页面
      */
-    private var toLoginList = arrayListOf(AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY)
+    private var toLoginList = arrayListOf<String>()
+//    private var toLoginList = arrayListOf(AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY)
 
     override fun process(postcard: Postcard, callback: InterceptorCallback) {
         when (getDefaultMMKV().decodeInt(AppConstant.Constant.LOGIN_STATUS, -1)) {

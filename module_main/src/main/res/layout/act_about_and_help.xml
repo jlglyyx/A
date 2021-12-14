@@ -28,11 +28,13 @@
                 app:itemLeftContent="使用帮助"
                 app:itemLeftImgVisible="false"
                 android:layout_marginTop="@dimen/dp_10"
+                android:id="@+id/icv_help"
                 app:itemRightContentVisible="false"/>
             <com.yang.lib_common.widget.ItemContentView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:itemLeftContent="意见反馈"
+                android:id="@+id/icv_feed_back"
                 app:itemLeftImgVisible="false"
                 app:itemRightContentVisible="false" />
             <com.yang.lib_common.widget.ItemContentView

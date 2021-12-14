@@ -24,11 +24,11 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.dialog.EditBottomDialog
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
+import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.module_video.R
 import com.yang.module_video.helper.getVideoComponent
-import com.yang.module_video.model.VideoDataItem
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.act_video_item.*
 import javax.inject.Inject
@@ -56,9 +56,14 @@ class VideoItemActivity : BaseActivity() {
 
     override fun initData() {
         val intent = intent
-        val sid = intent.getStringExtra(AppConstant.Constant.ID)
-        sid?.let {
+        val id = intent.getStringExtra(AppConstant.Constant.ID)
+        val url = intent.getStringExtra(AppConstant.Constant.URL)
+        id?.let {
             videoModule.getVideoItemData(it)
+        }
+        url?.let {
+            this.url = it
+            initVideo()
         }
 
     }
@@ -123,6 +128,9 @@ class VideoItemActivity : BaseActivity() {
     override fun initViewModel() {
         getVideoComponent(this).inject(this)
         videoModule.mVideoItemData.observe(this, Observer {
+            if (it.size == 0){
+                return@Observer
+            }
             for ((index,videoDataItem) in it.withIndex()){
                 if (index == 0){
                     videoDataItem.select = true
