@@ -48,7 +48,7 @@ fun getScreenDpi(context: Context): FloatArray {
 }
 
 /**
- * 获取状态栏高度
+ * @return 获取状态栏高度
  */
 fun getStatusBarHeight(context: Context): Int {
     val resources = context.resources
@@ -57,7 +57,7 @@ fun getStatusBarHeight(context: Context): Int {
 }
 
 /**
- * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+ * @return 根据手机的分辨率从 dp 的单位 转成为 px(像素)
  */
 fun Float.dip2px(context: Context): Int {
     val scale = context.resources.displayMetrics.density
@@ -65,7 +65,7 @@ fun Float.dip2px(context: Context): Int {
 }
 
 /**
- * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+ * @return 根据手机的分辨率从 px(像素) 的单位 转成为 dp
  */
 fun Float.px2dip(context: Context): Int {
     val scale = context.resources.displayMetrics.density
@@ -81,7 +81,7 @@ fun View.clicks(): Observable<Unit> {
 
 
 /**
- * toJson
+ * @return toJson
  */
 fun Any.toJson(): String {
     return Gson().toJson(this)
@@ -89,14 +89,14 @@ fun Any.toJson(): String {
 
 
 /**
- * 解析Json
+ * @return 解析Json
  */
 fun <T> fromJson(json: String, t: Class<T>): T {
     return Gson().fromJson<T>(json, t)
 }
 
 /**
- * 获取文件夹下所有文件路径
+ * @return 获取文件夹下所有文件路径
  */
 fun getFilePath(
     path: String = "${Environment.getExternalStorageDirectory()}/MFiles/picture",
@@ -124,7 +124,7 @@ fun getFilePath(
 }
 
 /**
- * 获取文件夹下所有文件夹路径
+ * @return 获取文件夹下所有文件夹路径
  */
 fun getDirectoryName(
     path: String = "${Environment.getExternalStorageDirectory()}/MFiles/picture/A",
@@ -146,14 +146,14 @@ fun getDirectoryName(
 
 
 /**
- * 获取getDefaultMMKV
+ * @return 获取getDefaultMMKV
  */
 fun getDefaultMMKV(): MMKV {
     return MMKV.defaultMMKV()
 }
 
 /**
- * 获取用户缓存
+ * @return 获取用户缓存
  */
 fun getUserInfo(): UserInfoData? {
     val userInfo = getDefaultMMKV().decodeString(AppConstant.Constant.USER_INFO, "")
@@ -164,7 +164,7 @@ fun getUserInfo(): UserInfoData? {
 }
 
 /**
- * 返回xx,xx
+ * @return 返回xx,xx
  */
 fun MutableList<String>.formatWithSymbol(symbol: String = ","): String {
     val stringBuilder = StringBuilder()
@@ -179,7 +179,7 @@ fun MutableList<String>.formatWithSymbol(symbol: String = ","): String {
 }
 
 /**
- * 解析xx,xx
+ * @return 解析xx,xx
  */
 fun String.symbolToList(symbol: String = ","): MutableList<String> {
     val mutableListOf = mutableListOf<String>()
@@ -189,7 +189,7 @@ fun String.symbolToList(symbol: String = ","): MutableList<String> {
 }
 
 /**
- * uri2path
+ * @return uri2path
  */
 fun uri2path(context: Context, uri: Uri): String {
     var path = ""
@@ -211,7 +211,7 @@ fun uri2path(context: Context, uri: Uri): String {
 }
 
 /**
- * 获取app VersionCode
+ * @return 获取app VersionCode
  */
 fun getVersionCode(context: Context): Int {
     val packageManager = context.packageManager
@@ -221,7 +221,7 @@ fun getVersionCode(context: Context): Int {
 }
 
 /**
- * 获取app VersionName
+ * @return 获取app VersionName
  */
 fun getVersionName(context: Context): String {
     val packageManager = context.packageManager
@@ -230,7 +230,7 @@ fun getVersionName(context: Context): String {
 }
 
 /**
- * 获取指定文件大小
+ * @return 获取指定文件大小
  */
 fun getAllFileSize(file: File): Long {
     var size = 0L
@@ -255,7 +255,7 @@ fun getAllFileSize(file: File): Long {
 }
 
 /**
- * 格式化文件大小格式
+ * @return 格式化文件大小格式
  */
 fun formatSize(size: Long): String {
     Log.i(TAG, "formatSize: $size")
@@ -270,22 +270,27 @@ fun formatSize(size: Long): String {
         return DecimalFormat("0.00K").format(k)
     }
 
-    val t = m / 1024
+    val g = m / 1024
 
-    if (t < 1) {
+    if (g < 1) {
         return DecimalFormat("0.00M").format(m)
     }
 
+    val t = g / 1024
+
+    if (t < 1) {
+        return DecimalFormat("0.00G").format(g)
+    }
     val t1 = t / 1024
 
     if (t1 < 1) {
-        return DecimalFormat("0.00T").format(t)
+        return DecimalFormat("0.00G").format(t)
     }
     return DecimalFormat("0.00T").format(t1)
 }
 
 /**
- * 删除文件夹
+ * @return 删除文件夹
  */
 fun deleteDirectory(file: File) {
     if (file.isDirectory) {
@@ -306,7 +311,7 @@ fun deleteDirectory(file: File) {
 }
 
 /**
- * 删除文件
+ * @return 删除文件
  */
 fun deleteFile(file: File) {
     if (file.exists()) {
