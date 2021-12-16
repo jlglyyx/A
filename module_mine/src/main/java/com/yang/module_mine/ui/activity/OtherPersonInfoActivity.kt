@@ -3,11 +3,9 @@ package com.yang.module_mine.ui.activity
 import android.text.TextUtils
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.transform.BlurTransformation
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getUserInfo
 import com.yang.lib_common.widget.CommonToolBar
@@ -48,15 +46,8 @@ class OtherPersonInfoActivity : BaseActivity() {
             override fun tvRightClickListener() {
                 buildARouter(AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY).navigation()
             }
-
         }
-
-        Glide.with(this)
-            .load("https://scpic.chinaz.net/files/pic/pic9/202107/bpic23810.jpg")
-            .apply(RequestOptions.bitmapTransform(BlurTransformation(this)))
-            .error(R.drawable.iv_image_error)
-            .placeholder(R.drawable.iv_image_placeholder)
-            .into(iv_bg)
+        lifecycle.addObserver(iv_bg)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {

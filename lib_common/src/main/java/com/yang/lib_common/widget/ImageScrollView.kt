@@ -120,14 +120,14 @@ class ImageScrollView : FrameLayout, LifecycleObserver {
             System.gc()
         }
 
-        mPaint.colorFilter = ColorMatrixColorFilter(
-            floatArrayOf(
-                1f, 0f, 0f, 0f, 0f,
-                0f, 2f, 0f, 0f, 0f,
-                0f, 0f, 2f, 0f, 0f,
-                0f, 0f, 0f, 1f, 0f
-            )
-        )
+//        mPaint.colorFilter = ColorMatrixColorFilter(
+//            floatArrayOf(
+//                1f, 0f, 0f, 0f, 0f,
+//                0f, 2f, 0f, 0f, 0f,
+//                0f, 0f, 2f, 0f, 0f,
+//                0f, 0f, 0f, 1f, 0f
+//            )
+//        )
         requestLayout()
         invalidate()
     }

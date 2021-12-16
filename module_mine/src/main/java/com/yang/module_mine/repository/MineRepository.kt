@@ -16,7 +16,6 @@ class MineRepository @Inject constructor(private val mineApiService: MineApiServ
         return withContextIO{
             mineApiService.login(userAccount, password)
         }
-
     }
 
     suspend fun register(userInfoData: UserInfoData): MResult<UserInfoData> {
@@ -30,6 +29,17 @@ class MineRepository @Inject constructor(private val mineApiService: MineApiServ
     suspend fun uploadFile(filePaths: MutableMap<String, RequestBody>): MResult<MutableList<String>> {
         return withContext(Dispatchers.IO) {
             mineApiService.uploadFile(filePaths)
+        }
+    }
+
+    suspend fun changePassword(password: String): MResult<String> {
+        return withContextIO{
+            mineApiService.changePassword(password)
+        }
+    }
+    suspend fun changeUserInfo(userInfoData: UserInfoData): MResult<UserInfoData> {
+        return withContextIO{
+            mineApiService.changeUserInfo(userInfoData)
         }
     }
 

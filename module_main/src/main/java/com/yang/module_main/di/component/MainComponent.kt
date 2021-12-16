@@ -8,7 +8,6 @@ import com.yang.module_main.ui.main.activity.DynamicDetailActivity
 import com.yang.module_main.ui.main.activity.MainActivity
 import com.yang.module_main.ui.main.fragment.MainFragment
 import com.yang.module_main.ui.menu.activity.MyPushActivity
-import com.yang.module_main.ui.menu.activity.UploadActivity
 import com.yang.module_main.ui.menu.activity.WebViewActivity
 import com.yang.module_main.ui.menu.fragment.MyCollectionPictureFragment
 import com.yang.module_main.ui.menu.fragment.MyCollectionVideoFragment
@@ -26,5 +25,4 @@ interface MainComponent {
     fun inject(myCollectionPictureFragment: MyCollectionPictureFragment)
     fun inject(myCollectionVideoFragment: MyCollectionVideoFragment)
     fun inject(webViewActivity: WebViewActivity)
-    fun inject(uploadActivity: UploadActivity)
 }

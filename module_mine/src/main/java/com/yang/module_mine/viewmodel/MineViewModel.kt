@@ -32,8 +32,7 @@ class MineViewModel @Inject constructor(
         }, {
             mUserInfoData.postValue(it.data)
             showDialog(it.message)
-            delayShowDialog()
-            dismissDialog()
+            delayMissDialog()
         },{
             buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
         }, messages = *arrayOf("请求中..."))
@@ -45,8 +44,7 @@ class MineViewModel @Inject constructor(
         }, {
             mUserInfoData.postValue(it.data)
             showDialog(it.message)
-            delayShowDialog()
-            dismissDialog()
+            delayMissDialog()
         }, messages = *arrayOf("请求中..."))
     }
 
@@ -66,5 +64,25 @@ class MineViewModel @Inject constructor(
         }, messages = *arrayOf("上传中", "添加成功"))
     }
 
+    fun changePassword(password: String) {
+        launch({
+            mineRepository.changePassword(password)
+        }, {
+            requestSuccess()
+            showDialog(it.message)
+            delayMissDialog()
+        },{
+            requestSuccess()
+        },messages = *arrayOf("请求中..."))
+    }
+    fun changeUserInfo(userInfoData: UserInfoData) {
+        launch({
+            mineRepository.changeUserInfo(userInfoData)
+        }, {
+            mUserInfoData.postValue(it.data)
+            showDialog(it.message)
+            delayMissDialog()
+        },messages = *arrayOf("请求中..."))
+    }
 }
 

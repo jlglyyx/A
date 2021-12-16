@@ -35,7 +35,7 @@ class LoadingProgressView : View {
                 this.visibility = GONE
                 startX = 0f
                 endX = 0f
-                if (mWidth != 0f && mHeight != 0f){
+                if (mWidth != 0f && mHeight != 0f) {
                     getBitmap()
                 }
             }
@@ -51,24 +51,6 @@ class LoadingProgressView : View {
 
             invalidate()
         }
-//    var mProgress = 0
-//        set(value) {
-//            Log.i("TAG", "====: $field  $currentProgress")
-//            field = value
-//            if (field >= 100) {
-//                this.visibility = GONE
-//                startX = 0f
-//                endX = 0f
-//                getBitmap()
-//            } else {
-//                if (currentProgress == field) {
-//                    return
-//                }
-//                currentProgress = field
-//                this.visibility = VISIBLE
-//                invalidate()
-//            }
-//        }
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -110,7 +92,7 @@ class LoadingProgressView : View {
 //        Log.i("TAG", "onDraw: ")
         imageBitmap?.let {
             val imageSaveLayer = canvas.saveLayer(0f, 0f, mWidth, mHeight, null)
-            canvas.drawBitmap(it, 0f, 0f, null)
+            canvas.drawBitmap(it, 0f, mHeight / 2 - it.height / 2, null)
             canvas.restoreToCount(imageSaveLayer)
         }
         startX = endX
@@ -129,9 +111,11 @@ class LoadingProgressView : View {
             Log.i("TAG", "createBitmap: $s")
             imageBitmap = BitmapFactory.decodeFile(s)
             imageBitmap = imageBitmap?.let {
-                Bitmap.createScaledBitmap(it,
+                Bitmap.createScaledBitmap(
+                    it,
                     mWidth.toInt(),
-                    mHeight.toInt(),true)
+                    mWidth.toInt() * it.height / it.width, true
+                )
             }
         }
     }

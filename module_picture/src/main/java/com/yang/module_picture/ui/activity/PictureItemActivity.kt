@@ -234,10 +234,10 @@ class PictureItemActivity : BaseActivity() {
         })
 
         val pageRecyclerView = viewPager.getChildAt(0) as RecyclerView
-        pageRecyclerView.setPadding(10f.dip2px(this), 0, 10f.dip2px(this), 0)
+        pageRecyclerView.setPadding(5f.dip2px(this), 0, 5f.dip2px(this), 0)
         pageRecyclerView.clipToPadding = false
         val compositePageTransformer = CompositePageTransformer()
-        compositePageTransformer.addTransformer(MarginPageTransformer(5f.dip2px(this)))
+        compositePageTransformer.addTransformer(MarginPageTransformer(3f.dip2px(this)))
         compositePageTransformer.addTransformer(ScaleInTransformer())
         viewPager.setPageTransformer(compositePageTransformer)
     }

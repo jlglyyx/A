@@ -22,12 +22,13 @@
                 android:paddingBottom="@dimen/dp_10"
                 app:layout_collapseMode="parallax">
 
-                <ImageView
+                <com.yang.lib_common.widget.ImageScrollView
                     android:id="@+id/iv_bg"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_250"
                     android:scaleType="centerCrop"
                     android:src="@color/plum"
+                    app:scrollType="normal"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView

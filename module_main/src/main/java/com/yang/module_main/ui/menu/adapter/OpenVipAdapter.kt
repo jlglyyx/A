@@ -16,6 +16,7 @@ class OpenVipAdapter(layoutResId: Int, data: MutableList<OpenVipData>?) :
     override fun convert(helper: BaseViewHolder, item: OpenVipData) {
 
         helper.setText(R.id.tv_type, item.type)
+            .setText(R.id.tv_experience, "+${item.experience}")
             .setText(R.id.tv_price, "￥${item.price}")
             .setText(R.id.tv_time, "${item.time}天")
     }

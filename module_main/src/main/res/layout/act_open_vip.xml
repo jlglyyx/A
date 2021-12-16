@@ -39,8 +39,8 @@
                         android:layout_height="wrap_content"
                         android:text="当前等级：vip1"
                         android:id="@+id/tv_level"
-                        android:textSize="@dimen/sp_15"
-                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp_16"
+                        android:textColor="@color/red"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"/>
                     <TextView
@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:id="@+id/tv_progress"
-                        android:text="当前进度：405/1000"
+                        android:text="下一级进度：40/100"
                         android:textSize="@dimen/sp_15"
                         android:textColor="@color/black"
                         android:layout_marginTop="@dimen/dp_10"

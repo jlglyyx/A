@@ -3,6 +3,7 @@ package com.yang.module_mine.ui.activity
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -10,6 +11,7 @@ import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
@@ -45,6 +47,8 @@ class ChangeUserInfoActivity : BaseActivity() {
 
     private var sexArray = arrayOf("男","女")
 
+    private var url :String? = null
+
     override fun getLayout(): Int {
         return R.layout.act_change_user_info
     }
@@ -54,12 +58,33 @@ class ChangeUserInfoActivity : BaseActivity() {
         val userInfo = getUserInfo()
         Glide.with(this).load(userInfo?.userImage).error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
+
+        mineViewModel.mUserInfoData.observe(this, Observer {
+            finish()
+        })
+        mineViewModel.pictureListLiveData.observe(this, Observer {
+            url = it[0]
+        })
+
     }
 
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
-
+                val userInfoData = UserInfoData(
+                    null,
+                    null,
+                    et_name.text.toString(),
+                    null,
+                    null,
+                    null,
+                    url,
+                    0,
+                    null,
+                    null,
+                    null
+                )
+                mineViewModel.changeUserInfo(userInfoData)
             }
 
         }

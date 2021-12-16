@@ -3,13 +3,11 @@ package com.yang.module_mine.ui.fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.appbar.AppBarLayout
 import com.yang.lib_common.adapter.NormalImageAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.transform.BlurTransformation
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
@@ -38,6 +36,8 @@ class MineFragment : BaseLazyFragment() {
         initAppBarLayout()
         initRecyclerView()
         initViewClickListener()
+
+        lifecycle.addObserver(iv_bg)
     }
 
     override fun initData() {
@@ -54,12 +54,6 @@ class MineFragment : BaseLazyFragment() {
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
             .into(siv_toolbar_img)
-        Glide.with(this)
-            .load("https://scpic.chinaz.net/files/pic/pic9/202107/bpic23810.jpg")
-            .apply(RequestOptions.bitmapTransform(BlurTransformation(requireContext())))
-            .error(R.drawable.iv_image_error)
-            .placeholder(R.drawable.iv_image_placeholder)
-            .into(iv_bg)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
