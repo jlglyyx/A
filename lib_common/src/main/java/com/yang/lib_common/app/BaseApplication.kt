@@ -24,11 +24,12 @@ import com.yang.lib_common.helper.getRemoteComponent
 import com.yang.lib_common.service.DaemonRemoteService
 import com.yang.lib_common.service.DaemonService
 import com.yang.lib_common.util.NetworkUtil
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
+import kotlin.system.measureTimeMillis
 
 
 class BaseApplication : Application() {
@@ -52,37 +53,50 @@ class BaseApplication : Application() {
     }
 
     companion object {
+        private const val TAG = "BaseApplication"
+
         lateinit var baseApplication: BaseApplication
     }
 
-    private fun initService(){
+    private fun initService() {
         startService(Intent(this, DaemonRemoteService::class.java))
         startService(Intent(this, DaemonService::class.java))
     }
 
     private fun initARouter(application: BaseApplication) {
-        GlobalScope.launch(Dispatchers.Unconfined) {
-            if (BuildConfig.DEBUG) {
-                ARouter.openLog()
-                ARouter.openDebug()
-            }
-            ARouter.init(application)
+        val measureTimeMillis = measureTimeMillis {
+            CoroutineScope(Dispatchers.Unconfined)
+                .launch {
+                    if (BuildConfig.DEBUG) {
+                        ARouter.openLog()
+                        ARouter.openDebug()
+                    }
+                    ARouter.init(application)
+                }
         }
+        Log.i(TAG, "initARouter: ==>${measureTimeMillis}")
     }
 
     private fun initCrashReport(application: BaseApplication) {
-        GlobalScope.launch(Dispatchers.IO) {
-            delay(3000)
-            CrashReport.initCrashReport(application, "4f807733a2", BuildConfig.DEBUG)
-            createNotificationChannel()
+        val measureTimeMillis = measureTimeMillis {
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(3000)
+                CrashReport.initCrashReport(application, "4f807733a2", BuildConfig.DEBUG)
+                createNotificationChannel()
+            }
+            Thread.setDefaultUncaughtExceptionHandler(CrashHandle.instance)
         }
-        Thread.setDefaultUncaughtExceptionHandler(CrashHandle.instance)
+        Log.i(TAG, "initCrashReport: ==>${measureTimeMillis}")
     }
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel =
-                NotificationChannel(AppConstant.NoticeChannel.DOWNLOAD, "下载通知", NotificationManager.IMPORTANCE_HIGH)
+                NotificationChannel(
+                    AppConstant.NoticeChannel.DOWNLOAD,
+                    "下载通知",
+                    NotificationManager.IMPORTANCE_HIGH
+                )
             val systemService =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             systemService.createNotificationChannel(notificationChannel)
@@ -90,17 +104,23 @@ class BaseApplication : Application() {
     }
 
     private fun initMMKV(application: BaseApplication) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val initialize = MMKV.initialize(application)
-            Log.i("TAG", "initMMKV: $initialize")
+        val measureTimeMillis = measureTimeMillis {
+            CoroutineScope(Dispatchers.IO).launch {
+                val initialize = MMKV.initialize(application)
+                Log.i("TAG", "initMMKV: $initialize")
+            }
         }
+        Log.i(TAG, "initMMKV: ==>${measureTimeMillis }")
     }
 
     private fun initGlide(application: BaseApplication) {
-        GlobalScope.launch(Dispatchers.IO) {
-            delay(1000)
-            Glide.get(application)
+        val measureTimeMillis = measureTimeMillis {
+            CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
+                delay(1000)
+                Glide.get(application)
+            }
         }
+        Log.i(TAG, "initGlide: ==>${measureTimeMillis}")
     }
 
     private fun initNetworkStatusListener(application: BaseApplication) {
@@ -113,32 +133,37 @@ class BaseApplication : Application() {
     }
 
     private fun initVideo() {
-        GlobalScope.launch(Dispatchers.IO) {
-            delay(3000)
-            PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
+        val measureTimeMillis = measureTimeMillis {
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(3000)
+                PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
+            }
         }
-
+        Log.i(TAG, "initVideo: ==>${measureTimeMillis}")
     }
 
-    private fun initWebView(){
-        GlobalScope.launch(Dispatchers.IO) {
-            delay(1000)
-            QbSdk.setDownloadWithoutWifi(true)
-            //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
-            //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
-            val cb: PreInitCallback = object : PreInitCallback {
-                override fun onViewInitFinished(arg0: Boolean) {
-                    //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
-                    Log.i("TAG", "onViewInitFinished: $arg0")
+
+    private fun initWebView() {
+        val measureTimeMillis = measureTimeMillis {
+            CoroutineScope(Dispatchers.IO).launch {
+                delay(1000)
+                QbSdk.setDownloadWithoutWifi(true)
+                //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
+                //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
+                val cb: PreInitCallback = object : PreInitCallback {
+                    override fun onViewInitFinished(arg0: Boolean) {
+                        //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
+                        Log.i("TAG", "onViewInitFinished: $arg0")
+                    }
+
+                    override fun onCoreInitFinished() {}
                 }
-
-                override fun onCoreInitFinished() {}
+                //x5内核初始化接口
+                //x5内核初始化接口
+                QbSdk.initX5Environment(applicationContext, cb)
             }
-            //x5内核初始化接口
-            //x5内核初始化接口
-            QbSdk.initX5Environment(applicationContext, cb)
         }
-
+        Log.i(TAG, "initWebView: ==>${measureTimeMillis}")
 
     }
 

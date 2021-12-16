@@ -51,6 +51,7 @@ class SplashActivity : BaseActivity() {
 //                    .createNewFile(true)
 //            )
         }
+
         override fun onServiceDisconnected(name: ComponentName?) {
 
         }
@@ -70,72 +71,76 @@ class SplashActivity : BaseActivity() {
 
     override fun initView() {
         val userInfo = getUserInfo()
-        if (null == userInfo) {
-            val launch = lifecycleScope.launch {
-                for (i in 1 downTo 0) {
-                    tv_timer.text = "${i}s点击跳过"
-                    delay(1000)
-                }
 
-                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-                    .withOptionsCompat(
-                        ActivityOptionsCompat.makeCustomAnimation(
-                            this@SplashActivity,
-                            0,
-                            0
-                        )
-                    )
-                    .navigation(this@SplashActivity)
-                finish()
+        val launch = lifecycleScope.launch {
+            for (i in 1 downTo 0) {
+                tv_timer.text = "${i}s点击跳过"
+                delay(1000)
             }
-
-            tv_timer.clicks().subscribe {
-                launch.cancel()
-                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-                    .withOptionsCompat(
-                        ActivityOptionsCompat.makeCustomAnimation(
-                            this@SplashActivity,
-                            0,
-                            0
-                        )
-                    )
-                    .navigation(this@SplashActivity)
-                finish()
-            }
-
-        } else {
-
-            loginViewModel.splashLogin(userInfo.userAccount, userInfo.userPassword)
-            loginViewModel.mUserInfoData.observe(this, Observer {
-                getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_SUCCESS)
-                getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
-                buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                .withOptionsCompat(
                     ActivityOptionsCompat.makeCustomAnimation(
                         this@SplashActivity,
-                        R.anim.fade_in,
-                        R.anim.fade_out
-                    )
-                ).navigation()
-                finish()
-            })
-
-            tv_timer.clicks().subscribe {
-                getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS,AppConstant.Constant.LOGIN_NO_PERMISSION)
-                buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
-                    ActivityOptionsCompat.makeCustomAnimation(
-                        this@SplashActivity,
-                        R.anim.fade_in,
-                        R.anim.fade_out
+                        0,
+                        0
                     )
                 )
-                    .navigation(this@SplashActivity)
-                finish()
-            }
+                .navigation(this@SplashActivity)
+            finish()
         }
 
+        tv_timer.clicks().subscribe {
+            launch.cancel()
+            if (null == userInfo) {
+                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                    .withOptionsCompat(
+                        ActivityOptionsCompat.makeCustomAnimation(
+                            this@SplashActivity,
+                            0,
+                            0
+                        )
+                    )
+                    .navigation(this@SplashActivity)
+                finish()
+            } else {
+
+                loginViewModel.splashLogin(userInfo.userAccount!!, userInfo.userPassword!!)
+                loginViewModel.mUserInfoData.observe(this, Observer {
+                    getDefaultMMKV().encode(
+                        AppConstant.Constant.LOGIN_STATUS,
+                        AppConstant.Constant.LOGIN_SUCCESS
+                    )
+                    getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
+                    buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
+                        ActivityOptionsCompat.makeCustomAnimation(
+                            this@SplashActivity,
+                            R.anim.fade_in,
+                            R.anim.fade_out
+                        )
+                    ).navigation()
+                    finish()
+                })
+
+                tv_timer.clicks().subscribe {
+                    getDefaultMMKV().encode(
+                        AppConstant.Constant.LOGIN_STATUS,
+                        AppConstant.Constant.LOGIN_NO_PERMISSION
+                    )
+                    buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
+                        ActivityOptionsCompat.makeCustomAnimation(
+                            this@SplashActivity,
+                            R.anim.fade_in,
+                            R.anim.fade_out
+                        )
+                    )
+                        .navigation(this@SplashActivity)
+                    finish()
+                }
+            }
+        }
     }
 
-    private fun downPicture(){
+    private fun downPicture() {
         MultiMoreThreadDownload.Builder(this)
             .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/picture")
             .filePath("login.png")

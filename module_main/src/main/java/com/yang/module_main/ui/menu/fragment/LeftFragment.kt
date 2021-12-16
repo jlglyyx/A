@@ -38,7 +38,7 @@ class LeftFragment : BaseFragment() {
 
         lifecycle.addObserver(isv_image)
 
-        siv_head.clicks().subscribe {
+        cl_user_info.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
                 AppConstant.Constant.ID,
                 userInfo?.id
@@ -85,9 +85,6 @@ class LeftFragment : BaseFragment() {
                     R.anim.fade_out
                 )
             ).navigation(requireActivity())
-        }
-        tv_upload.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.UPLOAD_ACTIVITY).navigation()
         }
     }
 

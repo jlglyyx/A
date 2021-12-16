@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 
 private const val TAG = "AppUtils"
 
-val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd hh:mm:ss")
+val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
 
 /**
  * @return 宽高集合
@@ -47,6 +47,9 @@ fun getScreenDpi(context: Context): FloatArray {
     return floatArrayOf(widthPixels, heightPixels)
 }
 
+/**
+ * 获取状态栏高度
+ */
 fun getStatusBarHeight(context: Context): Int {
     val resources = context.resources
     val identifier = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -77,14 +80,24 @@ fun View.clicks(): Observable<Unit> {
 }
 
 
+/**
+ * toJson
+ */
 fun Any.toJson(): String {
     return Gson().toJson(this)
 }
 
+
+/**
+ * 解析Json
+ */
 fun <T> fromJson(json: String, t: Class<T>): T {
     return Gson().fromJson<T>(json, t)
 }
 
+/**
+ * 获取文件夹下所有文件路径
+ */
 fun getFilePath(
     path: String = "${Environment.getExternalStorageDirectory()}/MFiles/picture",
     mutableListOf: MutableList<String> = mutableListOf()
@@ -110,6 +123,9 @@ fun getFilePath(
     return mutableListOf
 }
 
+/**
+ * 获取文件夹下所有文件夹路径
+ */
 fun getDirectoryName(
     path: String = "${Environment.getExternalStorageDirectory()}/MFiles/picture/A",
     mutableListOf: MutableList<File> = mutableListOf()
@@ -118,7 +134,7 @@ fun getDirectoryName(
     if (file.isDirectory) {
         val listFiles = file.listFiles()
         listFiles?.forEach {
-            if (it.isDirectory){
+            if (it.isDirectory) {
                 getDirectoryName(it.path, mutableListOf)
                 Log.i(TAG, "getDirectoryName: ${it.name}  ${it.path}")
                 mutableListOf.add(it)
@@ -136,6 +152,9 @@ fun getDefaultMMKV(): MMKV {
     return MMKV.defaultMMKV()
 }
 
+/**
+ * 获取用户缓存
+ */
 fun getUserInfo(): UserInfoData? {
     val userInfo = getDefaultMMKV().decodeString(AppConstant.Constant.USER_INFO, "")
     if (!userInfo.isNullOrEmpty()) {
@@ -144,7 +163,9 @@ fun getUserInfo(): UserInfoData? {
     return null
 }
 
-
+/**
+ * 返回xx,xx
+ */
 fun MutableList<String>.formatWithSymbol(symbol: String = ","): String {
     val stringBuilder = StringBuilder()
     this.forEachIndexed { index, s ->
@@ -157,6 +178,9 @@ fun MutableList<String>.formatWithSymbol(symbol: String = ","): String {
     return stringBuilder.toString()
 }
 
+/**
+ * 解析xx,xx
+ */
 fun String.symbolToList(symbol: String = ","): MutableList<String> {
     val mutableListOf = mutableListOf<String>()
     val split = this.split(symbol)
@@ -164,6 +188,9 @@ fun String.symbolToList(symbol: String = ","): MutableList<String> {
     return mutableListOf
 }
 
+/**
+ * uri2path
+ */
 fun uri2path(context: Context, uri: Uri): String {
     var path = ""
     val contentResolver = context.contentResolver
@@ -257,6 +284,9 @@ fun formatSize(size: Long): String {
     return DecimalFormat("0.00T").format(t1)
 }
 
+/**
+ * 删除文件夹
+ */
 fun deleteDirectory(file: File) {
     if (file.isDirectory) {
         file.listFiles()?.let {
@@ -275,7 +305,9 @@ fun deleteDirectory(file: File) {
     }
 }
 
-
+/**
+ * 删除文件
+ */
 fun deleteFile(file: File) {
     if (file.exists()) {
         file.delete()

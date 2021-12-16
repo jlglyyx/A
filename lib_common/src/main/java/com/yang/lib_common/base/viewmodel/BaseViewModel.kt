@@ -89,6 +89,10 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     suspend fun delayShowDialog(timeMillis: Long = 1000) {
         delay(timeMillis)
     }
+    suspend fun delayMissDialog(timeMillis: Long = 1000) {
+        delay(timeMillis)
+        dismissDialog()
+    }
 
     private suspend fun handleException(exception: Throwable, content: String = "") {
         val handle = ErrorHandle(exception).handle()

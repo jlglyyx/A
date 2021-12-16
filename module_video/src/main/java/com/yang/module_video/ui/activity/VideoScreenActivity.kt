@@ -12,7 +12,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
-import com.yang.apt_annotation.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -31,18 +30,17 @@ import javax.inject.Inject
  * @Description
  * @Date 2021/11/19 11:08
  */
-@InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
 @Route(path = AppConstant.RoutePath.VIDEO_SCREEN_ACTIVITY)
 class VideoScreenActivity : BaseActivity() {
 
     @Inject
     lateinit var videoViewModel: VideoViewModel
 
-    lateinit var screenOneAdapter: ScreenAdapter
+    private lateinit var screenOneAdapter: ScreenAdapter
 
-    lateinit var screenTwoAdapter: ScreenAdapter
+    private lateinit var screenTwoAdapter: ScreenAdapter
 
-    lateinit var screenThreeAdapter: ScreenAdapter
+    private lateinit var screenThreeAdapter: ScreenAdapter
 
 
     override fun getLayout(): Int {

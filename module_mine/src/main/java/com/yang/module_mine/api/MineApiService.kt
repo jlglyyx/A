@@ -17,4 +17,10 @@ interface MineApiService : BaseApiService {
     @Multipart
     @POST("/uploadFile")
     suspend fun uploadFile(@PartMap file: MutableMap<String, RequestBody>): MResult<MutableList<String>>
+
+    @POST("user/changePassword")
+    suspend fun changePassword(@Query("password") password:String): MResult<String>
+
+    @POST("user/changeUserInfo")
+    suspend fun changeUserInfo(@Body userInfoData: UserInfoData): MResult<UserInfoData>
 }
