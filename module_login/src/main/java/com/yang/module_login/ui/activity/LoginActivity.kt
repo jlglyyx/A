@@ -93,11 +93,11 @@ class LoginActivity : BaseActivity() {
 
     private fun checkForm() {
         if (TextUtils.isEmpty(et_user.text.toString())) {
-            showShort("请输入账号")
+            showShort(getString(R.string.input_account))
             return
         }
         if (TextUtils.isEmpty(et_password.text.toString())) {
-            showShort("请输入密码")
+            showShort(getString(R.string.input_password))
             return
         }
         loginViewModel.login(et_user.text.toString(), et_password.text.toString())
@@ -126,7 +126,7 @@ class LoginActivity : BaseActivity() {
                 delay(1000)
             }
             tv_verification_code.isClickable = true
-            tv_verification_code.text = "重新获取验证码"
+            tv_verification_code.text = getString(R.string.re_get_verification_code)
         }
     }
 

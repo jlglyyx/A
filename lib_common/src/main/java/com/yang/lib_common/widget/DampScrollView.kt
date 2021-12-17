@@ -10,10 +10,13 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.TranslateAnimation
 import androidx.core.widget.NestedScrollView
 
+/**
+ *
+ */
 class DampScrollView : NestedScrollView {
 
     /**scrollView的第一个子view*/
-    lateinit var parentView: View
+    private lateinit var parentView: View
 
     /**记录scrollView的第一个子view位置*/
     private val rect = Rect()
@@ -65,6 +68,11 @@ class DampScrollView : NestedScrollView {
     }
 
 
+    /**
+     * @return true 自己处理事件 事件不会向下传递 onInterceptTouchEvent onTouchEvent 不会触发
+     * @return false 自己不处理事件 事件不会向下传递 事件向上传递 上一级onTouchEvent传递事件 onInterceptTouchEvent onTouchEvent 不会触发
+     * @return super.dispatchTouchEvent(ev) 事件分发当前 onInterceptTouchEvent
+     */
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         when (ev.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -92,11 +100,20 @@ class DampScrollView : NestedScrollView {
         return super.dispatchTouchEvent(ev)
     }
 
-
+    /**
+     * @return true 事件拦截 事件传递当前 onTouchEvent
+     * @return false 事件放行 下一级 dispatchTouchEvent 继续分发
+     * @return super.onInterceptTouchEvent(ev) 同 return false
+     */
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return super.onInterceptTouchEvent(ev)
     }
 
+    /**
+     * @return true 事件处理（消费）
+     * @return false 事件不处理（不消费）返回上一级 onTouchEvent处理
+     * @return super.onTouchEvent(ev) 有能力处理则处理 没能力处理返回上一级 onTouchEvent处理 例如：TextView or BottomView
+     */
     override fun onTouchEvent(ev: MotionEvent): Boolean {
 
         return super.onTouchEvent(ev)

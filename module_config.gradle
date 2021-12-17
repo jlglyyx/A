@@ -27,6 +27,10 @@ android {
                 includeCompileClasspath = false
             }
         }
+
+        ndk{
+            abiFilters  "armeabi-v7a","arm64-v8a"
+        }
     }
 
     kotlinOptions {
@@ -43,7 +47,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

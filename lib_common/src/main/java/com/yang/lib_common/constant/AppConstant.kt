@@ -184,7 +184,7 @@ interface AppConstant {
 
         const val CONTENT = "content"
 
-        const val PAGE_SIZE_COUNT = 2
+        const val PAGE_SIZE_COUNT = 10
 
         const val TAB_HEIGHT = "TAB_HEIGHT"
 

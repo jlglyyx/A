@@ -30,8 +30,7 @@ class LoginViewModel @Inject constructor(
             getDefaultMMKV().encode(AppConstant.Constant.TOKEN, it.data.token)
             mUserInfoData.postValue(it.data)
             showDialog(it.message)
-            delayShowDialog()
-            dismissDialog()
+            delayMissDialog()
         },{
             getDefaultMMKV().encode(AppConstant.Constant.TOKEN, UUID.randomUUID().toString())
         }, messages = *arrayOf("请求中..."))
@@ -42,8 +41,7 @@ class LoginViewModel @Inject constructor(
         }, {
             mUserInfoData.postValue(it.data)
             showDialog(it.message)
-            delayShowDialog()
-            dismissDialog()
+            delayMissDialog()
         },{
             buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
             finishActivity()
@@ -56,8 +54,7 @@ class LoginViewModel @Inject constructor(
         }, {
             mUserInfoData.postValue(it.data)
             showDialog(it.message)
-            delayShowDialog()
-            dismissDialog()
+            delayMissDialog()
         }, messages = *arrayOf("请求中..."))
     }
 

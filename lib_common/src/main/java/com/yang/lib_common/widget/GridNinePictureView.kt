@@ -90,6 +90,7 @@ class GridNinePictureView : ViewGroup {
         defStyleAttr
     ) {
         this.mContext = context
+        setWillNotDraw(true)
         init()
     }
 
@@ -175,8 +176,8 @@ class GridNinePictureView : ViewGroup {
         }
     }
 
-    override fun dispatchDraw(canvas: Canvas) {
-        super.dispatchDraw(canvas)
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
         if (dataSize - maxChild > 0) {
             val exceedCount = dataSize - maxChild
             val bgLayer = canvas.saveLayer(rectF, null)

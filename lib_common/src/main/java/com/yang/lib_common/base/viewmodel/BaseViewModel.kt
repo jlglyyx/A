@@ -13,13 +13,22 @@ import kotlinx.coroutines.launch
 
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
+    /**
+     * ui状态控制器
+     */
     var uC = UIChangeLiveData()
 
 
+    /**
+     * showDialog
+     */
     fun showDialog(content: String = "加载中") {
         uC.showLoadingEvent.value = content
     }
 
+    /**
+     * dismissDialog
+     */
     fun dismissDialog() {
         uC.dismissDialogEvent.call()
     }
@@ -86,7 +95,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         uC.showRecyclerViewEvent.postValue(AppConstant.LoadingViewEnum.EMPTY_VIEW)
     }
 
-    suspend fun delayShowDialog(timeMillis: Long = 1000) {
+    suspend fun delayTime(timeMillis: Long = 1000) {
         delay(timeMillis)
     }
     suspend fun delayMissDialog(timeMillis: Long = 1000) {
@@ -101,7 +110,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         } else {
             showDialog(content)
         }
-        delayShowDialog(1000)
+        delayTime(1000)
         dismissDialog()
     }
 
@@ -125,14 +134,14 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
             try {
                 if (messages.isNotEmpty()) {
                     showDialog(messages[0])
-                    delayShowDialog()
+                    delayTime()
                 }
                 val data = onRequest()
                 onSuccess(data)
                 if (messages.isNotEmpty() && messages.size >= 2) {
                     showDialog(messages[1])
                 }
-                delayShowDialog()
+                delayTime()
                 dismissDialog()
             } catch (t: Throwable) {
                 error(t)
