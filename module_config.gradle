@@ -43,11 +43,11 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -68,6 +68,8 @@ android {
     dependencies {
         rootProject.ext.kaptDependencies.each { k, v -> kapt v }
         rootProject.ext.compileOnlyDependencies.each { k, v -> compileOnly v }
+        implementation project(path: ':apt-annotation')
+        implementation project(path: ':apt-processor')
     }
 }
 

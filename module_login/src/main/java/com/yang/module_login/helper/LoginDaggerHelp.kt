@@ -1,3 +1,4 @@
+@file:JvmName("LoginDaggerHelp")
 package com.yang.module_login.helper
 
 import androidx.appcompat.app.AppCompatActivity

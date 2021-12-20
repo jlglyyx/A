@@ -72,17 +72,16 @@
 -obfuscationdictionary ./dictionary.txt         #引用第三方字典
 -classobfuscationdictionary ./dictionary.txt    #引用第三方字典
 -packageobfuscationdictionary ./dictionary.txt  #引用第三方字典
--keepattributes SourceFile,LineNumberTable  #保留行号
+-keepattributes SourceFile,LineNumberTable      #保留行号
 -keep class com.tencent.**{*;}
 -keep class android.**{*;}
 -keep class androidx.**{*;}
 -keep class org.** {*;}
 -keep class com.yang.lib_common.bus.event.LiveDataBus.**{*;}
--dontusemixedcaseclassnames                 # 是否使用大小写混合
--verbose                                    # 混淆时是否记录日志
--optimizationpasses 5                       # 指定代码的压缩级别
--dontusemixedcaseclassnames                 # 是否使用大小写混合
--keepattributes *Annotation*                #保护注解
+-dontusemixedcaseclassnames                     # 是否使用大小写混合
+-verbose                                        # 混淆时是否记录日志
+-optimizationpasses 5                           # 指定代码的压缩级别
+-keepattributes *Annotation*                    #保护注解
 -keep class * implements java.io.Serializable {*;}
 -keepclassmembers class fqcn.of.javascript.interface.for.webview {
    public *;

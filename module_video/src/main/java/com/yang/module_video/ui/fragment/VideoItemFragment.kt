@@ -14,7 +14,6 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
-import com.yang.apt_annotation.InjectViewModel
 import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
@@ -29,7 +28,7 @@ import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.fra_item_video.*
 import javax.inject.Inject
 
-@InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
+
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
 class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 

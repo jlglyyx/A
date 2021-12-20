@@ -13,6 +13,9 @@ import javax.tools.Diagnostic
 @AutoService(Processor::class)
 class Processor : AbstractProcessor() {
 
+    var proxyInfoMap = mutableMapOf<String,ProxyInfo>()
+    var a = 0
+
     override fun init(processingEnv: ProcessingEnvironment) {
         super.init(processingEnv)
         processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, "==============")
@@ -33,8 +36,39 @@ class Processor : AbstractProcessor() {
         roundEnv: RoundEnvironment
     ): Boolean {
         try {
+            proxyInfoMap.clear()
+            val elementsAnnotatedWith = roundEnv.getElementsAnnotatedWith(InjectViewModel::class.java)
+            elementsAnnotatedWith.forEach { element ->
+                val enclosingElement = element.enclosingElement as TypeElement
+                val qualifiedName = enclosingElement.qualifiedName.toString()
+                var proxyInfo = proxyInfoMap[qualifiedName]
+                if (null == proxyInfo){
+                    proxyInfo = ProxyInfo()
+                    proxyInfo.className = enclosingElement.simpleName.toString()
+                    proxyInfoMap[qualifiedName] = proxyInfo
+                }
+                processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, "==============错误：${qualifiedName}  ${enclosingElement.getSimpleName()}")
+                val annotation = element.getAnnotation(InjectViewModel::class.java)
+                proxyInfo.mInjectElements[annotation.model] = element
+            }
 
 
+            proxyInfoMap.forEach { (t, u) ->
+                val createSourceFile =
+                    processingEnv.filer.createSourceFile("com.yang.processor.${u.className}_InjectViewModel")
+                val openWriter = createSourceFile.openWriter()
+                openWriter.write("import com.yang.apt_processor.*;\n")
+                openWriter.write("import com.yang.module_login.*;\n")
+                openWriter.write("import $t;\n")
+                openWriter.write("public class ${u.className}_InjectViewModel implements InjectManager<$t>{\n")
+                openWriter.write("@Override\n" +
+                        "    public void inject($t data) {\n" +
+                        "        com.yang.module_login.helper.LoginDaggerHelp.getLoginComponent(data).inject(data);\n" +
+                        "    }\n")
+                openWriter.write("}")
+                openWriter.flush()
+                openWriter.close()
+            }
 
 
 //            val createSourceFile = processingEnv.filer.createSourceFile("com.yang.processor.VideoComponent")
@@ -87,8 +121,9 @@ class Processor : AbstractProcessor() {
 //            builder.writeTo(processingEnv.filer)
         } catch (e: Exception) {
             processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, "==============错误：${e.message}")
+            return false
         }
 
-        return false
+        return true
     }
 }

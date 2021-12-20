@@ -110,7 +110,7 @@ class BaseApplication : Application() {
                 Log.i("TAG", "initMMKV: $initialize")
             }
         }
-        Log.i(TAG, "initMMKV: ==>${measureTimeMillis }")
+        Log.i(TAG, "initMMKV: ==>${measureTimeMillis}")
     }
 
     private fun initGlide(application: BaseApplication) {

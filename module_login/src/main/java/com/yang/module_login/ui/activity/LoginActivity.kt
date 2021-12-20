@@ -1,5 +1,6 @@
 package com.yang.module_login.ui.activity
 
+import LoginActivity_InjectViewModel
 import android.media.MediaPlayer
 import android.os.Environment
 import android.text.TextUtils
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.gson.Gson
+import com.yang.apt_annotation.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -18,7 +20,7 @@ import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getDefaultMMKV
 import com.yang.lib_common.util.showShort
 import com.yang.module_login.R
-import com.yang.module_login.helper.getLoginComponent
+import com.yang.module_login.di.factory.LoginViewModelFactory
 import com.yang.module_login.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.act_login.*
 import kotlinx.coroutines.cancel
@@ -32,8 +34,12 @@ class LoginActivity : BaseActivity() {
     @Inject
     lateinit var gson: Gson
 
-    @Inject
+    //@Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_LOGIN)
     lateinit var loginViewModel: LoginViewModel
+
+    @Inject
+    lateinit var loginViewModelFactory: LoginViewModelFactory
 
 
     override fun getLayout(): Int {
@@ -42,12 +48,21 @@ class LoginActivity : BaseActivity() {
 
     override fun initData() {
 
+        Log.i(TAG, "initData: $loginViewModel")
+
+        Log.i(TAG, "initDatass: $loginViewModelFactory")
+
+
     }
 
     override fun initView() {
         initVideoView()
+        var i = 0
+        bt_login.text = "${loginViewModel.a}"
         bt_login.clicks().subscribe {
-            checkForm()
+            loginViewModel.a =  i++
+            bt_login.text = "${loginViewModel.a}"
+            //checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
@@ -84,7 +99,9 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getLoginComponent(this).inject(this)
+        //getLoginComponent(this).inject(this)
+        LoginActivity_InjectViewModel().inject(this)
+        loginViewModel = getViewModel(loginViewModelFactory,LoginViewModel::class.java)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {

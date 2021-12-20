@@ -29,11 +29,13 @@ class MainViewModel @Inject constructor(
     var dynamicListLiveData = MutableLiveData<MutableList<DynamicData>>()
     var pictureListLiveData = MutableLiveData<MutableList<String>>()
 
-
     fun addDynamic(dynamicData: DynamicData) {
         launch({
             mainRepository.addDynamic(dynamicData)
         }, {
+            LiveDataBus.instance.with("refresh_dynamic").value = "refresh_dynamic"
+            finishActivity()
+        },{
             LiveDataBus.instance.with("refresh_dynamic").value = "refresh_dynamic"
             finishActivity()
         }, messages = *arrayOf("正在努力发表中...", "发表成功"))

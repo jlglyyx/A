@@ -6,6 +6,6 @@ package com.yang.apt_annotation
  * @Description
  * @Date 2021/12/8 17:28
  */
-@Target(AnnotationTarget.CLASS)
+@Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class InjectViewModel(val model:String)

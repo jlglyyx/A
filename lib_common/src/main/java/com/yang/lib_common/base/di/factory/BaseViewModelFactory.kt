@@ -3,14 +3,19 @@ package com.yang.lib_common.base.di.factory
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.yang.lib_common.base.repository.BaseRepository
 import java.lang.reflect.InvocationTargetException
 
-class BaseViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+class BaseViewModelFactory <B : BaseRepository>(
+    private val application: Application,
+    private val baseRepository: B
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return try {
             modelClass.canonicalName?.run {
-                val viewModel = Class.forName(this).getConstructor(Application::class.java)
-                    .newInstance(application) as ViewModel
+                val viewModel = Class.forName(this)
+                    .getConstructor(Application::class.java,BaseRepository::class.java)
+                    .newInstance(application,baseRepository) as ViewModel
                 viewModel as T
             }!!
         } catch (e: ClassNotFoundException) {

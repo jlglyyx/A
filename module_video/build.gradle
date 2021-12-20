@@ -11,6 +11,4 @@ android {
 
 dependencies {
     implementation project(path: ":lib_common")
-    implementation project(path: ':apt-annotation')
-    kapt project(path: ':apt-processor')
 }

@@ -23,6 +23,8 @@ class LoginViewModel @Inject constructor(
 
     var mUserInfoData = MutableLiveData<UserInfoData>()
 
+    var a:Int = 0
+
     fun login(userAccount: String, password: String) {
         launch({
             loginRepository.login(userAccount, password)
