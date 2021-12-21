@@ -30,7 +30,6 @@ interface AppConstant {
         private const val PROVIDE = "provide"
 
         const val MODULE_MAIN = "module_main"
-        const val MODULE_HOME = "module_home"
         const val MODULE_MINE = "module_mine"
         const val MODULE_VIDEO = "module_video"
         const val MODULE_PICTURE = "module_picture"

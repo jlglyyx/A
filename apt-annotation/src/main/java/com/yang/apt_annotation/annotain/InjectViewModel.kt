@@ -1,4 +1,4 @@
-package com.yang.apt_annotation
+package com.yang.apt_annotation.annotain
 
 /**
  * @Author Administrator
@@ -8,4 +8,4 @@ package com.yang.apt_annotation
  */
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class InjectViewModel(val model:String)
+annotation class InjectViewModel(val value:String)

@@ -10,18 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.BaseAppDatabase
+import com.yang.lib_common.room.entity.ImageDataItem
 import com.yang.lib_common.room.entity.SearchData
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.simpleDateFormat
 import com.yang.module_picture.R
 import com.yang.module_picture.adapter.PictureSearchAdapter
-import com.yang.module_picture.helper.getPictureComponent
-import com.yang.lib_common.room.entity.ImageDataItem
 import com.yang.module_picture.viewmodel.PictureViewModel
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
@@ -32,7 +33,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.*
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -43,7 +43,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.PICTURE_SEARCH_ACTIVITY)
 class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_PICTURE)
     lateinit var pictureViewModel: PictureViewModel
     private var pageNum = 1
     private var list = mutableListOf<SearchData>()
@@ -95,7 +95,7 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
     }
 
     override fun initViewModel() {
-        getPictureComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun initSmartRefreshLayout() {

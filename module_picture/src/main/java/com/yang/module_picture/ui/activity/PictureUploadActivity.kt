@@ -13,21 +13,21 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.lxj.xpopup.XPopup
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.upload.UploadService
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.dip2px
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_picture.R
-import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.viewmodel.PictureViewModel
 import kotlinx.android.synthetic.main.act_picture_upload.*
 import java.util.*
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -38,7 +38,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.PICTURE_UPLOAD_ACTIVITY)
 class PictureUploadActivity : BaseActivity() {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_PICTURE)
     lateinit var pictureViewModel: PictureViewModel
 
     private var selectType = ""
@@ -123,7 +123,7 @@ class PictureUploadActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getPictureComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun initRecyclerView(){

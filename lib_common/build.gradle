@@ -61,5 +61,8 @@ dependencies {
     rootProject.ext.compileOnlyDependencies.each { k, v -> compileOnly v }
     rootProject.ext.debugImplementationDependencies.each { k, v -> debugImplementation v }
     rootProject.ext.testImplementationDependencies.each { k, v -> testImplementation v }
+    rootProject.ext.testImplementationDependencies.each { k, v -> testImplementation v }
+
+    rootProject.ext.apiProjectDependencies.each { k, v -> api project(path: v) }
 
 }

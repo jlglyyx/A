@@ -20,18 +20,18 @@ import com.google.gson.Gson
 import com.lxj.xpopup.XPopup
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.dialog.ImageViewPagerDialog
-import com.yang.lib_common.scope.ModelWithFactory
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_main.R
 import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.data.model.DynamicData
-import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.ui.main.activity.AddDynamicActivity
 import com.yang.module_main.ui.main.activity.MainActivity
 import com.yang.module_main.viewmodel.MainViewModel
@@ -48,8 +48,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     @Inject
     lateinit var gson: Gson
 
-    @Inject
-    @ModelWithFactory
+    @InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter
@@ -169,7 +168,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     override fun initViewModel() {
-        getMainComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
 

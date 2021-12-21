@@ -18,26 +18,27 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.CommentAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.dialog.EditBottomDialog
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.module_video.R
-import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.act_video_item.*
-import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
 class VideoItemActivity : BaseActivity() {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
     lateinit var videoModule: VideoViewModel
+
     private lateinit var orientationUtils: OrientationUtils
     private lateinit var commentAdapter: CommentAdapter
 
@@ -126,7 +127,7 @@ class VideoItemActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getVideoComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
         videoModule.mVideoItemData.observe(this, Observer {
             if (it.size == 0){
                 return@Observer

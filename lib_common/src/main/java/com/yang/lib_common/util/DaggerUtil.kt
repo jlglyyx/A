@@ -1,3 +1,4 @@
+@file:JvmName("DaggerUtil")
 package com.yang.lib_common.util
 
 import androidx.annotation.NonNull

@@ -4,17 +4,17 @@ import android.graphics.Bitmap
 import android.os.Environment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.huawei.hms.hmsscankit.ScanUtil
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.showShort
 import com.yang.module_mine.R
-import com.yang.module_mine.helper.getMineComponent
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.act_mine_limit_time_extension.*
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import javax.inject.Inject
 
 
 /**
@@ -25,7 +25,7 @@ import javax.inject.Inject
  */
 @Route(path = AppConstant.RoutePath.MINE_LIMIT_TIME_EXTENSION_ACTIVITY)
 class MineLimitTimeExtensionActivity:BaseActivity() {
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
     lateinit var mineViewModel: MineViewModel
 
     override fun getLayout(): Int {
@@ -40,7 +40,7 @@ class MineLimitTimeExtensionActivity:BaseActivity() {
     }
 
     override fun initViewModel() {
-        getMineComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun createQRCode(){

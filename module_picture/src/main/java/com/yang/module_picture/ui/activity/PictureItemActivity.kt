@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
 import com.lxj.xpopup.XPopup
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.CommentAdapter
 import com.yang.lib_common.adapter.ImageViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
@@ -20,16 +21,15 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.dialog.EditBottomDialog
 import com.yang.lib_common.dialog.ImageViewPagerDialog
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.dip2px
 import com.yang.module_picture.R
-import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.viewmodel.PictureViewModel
 import com.youth.banner.transformer.ScaleInTransformer
 import kotlinx.android.synthetic.main.act_picture_item.*
 import kotlinx.android.synthetic.main.fra_item_picture.recyclerView
-import javax.inject.Inject
 
 
 @Route(path = AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
@@ -37,7 +37,7 @@ class PictureItemActivity : BaseActivity() {
 
     private lateinit var commentAdapter: CommentAdapter
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_PICTURE)
     lateinit var pictureViewModel: PictureViewModel
 
     private var isScroll = false
@@ -83,7 +83,7 @@ class PictureItemActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getPictureComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun scrollToPosition(view: View) {

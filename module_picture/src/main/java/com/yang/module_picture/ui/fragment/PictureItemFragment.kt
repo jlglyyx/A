@@ -5,25 +5,25 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.entity.ImageDataItem
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_picture.R
 import com.yang.module_picture.adapter.PictureAdapter
-import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.viewmodel.PictureViewModel
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.fra_item_picture.*
-import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT)
 class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_PICTURE)
     lateinit var pictureModule: PictureViewModel
 
     private var queryType: String? = null
@@ -54,7 +54,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     override fun initViewModel() {
-        getPictureComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
 
     }
 

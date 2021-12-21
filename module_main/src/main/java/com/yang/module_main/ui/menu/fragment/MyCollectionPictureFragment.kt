@@ -11,11 +11,10 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.yang.lib_common.base.ui.fragment.BaseFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.scope.ModelWithFactory
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getFilePath
 import com.yang.module_main.R
-import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import javax.inject.Inject
@@ -30,7 +29,7 @@ import javax.inject.Inject
 class MyCollectionPictureFragment : BaseFragment(), OnRefreshLoadMoreListener {
 
     @Inject
-    @ModelWithFactory
+
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter
@@ -55,7 +54,7 @@ class MyCollectionPictureFragment : BaseFragment(), OnRefreshLoadMoreListener {
     }
 
     override fun initViewModel() {
-        getMainComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun initSmartRefreshLayout() {

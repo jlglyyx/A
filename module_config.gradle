@@ -68,8 +68,9 @@ android {
     dependencies {
         rootProject.ext.kaptDependencies.each { k, v -> kapt v }
         rootProject.ext.compileOnlyDependencies.each { k, v -> compileOnly v }
-        implementation project(path: ':apt-annotation')
-        implementation project(path: ':apt-processor')
+        rootProject.ext.kaptProjectDependencies.each { k, v -> kapt project(path: v) }
+//        implementation project(path: ':apt-annotation')
+//        implementation project(path: ':apt-processor')
     }
 }
 

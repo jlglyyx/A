@@ -4,25 +4,25 @@ import android.text.TextUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoData
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.showShort
 import com.yang.module_login.R
-import com.yang.module_login.helper.getLoginComponent
 import com.yang.module_login.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.act_register.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.REGISTER_ACTIVITY)
 class RegisterActivity : BaseActivity() {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_LOGIN)
     lateinit var loginViewModel: LoginViewModel
 
     override fun getLayout(): Int {
@@ -50,7 +50,7 @@ class RegisterActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getLoginComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun checkForm(){

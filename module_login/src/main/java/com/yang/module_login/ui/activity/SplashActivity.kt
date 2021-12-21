@@ -10,17 +10,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.gson.Gson
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.down.DownLoadManagerService
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getDefaultMMKV
 import com.yang.lib_common.util.getUserInfo
 import com.yang.module_login.R
-import com.yang.module_login.helper.getLoginComponent
 import com.yang.module_login.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.act_splash.*
 import kotlinx.coroutines.cancel
@@ -34,7 +35,7 @@ class SplashActivity : BaseActivity() {
     @Inject
     lateinit var gson: Gson
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_LOGIN)
     lateinit var loginViewModel: LoginViewModel
 
     lateinit var downLoadManagerBinder: DownLoadManagerService.DownLoadManagerBinder
@@ -165,7 +166,7 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getLoginComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     override fun onDestroy() {

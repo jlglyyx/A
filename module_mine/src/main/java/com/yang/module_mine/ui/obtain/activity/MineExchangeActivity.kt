@@ -3,16 +3,16 @@ package com.yang.module_mine.ui.obtain.activity
 import androidx.fragment.app.Fragment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayoutMediator
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.TabAndViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_mine.R
-import com.yang.module_mine.helper.getMineComponent
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.act_mine_exchange.*
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.MINE_EXCHANGE_ACTIVITY)
 class MineExchangeActivity :BaseActivity() {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
     lateinit var mineViewModel: MineViewModel
 
     private lateinit var fragments: MutableList<Fragment>
@@ -58,7 +58,7 @@ class MineExchangeActivity :BaseActivity() {
     }
 
     override fun initViewModel() {
-        getMineComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun initViewPager() {

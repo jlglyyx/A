@@ -1,6 +1,5 @@
 package com.yang.module_login.ui.activity
 
-import LoginActivity_InjectViewModel
 import android.media.MediaPlayer
 import android.os.Environment
 import android.text.TextUtils
@@ -11,16 +10,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.gson.Gson
-import com.yang.apt_annotation.InjectViewModel
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getDefaultMMKV
 import com.yang.lib_common.util.showShort
 import com.yang.module_login.R
-import com.yang.module_login.di.factory.LoginViewModelFactory
 import com.yang.module_login.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.act_login.*
 import kotlinx.coroutines.cancel
@@ -34,23 +33,14 @@ class LoginActivity : BaseActivity() {
     @Inject
     lateinit var gson: Gson
 
-    //@Inject
     @InjectViewModel(AppConstant.RoutePath.MODULE_LOGIN)
     lateinit var loginViewModel: LoginViewModel
-
-    @Inject
-    lateinit var loginViewModelFactory: LoginViewModelFactory
-
 
     override fun getLayout(): Int {
         return R.layout.act_login
     }
 
     override fun initData() {
-
-        Log.i(TAG, "initData: $loginViewModel")
-
-        Log.i(TAG, "initDatass: $loginViewModelFactory")
 
 
     }
@@ -60,7 +50,7 @@ class LoginActivity : BaseActivity() {
         var i = 0
         bt_login.text = "${loginViewModel.a}"
         bt_login.clicks().subscribe {
-            loginViewModel.a =  i++
+            loginViewModel.a = i++
             bt_login.text = "${loginViewModel.a}"
             //checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
@@ -98,10 +88,15 @@ class LoginActivity : BaseActivity() {
         }
     }
 
+
+    /**
+     * 1.去除loginViewModelFactory
+     * 2.去除getLoginComponent(this).inject(this)
+     * 3.去除loginViewModel = getViewModel(loginViewModelFactory,LoginViewModel::class.java)
+     */
+
     override fun initViewModel() {
-        //getLoginComponent(this).inject(this)
-        LoginActivity_InjectViewModel().inject(this)
-        loginViewModel = getViewModel(loginViewModelFactory,LoginViewModel::class.java)
+        InjectViewModelProxy.inject(this)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -149,7 +144,8 @@ class LoginActivity : BaseActivity() {
 
     private fun initVideoView() {
         lifecycle.addObserver(surfaceView)
-        val mediaPlayer = surfaceView.initMediaPlayer("${Environment.getExternalStorageDirectory()}/MFiles/video/register.mp4")
+        val mediaPlayer =
+            surfaceView.initMediaPlayer("${Environment.getExternalStorageDirectory()}/MFiles/video/register.mp4")
         mediaPlayer?.setOnInfoListener { mp, what, extra ->
             if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                 iv_cover.visibility = View.GONE

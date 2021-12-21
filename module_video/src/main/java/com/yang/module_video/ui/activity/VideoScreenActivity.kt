@@ -12,17 +12,17 @@ import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_video.R
 import com.yang.module_video.data.VideoScreenData
-import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.act_video_screen.*
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -33,7 +33,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.VIDEO_SCREEN_ACTIVITY)
 class VideoScreenActivity : BaseActivity() {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
     lateinit var videoViewModel: VideoViewModel
 
     private lateinit var screenOneAdapter: ScreenAdapter
@@ -63,7 +63,7 @@ class VideoScreenActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getVideoComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
 

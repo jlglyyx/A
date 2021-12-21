@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.lxj.xpopup.XPopup
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.CommentAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
@@ -14,21 +15,19 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.dialog.EditBottomDialog
 import com.yang.lib_common.dialog.ImageViewPagerDialog
-import com.yang.lib_common.scope.ModelWithFactory
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.symbolToList
 import com.yang.module_main.R
 import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.data.model.DynamicData
-import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_dynamic_detail.*
 import kotlinx.android.synthetic.main.item_dynamic_detail_comment.*
 import kotlinx.android.synthetic.main.item_dynamic_detail_comment.view.*
 import kotlinx.android.synthetic.main.item_main_content_image.*
 import kotlinx.android.synthetic.main.item_main_content_text.*
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -39,8 +38,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY)
 class DynamicDetailActivity : BaseActivity() {
 
-    @Inject
-    @ModelWithFactory
+    @InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var commentAdapter: CommentAdapter
@@ -126,7 +124,7 @@ class DynamicDetailActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getMainComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {

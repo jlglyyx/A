@@ -5,22 +5,22 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayoutMediator
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.TabAndViewPagerFragmentAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_picture.R
-import com.yang.module_picture.helper.getPictureComponent
 import com.yang.module_picture.viewmodel.PictureViewModel
 import kotlinx.android.synthetic.main.fra_picture.*
-import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.PICTURE_FRAGMENT)
 class PictureFragment : BaseLazyFragment() {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_PICTURE)
     lateinit var pictureModule: PictureViewModel
 
     lateinit var fragments: MutableList<Fragment>
@@ -78,7 +78,7 @@ class PictureFragment : BaseLazyFragment() {
     }
 
     override fun initViewModel() {
-        getPictureComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
 

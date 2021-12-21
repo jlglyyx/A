@@ -6,24 +6,24 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayoutMediator
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.TabAndViewPagerFragmentAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_video.R
-import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.fra_video.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.VIDEO_FRAGMENT)
 class VideoFragment : BaseLazyFragment() {
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
     lateinit var videoModule: VideoViewModel
 
     private lateinit var fragments: MutableList<Fragment>
@@ -81,7 +81,7 @@ class VideoFragment : BaseLazyFragment() {
     }
 
     override fun initViewModel() {
-        getVideoComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
 
     }
 

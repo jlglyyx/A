@@ -12,28 +12,26 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tbruyelle.rxpermissions3.RxPermissions
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.TabAndViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.scope.ModelWithFactory
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getScreenPx
 import com.yang.lib_common.util.px2dip
 import com.yang.lib_common.util.showShort
 import com.yang.module_main.R
-import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.ui.menu.fragment.LeftFragment
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
-import javax.inject.Inject
 
 
 @Route(path = AppConstant.RoutePath.MAIN_ACTIVITY)
 class MainActivity : BaseActivity() {
 
-    @Inject
-    @ModelWithFactory
+    @InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var fragments: MutableList<Fragment>
@@ -101,7 +99,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getMainComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
 
     }
 

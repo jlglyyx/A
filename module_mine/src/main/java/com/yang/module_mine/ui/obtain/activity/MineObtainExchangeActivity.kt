@@ -4,20 +4,20 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
 import com.yang.module_mine.adapter.MineObtainExchangeAdapter
 import com.yang.module_mine.data.MineObtainExchangeData
-import com.yang.module_mine.helper.getMineComponent
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.act_mine_obtain_exchange.*
 import kotlinx.android.synthetic.main.view_normal_recyclerview.recyclerView
 import kotlinx.android.synthetic.main.view_normal_recyclerview.smartRefreshLayout
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -28,7 +28,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.MINE_OBTAIN_EXCHANGE_ACTIVITY)
 class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
     lateinit var mineViewModel: MineViewModel
 
     private var pageNum = 1
@@ -60,7 +60,7 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
     }
 
     override fun initViewModel() {
-        getMineComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun initSmartRefreshLayout() {

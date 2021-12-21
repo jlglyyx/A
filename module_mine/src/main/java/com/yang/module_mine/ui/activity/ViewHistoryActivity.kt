@@ -6,16 +6,16 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getFilePath
 import com.yang.module_mine.R
-import com.yang.module_mine.helper.getMineComponent
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -26,7 +26,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)
 class ViewHistoryActivity:BaseActivity() {
 
-    @Inject
+    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
     lateinit var mineViewModel: MineViewModel
 
     private lateinit var mAdapter: MAdapter
@@ -46,7 +46,7 @@ class ViewHistoryActivity:BaseActivity() {
     }
 
     override fun initViewModel() {
-        getMineComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun initRecyclerView() {
