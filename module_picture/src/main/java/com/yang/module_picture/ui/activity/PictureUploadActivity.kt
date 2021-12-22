@@ -38,7 +38,7 @@ import java.util.*
 @Route(path = AppConstant.RoutePath.PICTURE_UPLOAD_ACTIVITY)
 class PictureUploadActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_PICTURE)
+    @InjectViewModel
     lateinit var pictureViewModel: PictureViewModel
 
     private var selectType = ""

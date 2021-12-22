@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 @Route(path = AppConstant.RoutePath.MY_PUSH_ACTIVITY)
 class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter

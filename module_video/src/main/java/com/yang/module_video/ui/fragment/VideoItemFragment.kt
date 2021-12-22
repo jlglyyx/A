@@ -33,7 +33,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
 class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
+    @InjectViewModel
     lateinit var videoModule: VideoViewModel
 
     @Inject

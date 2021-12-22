@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.item_main_content_text.*
 @Route(path = AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY)
 class DynamicDetailActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var commentAdapter: CommentAdapter

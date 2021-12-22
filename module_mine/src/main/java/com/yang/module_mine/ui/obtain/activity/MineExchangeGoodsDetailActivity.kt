@@ -29,7 +29,7 @@ import kotlin.math.abs
 @Route(path = AppConstant.RoutePath.MINE_EXCHANGE_DETAIL_ACTIVITY)
 class MineExchangeGoodsDetailActivity :BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     private var alphaPercent = 0f

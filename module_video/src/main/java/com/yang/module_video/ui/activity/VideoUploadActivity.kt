@@ -38,7 +38,7 @@ import java.util.*
 @Route(path = AppConstant.RoutePath.VIDEO_UPLOAD_ACTIVITY)
 class VideoUploadActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
+    @InjectViewModel
     lateinit var videoViewModel: VideoViewModel
 
     private var selectType = ""

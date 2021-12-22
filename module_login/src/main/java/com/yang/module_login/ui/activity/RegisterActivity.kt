@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 @Route(path = AppConstant.RoutePath.REGISTER_ACTIVITY)
 class RegisterActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_LOGIN)
+    @InjectViewModel
     lateinit var loginViewModel: LoginViewModel
 
     override fun getLayout(): Int {

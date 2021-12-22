@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.act_video_screen.*
 @Route(path = AppConstant.RoutePath.VIDEO_SCREEN_ACTIVITY)
 class VideoScreenActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
+    @InjectViewModel
     lateinit var videoViewModel: VideoViewModel
 
     private lateinit var screenOneAdapter: ScreenAdapter

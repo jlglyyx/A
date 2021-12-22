@@ -35,7 +35,7 @@ class SplashActivity : BaseActivity() {
     @Inject
     lateinit var gson: Gson
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_LOGIN)
+    @InjectViewModel
     lateinit var loginViewModel: LoginViewModel
 
     lateinit var downLoadManagerBinder: DownLoadManagerService.DownLoadManagerBinder

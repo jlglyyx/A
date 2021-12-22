@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.act_video_item.*
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
 class VideoItemActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
+    @InjectViewModel
     lateinit var videoModule: VideoViewModel
 
     private lateinit var orientationUtils: OrientationUtils

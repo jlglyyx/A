@@ -1,37 +1,56 @@
 package com.yang.apt_annotation.processor
 
-import com.yang.apt_annotation.data.ProxyInfo
+import com.yang.apt_annotation.data.ProxyInfoData
 import javax.annotation.processing.ProcessingEnvironment
 
 /**
  * @Author Administrator
- * @ClassName MainProcessor
+ * @ClassName LoginProcessor
  * @Description
  * @Date 2021/12/21 14:32
  */
-class MainProcessor : IProcessor {
+class ProcessorCreate(
+    private var prefixName: String,
+    private var fieldName: String,
+    private var packageName: String
+) : IProcessor {
 
-    private var prefixName = "Main"
-    private var fieldName = "mMain"
-    private var packageName = "main"
+    private val mutableMap = mutableMapOf<String, String>()
 
     override fun createProcessor(
         className: String,
-        proxyInfo: ProxyInfo,
+        proxyInfoData: ProxyInfoData,
         processingEnv: ProcessingEnvironment
     ) {
         val createSourceFile =
-            processingEnv.filer.createSourceFile("com.yang.processor.${proxyInfo.className}_InjectViewModel")
+            processingEnv.filer.createSourceFile("com.yang.processor.${proxyInfoData.className}_InjectViewModel")
         val openWriter = createSourceFile.openWriter()
 
         val elementNameListBuilder = StringBuilder()
-        proxyInfo.elementNameMap.forEach { (t, u) ->
-            elementNameListBuilder.append( "viewModelStoreOwner.$t = DaggerUtil.getViewModel(viewModelStoreOwner, factory, $u);\n" +
-                    "            ")
-        }
 
-        openWriter.write("package com.yang.processor;\n")
-        openWriter.write(
+        val packageStringBuilder: StringBuilder = StringBuilder()
+
+        proxyInfoData.elementNameMap.forEach { (t, u) ->
+
+            var forName = "${t}Class"
+
+            val substring = u.substring(u.lastIndexOf(".") + 1)
+
+            if(mutableMap.containsValue(u)){
+                mutableMap.forEach { (at, au) ->
+                    if (au == u){
+                        forName = at
+                    }
+                }
+            }else{
+                elementNameListBuilder.append("Class<$substring> $forName = (Class<$substring>) Class.forName(\"$u\");\n")
+                packageStringBuilder.append("import $u;")
+                mutableMap[forName] = u
+            }
+
+            elementNameListBuilder.append("            viewModelStoreOwner.$t = DaggerUtil.getViewModel(viewModelStoreOwner, factory, $forName);\n")
+        }
+        packageStringBuilder.append(
             "import com.yang.apt_annotation.manager.InjectManager;\n" +
                     "import com.yang.lib_common.util.DaggerUtil;\n" +
                     "import com.yang.module_${packageName}.di.component.Dagger${prefixName}Component;\n" +
@@ -40,10 +59,12 @@ class MainProcessor : IProcessor {
                     "import com.yang.module_${packageName}.helper.${prefixName}DaggerHelp;\n" +
                     "import org.jetbrains.annotations.NotNull;\n" +
                     "import java.lang.reflect.Field;\n" +
-                    "import javax.inject.Provider;\n"
+                    "import javax.inject.Provider;\n" +
+                    "import $className;\n"
         )
-        openWriter.write("import $className;\n")
-        openWriter.write("public class ${proxyInfo.className}_InjectViewModel implements InjectManager<$className>{\n")
+        openWriter.write("package com.yang.processor;\n")
+        openWriter.write(packageStringBuilder.toString())
+        openWriter.write("public class ${proxyInfoData.className}_InjectViewModel implements InjectManager<$className>{\n")
         openWriter.write(
             "   @Override\n" +
                     "    public void inject($className viewModelStoreOwner) {\n" +

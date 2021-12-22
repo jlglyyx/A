@@ -68,7 +68,7 @@
 
 
 #------app混淆配置------#
--printmapping mapping.txt
+#-printmapping mapping.txt
 -obfuscationdictionary ./dictionary.txt         #引用第三方字典
 -classobfuscationdictionary ./dictionary.txt    #引用第三方字典
 -packageobfuscationdictionary ./dictionary.txt  #引用第三方字典
@@ -86,3 +86,11 @@
 -keepclassmembers class fqcn.of.javascript.interface.for.webview {
    public *;
 }
+#不混淆自定义注解生成的类
+-keep class * implements com.yang.apt_annotation.manager.InjectManager{*;}
+#不混淆ViewModel
+-keep class **.*ViewModel{*;}
+#不混淆dagger2 Component
+-keep class **.*Component{*;}
+#不混淆Fragment
+-keep class **.*Fragment{*;}

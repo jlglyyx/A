@@ -3,22 +3,52 @@
     package="com.yang.module_mine">
 
     <application>
-        <activity android:name="com.yang.module_mine.ui.activity.OtherPersonInfoActivity"/>
-        <activity android:name="com.yang.module_mine.ui.activity.ChangeUserInfoActivity"/>
-        <activity android:name="com.yang.module_mine.ui.activity.ViewHistoryActivity"/>
-        <activity android:name="com.yang.module_mine.ui.obtain.activity.MineObtainActivity"/>
-        <activity android:name="com.yang.module_mine.ui.obtain.activity.MineObtainExchangeActivity"/>
-        <activity android:name="com.yang.module_mine.ui.obtain.activity.MineExchangeActivity"/>
-        <activity android:name="com.yang.module_mine.ui.obtain.activity.MineExchangeGoodsDetailActivity"/>
-        <activity android:name="com.yang.module_mine.ui.activity.MineSignActivity"/>
-        <activity android:name="com.yang.module_mine.ui.activity.MineExtensionActivity"/>
-        <activity android:name="com.yang.module_mine.ui.activity.MineEarnObtainActivity"/>
-        <activity android:name="com.yang.module_mine.ui.activity.MineLimitTimeExtensionActivity"/>
-        <activity android:name="com.yang.module_mine.ui.obtain.activity.MineShippingAddressActivity"/>
-        <activity android:name="com.yang.module_mine.ui.obtain.activity.MineAddAddressActivity"/>
-        <activity android:name="com.yang.module_mine.ui.obtain.activity.MineOrderDetailActivity"/>
-        <activity android:name="com.yang.module_mine.ui.obtain.activity.MineCreateOrderDetailActivity"/>
-        <activity android:name=".ui.activity.ChangePasswordActivity"/>
+        <activity
+            android:name="com.yang.module_mine.ui.activity.OtherPersonInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.activity.ChangeUserInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.activity.ViewHistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.obtain.activity.MineObtainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.obtain.activity.MineObtainExchangeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.obtain.activity.MineExchangeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.obtain.activity.MineExchangeGoodsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.activity.MineSignActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.activity.MineExtensionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.activity.MineEarnObtainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.activity.MineLimitTimeExtensionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.obtain.activity.MineShippingAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.obtain.activity.MineAddAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.obtain.activity.MineOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_mine.ui.obtain.activity.MineCreateOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.ChangePasswordActivity" />
     </application>
 
 </manifest>

@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 @Route(path = AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)
 class ViewHistoryActivity:BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     private lateinit var mAdapter: MAdapter

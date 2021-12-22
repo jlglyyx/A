@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 @Route(path = AppConstant.RoutePath.VIDEO_UPLOAD_TASK_ACTIVITY)
 class VideoUploadTaskActivity : BaseActivity(), UploadListener {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
+    @InjectViewModel
     lateinit var videoViewModel: VideoViewModel
 
 

@@ -33,8 +33,11 @@ class LoginActivity : BaseActivity() {
     @Inject
     lateinit var gson: Gson
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_LOGIN)
+    @InjectViewModel
     lateinit var loginViewModel: LoginViewModel
+
+    @InjectViewModel
+    lateinit var loaginViewModel: LoginViewModel
 
     override fun getLayout(): Int {
         return R.layout.act_login
@@ -43,16 +46,14 @@ class LoginActivity : BaseActivity() {
     override fun initData() {
 
 
+        Log.i(TAG, "initData: $loginViewModel")
+        Log.i(TAG, "initData: $loaginViewModel")
     }
 
     override fun initView() {
         initVideoView()
-        var i = 0
-        bt_login.text = "${loginViewModel.a}"
         bt_login.clicks().subscribe {
-            loginViewModel.a = i++
-            bt_login.text = "${loginViewModel.a}"
-            //checkForm()
+            checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
@@ -154,7 +155,6 @@ class LoginActivity : BaseActivity() {
             return@setOnInfoListener false
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

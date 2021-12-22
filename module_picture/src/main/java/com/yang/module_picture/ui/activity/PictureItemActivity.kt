@@ -37,7 +37,7 @@ class PictureItemActivity : BaseActivity() {
 
     private lateinit var commentAdapter: CommentAdapter
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_PICTURE)
+    @InjectViewModel
     lateinit var pictureViewModel: PictureViewModel
 
     private var isScroll = false

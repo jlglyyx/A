@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.act_other_person_info.commonToolBar
 @Route(path = AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY)
 class ChangeUserInfoActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     private lateinit var activityInfoAdapter: ActivityInfoAdapter

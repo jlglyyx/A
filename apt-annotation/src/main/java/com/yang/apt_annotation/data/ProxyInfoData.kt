@@ -6,7 +6,7 @@ package com.yang.apt_annotation.data
  * @Description
  * @Date 2021/12/20 15:36
  */
-class ProxyInfo {
+class ProxyInfoData {
 
     /**
      * Inject("elementValue")
@@ -16,7 +16,7 @@ class ProxyInfo {
     /**
      * 注解名 - 注解注解类型集合
      */
-    var elementNameMap = mutableMapOf<String,Class<*>>()
+    var elementNameMap = mutableMapOf<String,String>()
 
     /**
      *  当前注解所在的类名

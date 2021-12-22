@@ -45,7 +45,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.VIDEO_SEARCH_ACTIVITY)
 class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
+    @InjectViewModel
     lateinit var videoViewModel: VideoViewModel
     @Inject
     lateinit var gson: Gson

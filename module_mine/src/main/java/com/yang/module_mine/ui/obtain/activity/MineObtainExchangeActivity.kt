@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.view_normal_recyclerview.smartRefreshLayou
 @Route(path = AppConstant.RoutePath.MINE_OBTAIN_EXCHANGE_ACTIVITY)
 class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     private var pageNum = 1

@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 @Route(path = AppConstant.RoutePath.MINE_EXTENSION_ACTIVITY)
 class MineExtensionActivity:BaseActivity(), OnRefreshLoadMoreListener {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
     private var pageNum = 1
 

@@ -17,7 +17,7 @@ import com.yang.module_mine.viewmodel.MineViewModel
 @Route(path = AppConstant.RoutePath.MINE_ADD_ADDRESS_ACTIVITY)
 class MineAddAddressActivity:BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     override fun getLayout(): Int {

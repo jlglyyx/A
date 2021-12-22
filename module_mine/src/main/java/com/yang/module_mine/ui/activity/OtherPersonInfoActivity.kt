@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.act_other_person_info.*
  */
 @Route(path = AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
 class OtherPersonInfoActivity : BaseActivity() {
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     override fun getLayout(): Int {

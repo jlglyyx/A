@@ -43,7 +43,7 @@ import java.util.*
 @Route(path = AppConstant.RoutePath.PICTURE_SEARCH_ACTIVITY)
 class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_PICTURE)
+    @InjectViewModel
     lateinit var pictureViewModel: PictureViewModel
     private var pageNum = 1
     private var list = mutableListOf<SearchData>()

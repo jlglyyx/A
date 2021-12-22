@@ -31,7 +31,7 @@ import kotlinx.coroutines.*
 @Route(path = AppConstant.RoutePath.MAIN_ACTIVITY)
 class MainActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var fragments: MutableList<Fragment>
@@ -138,10 +138,12 @@ class MainActivity : BaseActivity() {
             tab.setIcon(icon[position])
             if (position == 0) {
                 tab.setIcon(selectIcon[position])
-                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.plum))
+                (tab.view.getChildAt(0) as ImageView).imageTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.plum))
             } else {
                 tab.setIcon(icon[position])
-                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.grey))
+                (tab.view.getChildAt(0) as ImageView).imageTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.grey))
             }
             tab.view.setOnLongClickListener { true }
         }.attach()
@@ -157,12 +159,14 @@ class MainActivity : BaseActivity() {
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
                 tab.setIcon(icon[tab.position])
-                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.grey))
+                (tab.view.getChildAt(0) as ImageView).imageTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.grey))
             }
 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 tab.setIcon(selectIcon[tab.position])
-                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.plum))
+                (tab.view.getChildAt(0) as ImageView).imageTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.plum))
 
             }
 
@@ -181,14 +185,15 @@ class MainActivity : BaseActivity() {
             .subscribe {
                 when {
                     it.granted -> {
-
+                        //showShort("呦西，小伙子很不错")
                     }
 
                     it.shouldShowRequestPermissionRationale -> {
 
+                        showShort("逼崽子把权限关了还怎么玩，赶紧打开")
                     }
                     else -> {
-
+                        showShort("逼崽子把权限关了还怎么玩，赶紧打开")
                     }
                 }
             }

@@ -21,7 +21,7 @@ import kotlin.math.abs
 @Route(path = AppConstant.RoutePath.MINE_FRAGMENT)
 class MineFragment : BaseLazyFragment() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     private lateinit var normalImageAdapter: NormalImageAdapter<String>

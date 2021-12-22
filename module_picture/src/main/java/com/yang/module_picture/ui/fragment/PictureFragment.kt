@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fra_picture.*
 @Route(path = AppConstant.RoutePath.PICTURE_FRAGMENT)
 class PictureFragment : BaseLazyFragment() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_PICTURE)
+    @InjectViewModel
     lateinit var pictureModule: PictureViewModel
 
     lateinit var fragments: MutableList<Fragment>

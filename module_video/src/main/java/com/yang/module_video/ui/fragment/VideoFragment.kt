@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @Route(path = AppConstant.RoutePath.VIDEO_FRAGMENT)
 class VideoFragment : BaseLazyFragment() {
-    @InjectViewModel(AppConstant.RoutePath.MODULE_VIDEO)
+    @InjectViewModel
     lateinit var videoModule: VideoViewModel
 
     private lateinit var fragments: MutableList<Fragment>

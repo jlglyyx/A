@@ -3,9 +3,15 @@
     package="com.yang.module_picture">
 
     <application>
-        <activity android:name="com.yang.module_picture.ui.activity.PictureItemActivity"/>
-        <activity android:name="com.yang.module_picture.ui.activity.PictureSearchActivity"/>
-        <activity android:name="com.yang.module_picture.ui.activity.PictureUploadActivity"/>
+        <activity
+            android:name="com.yang.module_picture.ui.activity.PictureItemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_picture.ui.activity.PictureSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.yang.module_picture.ui.activity.PictureUploadActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

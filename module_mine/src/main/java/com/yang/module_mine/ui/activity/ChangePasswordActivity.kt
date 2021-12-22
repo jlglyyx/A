@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.act_change_password.*
 @Route(path = AppConstant.RoutePath.CHANGE_PASSWORD_ACTIVITY)
 class ChangePasswordActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     override fun getLayout(): Int {

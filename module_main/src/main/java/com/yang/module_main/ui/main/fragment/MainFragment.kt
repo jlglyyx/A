@@ -48,7 +48,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     @Inject
     lateinit var gson: Gson
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter

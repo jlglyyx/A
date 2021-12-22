@@ -1,6 +1,6 @@
 package com.yang.apt_annotation.processor
 
-import com.yang.apt_annotation.data.ProxyInfo
+import com.yang.apt_annotation.data.ProxyInfoData
 import javax.annotation.processing.ProcessingEnvironment
 
 /**
@@ -11,6 +11,6 @@ import javax.annotation.processing.ProcessingEnvironment
  */
 interface IProcessor {
 
-    fun createProcessor(className:String,proxyInfo:ProxyInfo,processingEnv: ProcessingEnvironment)
+    fun createProcessor(className:String, proxyInfoData:ProxyInfoData, processingEnv: ProcessingEnvironment)
 
 }

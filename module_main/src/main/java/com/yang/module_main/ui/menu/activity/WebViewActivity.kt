@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.act_web_view.*
 @Route(path = AppConstant.RoutePath.WEB_VIEW_ACTIVITY)
 class WebViewActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private var url = "https://www.baidu.com/"

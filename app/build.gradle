@@ -16,22 +16,22 @@ android {
         resConfigs "zh"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk{
-            abiFilters  "armeabi-v7a","arm64-v8a"
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
         }
     }
     signingConfigs {
         debug {
-            storePassword '123456'
-            keyPassword '123456'
-            keyAlias 'key0'
-            storeFile file('../collection.jks')
+            storePassword DEBUG_STOREPASSWORD
+            keyPassword DEBUG_KEYPASSWORD
+            keyAlias DEBUG_KEYALIAS
+            storeFile file(DEBUG_PATH)
         }
         release {
-            storePassword '123456'
-            keyPassword '123456'
-            keyAlias 'key0'
-            storeFile file('../collection.jks')
+            storePassword RELEASE_STOREPASSWORD
+            keyPassword RELEASE_KEYPASSWORD
+            keyAlias RELEASE_KEYALIAS
+            storeFile file(RELEASE_PATH)
         }
     }
 
@@ -41,10 +41,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-        debug{
-            minifyEnabled false
+        debug {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
+        }
+    }
+
+    //V1_1.0.1_20201001142556_release.apk
+    android.applicationVariants.all { variant  ->
+        variant.outputs.all {
+            outputFileName = "V${variant.versionCode}_${variant.versionName}_${new Date().format("yyyyMMddHHmmss")}_${variant.buildType.name}.apk"
         }
     }
 

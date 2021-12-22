@@ -37,7 +37,7 @@ import java.util.*
 @Route(path = AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY)
 class AddDynamicActivity : BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var pictureSelectAdapter: PictureSelectAdapter

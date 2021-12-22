@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.act_mine_exchange.*
 @Route(path = AppConstant.RoutePath.MINE_EXCHANGE_ACTIVITY)
 class MineExchangeActivity :BaseActivity() {
 
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     private lateinit var fragments: MutableList<Fragment>

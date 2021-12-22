@@ -25,7 +25,7 @@ import java.io.FileOutputStream
  */
 @Route(path = AppConstant.RoutePath.MINE_LIMIT_TIME_EXTENSION_ACTIVITY)
 class MineLimitTimeExtensionActivity:BaseActivity() {
-    @InjectViewModel(AppConstant.RoutePath.MODULE_MINE)
+    @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
     override fun getLayout(): Int {
