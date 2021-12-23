@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.fragment.BaseFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
@@ -17,7 +18,6 @@ import com.yang.lib_common.util.getFilePath
 import com.yang.module_main.R
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -28,8 +28,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.MY_COLLECTION_PICTURE_FRAGMENT)
 class MyCollectionPictureFragment : BaseFragment(), OnRefreshLoadMoreListener {
 
-    @Inject
-
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter

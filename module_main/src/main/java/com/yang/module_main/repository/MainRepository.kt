@@ -24,14 +24,22 @@ class MainRepository @Inject constructor(private val mainApiService: MainApiServ
             mainApiService.getDynamicList(params)
         }
     }
+
     suspend fun uploadFile(filePaths: MutableMap<String, RequestBody>): MResult<MutableList<String>> {
         return withContext(Dispatchers.IO) {
             mainApiService.uploadFile(filePaths)
         }
     }
+
     suspend fun uploadFileAndParam(filePaths: MutableList<RequestBody>): MResult<MutableList<String>> {
         return withContext(Dispatchers.IO) {
             mainApiService.uploadFileAndParam(filePaths)
+        }
+    }
+
+    suspend fun addCollect(id: String, type: String): MResult<String> {
+        return withContext(Dispatchers.IO) {
+            mainApiService.addCollect(id,type)
         }
     }
 

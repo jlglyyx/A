@@ -23,6 +23,7 @@
         android:text="已完成"
         android:background="@drawable/shape_flaw_item_bg"
         android:textSize="@dimen/sp_14"
+        android:textColor="@color/tomato"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 

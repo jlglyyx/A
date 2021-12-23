@@ -36,18 +36,13 @@ class LoginActivity : BaseActivity() {
     @InjectViewModel
     lateinit var loginViewModel: LoginViewModel
 
-    @InjectViewModel
-    lateinit var loaginViewModel: LoginViewModel
-
     override fun getLayout(): Int {
         return R.layout.act_login
     }
 
     override fun initData() {
 
-
         Log.i(TAG, "initData: $loginViewModel")
-        Log.i(TAG, "initData: $loaginViewModel")
     }
 
     override fun initView() {

@@ -35,7 +35,7 @@ class MainViewModel @Inject constructor(
         }, {
             LiveDataBus.instance.with("refresh_dynamic").value = "refresh_dynamic"
             finishActivity()
-        },{
+        }, {
             LiveDataBus.instance.with("refresh_dynamic").value = "refresh_dynamic"
             finishActivity()
         }, messages = *arrayOf("正在努力发表中...", "发表成功"))
@@ -73,6 +73,7 @@ class MainViewModel @Inject constructor(
             dynamicListLiveData.postValue(mutableListOf)
         }, errorDialog = false)
     }
+
     fun getDynamicDetail(params: Map<String, String>) {
         launch({
             mainRepository.getDynamicList(params)
@@ -101,7 +102,7 @@ class MainViewModel @Inject constructor(
                     "https://img1.baidu.com/it/u=3222474767,386356710&fm=26&fmt=auto#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg#https://img2.baidu.com/it/u=3583098839,704145971&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=889"
             })
             dynamicListLiveData.postValue(mutableListOf)
-        },messages = *arrayOf("请求中"))
+        }, messages = *arrayOf("请求中"))
     }
 
     fun uploadFile(filePaths: MutableList<MediaInfoBean>) {
@@ -110,7 +111,8 @@ class MainViewModel @Inject constructor(
             filePaths.forEach {
                 val file = File(it.filePath.toString())
                 val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-                val encode = URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+                val encode =
+                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
                 mutableMapOf["file\";filename=\"$encode"] = requestBody
             }
             mainRepository.uploadFile(mutableMapOf)
@@ -118,16 +120,18 @@ class MainViewModel @Inject constructor(
             pictureListLiveData.postValue(it.data)
         }, messages = *arrayOf("上传中", "添加成功"))
     }
+
     fun uploadFileAndParam(filePaths: MutableList<MediaInfoBean>) {
         launch({
             val mutableListOf = mutableListOf<RequestBody>()
             filePaths.forEach {
                 val file = File(it.filePath.toString())
                 val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-                val encode = URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+                val encode =
+                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
                 val build = MultipartBody.Builder()
-                    .addFormDataPart("param","".toJson())
-                    .addFormDataPart("file",encode,requestBody).build()
+                    .addFormDataPart("param", "".toJson())
+                    .addFormDataPart("file", encode, requestBody).build()
                 mutableListOf.add(build)
             }
 
@@ -137,6 +141,13 @@ class MainViewModel @Inject constructor(
         }, messages = *arrayOf("上传中", "添加成功"))
     }
 
+    fun addCollect(id: String, type: String) {
+        launch({
+            mainRepository.addCollect(id, type)
+        }, {
+
+        })
+    }
 
 }
 

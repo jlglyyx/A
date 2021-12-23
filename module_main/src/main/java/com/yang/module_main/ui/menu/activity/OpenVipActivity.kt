@@ -38,7 +38,7 @@ class OpenVipActivity:BaseActivity() {
     }
 
     override fun initData() {
-        tv_time.text = simpleDateFormat.format(dateTime)
+        tv_time.text = "到期时间："+simpleDateFormat.format(dateTime)
     }
 
     override fun initView() {

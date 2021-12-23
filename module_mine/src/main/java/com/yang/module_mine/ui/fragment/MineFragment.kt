@@ -42,15 +42,15 @@ class MineFragment : BaseLazyFragment() {
 
     override fun initData() {
         val userInfo = getUserInfo()
-        tv_toolbar_name.text = userInfo?.userName
-        tv_name.text = userInfo?.userName
+        tv_toolbar_name.text = userInfo?.userName?:"点击登录"
+        tv_name.text = userInfo?.userName?:"点击登录"
         Glide.with(this)
-            .load(userInfo?.userImage)
+            .load(userInfo?.userImage?:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
             .into(siv_img)
         Glide.with(this)
-            .load(userInfo?.userImage)
+            .load(userInfo?.userImage?:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
             .into(siv_toolbar_img)
@@ -90,6 +90,7 @@ class MineFragment : BaseLazyFragment() {
     private fun initAppBarLayout() {
         siv_toolbar_img.alpha = alphaPercent
         tv_toolbar_name.alpha = alphaPercent
+        toolbar.alpha = 0f
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             //滑动状态
             alphaPercent =
@@ -103,6 +104,7 @@ class MineFragment : BaseLazyFragment() {
             siv_toolbar_img.alpha = alphaPercent
             tv_toolbar_name.alpha = alphaPercent
             tv_toolbar_title.alpha = (1f - alphaPercent)
+            toolbar.alpha = alphaPercent
         })
     }
 

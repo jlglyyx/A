@@ -1,8 +1,8 @@
 package com.yang.lib_common.adapter
 
+import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -58,7 +58,8 @@ class ImageViewPagerAdapter(var data: MutableList<String>) : RecyclerView.Adapte
         val shapeAbleImageView = ShapeableImageView(parent.context)
         shapeAbleImageView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
-        shapeAbleImageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        //shapeAbleImageView.scaleType = ImageView.ScaleType.FIT_CENTER
+        shapeAbleImageView.setBackgroundColor(Color.BLACK)
         return ImageViewPagerViewHolder(shapeAbleImageView)
     }
 
@@ -69,6 +70,7 @@ class ImageViewPagerAdapter(var data: MutableList<String>) : RecyclerView.Adapte
         Glide.with(holder.shapeAbleImageView)
             .load(data[position])
             .error(R.drawable.iv_image_error)
+            .fitCenter()
             .placeholder(R.drawable.iv_image_placeholder)
             .into(holder.shapeAbleImageView)
     }

@@ -21,4 +21,7 @@ interface MainApiService:BaseApiService {
     @Multipart
     @POST("/uploadFile")
     suspend fun uploadFileAndParam(@Body file: MutableList<RequestBody>): MResult<MutableList<String>>
+
+    @POST("user/dynamic/insertUserDynamic")
+    suspend fun addCollect(@Query("id") id : String,@Query("type") type : String): MResult<String>
 }

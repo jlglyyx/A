@@ -6,8 +6,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import com.yang.lib_common.app.BaseApplication
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 
@@ -25,7 +24,7 @@ private val context: Context = BaseApplication.baseApplication
 
 @SuppressLint("ShowToast")
 fun showShort(msg: Any) {
-    GlobalScope.launch(Dispatchers.Main) {
+    MainScope().launch {
         if (toast == null) {
             toast = Toast.makeText(context, "", Toast.LENGTH_SHORT)
             toast?.setText(msg.toString())
@@ -39,12 +38,14 @@ fun showShort(msg: Any) {
 
 @SuppressLint("ShowToast")
 fun showLong(msg: Any) {
-    if (toast == null) {
-        toast = Toast.makeText(context, "", Toast.LENGTH_LONG)
-        toast?.setText(msg.toString())
-    } else {
-        toast!!.setText(msg.toString())
-        toast!!.duration = Toast.LENGTH_LONG
+    MainScope().launch {
+        if (toast == null) {
+            toast = Toast.makeText(context, "", Toast.LENGTH_LONG)
+            toast?.setText(msg.toString())
+        } else {
+            toast!!.setText(msg.toString())
+            toast!!.duration = Toast.LENGTH_LONG
+        }
+        toast?.show()
     }
-    toast?.show()
 }

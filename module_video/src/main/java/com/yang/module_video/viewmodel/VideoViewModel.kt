@@ -54,7 +54,7 @@ class VideoViewModel @Inject constructor(
                         var count = 0
                         directoryName.forEachIndexed { index, file ->
                             val listFiles = file.listFiles()
-                            listFiles.forEachIndexed { childIndex, childFile ->
+                            listFiles?.forEachIndexed { childIndex, childFile ->
                                 mutableListOf.add(VideoDataItem().apply {
                                     id = "${count++}"
                                     videoTitle = childFile.name
@@ -199,6 +199,16 @@ class VideoViewModel @Inject constructor(
             }
         }, "加载中...")
     }
+
+
+    fun addCollect(id: String, type: String) {
+        launch({
+            videoRepository.addCollect(id, type)
+        }, {
+
+        })
+    }
+
 
 }
 

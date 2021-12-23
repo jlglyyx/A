@@ -1,5 +1,6 @@
 package com.yang.lib_common.dialog
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Environment
 import android.view.LayoutInflater
@@ -89,7 +90,7 @@ class ImageViewPagerDialog(
 
 
     }
-
+    @SuppressLint("SetTextI18n")
     private fun initViewPager() {
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(mPosition: Int) {

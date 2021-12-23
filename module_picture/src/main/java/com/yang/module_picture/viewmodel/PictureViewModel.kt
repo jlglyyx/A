@@ -168,5 +168,13 @@ class PictureViewModel @Inject constructor(
         }, "加载中...")
     }
 
+
+    fun addCollect(id: String, type: String) {
+        launch({
+            pictureRepository.addCollect(id, type)
+        }, {
+
+        })
+    }
 }
 
