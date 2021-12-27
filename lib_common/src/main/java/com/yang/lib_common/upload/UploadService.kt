@@ -39,22 +39,22 @@ class UploadService : Service(), UploadListener {
         }
     }
 
-    override fun onProgress(noticeId: Int, progress: Int) {
+    override fun onProgress(id: String, progress: Int) {
 
-        showProgressNotice(noticeId, progress)
+        //showProgressNotice(id, progress)
     }
 
-    override fun onSuccess(noticeId: Int) {
-        showCompleteNotice(noticeId)
+    override fun onSuccess(id: String) {
+        //showCompleteNotice(id)
     }
 
-    override fun onFailed(noticeId: Int) {
+    override fun onFailed(id: String) {
 
     }
 
     override fun onCreate() {
         super.onCreate()
-        UploadManage.instance.addUploadListener(this)
+        //UploadManage.instance.addUploadListener(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

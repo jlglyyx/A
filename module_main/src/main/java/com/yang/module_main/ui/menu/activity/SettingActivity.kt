@@ -2,9 +2,7 @@ package com.yang.module_main.ui.menu.activity
 
 import android.os.Environment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.*
@@ -48,33 +46,33 @@ class SettingActivity : BaseActivity() {
         icv_download_setting.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.DOWNLOAD_SETTING_ACTIVITY).navigation()
         }
-        icv_font_setting.clicks().subscribe {
-            val list = assets.list("")?.filter {
-                it.endsWith(".ttf", true)
-            }?.toTypedArray()
-            val asBottomList = XPopup.Builder(this).asBottomList(
-                "", list
-            ) { position, text ->
-                getDefaultMMKV().encode(AppConstant.Constant.FONT_TYPE,text)
-                showShort("重启后生效")
-            }
-            asBottomList.findViewById<RecyclerView>(com.lxj.xpopup.R.id.recyclerView).let {
-                it.post {
-                    if (it.measuredHeight > 300f.dip2px(this)) {
-                        it.layoutParams.height = 300f.dip2px(this)
-                    }
-
-//                    val itemCount = it.adapter?.itemCount
-//                    for (i in 0 until 16){
-//                        Log.i(TAG, "initView: $i")
-//                        val createFromAsset = Typeface.createFromAsset(assets, list?.get(i))
-//                        it[i].findViewById<TextView>(com.lxj.xpopup.R.id.tv_text).typeface = createFromAsset
+//        icv_font_setting.clicks().subscribe {
+//            val list = assets.list("")?.filter {
+//                it.endsWith(".ttf", true)
+//            }?.toTypedArray()
+//            val asBottomList = XPopup.Builder(this).asBottomList(
+//                "", list
+//            ) { position, text ->
+//                getDefaultMMKV().encode(AppConstant.Constant.FONT_TYPE,text)
+//                showShort("重启后生效")
+//            }
+//            asBottomList.findViewById<RecyclerView>(com.lxj.xpopup.R.id.recyclerView).let {
+//                it.post {
+//                    if (it.measuredHeight > 300f.dip2px(this)) {
+//                        it.layoutParams.height = 300f.dip2px(this)
 //                    }
-                }
-
-            }
-            asBottomList.show()
-        }
+//
+////                    val itemCount = it.adapter?.itemCount
+////                    for (i in 0 until 16){
+////                        Log.i(TAG, "initView: $i")
+////                        val createFromAsset = Typeface.createFromAsset(assets, list?.get(i))
+////                        it[i].findViewById<TextView>(com.lxj.xpopup.R.id.tv_text).typeface = createFromAsset
+////                    }
+//                }
+//
+//            }
+//            asBottomList.show()
+//        }
     }
 
     override fun initViewModel() {

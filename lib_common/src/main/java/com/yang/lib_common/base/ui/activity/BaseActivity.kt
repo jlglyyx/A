@@ -1,16 +1,11 @@
 package com.yang.lib_common.base.ui.activity
 
-import android.content.Context
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.LayoutInflaterCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -22,7 +17,6 @@ import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.addActivity
-import com.yang.lib_common.util.getDefaultMMKV
 import com.yang.lib_common.util.removeActivity
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -36,42 +30,6 @@ abstract class BaseActivity : AppCompatActivity() {
     val TAG = this.javaClass.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        getDefaultMMKV().decodeString(AppConstant.Constant.FONT_TYPE)?.let {
-            val createFromAsset = Typeface.createFromAsset(
-                assets,
-                getDefaultMMKV().decodeString(AppConstant.Constant.FONT_TYPE)
-            )
-            createFromAsset?.let {
-                LayoutInflaterCompat.setFactory2(
-                    LayoutInflater.from(this),
-                    object : LayoutInflater.Factory2 {
-                        override fun onCreateView(
-                            parent: View?,
-                            name: String,
-                            context: Context,
-                            attrs: AttributeSet
-                        ): View? {
-                            val delegate = delegate
-                            val createView = delegate.createView(parent, name, context, attrs)
-                            createView?.let {
-                                if (it is TextView) {
-                                    it.typeface = createFromAsset
-                                }
-                            }
-                            return createView
-                        }
-
-                        override fun onCreateView(
-                            name: String,
-                            context: Context,
-                            attrs: AttributeSet
-                        ): View? {
-                            return null
-                        }
-
-                    })
-            }
-        }
         super.onCreate(savedInstanceState)
         setContentView(getLayout())
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {

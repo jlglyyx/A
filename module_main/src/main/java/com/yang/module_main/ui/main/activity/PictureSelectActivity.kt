@@ -54,15 +54,13 @@ class PictureSelectActivity : BaseActivity() {
 
     override fun initData() {
         intent?.let {
-            val selectData =  it.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)?.apply {
+            it.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)?.apply {
                 data.addAll(this)
             }
-
             showType = it.getIntExtra(AppConstant.Constant.TYPE,showType)
 
             maxSelect = it.getIntExtra(AppConstant.Constant.NUM,maxSelect)
         }
-
     }
 
     override fun initView() {
@@ -88,7 +86,7 @@ class PictureSelectActivity : BaseActivity() {
         recyclerView.adapter = pictureSelectAdapter
         recyclerView.layoutManager = GridLayoutManager(this, 3)
         pictureSelectAdapter.setOnItemClickListener { adapter, view, position ->
-            var imageList = (adapter.data as MutableList<MediaInfoBean>).map {
+            val imageList = (adapter.data as MutableList<MediaInfoBean>).map {
                 it.filePath
             } as MutableList<String>
             val imageViewPagerDialog =
@@ -140,9 +138,9 @@ class PictureSelectActivity : BaseActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             when (showType) {
                 AppConstant.Constant.NUM_ZERO -> {
-                    val allPictureAndVideo = getAllPictureAndVideo()
+                    val allPicture = getAllPicture()
                     val allVideo = getAllVideo()
-                    val sortedByDescending = (allPictureAndVideo + allVideo).sortedByDescending {
+                    val sortedByDescending = (allPicture + allVideo).sortedByDescending {
                         it.fileCreateTime
                     }.apply {
                         for (i in data) {
@@ -164,7 +162,7 @@ class PictureSelectActivity : BaseActivity() {
                     }
                 }
                 AppConstant.Constant.NUM_ONE -> {
-                    val allPictureAndVideo = getAllPictureAndVideo()
+                    val allPictureAndVideo = getAllPicture()
                     for (i in data) {
                         allPictureAndVideo.findLast {
                             TextUtils.equals(i.filePath, it.filePath)
@@ -204,7 +202,7 @@ class PictureSelectActivity : BaseActivity() {
     }
 
 
-    private fun getAllPictureAndVideo(): MutableList<MediaInfoBean> {
+    private fun getAllPicture(): MutableList<MediaInfoBean> {
         val mutableListOf = mutableListOf<MediaInfoBean>()
         val query = contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -231,6 +229,7 @@ class PictureSelectActivity : BaseActivity() {
 
             Log.i(TAG, "getAllPictureAndVideo:${i++}=== $path  ")
         }
+        query.close()
         return mutableListOf
     }
 
@@ -260,6 +259,7 @@ class PictureSelectActivity : BaseActivity() {
             mutableListOf.add(mediaInfoBean)
             Log.i(TAG, "getAllVideo: $path  ${mediaInfoBean.toString()}")
         }
+        query.close()
         return mutableListOf
     }
 }

@@ -10,16 +10,14 @@ import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
+import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.room.entity.UploadTaskData
 import com.yang.lib_common.upload.UploadListener
 import com.yang.lib_common.upload.UploadManage
 import com.yang.module_video.R
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.act_video_upload.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 /**
  * @Author Administrator
@@ -34,7 +32,7 @@ class VideoUploadTaskActivity : BaseActivity(), UploadListener {
     lateinit var videoViewModel: VideoViewModel
 
 
-    private lateinit var videoUploadTaskAdapter: VideoUploadTaskAdapter
+    private var videoUploadTaskAdapter: VideoUploadTaskAdapter? = null
 
 
     override fun getLayout(): Int {
@@ -63,33 +61,21 @@ class VideoUploadTaskActivity : BaseActivity(), UploadListener {
         videoUploadTaskAdapter =
             VideoUploadTaskAdapter(R.layout.item_upload_task, mutableListOf())
         recyclerView.adapter = videoUploadTaskAdapter
-        videoUploadTaskAdapter.addData(
-            UploadTaskData(
-                "1",
-                0,
-                "/storage/emulated/0/MFiles/video/B/舞蹈/aaa.mp4"
-            ,0)
-        )
-        videoUploadTaskAdapter.addData(
-            UploadTaskData(
-                "1",
-                0,
-                "/storage/emulated/0/MFiles/video/B/跳舞/aaa.mp4"
-            ,0)
-        )
-
-
-        videoUploadTaskAdapter.setOnItemChildClickListener { adapter, view, position ->
-            val item = videoUploadTaskAdapter.getItem(position)
+        CoroutineScope(Dispatchers.IO).launch {
+            val queryData = BaseAppDatabase.instance.uploadTaskDao().queryData()
+            videoUploadTaskAdapter?.replaceData(queryData)
+        }
+        videoUploadTaskAdapter?.setOnItemChildClickListener { adapter, view, position ->
+            val item = videoUploadTaskAdapter?.getItem(position)
             if (view.id == R.id.tv_progress) {
-                when(item?.status){
-                    0 ->{
+                when (item?.status) {
+                    0 -> {
 
                     }
-                    1 ->{
+                    1 -> {
 
                     }
-                    2 ->{
+                    2 -> {
 
                     }
                 }
@@ -97,9 +83,7 @@ class VideoUploadTaskActivity : BaseActivity(), UploadListener {
             }
 
         }
-
     }
-
 
     inner class VideoUploadTaskAdapter(layoutResId: Int, data: MutableList<UploadTaskData>?) :
         BaseQuickAdapter<UploadTaskData, BaseViewHolder>(layoutResId, data) {
@@ -110,22 +94,31 @@ class VideoUploadTaskActivity : BaseActivity(), UploadListener {
         }
     }
 
-    override fun onProgress(noticeId: Int, progress: Int) {
-        val item = videoUploadTaskAdapter.getItem(noticeId)
-        item?.progress = progress
-        if (recyclerView.isComputingLayout) {
-            GlobalScope.launch(Dispatchers.Main) {
-                delay(500)
-                videoUploadTaskAdapter.notifyDataSetChanged()
+    override fun onProgress(id: String, progress: Int) {
+        videoUploadTaskAdapter?.let {
+            it.data.findLast { bean ->
+                bean.id == id
+            }?.apply {
+                if (status == 1) {
+                    return
+                }
+                this.progress = progress
+                if (!recyclerView.isComputingLayout) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        it.notifyItemChanged(it.data.indexOf(this@apply))
+                    }
+                }
+                Log.i(TAG, "onProgress: $id  $progress")
             }
         }
-        Log.i(TAG, "onProgress: $noticeId  $progress")
+
     }
 
-    override fun onSuccess(noticeId: Int) {
+    override fun onSuccess(id: String) {
+
     }
 
-    override fun onFailed(noticeId: Int) {
+    override fun onFailed(id: String) {
 
     }
 

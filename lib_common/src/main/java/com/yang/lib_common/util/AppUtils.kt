@@ -189,21 +189,26 @@ fun String.symbolToList(symbol: String = ","): MutableList<String> {
 }
 
 /**
+ * 不行 content://com.android.externalstorage.documents/document/primary%3AMFiles%2Fpicture%2F1638856053728_a.jpg
+ * 可以 content://com.miui.gallery.open/raw/%2Fstorage%2Femulated%2F0%2FPictures%2F20211223_092453.jpg
  * @return uri2path
  */
 fun uri2path(context: Context, uri: Uri): String {
     var path = ""
     val contentResolver = context.contentResolver
     val projection = arrayOf(MediaStore.Images.Media.DATA)
-    val query = contentResolver.query(uri, projection, null, null, null)
+    val query =
+        contentResolver.query(uri, projection, null, null, null)
     try {
         query?.let {
             val columnIndex = query.getColumnIndex(MediaStore.Images.Media.DATA)
             it.moveToFirst()
             path = query.getString(columnIndex)
+            Log.i(TAG, "uri2path: $path")
             query.close()
         }
     } catch (e: Exception) {
+        e.printStackTrace()
         Log.i(TAG, "uri2path: ${e.message}")
     }
 

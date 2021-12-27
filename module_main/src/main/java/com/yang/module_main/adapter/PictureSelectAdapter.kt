@@ -18,9 +18,7 @@ import java.text.DecimalFormat
 class PictureSelectAdapter(
     layoutResId: Int,
     data: MutableList<MediaInfoBean>,
-    private val showSelect: Boolean = true
-) :
-    BaseQuickAdapter<MediaInfoBean, BaseViewHolder>(layoutResId, data) {
+    private val showSelect: Boolean = true) : BaseQuickAdapter<MediaInfoBean, BaseViewHolder>(layoutResId, data) {
 
 
     override fun convert(helper: BaseViewHolder, item: MediaInfoBean) {
@@ -47,7 +45,6 @@ class PictureSelectAdapter(
             helper.setVisible(R.id.cl_cb, false)
             helper.setVisible(R.id.tv_time, false)
         }
-
         if (item.fileType == 1) {
             Glide.with(ivImg)
                 .setDefaultRequestOptions(RequestOptions().frame(1000).centerCrop())
@@ -66,14 +63,14 @@ class PictureSelectAdapter(
             helper.setVisible(R.id.iv_play, false)
         }
 
+
     }
 
     private fun secToTime(data: String): String {
         val time = data.toInt() / 1000
-        val timeStr: String?
+        val timeStr: String
         if (time <= 0) return "00:00:00" else {
-            timeStr =
-                "${unitFormat(time / 60 / 60 % 60)}:${unitFormat(time / 60 % 60)}:${unitFormat(time % 60)}"
+            timeStr = "${unitFormat(time / 60 / 60 % 60)}:${unitFormat(time / 60 % 60)}:${unitFormat(time % 60)}"
         }
         return timeStr
     }

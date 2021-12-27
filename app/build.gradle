@@ -42,18 +42,18 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
         }
     }
 
     //V1_1.0.1_20201001142556_release.apk
-    android.applicationVariants.all { variant  ->
-        variant.outputs.all {
-            outputFileName = "V${variant.versionCode}_${variant.versionName}_${new Date().format("yyyyMMddHHmmss")}_${variant.buildType.name}.apk"
-        }
-    }
+//    android.applicationVariants.all { variant  ->
+//        variant.outputs.all {
+//            outputFileName = "V${variant.versionCode}_${variant.versionName}_${new Date().format("yyyyMMddHHmmss")}_${variant.buildType.name}.apk"
+//        }
+//    }
 
     kotlinOptions {
         jvmTarget = "1.8"

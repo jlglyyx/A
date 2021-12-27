@@ -4,6 +4,11 @@ import android.util.Log
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.interceptor.LogInterceptor
 import com.yang.lib_common.interceptor.UrlInterceptor
+import com.yang.lib_common.room.BaseAppDatabase
+import com.yang.lib_common.room.entity.UploadTaskData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.*
 import okio.Buffer
 import okio.BufferedSink
@@ -11,6 +16,7 @@ import okio.ForwardingSink
 import okio.Okio
 import java.io.File
 import java.io.IOException
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -45,14 +51,18 @@ class UploadManage {
         val builder = MultipartBody.Builder()
         filePath.forEachIndexed { index, s ->
             val file = File(s)
+            val id = UUID.randomUUID().toString().replace("-", "")
             val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
             builder.addPart(
                 MultipartBody.Part.createFormData(
                     "file",
                     file.name,
-                    UploadRequestBody(requestBody, index)
+                    UploadRequestBody(requestBody, id)
                 )
             )
+            CoroutineScope(Dispatchers.IO).launch {
+                BaseAppDatabase.instance.uploadTaskDao().insertData(UploadTaskData(id, 0, s, 0))
+            }
         }
         return builder.build()
     }
@@ -80,11 +90,12 @@ class UploadManage {
         return newCall
     }
 
-    fun cancelUpload(uploadCall: Call){
+    fun cancelUpload(uploadCall: Call) {
         uploadCall.cancel()
     }
 
-    inner class UploadRequestBody(var requestBody: RequestBody, var noticeId: Int) : RequestBody() {
+    inner class UploadRequestBody(var requestBody: RequestBody, var id: String) :
+        RequestBody() {
 
         override fun contentType(): MediaType? {
             return requestBody.contentType()
@@ -96,22 +107,23 @@ class UploadManage {
                 override fun write(source: Buffer, byteCount: Long) {
                     super.write(source, byteCount)
                     countByte += byteCount
-                    val process = (countByte / requestBody.contentLength().toFloat() * 100).toInt()
+                    val process =
+                        (countByte / requestBody.contentLength().toFloat() * 100).toInt()
                     uploadListeners.forEach {
-                        it?.onProgress(noticeId, process)
+                        it?.onProgress(id, process)
+                        val queryData =
+                            BaseAppDatabase.instance.uploadTaskDao().queryData(id)
+                        queryData.progress = process
+                        BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
                         if (process >= 100) {
-                            it?.onSuccess(noticeId)
+                            it?.onSuccess(id)
+                            queryData.status = 1
+                            BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
                         }
-                        Log.i(
-                            TAG,
-                            "write: $byteCount  $countByte   ${
-                                countByte / requestBody.contentLength().toFloat() * 100
-                            }%  $process"
-                        )
                     }
                 }
-            })
-            Log.i(TAG, "aaaa: sss")
+            }
+            )
             requestBody.writeTo(buffer)
             buffer.flush()
         }
@@ -121,15 +133,17 @@ class UploadManage {
         }
     }
 
-    fun addUploadListener(uploadListener:UploadListener){
+    fun addUploadListener(uploadListener: UploadListener) {
         uploadListeners.add(uploadListener)
     }
 
-    fun removeUploadListener(uploadListener:UploadListener){
+    fun removeUploadListener(uploadListener: UploadListener) {
         uploadListeners.remove(uploadListener)
     }
 
-    fun clearUploadListener(){
+    fun clearUploadListener() {
         uploadListeners.clear()
     }
+
+
 }

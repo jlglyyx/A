@@ -19,10 +19,12 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.proxy.InjectViewModelProxy
+import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.upload.UploadService
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.dip2px
+import com.yang.lib_common.util.showShort
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_video.R
 import com.yang.module_video.viewmodel.VideoViewModel
@@ -110,11 +112,14 @@ class VideoUploadActivity : BaseActivity() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
             override fun tvRightClickListener() {
                 if (TextUtils.isEmpty(selectType)){
+                    showShort("请选择文件类别")
                     return
                 }
                 if (videoUploadAdapter.data.isEmpty()){
+                    showShort("请选择文件")
                     return
                 }
+                BaseAppDatabase.instance.uploadTaskDao().deleteData()
                 uploadServiceBinder?.startUpload(videoUploadAdapter.data)
                 buildARouter(AppConstant.RoutePath.VIDEO_UPLOAD_TASK_ACTIVITY).navigation()
             }
@@ -130,8 +135,6 @@ class VideoUploadActivity : BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         videoUploadAdapter = VideoUploadAdapter(R.layout.item_upload,mutableListOf())
         recyclerView.adapter = videoUploadAdapter
-        videoUploadAdapter.addData("/storage/emulated/0/MFiles/video/B/舞蹈/aaa.mp4")
-        videoUploadAdapter.addData("/storage/emulated/0/MFiles/video/B/跳舞/aaa.mp4")
     }
 
 
