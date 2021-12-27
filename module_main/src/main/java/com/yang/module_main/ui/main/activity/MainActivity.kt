@@ -139,7 +139,7 @@ class MainActivity : BaseActivity() {
             if (position == 0) {
                 tab.setIcon(selectIcon[position])
                 (tab.view.getChildAt(0) as ImageView).imageTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.plum))
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
             } else {
                 tab.setIcon(icon[position])
                 (tab.view.getChildAt(0) as ImageView).imageTintList =
@@ -166,7 +166,7 @@ class MainActivity : BaseActivity() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 tab.setIcon(selectIcon[tab.position])
                 (tab.view.getChildAt(0) as ImageView).imageTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.plum))
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
 
             }
 

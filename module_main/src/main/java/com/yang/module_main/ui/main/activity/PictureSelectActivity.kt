@@ -92,7 +92,7 @@ class PictureSelectActivity : BaseActivity() {
                 it.filePath
             } as MutableList<String>
             val imageViewPagerDialog =
-                ImageViewPagerDialog(this, imageList, position, false)
+                ImageViewPagerDialog(this, imageList, position)
             XPopup.Builder(this).asCustom(imageViewPagerDialog).show()
         }
         pictureSelectAdapter.setOnItemChildClickListener { adapter, view, position ->

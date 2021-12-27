@@ -201,14 +201,20 @@ class VideoViewModel @Inject constructor(
     }
 
 
-    fun addCollect(id: String, type: String) {
+    fun addViewHistory(id: String, type: String) {
         launch({
-            videoRepository.addCollect(id, type)
+            videoRepository.addViewHistory(id, type)
         }, {
 
         })
     }
 
+    fun addComment(params: Map<String, String>) {
+        launch({
+            videoRepository.addComment(params)
+        }, {
 
+        })
+    }
 }
 

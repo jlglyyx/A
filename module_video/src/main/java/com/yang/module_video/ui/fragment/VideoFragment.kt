@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @Route(path = AppConstant.RoutePath.VIDEO_FRAGMENT)
 class VideoFragment : BaseLazyFragment() {
     @InjectViewModel
-    lateinit var videoModule: VideoViewModel
+    lateinit var videoViewModel: VideoViewModel
 
     private lateinit var fragments: MutableList<Fragment>
 
@@ -36,8 +36,8 @@ class VideoFragment : BaseLazyFragment() {
 
     override fun initData() {
 
-        videoModule.getVideoTypeData()
-        videoModule.mVideoTypeData.observe(this, Observer {
+        videoViewModel.getVideoTypeData()
+        videoViewModel.mVideoTypeData.observe(this, Observer {
 
             it.forEach { videoTypeData ->
                 titles.add(videoTypeData.name)
@@ -77,7 +77,7 @@ class VideoFragment : BaseLazyFragment() {
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return videoModule.uC
+        return videoViewModel.uC
     }
 
     override fun initViewModel() {

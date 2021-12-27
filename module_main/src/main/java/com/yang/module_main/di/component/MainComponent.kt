@@ -10,8 +10,8 @@ import com.yang.module_main.ui.main.activity.MainActivity
 import com.yang.module_main.ui.main.fragment.MainFragment
 import com.yang.module_main.ui.menu.activity.MyPushActivity
 import com.yang.module_main.ui.menu.activity.WebViewActivity
-import com.yang.module_main.ui.menu.fragment.MyCollectionPictureFragment
-import com.yang.module_main.ui.menu.fragment.MyCollectionVideoFragment
+import com.yang.module_main.ui.menu.fragment.MyCollectionFragment
+import com.yang.module_main.ui.menu.fragment.MyDownLoadFragment
 import dagger.Component
 
 
@@ -24,7 +24,7 @@ interface MainComponent {
     fun inject(myPushActivity: MyPushActivity)
     fun inject(addDynamicActivity: AddDynamicActivity)
     fun inject(dynamicDetailActivity: DynamicDetailActivity)
-    fun inject(myCollectionPictureFragment: MyCollectionPictureFragment)
-    fun inject(myCollectionVideoFragment: MyCollectionVideoFragment)
+    fun inject(myCollectionFragment: MyCollectionFragment)
+    fun inject(myDownLoadFragment: MyDownLoadFragment)
     fun inject(webViewActivity: WebViewActivity)
 }

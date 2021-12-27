@@ -9,8 +9,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.RequestBody
 import javax.inject.Inject
 
-class MainRepository @Inject constructor(private val mainApiService: MainApiService) :
-    BaseRepository() {
+class MainRepository @Inject constructor(private val mainApiService: MainApiService) : BaseRepository() {
 
 
     suspend fun addDynamic(dynamicData: DynamicData): MResult<String> {
@@ -37,9 +36,14 @@ class MainRepository @Inject constructor(private val mainApiService: MainApiServ
         }
     }
 
-    suspend fun addCollect(id: String, type: String): MResult<String> {
+    suspend fun addComment(params: Map<String, String>): MResult<String> {
         return withContext(Dispatchers.IO) {
-            mainApiService.addCollect(id,type)
+            mainApiService.addComment(params)
+        }
+    }
+    suspend fun queryCollect(type: String,pageSize: Int,pageNum: Int): MResult<String> {
+        return withContext(Dispatchers.IO) {
+            mainApiService.queryCollect(type,pageSize,pageNum)
         }
     }
 

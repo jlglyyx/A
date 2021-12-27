@@ -27,7 +27,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_250"
                     android:scaleType="centerCrop"
-                    android:src="@color/plum"
                     app:scrollType="normal"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -180,7 +179,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_80"
-                    android:background="@color/plum"
+                    android:background="@color/colorBar"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingTop="@dimen/dp_30">

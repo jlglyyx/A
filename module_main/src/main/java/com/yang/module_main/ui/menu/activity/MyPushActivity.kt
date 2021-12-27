@@ -44,11 +44,6 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
     override fun initData() {
         smartRefreshLayout.autoRefresh()
         initSmartRefreshLayout()
-
-    }
-
-    override fun initView() {
-        initRecyclerView()
         mainViewModel.dynamicListLiveData.observe(this, Observer {
             when {
                 smartRefreshLayout.isRefreshing -> {
@@ -69,6 +64,11 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                 }
             }
         })
+    }
+
+    override fun initView() {
+        initRecyclerView()
+
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
@@ -147,7 +147,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
             mRecyclerView.adapter = dynamicAdapter
             dynamicAdapter.setOnItemClickListener { adapter, view, position ->
                 val imageViewPagerDialog =
-                    ImageViewPagerDialog(this@MyPushActivity, item.imageUrls?.symbolToList("#")!!, position)
+                    ImageViewPagerDialog(this@MyPushActivity, item.imageUrls?.symbolToList("#")!!, position,true)
                 XPopup.Builder(this@MyPushActivity).asCustom(imageViewPagerDialog).show()
             }
         }
@@ -158,7 +158,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     private fun getDynamicList(){
         val mutableMapOf = mutableMapOf<String, String>()
-        mutableMapOf[AppConstant.Constant.USER_ID] = getUserInfo()?.id.toString()
+        mutableMapOf[AppConstant.Constant.USER_ID] = getUserInfo()?.id?:""
         mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum.toString()
         mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT.toString()
         mainViewModel.getDynamicList(mutableMapOf)

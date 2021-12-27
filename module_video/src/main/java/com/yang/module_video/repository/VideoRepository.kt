@@ -10,20 +10,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class VideoRepository @Inject constructor(private val videoApiService: VideoApiService):BaseRepository() {
+class VideoRepository @Inject constructor(private val videoApiService: VideoApiService) :
+    BaseRepository() {
 
 
-
-    suspend fun getVideoInfo(map: MutableMap<String,Any>): MResult<VideoData> {
+    suspend fun getVideoInfo(map: MutableMap<String, Any>): MResult<VideoData> {
         return withContextIO {
             videoApiService.getVideoInfo(map)
         }
     }
-    suspend fun getVideoItemData(sid:String): MResult<MutableList<VideoDataItem>> {
+
+    suspend fun getVideoItemData(sid: String): MResult<MutableList<VideoDataItem>> {
         return withContextIO {
             videoApiService.getVideoItemData(sid)
         }
     }
+
     suspend fun getVideoTypeData(): MResult<MutableList<VideoTypeData>> {
         return withContextIO {
             videoApiService.getVideoTypeData()
@@ -31,9 +33,15 @@ class VideoRepository @Inject constructor(private val videoApiService: VideoApiS
     }
 
 
-    suspend fun addCollect(id: String, type: String): MResult<String> {
+    suspend fun addViewHistory(id: String, type: String): MResult<String> {
         return withContext(Dispatchers.IO) {
-            videoApiService.addCollect(id,type)
+            videoApiService.addViewHistory(id, type)
+        }
+    }
+
+    suspend fun addComment(params: Map<String, String>): MResult<String> {
+        return withContext(Dispatchers.IO) {
+            videoApiService.addComment(params)
         }
     }
 

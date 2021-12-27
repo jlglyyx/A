@@ -50,6 +50,7 @@ class PictureItemActivity : BaseActivity() {
         val intent = intent
         val sid = intent.getStringExtra(AppConstant.Constant.ID)
         pictureViewModel.getImageItemData(sid ?: "")
+        addViewHistory()
     }
 
     override fun initView() {
@@ -63,14 +64,17 @@ class PictureItemActivity : BaseActivity() {
                         commentAdapter.addData(0, CommentData(0, 0).apply {
                             comment = s
                         })
-                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
+                        addComment(s)
                         commentAdapter.getViewByPosition(
                             recyclerView,
                             0,
                             com.yang.lib_common.R.id.siv_img
                         )?.let { it1 ->
+                            it1.isFocusable = true
+                            it1.requestFocus()
                             scrollToPosition(it1)
                         }
+                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
                     }
 
                 }
@@ -84,6 +88,16 @@ class PictureItemActivity : BaseActivity() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
+    }
+
+    private fun addComment(comment: String) {
+        val mutableMapOf = mutableMapOf<String, String>()
+        mutableMapOf[AppConstant.Constant.COMMENT] = comment
+        pictureViewModel.addComment(mutableMapOf)
+    }
+
+    private fun addViewHistory() {
+        pictureViewModel.addViewHistory("", "")
     }
 
     private fun scrollToPosition(view: View) {
@@ -135,20 +149,30 @@ class PictureItemActivity : BaseActivity() {
                                                     }
                                                     1, 2 -> {
                                                         it.parentId?.let { mParentId ->
-                                                            val mPosition = commentAdapter.data.indexOf(commentAdapter.data.findLast {
-                                                                TextUtils.equals(it.parentId,mParentId)
-                                                            }?.apply {
-                                                                addSubItem(CommentData(1, 2).apply {
-                                                                    comment = s
-                                                                    parentId = mParentId
-                                                                })
-                                                            })
+                                                            val mPosition =
+                                                                commentAdapter.data.indexOf(
+                                                                    commentAdapter.data.findLast {
+                                                                        TextUtils.equals(
+                                                                            it.parentId,
+                                                                            mParentId
+                                                                        )
+                                                                    }?.apply {
+                                                                        addSubItem(
+                                                                            CommentData(
+                                                                                1,
+                                                                                2
+                                                                            ).apply {
+                                                                                comment = s
+                                                                                parentId = mParentId
+                                                                            })
+                                                                    })
 
                                                             commentAdapter.collapse(mPosition)
                                                             commentAdapter.expand(mPosition)
                                                         }
                                                     }
                                                 }
+                                                addComment(s)
                                             }
 
                                         }
@@ -208,7 +232,9 @@ class PictureItemActivity : BaseActivity() {
                     ImageViewPagerDialog(
                         this@PictureItemActivity,
                         imageViewPagerAdapter.data,
-                        position
+                        position,
+                        true,
+                        true
                     )
                 imageViewPagerDialog.imageViewPagerDialogCallBack = object :
                     ImageViewPagerDialog.ImageViewPagerDialogCallBack {
@@ -280,7 +306,6 @@ class PictureItemActivity : BaseActivity() {
 
         })
     }
-
 
 
 }

@@ -43,14 +43,16 @@ class DynamicDetailActivity : BaseActivity() {
 
     private lateinit var commentAdapter: CommentAdapter
 
+    private var id:String? = ""
+
     override fun getLayout(): Int {
 
         return R.layout.act_dynamic_detail
     }
 
     override fun initData() {
+        id = intent.getStringExtra(AppConstant.Constant.ID)
         getDynamicDetail()
-
         mainViewModel.dynamicListLiveData.observe(this, Observer {
             val dynamicData = it[1]
             initItemMainContentImage(dynamicData)
@@ -67,7 +69,7 @@ class DynamicDetailActivity : BaseActivity() {
             ).navigation()
         }
         tv_time.text = item.createTime
-        Glide.with(this).load(item.userImage)
+        Glide.with(this).load(item.userImage?:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder).into(siv_img)
     }
@@ -79,6 +81,7 @@ class DynamicDetailActivity : BaseActivity() {
             item_main_content_text.visibility = View.VISIBLE
             tv_text.text = item.content
         }
+
     }
 
     private fun initItemMainContentImage(item: DynamicData) {
@@ -93,7 +96,8 @@ class DynamicDetailActivity : BaseActivity() {
                 ImageViewPagerDialog(
                     this@DynamicDetailActivity,
                     item.imageUrls?.symbolToList("#")!!,
-                    position
+                    position,
+                    true
                 )
             XPopup.Builder(this@DynamicDetailActivity).asCustom(imageViewPagerDialog).show()
         }
@@ -108,14 +112,19 @@ class DynamicDetailActivity : BaseActivity() {
                         commentAdapter.addData(0, CommentData(0, 0).apply {
                             comment = s
                         })
-                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
+                        //nestedScrollView.fullScroll(View.FOCUS_DOWN)
+                        addComment(s)
+
                         commentAdapter.getViewByPosition(
                             recyclerView,
                             0,
                             com.yang.lib_common.R.id.siv_img
                         )?.let { it1 ->
+                            it1.isFocusable = true
+                            it1.requestFocus()
                             scrollToPosition(it1)
                         }
+                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
                     }
 
                 }
@@ -131,9 +140,15 @@ class DynamicDetailActivity : BaseActivity() {
         return mainViewModel.uC
     }
 
+    private fun addComment(comment:String){
+        val mutableMapOf = mutableMapOf<String, String>()
+        mutableMapOf[AppConstant.Constant.COMMENT] = comment
+        mainViewModel.addComment(mutableMapOf)
+    }
+
     private fun getDynamicDetail() {
         val mutableMapOf = mutableMapOf<String, String>()
-        mutableMapOf[AppConstant.Constant.ID] = ""
+        mutableMapOf[AppConstant.Constant.ID] = id?:""
         mainViewModel.getDynamicDetail(mutableMapOf)
     }
 
@@ -196,6 +211,7 @@ class DynamicDetailActivity : BaseActivity() {
                                                     }
                                                 }
                                             }
+                                            addComment(s)
                                         }
 
                                     }

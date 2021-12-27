@@ -37,6 +37,21 @@
             <com.yang.lib_common.widget.ItemContentView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:itemLeftContent="颜色设置"
+                app:itemLeftImgVisible="false"
+                android:layout_marginTop="10dp"
+                android:id="@+id/icv_color_setting"
+                app:itemRightContentVisible="false" />
+            <com.yang.lib_common.widget.ItemContentView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemLeftContent="字体设置"
+                app:itemLeftImgVisible="false"
+                android:id="@+id/icv_font_setting"
+                app:itemRightContentVisible="false" />
+            <com.yang.lib_common.widget.ItemContentView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:itemLeftContent="清除缓存"
                 app:itemLeftImgVisible="false"
                 android:layout_marginTop="@dimen/dp_10"

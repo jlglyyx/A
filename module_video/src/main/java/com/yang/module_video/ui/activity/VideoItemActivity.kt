@@ -37,7 +37,7 @@ import kotlinx.android.synthetic.main.act_video_item.*
 class VideoItemActivity : BaseActivity() {
 
     @InjectViewModel
-    lateinit var videoModule: VideoViewModel
+    lateinit var videoViewModel: VideoViewModel
 
     private lateinit var orientationUtils: OrientationUtils
     private lateinit var commentAdapter: CommentAdapter
@@ -51,6 +51,8 @@ class VideoItemActivity : BaseActivity() {
 
     private var isScroll = false
 
+    val paramMap = mutableMapOf<String, String>()
+
     override fun getLayout(): Int {
         return R.layout.act_video_item
     }
@@ -60,13 +62,13 @@ class VideoItemActivity : BaseActivity() {
         val id = intent.getStringExtra(AppConstant.Constant.ID)
         val url = intent.getStringExtra(AppConstant.Constant.URL)
         id?.let {
-            videoModule.getVideoItemData(it)
+            videoViewModel.getVideoItemData(it)
         }
         url?.let {
             this.url = it
             initVideo()
         }
-
+        addViewHistory()
     }
 
     override fun initView() {
@@ -94,14 +96,17 @@ class VideoItemActivity : BaseActivity() {
                         commentAdapter.addData(0, CommentData(0, 0).apply {
                             comment = s
                         })
-                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
+                        addComment(s)
                         commentAdapter.getViewByPosition(
                             recyclerView,
                             0,
                             com.yang.lib_common.R.id.siv_img
                         )?.let { it1 ->
+                            it1.isFocusable = true
+                            it1.requestFocus()
                             scrollToPosition(it1)
                         }
+                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
                     }
 
                 }
@@ -126,9 +131,19 @@ class VideoItemActivity : BaseActivity() {
         nestedScrollView.scrollTo(intArray[0], intArray[1])
     }
 
+    private fun addComment(comment:String){
+        paramMap.clear()
+        paramMap[AppConstant.Constant.COMMENT] = comment
+        videoViewModel.addComment(paramMap)
+    }
+
+    private fun addViewHistory() {
+        videoViewModel.addViewHistory("","")
+    }
+
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
-        videoModule.mVideoItemData.observe(this, Observer {
+        videoViewModel.mVideoItemData.observe(this, Observer {
             if (it.size == 0){
                 return@Observer
             }
@@ -195,8 +210,8 @@ class VideoItemActivity : BaseActivity() {
                                                     }
                                                 }
                                             }
+                                            addComment(s)
                                         }
-
                                     }
                                 }).show()
                         }

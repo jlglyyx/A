@@ -1,5 +1,6 @@
 package com.yang.module_main.ui.menu.activity
 
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.viewPager
 @Route(path = AppConstant.RoutePath.MY_COLLECTION_ACTIVITY)
 class MyCollectionActivity : BaseActivity() {
 
-    lateinit var fragments: MutableList<Fragment>
+    private lateinit var fragments: MutableList<Fragment>
 
     private lateinit var titles: MutableList<String>
 
@@ -31,16 +32,7 @@ class MyCollectionActivity : BaseActivity() {
 
     override fun initData() {
 
-        fragments = mutableListOf<Fragment>().apply {
-            add(
-                buildARouter(AppConstant.RoutePath.MY_COLLECTION_PICTURE_FRAGMENT)
-                    .navigation() as Fragment
-            )
-            add(
-                buildARouter(AppConstant.RoutePath.MY_COLLECTION_VIDEO_FRAGMENT)
-                    .navigation() as Fragment
-            )
-        }
+
         titles = mutableListOf<String>().apply {
             add("图片")
             add("视频")
@@ -48,8 +40,38 @@ class MyCollectionActivity : BaseActivity() {
     }
 
     override fun initView() {
-        val stringExtra = intent.getStringExtra(AppConstant.Constant.NAME)
-        commonToolBar.centerContent = stringExtra
+
+        val title = intent.getStringExtra(AppConstant.Constant.NAME)
+        val type = intent.getStringExtra(AppConstant.Constant.TYPE)
+        commonToolBar.centerContent = title
+        if (TextUtils.equals(type,AppConstant.Constant.COLLECT)){
+            fragments = mutableListOf<Fragment>().apply {
+                add(
+                    buildARouter(AppConstant.RoutePath.MY_COLLECTION_FRAGMENT)
+                        .withString(AppConstant.Constant.TYPE,AppConstant.Constant.PICTURE)
+                        .navigation() as Fragment
+                )
+                add(
+                    buildARouter(AppConstant.RoutePath.MY_COLLECTION_FRAGMENT)
+                        .withString(AppConstant.Constant.TYPE,AppConstant.Constant.VIDEO)
+                        .navigation() as Fragment
+                )
+            }
+        }else{
+            fragments = mutableListOf<Fragment>().apply {
+                add(
+                    buildARouter(AppConstant.RoutePath.MY_DOWNLOAD_FRAGMENT)
+                        .withString(AppConstant.Constant.TYPE,AppConstant.Constant.PICTURE)
+                        .navigation() as Fragment
+                )
+                add(
+                    buildARouter(AppConstant.RoutePath.MY_DOWNLOAD_FRAGMENT)
+                        .withString(AppConstant.Constant.TYPE,AppConstant.Constant.VIDEO)
+                        .navigation() as Fragment
+                )
+            }
+        }
+
         initViewPager()
         initTabLayout()
     }
@@ -71,10 +93,10 @@ class MyCollectionActivity : BaseActivity() {
 
         TabLayoutMediator(
             tabLayout,
-            viewPager,
-            TabLayoutMediator.TabConfigurationStrategy { tab, position ->
-                tab.text = titles[position]
-            }).attach()
+            viewPager
+        ) { tab, position ->
+            tab.text = titles[position]
+        }.attach()
     }
 
 

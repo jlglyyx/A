@@ -1,10 +1,13 @@
 package com.yang.module_main.viewmodel
 
 import android.app.Application
+import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
+import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
+import com.yang.lib_common.util.getFilePath
 import com.yang.lib_common.util.toJson
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.repository.MainRepository
@@ -27,7 +30,10 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel(application) {
 
     var dynamicListLiveData = MutableLiveData<MutableList<DynamicData>>()
+
     var pictureListLiveData = MutableLiveData<MutableList<String>>()
+
+    var pictureCollectListLiveData = MutableLiveData<MutableList<String>>()
 
     fun addDynamic(dynamicData: DynamicData) {
         launch({
@@ -141,12 +147,25 @@ class MainViewModel @Inject constructor(
         }, messages = *arrayOf("上传中", "添加成功"))
     }
 
-    fun addCollect(id: String, type: String) {
+    fun addComment(params: Map<String, String>) {
         launch({
-            mainRepository.addCollect(id, type)
+            mainRepository.addComment(params)
         }, {
 
         })
+    }
+
+    fun queryCollect(type: String,pageSize: Int) {
+        launch({
+            mainRepository.queryCollect(type,pageSize,AppConstant.Constant.PAGE_SIZE_COUNT)
+        }, {
+
+        },{
+            val filePath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/$type")
+            pictureCollectListLiveData.postValue(filePath)
+//            showRecyclerViewErrorEvent()
+//            cancelRefreshLoadMore()
+        },errorDialog = false)
     }
 
 }

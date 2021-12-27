@@ -56,7 +56,7 @@ class ChangeUserInfoActivity : BaseActivity() {
     override fun initData() {
         initRecyclerView()
         val userInfo = getUserInfo()
-        Glide.with(this).load(userInfo?.userImage).error(R.drawable.iv_image_error)
+        Glide.with(this).load(userInfo?.userImage?:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e").error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
 
         mineViewModel.mUserInfoData.observe(this, Observer {

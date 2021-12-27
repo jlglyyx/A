@@ -7,6 +7,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody
 import okio.Buffer
+import java.net.URLDecoder
 
 /**
  * @Author Administrator
@@ -21,14 +22,17 @@ class LogInterceptor(private var logLevel: Int = AppConstant.Constant.NUM_MINUS_
         var response = chain.proceed(request)
         Log.d(AppConstant.ClientInfo.TAG_LOG, "intercept: ===============request===============")
         //Log.d(AppConstant.ClientInfo.TAG_LOG, "request.baseUrl: ${request.url().toString().substring(0, request.url().toString().lastIndexOf("?"))}\n")
-        Log.d(AppConstant.ClientInfo.TAG_LOG, "request.url: ${request.url()}\n")
+        Log.d(AppConstant.ClientInfo.TAG_LOG, "request.url: ${URLDecoder.decode(request.url().toString(),"UTF-8")}\n")
         Log.d(AppConstant.ClientInfo.TAG_LOG, "request.method: ${request.method()}\n")
         Log.d(AppConstant.ClientInfo.TAG_LOG, "request.headers: ${request.headers()}\n")
         if (logLevel == AppConstant.Constant.NUM_MINUS_ONE){
             Log.d(AppConstant.ClientInfo.TAG_LOG, "request.body: ${getBody(request)}\n")
         }
         Log.d(AppConstant.ClientInfo.TAG_LOG, "intercept: ===============request===============")
-        Log.d(AppConstant.ClientInfo.TAG_LOG, "intercept: ===============Start --- Response===============")
+        Log.d(
+            AppConstant.ClientInfo.TAG_LOG,
+            "intercept: ===============Start --- Response==============="
+        )
         Log.d(AppConstant.ClientInfo.TAG_LOG, "response.isSuccessful: ${response.isSuccessful}\n")
         Log.d(AppConstant.ClientInfo.TAG_LOG, "response.message: ${response.message()}\n")
         Log.d(AppConstant.ClientInfo.TAG_LOG, "response.headers: ${response.headers()}\n")
@@ -38,7 +42,10 @@ class LogInterceptor(private var logLevel: Int = AppConstant.Constant.NUM_MINUS_
         //Log.d(TAG_LOG, "response.body: ${content?.length} ${content}\n")
         showLogCompletion(content.toString(), 3000)
         Log.d(AppConstant.ClientInfo.TAG_LOG, "response.request.url: ${response.request().url()}\n")
-        Log.d(AppConstant.ClientInfo.TAG_LOG, "intercept: ===============End --- Response===============")
+        Log.d(
+            AppConstant.ClientInfo.TAG_LOG,
+            "intercept: ===============End --- Response==============="
+        )
         response = response.newBuilder().body(ResponseBody.create(contentType, content)).build()
         return response
     }

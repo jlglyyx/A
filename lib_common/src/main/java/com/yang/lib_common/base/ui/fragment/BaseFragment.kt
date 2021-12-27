@@ -54,6 +54,7 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         uC = initUIChangeLiveData()
+        initData()
         initView()
         registerListener()
         Log.e(TAG, "OpenView===: $TAG")

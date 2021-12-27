@@ -58,8 +58,8 @@ interface AppConstant {
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
         const val LEFT_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/LeftFragment"
-        const val MY_COLLECTION_PICTURE_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionPictureFragment"
-        const val MY_COLLECTION_VIDEO_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionVideoFragment"
+        const val MY_COLLECTION_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionFragment"
+        const val MY_DOWNLOAD_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyDownLoadFragment"
 
 
         /**
@@ -220,6 +220,18 @@ interface AppConstant {
         const val IP = "ip"
 
         const val PORT = "port"
+
+        const val FONT_TYPE = "fontType"
+
+        const val VIDEO = "video"
+
+        const val PICTURE = "picture"
+
+        const val COLLECT = "collect"
+
+        const val DOWNLOAD = "download"
+
+        const val COMMENT = "comment"
 
         const val ITEM_MAIN_TITLE = 0
         const val ITEM_MAIN_CONTENT_TEXT = 1

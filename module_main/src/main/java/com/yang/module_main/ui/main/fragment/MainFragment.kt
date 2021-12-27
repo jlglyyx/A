@@ -138,7 +138,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         }
         val userInfo = getUserInfo()
         Glide.with(this)
-            .load(userInfo?.userImage)
+            .load(userInfo?.userImage?:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
             .into(commonToolBar.ivBack)
@@ -184,7 +184,9 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             }
 
             setOnItemClickListener { adapter, view, position ->
+                val item = mAdapter.getItem(position)
                 buildARouter(AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY)
+                    .withString(AppConstant.Constant.ID,item?.id)
                     .navigation()
             }
         }
@@ -223,7 +225,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_time, item.createTime)
-            Glide.with(sivImg).load(item.userImage)
+            Glide.with(sivImg).load(item.userImage?:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
                 .error(R.drawable.iv_image_error)
                 .placeholder(R.drawable.iv_image_placeholder).into(sivImg)
         }
@@ -245,7 +247,8 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     ImageViewPagerDialog(
                         requireContext(),
                         item.imageUrls?.symbolToList("#")!!,
-                        position
+                        position,
+                        true
                     )
                 XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
             }
@@ -259,8 +262,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private fun getDynamicList() {
         val mutableMapOf = mutableMapOf<String, String>()
         mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum.toString()
-        mutableMapOf[AppConstant.Constant.PAGE_SIZE] =
-            AppConstant.Constant.PAGE_SIZE_COUNT.toString()
+        mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT.toString()
         mainViewModel.getDynamicList(mutableMapOf)
     }
 

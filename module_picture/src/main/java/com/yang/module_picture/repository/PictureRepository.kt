@@ -10,29 +10,36 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class PictureRepository @Inject constructor(private val pictureApiService: PictureApiService):BaseRepository() {
+class PictureRepository @Inject constructor(private val pictureApiService: PictureApiService) :
+    BaseRepository() {
 
-    suspend fun getImageInfo(map: MutableMap<String,Any>): MResult<ImageData> {
+    suspend fun getImageInfo(map: MutableMap<String, Any>): MResult<ImageData> {
         return withContextIO {
             pictureApiService.getImageInfo(map)
         }
     }
-    suspend fun getImageItemData(sid:String): MResult<MutableList<ImageDataItem>> {
+
+    suspend fun getImageItemData(sid: String): MResult<MutableList<ImageDataItem>> {
         return withContextIO {
             pictureApiService.getImageItemData(sid)
         }
     }
+
     suspend fun getImageTypeData(): MResult<MutableList<ImageTypeData>> {
         return withContextIO {
             pictureApiService.getImageTypeData()
         }
     }
 
-    suspend fun addCollect(id: String, type: String): MResult<String> {
+    suspend fun addViewHistory(id: String, type: String): MResult<String> {
         return withContext(Dispatchers.IO) {
-            pictureApiService.addCollect(id,type)
+            pictureApiService.addViewHistory(id, type)
         }
     }
 
-
+    suspend fun addComment(params: Map<String, String>): MResult<String> {
+        return withContext(Dispatchers.IO) {
+            pictureApiService.addComment(params)
+        }
+    }
 }

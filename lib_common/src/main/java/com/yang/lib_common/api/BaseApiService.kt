@@ -1,10 +1,10 @@
 package com.yang.lib_common.api
 
-import io.reactivex.rxjava3.core.Observable
+import com.yang.lib_common.remote.di.response.MResult
 import retrofit2.http.GET
 
 interface BaseApiService {
 
-    @GET("/")
-    fun getA(): Observable<String>
+    @GET("user/addCollect")
+    suspend fun addCollect(): MResult<String>
 }

@@ -40,7 +40,7 @@
     <style name="mainTabLayout" parent="parentTabLayout">
         <item name="tabMode">fixed</item>
         <item name="tabTextAppearance">@style/mainTabTextAppearance</item>
-        <item name="tabSelectedTextColor">@color/plum</item>
+        <item name="tabSelectedTextColor">@color/colorBar</item>
     </style>
     <style name="mainTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">@dimen/sp_15</item>
@@ -48,9 +48,9 @@
     <style name="tabTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/itemTabTextAppearance</item>
         <item name="tabMode">scrollable</item>
-        <item name="tabSelectedTextColor">@color/plum</item>
+        <item name="tabSelectedTextColor">@color/colorBar</item>
         <item name="tabRippleColor">@android:color/transparent</item>
-        <item name="tabIndicatorColor">@color/plum</item>
+        <item name="tabIndicatorColor">@color/colorBar</item>
     </style>
     <style name="itemTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">@dimen/sp_14</item>

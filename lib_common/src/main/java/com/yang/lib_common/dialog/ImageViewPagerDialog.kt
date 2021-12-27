@@ -25,7 +25,8 @@ class ImageViewPagerDialog(
     context: Context,
     private var data: MutableList<String>,
     private var position: Int,
-    private var showDownAndCollection: Boolean = true
+    private var showDown: Boolean = false,
+    private var showCollection: Boolean = false
 ) : FullScreenPopupView(context) {
 
     companion object {
@@ -40,7 +41,7 @@ class ImageViewPagerDialog(
     interface ImageViewPagerDialogCallBack {
         fun getPosition(position: Int)
 
-        fun onViewClickListener(view:View)
+        fun onViewClickListener(view: View)
     }
 
 
@@ -61,35 +62,44 @@ class ImageViewPagerDialog(
             imageViewPagerDialogCallBack?.onViewClickListener(this)
             dismiss()
         }
-        if (showDownAndCollection){
-
-            iv_collection.clicks().subscribe {
-                imageViewPagerDialogCallBack?.onViewClickListener(this)
-                iv_collection.setImageResource(R.drawable.iv_collection_click)
-            }
-
+        if (showDown) {
+            iv_down.visibility = View.VISIBLE
             iv_down.clicks().subscribe {
                 imageViewPagerDialogCallBack?.onViewClickListener(this)
                 MultiMoreThreadDownload.Builder(mContext)
-                    .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/${if(data[position].endsWith(".mp4")) "video" else "picture"}")
+                    .parentFilePath(
+                        "${Environment.getExternalStorageDirectory()}/MFiles/${
+                            if (data[position].endsWith(
+                                    ".mp4"
+                                )
+                            ) "video" else "picture"
+                        }"
+                    )
                     .filePath(
-                        "${System.currentTimeMillis()}${data[position].substring(
-                            data[position].lastIndexOf(
-                                "."
+                        "${System.currentTimeMillis()}${
+                            data[position].substring(
+                                data[position].lastIndexOf(
+                                    "."
+                                )
                             )
-                        )}"
+                        }"
                     )
                     .fileUrl(data[position])
                     .build()
                     .start()
             }
-        }else{
-            iv_collection.visibility = View.GONE
-            iv_down.visibility = View.GONE
         }
 
+        if (showCollection) {
+            iv_collection.visibility = View.VISIBLE
+            iv_collection.clicks().subscribe {
+                imageViewPagerDialogCallBack?.onViewClickListener(this)
+                iv_collection.setImageResource(R.drawable.iv_collection_click)
+            }
+        }
 
     }
+
     @SuppressLint("SetTextI18n")
     private fun initViewPager() {
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -104,7 +114,8 @@ class ImageViewPagerDialog(
                 parent: ViewGroup,
                 viewType: Int
             ): RecyclerView.ViewHolder {
-                val inflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_image_viewpager_item, parent, false)
+                val inflate = LayoutInflater.from(mContext)
+                    .inflate(R.layout.dialog_image_viewpager_item, parent, false)
                 return object : RecyclerView.ViewHolder(inflate) {
 
                 }
@@ -126,12 +137,14 @@ class ImageViewPagerDialog(
 
 
                 val photoView = holder.itemView.findViewById<PhotoView>(R.id.photoView)
-                val gsyVideoPlayer = holder.itemView.findViewById<StandardGSYVideoPlayer>(R.id.detailPlayer)
+                val gsyVideoPlayer =
+                    holder.itemView.findViewById<StandardGSYVideoPlayer>(R.id.detailPlayer)
                 val endsWith = data[position].endsWith(".mp4")
 
-                gsyVideoPlayer.findViewById<View>(com.shuyu.gsyvideoplayer.R.id.surface_container).setOnClickListener {
-                    dismiss()
-                }
+                gsyVideoPlayer.findViewById<View>(com.shuyu.gsyvideoplayer.R.id.surface_container)
+                    .setOnClickListener {
+                        dismiss()
+                    }
 
 
                 photoView.setOnClickListener {

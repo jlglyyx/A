@@ -169,9 +169,17 @@ class PictureViewModel @Inject constructor(
     }
 
 
-    fun addCollect(id: String, type: String) {
+    fun addViewHistory(id: String, type: String) {
         launch({
-            pictureRepository.addCollect(id, type)
+            pictureRepository.addViewHistory(id, type)
+        }, {
+
+        })
+    }
+
+    fun addComment(params: Map<String, String>) {
+        launch({
+            pictureRepository.addComment(params)
         }, {
 
         })

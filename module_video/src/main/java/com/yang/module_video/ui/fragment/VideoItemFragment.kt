@@ -34,7 +34,7 @@ import javax.inject.Inject
 class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     @InjectViewModel
-    lateinit var videoModule: VideoViewModel
+    lateinit var videoViewModel: VideoViewModel
 
     @Inject
     lateinit var gson: Gson
@@ -66,7 +66,7 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return videoModule.uC
+        return videoViewModel.uC
     }
 
     override fun initViewModel() {
@@ -105,7 +105,7 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         recyclerView.adapter = mAdapter
 
 
-        videoModule.mVideoData.observe(this, Observer
+        videoViewModel.mVideoData.observe(this, Observer
         {
             when {
                 smartRefreshLayout.isRefreshing -> {
@@ -241,11 +241,11 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
-        videoModule.getVideoInfo(queryType ?: "", pageNum)
+        videoViewModel.getVideoInfo(queryType ?: "", pageNum)
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
-        videoModule.getVideoInfo(queryType ?: "", pageNum)
+        videoViewModel.getVideoInfo(queryType ?: "", pageNum)
     }
 }

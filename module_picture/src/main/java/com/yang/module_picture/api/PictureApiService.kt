@@ -20,7 +20,10 @@ interface PictureApiService : BaseApiService {
     @POST("image/queryImageType")
     suspend fun getImageTypeData(): MResult<MutableList<ImageTypeData>>
 
-    @POST("user/dynamic/insertUserDynamic")
-    suspend fun addCollect(@Query("id") id: String, @Query("type") type: String): MResult<String>
+    @POST("user/addViewHistory")
+    suspend fun addViewHistory(@Query("id") id: String, @Query("type") type: String): MResult<String>
+
+    @POST("user/addComment")
+    suspend fun addComment(@QueryMap params: Map<String, String>): MResult<String>
 
 }
