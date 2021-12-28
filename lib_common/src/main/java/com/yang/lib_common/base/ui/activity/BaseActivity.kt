@@ -163,9 +163,11 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        unRegisterListener()
+        uC = null
+        emptyView = null
         loadingPopupView?.dismiss()
         loadingPopupView = null
-        unRegisterListener()
         removeActivity(this)
     }
 }

@@ -80,7 +80,7 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
                     mVideoWidth = it.videoWidth
                     mVideoHeight = it.videoHeight
                     val childAt = getChildAt(0)
-                    if (mVideoHeight <= screenPx[1]/5*3){
+                    if (mVideoHeight <= screenPx[1]/5*4){
                         childAt.layoutParams = LayoutParams(screenPx[0], (mVideoHeight * screenPx[0] /mVideoWidth))
                     }
                     //requestLayout()
@@ -117,7 +117,9 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
         if(screenPx[1] == childAt.measuredHeight){
             childAt.layout(0,0, screenPx[0], screenPx[1])
         }else{
-            childAt.layout(0, (screenPx[1]/2 - childAt.measuredHeight/2), childAt.measuredWidth, screenPx[1]/2 + childAt.measuredHeight/2)
+            val i = (screenPx[1] - childAt.measuredHeight)/2
+            childAt.layout(0, i, childAt.measuredWidth, measuredHeight-i)
+//            childAt.layout(0, (screenPx[1]/2 - childAt.measuredHeight/2), childAt.measuredWidth, measuredHeight)
         }
     }
 

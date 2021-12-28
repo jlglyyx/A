@@ -76,7 +76,7 @@ class VideoFragment : BaseLazyFragment() {
         commonToolBar.ivSearch.visibility = View.VISIBLE
     }
 
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
+    override fun initUIChangeLiveData(): UIChangeLiveData {
         return videoViewModel.uC
     }
 

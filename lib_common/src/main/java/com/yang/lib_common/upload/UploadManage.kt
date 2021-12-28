@@ -37,7 +37,7 @@ class UploadManage {
         .build()
     private var uploadListeners: MutableList<UploadListener?> = mutableListOf()
 
-    private var uploadCalls: MutableList<Call> = mutableListOf()
+    private var callMap: MutableMap<String, Call?> = mutableMapOf()
 
     companion object {
         private const val TAG = "UploadManage"
@@ -47,90 +47,107 @@ class UploadManage {
         }
     }
 
-    private fun createRequestBody(filePath: List<String>): RequestBody {
+    /**
+     * 创建RequestBody
+     */
+    private fun createRequestBody(id: String, filePath: String): RequestBody {
         val builder = MultipartBody.Builder()
-        filePath.forEachIndexed { index, s ->
-            val file = File(s)
-            val id = UUID.randomUUID().toString().replace("-", "")
-            val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-            builder.addPart(
-                MultipartBody.Part.createFormData(
-                    "file",
-                    file.name,
-                    UploadRequestBody(requestBody, id)
-                )
+        val file = File(filePath)
+        val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+        builder.addPart(
+            MultipartBody.Part.createFormData(
+                "file",
+                file.name,
+                UploadRequestBody(requestBody, id, 0)
             )
-            CoroutineScope(Dispatchers.IO).launch {
-                BaseAppDatabase.instance.uploadTaskDao().insertData(UploadTaskData(id, 0, s, 0))
-            }
+        )
+        CoroutineScope(Dispatchers.IO).launch {
+            BaseAppDatabase.instance.uploadTaskDao()
+                .insertData(UploadTaskData(id, 0, filePath, 0, 0, 0))
         }
         return builder.build()
     }
 
-    fun startUpload(filePath: List<String>): Call {
-        val createRequestBody = createRequestBody(filePath)
-        var newCall: Call
-        createRequestBody.let {
-            val build = Request.Builder()
-                .post(it)
-                .url(AppConstant.ClientInfo.BASE_URL + "uploadFile")
-                .build()
-            newCall = okHttpClient.newCall(build)
-            uploadCalls.add(newCall)
-            newCall.enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    Log.i(TAG, "onFailure: ${e.message}")
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    Log.i(TAG, "onResponse: ")
-                }
-            })
-        }
-        return newCall
-    }
-
-    fun cancelUpload(uploadCall: Call) {
-        uploadCall.cancel()
-    }
-
-    inner class UploadRequestBody(var requestBody: RequestBody, var id: String) :
-        RequestBody() {
-
-        override fun contentType(): MediaType? {
-            return requestBody.contentType()
-        }
-
-        override fun writeTo(sink: BufferedSink) {
-            var countByte = 0L
-            val buffer = Okio.buffer(object : ForwardingSink(sink) {
-                override fun write(source: Buffer, byteCount: Long) {
-                    super.write(source, byteCount)
-                    countByte += byteCount
-                    val process =
-                        (countByte / requestBody.contentLength().toFloat() * 100).toInt()
+    /**
+     * 开始上传
+     *
+     * 1.开始上传 创建id 存入数据库
+     * 2.存储id 对应上传请求
+     * 3.实现监听获取进度
+     * 4.暂停 即取消 取出id重新创建请求 断点续传
+     * 5.取消
+     */
+    fun startUpload(filePath: String, id: String = UUID.randomUUID().toString().replace("-", "")) {
+        val createRequestBody = createRequestBody(id, filePath)
+        val build = Request.Builder()
+            .post(createRequestBody)
+            .url(AppConstant.ClientInfo.BASE_URL + "uploadFile")
+            .build()
+        val newCall = okHttpClient.newCall(build)
+        callMap[id] = newCall
+        newCall.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val queryData = BaseAppDatabase.instance.uploadTaskDao().queryData(id)
                     uploadListeners.forEach {
-                        it?.onProgress(id, process)
-                        val queryData =
-                            BaseAppDatabase.instance.uploadTaskDao().queryData(id)
-                        queryData.progress = process
+                        queryData.status = 2
                         BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
-                        if (process >= 100) {
-                            it?.onSuccess(id)
-                            queryData.status = 1
-                            BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
-                        }
+                        it?.onFailed(id)
                     }
                 }
+                Log.i(TAG, "onFailure: ${e.message}")
             }
-            )
-            requestBody.writeTo(buffer)
-            buffer.flush()
-        }
+            override fun onResponse(call: Call, response: Response) {
+                Log.i(TAG, "onResponse: ")
+            }
+        })
+    }
 
-        override fun contentLength(): Long {
-            return requestBody.contentLength()
+    fun resumeUpload(id: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val queryData = BaseAppDatabase.instance.uploadTaskDao().queryData(id)
+        if (callMap.containsKey(id)||null != queryData ) {
+            
+                val builder = MultipartBody.Builder()
+                val file = File(queryData.filePath)
+                val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                builder.addPart(
+                    MultipartBody.Part.createFormData(
+                        "file",
+                        file.name,
+                        UploadRequestBody(requestBody, id, queryData.currentSize)
+                    )
+                )
+                val build = Request.Builder()
+                    .post(builder.build())
+                    .url(AppConstant.ClientInfo.BASE_URL + "uploadFile")
+                    .header("Range", "bytes=${queryData.currentSize}-${queryData.countSize}")
+                    .build()
+                val newCall = okHttpClient.newCall(build)
+                callMap[id] = newCall
+                newCall.enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        uploadListeners.forEach {
+                            queryData.status = 2
+                            BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
+                            it?.onFailed(id)
+                        }
+                        Log.i(TAG, "onFailure: ${e.message}")
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        Log.i(TAG, "onResponse: ")
+                    }
+                })
+
+            }
+
+
         }
+    }
+
+    fun cancelUpload(id: String) {
+        callMap[id]?.cancel()
     }
 
     fun addUploadListener(uploadListener: UploadListener) {
@@ -146,4 +163,50 @@ class UploadManage {
     }
 
 
+    /**
+     * 计算进度
+     */
+    inner class UploadRequestBody(
+        var requestBody: RequestBody,
+        var id: String,
+        var currentSize: Long
+    ) : RequestBody() {
+
+        override fun contentType(): MediaType? {
+            return requestBody.contentType()
+        }
+
+        override fun writeTo(sink: BufferedSink) {
+            var countByte = currentSize
+            val queryData = BaseAppDatabase.instance.uploadTaskDao().queryData(id)
+            queryData.countSize = requestBody.contentLength()
+            val buffer = Okio.buffer(object : ForwardingSink(sink) {
+                override fun write(source: Buffer, byteCount: Long) {
+                    super.write(source, byteCount)
+                    countByte += byteCount
+                    val process = (countByte / requestBody.contentLength().toFloat() * 100).toInt()
+                    queryData.currentSize = countByte
+                    BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
+                    uploadListeners.forEach {
+                        it?.onProgress(id, process)
+                        queryData.progress = process
+                        BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
+                        if (process >= 100) {
+                            it?.onSuccess(id)
+                            callMap[id]?.cancel()
+                            callMap.remove(id)
+                            queryData.status = 1
+                            BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
+                        }
+                    }
+                }
+            })
+            requestBody.writeTo(buffer)
+            buffer.flush()
+        }
+
+        override fun contentLength(): Long {
+            return requestBody.contentLength()
+        }
+    }
 }

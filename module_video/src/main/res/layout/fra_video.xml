@@ -25,7 +25,7 @@
                     android:layout_height="wrap_content"
                     android:id="@id/commonToolBar"
                     app:leftImgVisible="false"
-                    app:rightImgVisible="true"
+                    app:rightImgVisible="false"
                     app:centerContent="视频"/>
             </LinearLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>

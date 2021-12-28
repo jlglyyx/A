@@ -58,8 +58,7 @@ class VideoUploadTaskActivity : BaseActivity(), UploadListener {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-        videoUploadTaskAdapter =
-            VideoUploadTaskAdapter(R.layout.item_upload_task, mutableListOf())
+        videoUploadTaskAdapter = VideoUploadTaskAdapter(R.layout.item_upload_task, mutableListOf())
         recyclerView.adapter = videoUploadTaskAdapter
         CoroutineScope(Dispatchers.IO).launch {
             val queryData = BaseAppDatabase.instance.uploadTaskDao().queryData()
@@ -70,13 +69,34 @@ class VideoUploadTaskActivity : BaseActivity(), UploadListener {
             if (view.id == R.id.tv_progress) {
                 when (item?.status) {
                     0 -> {
-
+                        /*在下载 点击暂停*/
+                        CoroutineScope(Dispatchers.IO).launch {
+                            item.status = 2
+                            val queryData =
+                                BaseAppDatabase.instance.uploadTaskDao().queryData(item.id)
+                            BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
+                            withContext(Dispatchers.Main){
+                                videoUploadTaskAdapter?.notifyItemChanged(position)
+                            }
+                        }
+                        UploadManage.instance.cancelUpload(item.id)
                     }
                     1 -> {
+                        /*已完成 不能点击*/
 
                     }
                     2 -> {
-
+                        /*已暂停 点击继续*/
+                        CoroutineScope(Dispatchers.IO).launch {
+                            item.status = 0
+                            val queryData =
+                                BaseAppDatabase.instance.uploadTaskDao().queryData(item.id)
+                            BaseAppDatabase.instance.uploadTaskDao().updateData(queryData)
+                            withContext(Dispatchers.Main){
+                                videoUploadTaskAdapter?.notifyItemChanged(position)
+                            }
+                        }
+                        UploadManage.instance.resumeUpload(item.id)
                     }
                 }
 
@@ -88,8 +108,18 @@ class VideoUploadTaskActivity : BaseActivity(), UploadListener {
     inner class VideoUploadTaskAdapter(layoutResId: Int, data: MutableList<UploadTaskData>?) :
         BaseQuickAdapter<UploadTaskData, BaseViewHolder>(layoutResId, data) {
         override fun convert(helper: BaseViewHolder, item: UploadTaskData) {
+            when (item.status ){
+                0 ->{
+                    helper.setText(R.id.tv_progress, "${item.progress}")
+                }
+                1 ->{
+                    helper.setText(R.id.tv_progress, "已完成")
+                }
+                2 ->{
+                    helper.setText(R.id.tv_progress, "继续下载")
+                }
+            }
             helper.setText(R.id.tv_content, item.filePath)
-                .setText(R.id.tv_progress, "${item.progress}")
                 .addOnClickListener(R.id.tv_progress)
         }
     }
@@ -119,7 +149,19 @@ class VideoUploadTaskActivity : BaseActivity(), UploadListener {
     }
 
     override fun onFailed(id: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            videoUploadTaskAdapter?.let {
+                it.data.findLast { bean ->
+                    bean.id == id
+                }.apply {
+                    val queryData = BaseAppDatabase.instance.uploadTaskDao().queryData(id)
+                    withContext(Dispatchers.Main){
+                        it.setData(it.data.indexOf(this@apply),queryData)
+                    }
+                }
+            }
 
+        }
     }
 
     override fun onDestroy() {

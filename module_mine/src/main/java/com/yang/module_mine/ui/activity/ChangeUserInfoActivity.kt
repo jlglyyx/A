@@ -12,12 +12,12 @@ import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
-import com.yang.lib_common.util.uri2path
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
 import com.yang.module_mine.adapter.ActivityInfoAdapter
@@ -45,9 +45,10 @@ class ChangeUserInfoActivity : BaseActivity() {
 
     private var selectSex = ""
 
-    private var sexArray = arrayOf("男","女")
+    private var sexArray = arrayOf("男", "女")
 
-    private var url :String? = null
+    private var url: String? = null
+
 
     override fun getLayout(): Int {
         return R.layout.act_change_user_info
@@ -56,7 +57,10 @@ class ChangeUserInfoActivity : BaseActivity() {
     override fun initData() {
         initRecyclerView()
         val userInfo = getUserInfo()
-        Glide.with(this).load(userInfo?.userImage?:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e").error(R.drawable.iv_image_error)
+        Glide.with(this).load(
+            userInfo?.userImage
+                ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e"
+        ).error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
 
         mineViewModel.mUserInfoData.observe(this, Observer {
@@ -90,7 +94,8 @@ class ChangeUserInfoActivity : BaseActivity() {
         }
 
         ll_sex.clicks().subscribe {
-            XPopup.Builder(this).asBottomList("", sexArray
+            XPopup.Builder(this).asBottomList(
+                "", sexArray
             ) { position, text ->
                 selectSex = sexArray[position]
                 tv_sex.text = selectSex
@@ -99,19 +104,23 @@ class ChangeUserInfoActivity : BaseActivity() {
         val registerForActivityResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK && null != it.data) {
-                    it.data?.data?.let { uri ->
-                        imageUrl = uri2path(this, uri)
-                    }
-                    mineViewModel.uploadFile(mutableListOf(imageUrl))
-                    Glide.with(this).load(imageUrl).centerCrop().error(R.drawable.iv_image_error)
-                        .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
+                    it.data!!.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
+                        ?.let { beans ->
+                            imageUrl = beans[0].filePath.toString()
+                            mineViewModel.uploadFile(mutableListOf(imageUrl))
+                            Glide.with(this).load(imageUrl).centerCrop().error(R.drawable.iv_image_error)
+                                .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
+                        }
                 }
             }
+
+
         ll_image.clicks().subscribe {
-            val innerIntent = Intent(Intent.ACTION_PICK)
-            innerIntent.type = "image/*"
-            val wrapperIntent = Intent.createChooser(innerIntent, "选择头像")
-            registerForActivityResult.launch(wrapperIntent)
+            val forName = Class.forName("com.yang.module_main.ui.main.activity.PictureSelectActivity")
+            val intent = Intent(this,forName)
+            intent.putExtra(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_ONE)
+            intent.putExtra(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
+            registerForActivityResult.launch(intent)
         }
     }
 

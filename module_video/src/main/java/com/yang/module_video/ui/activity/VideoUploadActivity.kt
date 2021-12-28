@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +18,6 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.upload.UploadService
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
@@ -105,22 +103,22 @@ class VideoUploadActivity : BaseActivity() {
             buildARouter(AppConstant.RoutePath.PICTURE_SELECT_ACTIVITY)
                 .withParcelableArrayList(AppConstant.Constant.DATA, selectFileList as ArrayList)
                 .withInt(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_TWO)
-                .withInt(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
+                .withInt(AppConstant.Constant.NUM, AppConstant.Constant.NUM_TWO)
                 .navigation(this, FILE_CODE)
         }
 
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
             override fun tvRightClickListener() {
-                if (TextUtils.isEmpty(selectType)){
-                    showShort("请选择文件类别")
-                    return
-                }
+//                if (TextUtils.isEmpty(selectType)){
+//                    showShort("请选择文件类别")
+//                    return
+//                }
                 if (videoUploadAdapter.data.isEmpty()){
                     showShort("请选择文件")
                     return
                 }
-                BaseAppDatabase.instance.uploadTaskDao().deleteData()
-                uploadServiceBinder?.startUpload(videoUploadAdapter.data)
+                //BaseAppDatabase.instance.uploadTaskDao().deleteData()
+                uploadServiceBinder?.startUpload(videoUploadAdapter.data[0])
                 buildARouter(AppConstant.RoutePath.VIDEO_UPLOAD_TASK_ACTIVITY).navigation()
             }
         }

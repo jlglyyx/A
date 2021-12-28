@@ -12,4 +12,4 @@ import androidx.room.PrimaryKey
  * status 0上传中 1完成 2暂停
  */
 @Entity(tableName = "upload_task")
-data class UploadTaskData (@PrimaryKey var id:String,var progress:Int,var filePath:String,var status:Int)
+data class UploadTaskData (@PrimaryKey var id:String,var progress:Int,var filePath:String,var status:Int,var currentSize:Long,var countSize:Long)

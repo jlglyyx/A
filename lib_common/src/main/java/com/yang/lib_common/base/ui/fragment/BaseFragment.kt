@@ -170,8 +170,9 @@ abstract class BaseFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         unRegisterListener()
+        uC = null
+        mView = null
         loadingPopupView?.dismiss()
         loadingPopupView = null
-        mView = null
     }
 }

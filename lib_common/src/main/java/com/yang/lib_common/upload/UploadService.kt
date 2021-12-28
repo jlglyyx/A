@@ -9,7 +9,10 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
-import okhttp3.Call
+import com.yang.lib_common.room.BaseAppDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 /**
@@ -30,12 +33,12 @@ class UploadService : Service(), UploadListener {
 
     inner class UploadServiceBinder : Binder() {
 
-        fun startUpload(filePath: MutableList<String>):Call {
+        fun startUpload(filePath: String) {
             return UploadManage.instance.startUpload(filePath)
         }
 
-        fun cancelUpload(uploadCall: Call){
-            UploadManage.instance.cancelUpload(uploadCall)
+        fun cancelUpload(){
+            UploadManage.instance.cancelUpload("")
         }
     }
 
@@ -63,6 +66,15 @@ class UploadService : Service(), UploadListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        CoroutineScope(Dispatchers.IO).launch {
+            val queryData = BaseAppDatabase.instance.uploadTaskDao().queryData()
+            queryData.forEach {
+                if (it.status == 0){
+                    it.status = 2
+                    BaseAppDatabase.instance.uploadTaskDao().updateData(it)
+                }
+            }
+        }
     }
 
     private fun showProgressNotice(noticeId: Int, progress: Int) {

@@ -131,14 +131,7 @@ class DownLoadManagerService : Service() {
                 PendingIntent.getActivity(
                     this,
                     DOWN_SUCCESS_ID,
-                    Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*")
-                        .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true).setData(
-                            FileProvider.getUriForFile(
-                                this,
-                                "com.yang.collection.fileProvider",
-                                file
-                            )
-                        ),
+                    Intent(Intent.ACTION_GET_CONTENT).setType("*/*"),
                     PendingIntent.FLAG_UPDATE_CURRENT
                 )
             )

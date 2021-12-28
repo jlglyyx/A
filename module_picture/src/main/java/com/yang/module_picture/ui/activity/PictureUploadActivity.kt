@@ -23,6 +23,7 @@ import com.yang.lib_common.upload.UploadService
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.dip2px
+import com.yang.lib_common.util.showShort
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_picture.R
 import com.yang.module_picture.viewmodel.PictureViewModel
@@ -110,12 +111,14 @@ class PictureUploadActivity : BaseActivity() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
             override fun tvRightClickListener() {
                 if (TextUtils.isEmpty(selectType)){
+                    showShort("请选择文件类别")
                     return
                 }
                 if (pictureUploadAdapter.data.isEmpty()){
+                    showShort("请选择文件")
                     return
                 }
-                uploadServiceBinder?.startUpload(pictureUploadAdapter.data)
+                uploadServiceBinder?.startUpload(pictureUploadAdapter.data[0])
                 //buildARouter(AppConstant.RoutePath.VIDEO_UPLOAD_TASK_ACTIVITY).navigation()
             }
         }
