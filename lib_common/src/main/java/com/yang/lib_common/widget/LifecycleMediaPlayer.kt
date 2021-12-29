@@ -10,7 +10,9 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.yang.lib_common.observer.ILifecycleObserver
 import com.yang.lib_common.util.getScreenPx
 
@@ -50,6 +52,12 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
 
     private lateinit var surfaceView: SurfaceView
 
+    private lateinit var ivCover: ImageView
+
+    private var currentPath = ""
+
+
+
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -59,6 +67,11 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
     ) {
         mContext = context!!
         mediaPlayer = MediaPlayer()
+        mediaPlayer?.setAudioAttributes(
+            AudioAttributes.Builder().setLegacyStreamType(AudioManager.STREAM_MUSIC)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributes.USAGE_MEDIA).build()
+        )
         screenPx = getScreenPx(mContext)
         setWillNotDraw(true)
         initSurfaceView()
@@ -70,18 +83,21 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
         surfaceView = SurfaceView(mContext)
         mHolder = surfaceView.holder
         mHolder.addCallback(this@LifecycleMediaPlayer)
+        ivCover = ImageView(mContext)
+        ivCover.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        ivCover.setBackgroundColor(Color.WHITE)
         this.addView(surfaceView)
+        this.addView(ivCover)
     }
 
     fun initMediaPlayer(path: String): MediaPlayer? {
         try {
+            if (currentPath == path){
+                return null
+            }
+            currentPath = path
             return mediaPlayer?.apply {
-                setAudioAttributes(
-                    AudioAttributes.Builder().setLegacyStreamType(AudioManager.STREAM_MUSIC)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .setUsage(AudioAttributes.USAGE_MEDIA).build()
-                )
-                mediaPlayer?.setDataSource(path)
+                setDataSource(path)
                 isLooping = true
                 setOnPreparedListener {
                     start()
@@ -92,15 +108,13 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
                     }
                     mVideoWidth = it.videoWidth
                     mVideoHeight = it.videoHeight
-                    val childAt = getChildAt(0)
-                    if (mVideoHeight <= screenPx[1] / 5 * 4) {
-                        childAt.layoutParams =
-                            LayoutParams(screenPx[0], (mVideoHeight * screenPx[0] / mVideoWidth))
-                    }
-                    //requestLayout()
+                    scaleVideo(mVideoWidth,mVideoHeight)
                 }
                 setOnInfoListener { mp, what, extra ->
                     Log.i(TAG, "setOnInfoListener: $mp   $what   $extra")
+                    if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                        ivCover.visibility = View.GONE
+                    }
                     return@setOnInfoListener false
                 }
                 setOnErrorListener { mp, what, extra ->
@@ -115,7 +129,28 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
                 prepareAsync()
             }
         } catch (e: Exception) {
+            e.printStackTrace()
+            ivCover.visibility = View.VISIBLE
             return null
+        }
+    }
+
+    fun restartVideo(path: String){
+        mediaPlayer?.let {
+            it.reset()
+            isReset = false
+            initMediaPlayer(path)
+        }
+
+    }
+
+    private fun scaleVideo(mVideoWidth:Int,mVideoHeight:Int){
+        val childAt = getChildAt(0)
+        if (mVideoHeight <= measuredHeight / 5 * 4) {
+            val vScaleW = screenPx[0]
+            val vScaleH = mVideoHeight * screenPx[0] / mVideoWidth
+            childAt.layoutParams = LayoutParams(vScaleW, vScaleH)
+            Log.i(TAG, "scaleVideo:$mVideoWidth   $vScaleW ==  $mVideoHeight  $vScaleH  == ${vScaleH / vScaleW.toFloat()}")
         }
     }
 
@@ -132,8 +167,10 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
             childAt.layout(0, 0, screenPx[0], childAt.measuredHeight)
         } else {
             val i = (measuredHeight - childAt.measuredHeight) / 2
-            childAt.layout(0, i, childAt.measuredWidth, childAt.measuredHeight)
-            Log.i(TAG, "onLayout:${screenPx[1]} === ${childAt.measuredHeight}  ===== ${measuredHeight} === $i")
+//            if (measuredHeight > screenPx[1]){
+//                i += (measuredHeight - screenPx[1]) / 2
+//            }
+            childAt.layout(0, i, childAt.measuredWidth, i+childAt.measuredHeight)
         }
     }
 

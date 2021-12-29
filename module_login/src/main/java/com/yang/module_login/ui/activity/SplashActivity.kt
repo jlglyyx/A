@@ -46,9 +46,11 @@ class SplashActivity : BaseActivity() {
 //            downLoadManagerBinder.startDown(
 //                DownLoadManager.Builder()
 //                    .threadSize(10)
-//                    .filePath("${Environment.getExternalStorageDirectory()}/MFiles/picture/${System.currentTimeMillis()}_a.mp4")
+//                    .filePath("${Environment.getExternalStorageDirectory()}/MFiles/video/aaa.mp4")
+////                    .filePath("${Environment.getExternalStorageDirectory()}/MFiles/video/${System.currentTimeMillis()}_a.mp4")
 //                    //.url("https://scpic.chinaz.net/files/pic/pic9/202107/bpic23810.jpg")
-//                    .url("https://93d2aeafc06b4b601cbc9bc1fd283894.dlied1.cdntips.net/dlied1.qq.com/qqweb/QQ_1/android_apk/Android_8.8.50.6735_537101929.32.HB2.apk?mkey=61a9c6201b117579&f=0000&cip=27.17.83.140&proto=https&access_type=")
+//                    .url("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
+////                    .url("https://93d2aeafc06b4b601cbc9bc1fd283894.dlied1.cdntips.net/dlied1.qq.com/qqweb/QQ_1/android_apk/Android_8.8.50.6735_537101929.32.HB2.apk?mkey=61a9c6201b117579&f=0000&cip=27.17.83.140&proto=https&access_type=")
 //                    .createNewFile(true)
 //            )
         }
@@ -104,7 +106,7 @@ class SplashActivity : BaseActivity() {
                 when {
                     it.granted -> {
                         val userInfo = getUserInfo()
-                        downVideo()
+                        //downVideo()
                         val launch = lifecycleScope.launch {
                             for (i in 1 downTo 0) {
                                 tv_timer.text = "${i}s点击跳过"

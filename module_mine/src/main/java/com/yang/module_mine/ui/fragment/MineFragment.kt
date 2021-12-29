@@ -90,7 +90,7 @@ class MineFragment : BaseLazyFragment() {
             mutableListOf.add(ViewHistoryData("2", it))
         }
 
-        mAdapter = MAdapter(R.layout.item_mine_view_history_image, mutableListOf.subList(0, 10)).apply {
+        mAdapter = MAdapter(R.layout.item_mine_view_history_image, mutableListOf).apply {
             setOnItemClickListener { adapter, view, position ->
                 val item = mAdapter.getItem(position)
                 item?.let {

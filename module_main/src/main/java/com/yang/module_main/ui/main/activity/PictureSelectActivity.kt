@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.act_picture_select.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.util.*
 
 
@@ -57,9 +58,9 @@ class PictureSelectActivity : BaseActivity() {
             it.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)?.apply {
                 data.addAll(this)
             }
-            showType = it.getIntExtra(AppConstant.Constant.TYPE,showType)
+            showType = it.getIntExtra(AppConstant.Constant.TYPE, showType)
 
-            maxSelect = it.getIntExtra(AppConstant.Constant.NUM,maxSelect)
+            maxSelect = it.getIntExtra(AppConstant.Constant.NUM, maxSelect)
         }
     }
 
@@ -140,60 +141,83 @@ class PictureSelectActivity : BaseActivity() {
                 AppConstant.Constant.NUM_ZERO -> {
                     val allPicture = getAllPicture()
                     val allVideo = getAllVideo()
-                    val sortedByDescending = (allPicture + allVideo).sortedByDescending {
-                        it.fileCreateTime
-                    }.apply {
-                        for (i in data) {
-                            this.findLast {
-                                TextUtils.equals(i.filePath, it.filePath)
-                            }.apply {
-                                /*遍历选中的数据与总数据匹配 设置匹配到的数据选中 */
-                                /*位置map 持有数据和数据的位置 */
-                                this?.let {
-                                    it.isSelect = true
-                                    it.selectPosition = i.selectPosition
-                                    mPositionMap[i] = indexOf(it)
+                    val sortedByDescending = (allPicture + allVideo)
+                        .filterNot {
+                            val file = File(it.filePath.toString())
+                            !file.exists()
+                        }
+                        .sortedByDescending {
+                            it.fileCreateTime
+                        }.apply {
+                            for (i in data) {
+                                this.findLast {
+                                    TextUtils.equals(i.filePath, it.filePath)
+                                }.apply {
+                                    /*遍历选中的数据与总数据匹配 设置匹配到的数据选中 */
+                                    /*位置map 持有数据和数据的位置 */
+                                    this?.let {
+                                        it.isSelect = true
+                                        it.selectPosition = i.selectPosition
+                                        mPositionMap[i] = indexOf(it)
+                                    }
                                 }
                             }
                         }
+                    withContext(Dispatchers.Main) {
+                        pictureSelectAdapter.setNewData(sortedByDescending)
                     }
+
+                }
+                AppConstant.Constant.NUM_ONE -> {
+                    val allPicture = getAllPicture()
+                    val sortedByDescending = allPicture
+                        .filterNot {
+                            val file = File(it.filePath.toString())
+                            !file.exists()
+                        }
+                        .sortedByDescending {
+                            it.fileCreateTime
+                        }.apply {
+                            for (i in data) {
+                                allPicture.findLast {
+                                    TextUtils.equals(i.filePath, it.filePath)
+                                }.apply {
+                                    this?.let {
+                                        it.isSelect = true
+                                        it.selectPosition = i.selectPosition
+                                        mPositionMap[i] = allPicture.indexOf(it)
+                                    }
+                                }
+                            }
+                        }
                     withContext(Dispatchers.Main) {
                         pictureSelectAdapter.setNewData(sortedByDescending)
                     }
                 }
-                AppConstant.Constant.NUM_ONE -> {
-                    val allPictureAndVideo = getAllPicture()
-                    for (i in data) {
-                        allPictureAndVideo.findLast {
-                            TextUtils.equals(i.filePath, it.filePath)
-                        }.apply {
-                            this?.let {
-                                it.isSelect = true
-                                it.selectPosition = i.selectPosition
-                                mPositionMap[i] = allPictureAndVideo.indexOf(it)
-                            }
-                        }
-                    }
-
-                    withContext(Dispatchers.Main) {
-                        pictureSelectAdapter.setNewData(allPictureAndVideo)
-                    }
-                }
                 else -> {
                     val allVideo = getAllVideo()
-                    for (i in data) {
-                        allVideo.findLast {
-                            TextUtils.equals(i.filePath, it.filePath)
+                    val sortedByDescending = allVideo
+                        .filterNot {
+                            val file = File(it.filePath.toString())
+                            !file.exists()
+                        }
+                        .sortedByDescending {
+                            it.fileCreateTime
                         }.apply {
-                            this?.let {
-                                it.isSelect = true
-                                it.selectPosition = i.selectPosition
-                                mPositionMap[i] = allVideo.indexOf(it)
+                            for (i in data) {
+                                allVideo.findLast {
+                                    TextUtils.equals(i.filePath, it.filePath)
+                                }.apply {
+                                    this?.let {
+                                        it.isSelect = true
+                                        it.selectPosition = i.selectPosition
+                                        mPositionMap[i] = allVideo.indexOf(it)
+                                    }
+                                }
                             }
                         }
-                    }
                     withContext(Dispatchers.Main) {
-                        pictureSelectAdapter.setNewData(allVideo)
+                        pictureSelectAdapter.setNewData(sortedByDescending)
                     }
                 }
             }

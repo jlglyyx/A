@@ -1,10 +1,12 @@
 package com.yang.module_login.ui.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +16,7 @@ import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
@@ -36,6 +39,10 @@ class LoginActivity : BaseActivity() {
     @InjectViewModel
     lateinit var loginViewModel: LoginViewModel
 
+    private var videoUrl = "${Environment.getExternalStorageDirectory()}/MFiles/video/aaa.mp4"
+
+    private var mediaPlayer:MediaPlayer? = null
+
     override fun getLayout(): Int {
         return R.layout.act_login
     }
@@ -47,8 +54,29 @@ class LoginActivity : BaseActivity() {
 
     override fun initView() {
         initVideoView()
+
+        val registerForActivityResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK && null != it.data) {
+                    it.data!!.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
+                        ?.let { beans ->
+                            videoUrl = beans[0].filePath.toString()
+                            surfaceView.restartVideo(videoUrl)
+                        }
+                }
+            }
+
+
+
         bt_login.clicks().subscribe {
-            checkForm()
+
+            val forName = Class.forName("com.yang.module_main.ui.main.activity.PictureSelectActivity")
+            val intent = Intent(this,forName)
+            intent.putExtra(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_TWO)
+            intent.putExtra(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
+            registerForActivityResult.launch(intent)
+
+            //checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
@@ -140,15 +168,7 @@ class LoginActivity : BaseActivity() {
 
     private fun initVideoView() {
         lifecycle.addObserver(surfaceView)
-        val mediaPlayer =
-            surfaceView.initMediaPlayer("${Environment.getExternalStorageDirectory()}/MFiles/video/register.mp4")
-        mediaPlayer?.setOnInfoListener { mp, what, extra ->
-            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                iv_cover.visibility = View.GONE
-            }
-            Log.i(TAG, "setOnInfoListener: $mp   $what   $extra")
-            return@setOnInfoListener false
-        }
+        mediaPlayer = surfaceView.initMediaPlayer(videoUrl)
     }
 
     override fun onDestroy() {
