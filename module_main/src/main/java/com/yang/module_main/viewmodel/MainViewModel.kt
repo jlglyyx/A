@@ -7,6 +7,7 @@ import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
+import com.yang.lib_common.util.filterEmptyFile
 import com.yang.lib_common.util.getFilePath
 import com.yang.lib_common.util.toJson
 import com.yang.module_main.data.model.DynamicData
@@ -161,7 +162,7 @@ class MainViewModel @Inject constructor(
         }, {
 
         },{
-            val filePath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/$type")
+            val filePath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/$type").filterEmptyFile()
             pictureCollectListLiveData.postValue(filePath)
 //            showRecyclerViewErrorEvent()
 //            cancelRefreshLoadMore()

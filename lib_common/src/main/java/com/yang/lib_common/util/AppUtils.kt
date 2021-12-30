@@ -123,6 +123,13 @@ fun getFilePath(
     return mutableListOf
 }
 
+fun MutableList<String>.filterEmptyFile():MutableList<String>{
+    return this.filterNot {
+        val file = File(it)
+        !file.exists()
+    }.toMutableList()
+}
+
 /**
  * @return 获取文件夹下所有文件夹路径
  */

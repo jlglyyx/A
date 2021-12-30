@@ -92,9 +92,14 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
 
     fun initMediaPlayer(path: String): MediaPlayer? {
         try {
-            if (currentPath == path){
-                return null
+            if (!isReset){
+                if (currentPath == path){
+                    return null
+                }else{
+                    position = 0
+                }
             }
+
             currentPath = path
             return mediaPlayer?.apply {
                 setDataSource(path)
@@ -130,6 +135,7 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.i(TAG, "initMediaPlayer: ${e.toString()}")
             ivCover.visibility = View.VISIBLE
             return null
         }

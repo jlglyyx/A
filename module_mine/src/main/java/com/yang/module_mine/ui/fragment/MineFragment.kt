@@ -14,10 +14,7 @@ import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.getFilePath
-import com.yang.lib_common.util.getUserInfo
+import com.yang.lib_common.util.*
 import com.yang.module_mine.R
 import com.yang.module_mine.data.ViewHistoryData
 import com.yang.module_mine.viewmodel.MineViewModel
@@ -80,12 +77,12 @@ class MineFragment : BaseLazyFragment() {
     private fun initRecyclerView() {
 
         val mutableListOf = mutableListOf<ViewHistoryData>()
-        val picturePath = getFilePath()
+        val picturePath = getFilePath().filterEmptyFile()
 
         picturePath.forEach {
             mutableListOf.add(ViewHistoryData("1", it))
         }
-        val videoPath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
+        val videoPath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video").filterEmptyFile()
         videoPath.forEach {
             mutableListOf.add(ViewHistoryData("2", it))
         }

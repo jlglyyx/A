@@ -13,6 +13,7 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.filterEmptyFile
 import com.yang.lib_common.util.getFilePath
 import com.yang.module_mine.R
 import com.yang.module_mine.data.ViewHistoryData
@@ -72,12 +73,12 @@ class ViewHistoryActivity:BaseActivity() {
             }
         }
         recyclerView.adapter = mAdapter
-        val picturePath = getFilePath()
+        val picturePath = getFilePath().filterEmptyFile()
 
         picturePath.forEach {
             mutableListOf.add(ViewHistoryData("1",it))
         }
-        val videoPath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
+        val videoPath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video").filterEmptyFile()
         videoPath.forEach {
             mutableListOf.add(ViewHistoryData("2",it))
         }

@@ -17,6 +17,7 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.filterEmptyFile
 import com.yang.lib_common.util.getFilePath
 import com.yang.module_main.R
 import com.yang.module_main.viewmodel.MainViewModel
@@ -102,7 +103,7 @@ class MyDownLoadFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
-        val filePath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/$type")
+        val filePath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/$type").filterEmptyFile()
         mAdapter.replaceData(filePath)
         smartRefreshLayout.finishRefresh()
     }

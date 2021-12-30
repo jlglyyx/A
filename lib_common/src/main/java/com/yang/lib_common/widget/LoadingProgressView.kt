@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.yang.lib_common.R
+import com.yang.lib_common.util.filterEmptyFile
 import com.yang.lib_common.util.getFilePath
 import java.util.*
 
@@ -105,7 +106,7 @@ class LoadingProgressView : View {
 
 
     private fun getBitmap() {
-        val filePath = getFilePath()
+        val filePath = getFilePath().filterEmptyFile()
         if (filePath.size > 0) {
             val s = filePath[Random().nextInt(filePath.size - 1)]
             Log.i("TAG", "createBitmap: $s")
