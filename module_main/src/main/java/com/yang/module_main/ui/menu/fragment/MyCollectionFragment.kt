@@ -53,11 +53,15 @@ class MyCollectionFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it)
+                    if (it.size == 0) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.isNotEmpty()) {
+                    if (pageNum != 1 && it.isNullOrEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
@@ -65,7 +69,11 @@ class MyCollectionFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     }
                 }
                 else -> {
-                    mAdapter.replaceData(it)
+                    if (it.size == 0) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
                 }
             }
         })

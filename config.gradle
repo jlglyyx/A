@@ -73,9 +73,9 @@ ext {
             "banner"                       : "com.youth.banner:banner:2.1.0",
             "photoview"                    : "com.github.chrisbanes.photoview:library:1.2.4",
             "XPopup"                       : "com.github.li-xiaojun:XPopup:2.4.0",
-            "location"                     : "com.amap.api:location:latest.integration",
+            "location"                     : "com.amap.api:location:5.6.1",
             "navi-3dmap"                   : 'com.amap.api:navi-3dmap:8.0.0_3dmap8.0.0',
-            "search"                       : 'com.amap.api:search:latest.integration',
+            "search"                       : 'com.amap.api:search:7.9.0',
             "flowlayout"                   : "com.hyman:flowlayout-lib:1.1.2",
             "tbs"                          : "com.tencent.tbs:tbssdk:44085",
 

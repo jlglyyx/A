@@ -14,7 +14,7 @@ import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.module_mine.R
 import com.yang.module_mine.adapter.MineObtainExchangeAdapter
-import com.yang.module_mine.data.MineObtainExchangeData
+import com.yang.module_mine.data.MineTurnoverData
 import com.yang.module_mine.viewmodel.MineViewModel
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.act_mine_exchange_goods_detail.*
@@ -47,7 +47,6 @@ class MineExchangeGoodsDetailActivity :BaseActivity() {
     override fun initView() {
         initRecyclerView()
         initAppBarLayout()
-
         tv_exchange.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_CREATE_ORDER_DETAIL_ACTIVITY).navigation()
         }
@@ -64,17 +63,17 @@ class MineExchangeGoodsDetailActivity :BaseActivity() {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter = MineObtainExchangeAdapter(mutableListOf<MineObtainExchangeData>().apply {
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
+        mAdapter = MineObtainExchangeAdapter(mutableListOf<MineTurnoverData>().apply {
+            add(MineTurnoverData("签到了一天","100","+100"))
+            add(MineTurnoverData("兑换了一块钱","99","-1"))
+            add(MineTurnoverData("签到了一天","100","+100"))
+            add(MineTurnoverData("兑换了一块钱","99","-1"))
+            add(MineTurnoverData("签到了一天","100","+100"))
+            add(MineTurnoverData("兑换了一块钱","99","-1"))
+            add(MineTurnoverData("签到了一天","100","+100"))
+            add(MineTurnoverData("兑换了一块钱","99","-1"))
+            add(MineTurnoverData("签到了一天","100","+100"))
+            add(MineTurnoverData("兑换了一块钱","99","-1"))
         })
 
         mAdapter.setOnItemClickListener { adapter, view, position ->

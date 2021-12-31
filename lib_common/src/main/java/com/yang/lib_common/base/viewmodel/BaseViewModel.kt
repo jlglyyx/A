@@ -2,6 +2,7 @@ package com.yang.lib_common.base.viewmodel
 
 import android.app.Application
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.yang.lib_common.bus.event.UIChangeLiveData
@@ -145,6 +146,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                 dismissDialog()
             } catch (t: Throwable) {
                 error(t)
+                Log.i("BaseViewModel", "launch: ${t.message}")
                 if (errorDialog) {
                     if (messages.isNotEmpty() && messages.size >= 3) {
                         handleException(t, messages[2])

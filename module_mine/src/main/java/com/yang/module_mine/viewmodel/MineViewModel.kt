@@ -1,11 +1,16 @@
 package com.yang.module_mine.viewmodel
 
 import android.app.Application
+import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.filterEmptyFile
+import com.yang.lib_common.util.getFilePath
+import com.yang.module_mine.data.MineTurnoverData
+import com.yang.module_mine.data.ViewHistoryData
 import com.yang.module_mine.repository.MineRepository
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -26,6 +31,11 @@ class MineViewModel @Inject constructor(
     var mUserInfoData = MutableLiveData<UserInfoData>()
     var pictureListLiveData = MutableLiveData<MutableList<String>>()
 
+    var mViewHistoryListLiveData = MutableLiveData<MutableList<ViewHistoryData>>()
+
+    var mMineTurnoverListLiveData = MutableLiveData<MutableList<MineTurnoverData>>()
+
+
     fun login(userAccount: String, password: String) {
         launch({
             mineRepository.login(userAccount, password)
@@ -33,7 +43,7 @@ class MineViewModel @Inject constructor(
             mUserInfoData.postValue(it.data)
             showDialog(it.message)
             delayMissDialog()
-        },{
+        }, {
             buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
         }, messages = *arrayOf("请求中..."))
     }
@@ -71,10 +81,11 @@ class MineViewModel @Inject constructor(
             requestSuccess()
             showDialog(it.message)
             delayMissDialog()
-        },{
+        }, {
             requestSuccess()
-        },messages = *arrayOf("请求中..."))
+        }, messages = *arrayOf("请求中..."))
     }
+
     fun changeUserInfo(userInfoData: UserInfoData) {
         launch({
             mineRepository.changeUserInfo(userInfoData)
@@ -82,7 +93,100 @@ class MineViewModel @Inject constructor(
             mUserInfoData.postValue(it.data)
             showDialog(it.message)
             delayMissDialog()
-        },messages = *arrayOf("请求中..."))
+        }, messages = *arrayOf("请求中..."))
     }
+
+    fun queryViewHistory() {
+        launch({
+            mineRepository.queryViewHistory()
+        }, {
+            mViewHistoryListLiveData.postValue(it.data)
+            showDialog(it.message)
+            delayMissDialog()
+        }, {
+            val mutableListOf = mutableListOf<ViewHistoryData>()
+            val picturePath = getFilePath().filterEmptyFile()
+
+            picturePath.forEach {
+                mutableListOf.add(ViewHistoryData("1", it))
+            }
+            val videoPath =
+                getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video").filterEmptyFile()
+            videoPath.forEach {
+                mutableListOf.add(ViewHistoryData("2", it))
+            }
+            mViewHistoryListLiveData.postValue(mutableListOf)
+        }, errorDialog = false)
+    }
+
+    fun queryObtainTurnover(pageNum:Int) {
+        launch({
+            mineRepository.queryObtainTurnover(pageNum)
+        }, {
+            mMineTurnoverListLiveData.postValue(it.data)
+//            showDialog(it.message)
+//            delayMissDialog()
+        },{
+            mMineTurnoverListLiveData.postValue(mutableListOf<MineTurnoverData>().apply {
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+            })
+        },errorDialog = false)
+    }
+
+    fun querySignTurnover() {
+        launch({
+            mineRepository.querySignTurnover()
+        }, {
+            mMineTurnoverListLiveData.postValue(it.data)
+//            showDialog(it.message)
+//            delayMissDialog()
+        }, {
+            mMineTurnoverListLiveData.postValue(mutableListOf<MineTurnoverData>().apply {
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+            })
+        }, errorDialog = false)
+    }
+
+    fun queryExtensionTurnover() {
+        launch({
+            mineRepository.queryExtensionTurnover()
+        }, {
+            mMineTurnoverListLiveData.postValue(it.data)
+//            showDialog(it.message)
+//            delayMissDialog()
+        }, {
+            mMineTurnoverListLiveData.postValue(mutableListOf<MineTurnoverData>().apply {
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+                add(MineTurnoverData("签到了一天","100","+100"))
+                add(MineTurnoverData("兑换了一块钱","99","-1"))
+            })
+        }, errorDialog = false)
+    }
+
 }
 

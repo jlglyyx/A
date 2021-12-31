@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yang.lib_common.util.simpleDateFormat
 import com.yang.module_mine.R
-import com.yang.module_mine.data.MineObtainData
+import com.yang.module_mine.data.MineTurnoverData
 
 /**
  * @Author Administrator
@@ -12,13 +12,13 @@ import com.yang.module_mine.data.MineObtainData
  * @Description
  * @Date 2021/9/10 11:13
  */
-class MineObtainAdapter(data: MutableList<MineObtainData>) :
-    BaseQuickAdapter<MineObtainData, BaseViewHolder>(data) {
+class MineObtainAdapter(data: MutableList<MineTurnoverData>?) :
+    BaseQuickAdapter<MineTurnoverData, BaseViewHolder>(data) {
     init {
         mLayoutResId = R.layout.item_mine_obtain
     }
 
-    override fun convert(helper: BaseViewHolder, item: MineObtainData) {
+    override fun convert(helper: BaseViewHolder, item: MineTurnoverData) {
         helper.setText(R.id.tv_title, item.title)
             .setText(R.id.tv_content, item.content)
             .setText(R.id.tv_count, "共计："+item.count)

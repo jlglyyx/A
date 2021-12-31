@@ -1,5 +1,6 @@
 package com.yang.lib_common.app
 
+import android.app.Activity
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,6 +10,7 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkRequest
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
@@ -32,10 +34,13 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import kotlin.system.measureTimeMillis
 
 
-class BaseApplication : Application() {
+class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
+
+    private var isFirstActivity = true
 
     override fun onCreate() {
         super.onCreate()
+        registerActivityLifecycleCallbacks(this)
     }
 
     override fun attachBaseContext(base: Context) {
@@ -49,7 +54,6 @@ class BaseApplication : Application() {
         initNetworkStatusListener(baseApplication)
         initVideo()
         initWebView()
-        initService()
     }
 
     companion object {
@@ -178,5 +182,38 @@ class BaseApplication : Application() {
     override fun onLowMemory() {
         super.onLowMemory()
         Glide.get(this).onLowMemory()
+    }
+
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        Log.i(TAG, "onActivityCreated: ")
+    }
+
+    override fun onActivityStarted(activity: Activity) {
+        Log.i(TAG, "onActivityStarted: ")
+        if (isFirstActivity){
+            initService()
+            isFirstActivity = false
+            unregisterActivityLifecycleCallbacks(this)
+        }
+    }
+
+    override fun onActivityResumed(activity: Activity) {
+        Log.i(TAG, "onActivityResumed: ")
+    }
+
+    override fun onActivityPaused(activity: Activity) {
+        Log.i(TAG, "onActivityPaused: ")
+    }
+
+    override fun onActivityStopped(activity: Activity) {
+        Log.i(TAG, "onActivityStopped: ")
+    }
+
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+        Log.i(TAG, "onActivitySaveInstanceState: ")
+    }
+
+    override fun onActivityDestroyed(activity: Activity) {
+        Log.i(TAG, "onActivityDestroyed: ")
     }
 }

@@ -1,20 +1,20 @@
 package com.yang.module_mine.ui.activity
 
-import android.os.Environment
 import android.widget.ImageView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.filterEmptyFile
-import com.yang.lib_common.util.getFilePath
 import com.yang.module_mine.R
 import com.yang.module_mine.data.ViewHistoryData
 import com.yang.module_mine.viewmodel.MineViewModel
@@ -27,10 +27,12 @@ import kotlinx.android.synthetic.main.view_normal_recyclerview.*
  * @Date 2021/8/31 10:44
  */
 @Route(path = AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)
-class ViewHistoryActivity:BaseActivity() {
+class ViewHistoryActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
+
+    private var pageNum = 1
 
     private lateinit var mAdapter: MAdapter
     override fun getLayout(): Int {
@@ -38,6 +40,37 @@ class ViewHistoryActivity:BaseActivity() {
     }
 
     override fun initData() {
+        initSmartRefreshLayout()
+        smartRefreshLayout.autoRefresh()
+        mineViewModel.mViewHistoryListLiveData.observe(this, Observer {
+            when {
+                smartRefreshLayout.isRefreshing -> {
+                    smartRefreshLayout.finishRefresh()
+                    if (it.size == 0) {
+                        mineViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
+                }
+                smartRefreshLayout.isLoading -> {
+                    smartRefreshLayout.finishLoadMore()
+                    if (pageNum != 1 && it.isNullOrEmpty()) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(false)
+                        mAdapter.addData(it)
+                    }
+                }
+                else -> {
+                    if (it.size == 0) {
+                        mineViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
+                }
+            }
+        })
+
     }
 
     override fun initView() {
@@ -52,18 +85,21 @@ class ViewHistoryActivity:BaseActivity() {
         InjectViewModelProxy.inject(this)
     }
 
+    private fun initSmartRefreshLayout() {
+        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+    }
+
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val mutableListOf = mutableListOf<ViewHistoryData>()
-        mAdapter = MAdapter(R.layout.item_view_history, mutableListOf).apply {
+        mAdapter = MAdapter(R.layout.item_view_history, null).apply {
             setOnItemClickListener { adapter, view, position ->
                 val item = mAdapter.getItem(position)
                 item?.let {
-                    if (it.type == "1"){
+                    if (it.type == "1") {
                         buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
                             .withString(AppConstant.Constant.ID, it.id)
                             .navigation()
-                    }else{
+                    } else {
                         buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
                             .withString(AppConstant.Constant.URL, it.filePath)
                             .navigation()
@@ -73,30 +109,29 @@ class ViewHistoryActivity:BaseActivity() {
             }
         }
         recyclerView.adapter = mAdapter
-        val picturePath = getFilePath().filterEmptyFile()
-
-        picturePath.forEach {
-            mutableListOf.add(ViewHistoryData("1",it))
-        }
-        val videoPath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video").filterEmptyFile()
-        videoPath.forEach {
-            mutableListOf.add(ViewHistoryData("2",it))
-        }
-        mAdapter.replaceData(mutableListOf)
     }
 
-    inner class MAdapter(layoutResId: Int, list: MutableList<ViewHistoryData>) :
+    inner class MAdapter(layoutResId: Int, list: MutableList<ViewHistoryData>?) :
         BaseQuickAdapter<ViewHistoryData, BaseViewHolder>(layoutResId, list) {
         override fun convert(helper: BaseViewHolder, item: ViewHistoryData) {
             val ivImage = helper.getView<ImageView>(R.id.iv_image)
             Glide.with(ivImage).load(item.filePath)
                 .error(R.drawable.iv_image_error)
                 .placeholder(R.drawable.iv_image_placeholder).into(ivImage)
-            if (item.type == "2"){
-                helper.setText(R.id.tv_type,"#视频")
-            }else{
-                helper.setText(R.id.tv_type,"#图片")
+            if (item.type == "2") {
+                helper.setText(R.id.tv_type, "#视频")
+            } else {
+                helper.setText(R.id.tv_type, "#图片")
             }
         }
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+        mineViewModel.queryViewHistory()
+    }
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+        pageNum++
+        mineViewModel.queryViewHistory()
     }
 }

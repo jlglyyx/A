@@ -52,11 +52,11 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.isNotEmpty()) {
-                        smartRefreshLayout.setNoMoreData(true)
-                    } else {
+                    if (pageNum != 1 && it.isNullOrEmpty()) {
                         smartRefreshLayout.setNoMoreData(false)
                         mAdapter.addData(it)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(true)
                     }
                 }
                 else -> {

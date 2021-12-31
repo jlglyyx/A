@@ -2,7 +2,7 @@ package com.yang.module_mine.data
 
 /**
  * @Author Administrator
- * @ClassName MineObtainData
+ * @ClassName MineObtainExchangeData
  * @Description
  * @Date 2021/9/10 11:13
  */

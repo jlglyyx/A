@@ -82,11 +82,12 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.isNotEmpty()) {
+                    if (pageNum != 1 && it.isNullOrEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
                         mAdapter.addData(it)
+
                     }
                 }
                 else -> {

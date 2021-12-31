@@ -8,7 +8,7 @@ interface AppConstant {
 
         const val BASE_PORT = "20000"
 
-        const val BASE_URL = "http://www.baidu.com/"
+        const val BASE_URL = "https://www.wanandroid.com/"
 //        const val BASE_URL = "http://jlgl.free.idcfengye.com/"
 //        const val BASE_URL = "http://10.16.242.28:20000/"
 

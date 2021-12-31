@@ -1,5 +1,6 @@
 package com.yang.module_mine.ui.obtain.activity
 
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -13,7 +14,6 @@ import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
 import com.yang.module_mine.adapter.MineObtainExchangeAdapter
-import com.yang.module_mine.data.MineObtainExchangeData
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.act_mine_obtain_exchange.*
 import kotlinx.android.synthetic.main.view_normal_recyclerview.recyclerView
@@ -65,58 +65,55 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
 
     private fun initSmartRefreshLayout() {
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+        smartRefreshLayout.autoRefresh()
     }
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
-        mAdapter = MineObtainExchangeAdapter(mutableListOf<MineObtainExchangeData>().apply {
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-            add(MineObtainExchangeData("签到了一天","100","+100"))
-            add(MineObtainExchangeData("兑换了一块钱","99","-1"))
-        })
+        mAdapter = MineObtainExchangeAdapter(null)
         mAdapter.setOnItemClickListener { adapter, view, position ->
 
             buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_DETAIL_ACTIVITY).navigation()
         }
         recyclerView.adapter = mAdapter
-//        mineViewModel.mVideoData.observe(this, Observer {
-//            when {
-//                smartRefreshLayout.isRefreshing -> {
-//                    smartRefreshLayout.finishRefresh()
-//                    mAdapter.replaceData(it.list)
-//                }
-//                smartRefreshLayout.isLoading -> {
-//                    smartRefreshLayout.finishLoadMore()
-//                    if (pageNum != 1 && it.list.isEmpty()) {
-//                        smartRefreshLayout.setNoMoreData(true)
-//                    } else {
-//                        smartRefreshLayout.setNoMoreData(false)
-//                        mAdapter.addData(it.list)
-//                    }
-//                }
-//                else -> {
-//                    mAdapter.replaceData(it.list)
-//                }
-//            }
-//        })
+        mineViewModel.mMineTurnoverListLiveData.observe(this, Observer {
+            when {
+                smartRefreshLayout.isRefreshing -> {
+                    smartRefreshLayout.finishRefresh()
+                    if (it.size == 0) {
+                        mineViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
+                }
+                smartRefreshLayout.isLoading -> {
+                    smartRefreshLayout.finishLoadMore()
+                    if (pageNum != 1 && it.isNullOrEmpty()) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(false)
+                        mAdapter.addData(it)
+                    }
+                }else -> {
+                if (it.size == 0) {
+                    mineViewModel.showRecyclerViewEmptyEvent()
+                } else {
+                    mAdapter.replaceData(it)
+                }
+            }
+            }
+        })
 
         registerRefreshAndRecyclerView(smartRefreshLayout, mAdapter)
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
-        //mineViewModel.getVideoInfo("",pageNum,keyword,true)
+        mineViewModel.queryObtainTurnover(pageNum)
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
-        //mineViewModel.getVideoInfo("",pageNum,keyword,true)
+        mineViewModel.queryObtainTurnover(pageNum)
     }
 }
