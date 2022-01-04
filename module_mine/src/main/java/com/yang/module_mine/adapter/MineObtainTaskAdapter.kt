@@ -7,11 +7,11 @@ import com.yang.module_mine.data.MineEarnObtainData
 
 /**
  * @Author Administrator
- * @ClassName MineEarnObtainAdapter
+ * @ClassName MineObtainTaskAdapter
  * @Description
  * @Date 2021/9/29 16:49
  */
-class MineEarnObtainAdapter(layoutResId: Int, data: MutableList<MineEarnObtainData>?) :
+class MineObtainTaskAdapter(layoutResId: Int, data: MutableList<MineEarnObtainData>?) :
     BaseQuickAdapter<MineEarnObtainData, BaseViewHolder>(layoutResId, data) {
     override fun convert(helper: BaseViewHolder, item: MineEarnObtainData) {
 

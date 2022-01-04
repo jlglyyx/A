@@ -53,6 +53,7 @@
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:paddingBottom="@dimen/dp_50"
+            android:id="@+id/nestedScrollView"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <LinearLayout
@@ -129,6 +130,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center"
+            android:textColor="@color/black"
             android:text="立即兑换" />
     </LinearLayout>
 </RelativeLayout>

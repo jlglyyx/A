@@ -19,12 +19,12 @@ import java.io.FileOutputStream
 
 /**
  * @Author Administrator
- * @ClassName MineLimitTimeExtensionActivity
+ * @ClassName MineExtensionQRCodeActivity
  * @Description 限时推广二维码
  * @Date 2021/9/10 11:53
  */
-@Route(path = AppConstant.RoutePath.MINE_LIMIT_TIME_EXTENSION_ACTIVITY)
-class MineLimitTimeExtensionActivity:BaseActivity() {
+@Route(path = AppConstant.RoutePath.MINE_EXTENSION_QR_CODE_ACTIVITY)
+class MineExtensionQRCodeActivity:BaseActivity() {
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 

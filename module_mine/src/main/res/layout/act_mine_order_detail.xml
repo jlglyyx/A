@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_100"
                 android:orientation="vertical"
-                android:background="@color/plum"
+                android:background="@color/colorBar"
                 android:gravity="center"
                 app:layout_constraintTop_toTopOf="parent">
 

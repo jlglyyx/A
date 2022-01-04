@@ -1,11 +1,11 @@
-package com.yang.module_mine.ui.activity
+package com.yang.module_mine.ui.obtain.activity
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.module_mine.R
-import com.yang.module_mine.adapter.MineEarnObtainAdapter
+import com.yang.module_mine.adapter.MineObtainTaskAdapter
 import com.yang.module_mine.data.MineEarnObtainData
 import kotlinx.android.synthetic.main.act_mine_earn_obtain.*
 
@@ -15,10 +15,10 @@ import kotlinx.android.synthetic.main.act_mine_earn_obtain.*
  * @Description
  * @Date 2021/9/29 16:13
  */
-@Route(path = AppConstant.RoutePath.MINE_EARN_OBTAIN_ACTIVITY)
-class MineEarnObtainActivity:BaseActivity() {
+@Route(path = AppConstant.RoutePath.MINE_OBTAIN_TASK_ACTIVITY)
+class MineObtainTaskActivity:BaseActivity() {
 
-    lateinit var mAdapter: MineEarnObtainAdapter
+    lateinit var mTaskAdapter: MineObtainTaskAdapter
 
     override fun getLayout(): Int {
         return R.layout.act_mine_earn_obtain
@@ -45,8 +45,8 @@ class MineEarnObtainActivity:BaseActivity() {
         mutableListOf.add(MineEarnObtainData("观看视频+60",true))
         mutableListOf.add(MineEarnObtainData("观看视频+60",false))
 
-        mAdapter = MineEarnObtainAdapter(R.layout.item_mine_earn_obtain,mutableListOf)
-        recyclerView.adapter = mAdapter
+        mTaskAdapter = MineObtainTaskAdapter(R.layout.item_mine_earn_obtain,mutableListOf)
+        recyclerView.adapter = mTaskAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 }

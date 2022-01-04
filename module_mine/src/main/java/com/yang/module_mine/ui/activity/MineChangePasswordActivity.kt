@@ -24,8 +24,8 @@ import kotlinx.android.synthetic.main.act_change_password.*
  * @Description 修改密码
  * @Date 2021/9/28 10:47
  */
-@Route(path = AppConstant.RoutePath.CHANGE_PASSWORD_ACTIVITY)
-class ChangePasswordActivity : BaseActivity() {
+@Route(path = AppConstant.RoutePath.MINE_CHANGE_PASSWORD_ACTIVITY)
+class MineChangePasswordActivity : BaseActivity() {
 
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel

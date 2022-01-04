@@ -5,7 +5,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yang.module_mine.R
-import com.yang.module_mine.data.MineTurnoverData
+import com.yang.module_mine.data.MineGoodsDetailData
 
 /**
  * @Author Administrator
@@ -13,13 +13,13 @@ import com.yang.module_mine.data.MineTurnoverData
  * @Description
  * @Date 2021/9/10 11:13
  */
-class MineObtainExchangeAdapter(data: MutableList<MineTurnoverData>?) :
-    BaseQuickAdapter<MineTurnoverData, BaseViewHolder>(data) {
+class MineObtainExchangeAdapter(data: MutableList<MineGoodsDetailData>?) :
+    BaseQuickAdapter<MineGoodsDetailData, BaseViewHolder>(data) {
     init {
         mLayoutResId = R.layout.item_mine_obtain_exchange
     }
 
-    override fun convert(helper: BaseViewHolder, item: MineTurnoverData) {
+    override fun convert(helper: BaseViewHolder, item: MineGoodsDetailData) {
         val imageView = helper.getView<ImageView>(R.id.iv_image)
         Glide.with(mContext)
             .load("https://img.alicdn.com/bao/uploaded/i2/2209667639897/O1CN015Oh5X32MysY6ea4fc_!!0-item_pic.jpg_200x200q90.jpg_.webp")

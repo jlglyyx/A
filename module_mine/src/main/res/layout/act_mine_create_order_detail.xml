@@ -35,14 +35,16 @@
                     android:id="@+id/cv_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp_10"
+                    android:layout_marginHorizontal="@dimen/dp_5"
+                    android:layout_marginVertical="@dimen/dp_10"
                     app:cardCornerRadius="@dimen/dp_10">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
-                        android:padding="@dimen/dp_10">
+                        android:paddingVertical="@dimen/dp_10"
+                        android:paddingHorizontal="@dimen/dp_5">
 
                         <TextView
                             android:id="@+id/tv_phone"
@@ -196,6 +198,7 @@
                     android:text="支付时间：2020-10-11 10:28:31"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_12"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_create_time" />
             </androidx.constraintlayout.widget.ConstraintLayout>

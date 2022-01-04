@@ -4,8 +4,7 @@ import com.yang.lib_common.base.repository.BaseRepository
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.module_mine.api.MineApiService
-import com.yang.module_mine.data.MineTurnoverData
-import com.yang.module_mine.data.ViewHistoryData
+import com.yang.module_mine.data.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.RequestBody
@@ -44,13 +43,13 @@ class MineRepository @Inject constructor(private val mineApiService: MineApiServ
             mineApiService.changeUserInfo(userInfoData)
         }
     }
-    suspend fun queryViewHistory(): MResult<MutableList<ViewHistoryData>> {
+    suspend fun queryViewHistory(): MResult<MutableList<MineViewHistoryData>> {
         return withContextIO{
             mineApiService.queryViewHistory()
         }
     }
 
-    suspend fun queryObtainTurnover(pageNum:Int): MResult<MutableList<MineTurnoverData>> {
+    suspend fun queryObtainTurnover(pageNum:Int): MResult<MutableList<MineObtainTurnoverData>> {
         return withContext(Dispatchers.IO) {
             mineApiService.queryObtainTurnover(pageNum)
         }
@@ -61,15 +60,20 @@ class MineRepository @Inject constructor(private val mineApiService: MineApiServ
 //        }
 //    }
 
-    suspend fun querySignTurnover(): MResult<MutableList<MineTurnoverData>> {
+    suspend fun querySignTurnover(): MResult<MutableList<MineSignTurnoverData>> {
         return withContextIO{
             mineApiService.querySignTurnover()
         }
     }
 
-    suspend fun queryExtensionTurnover(): MResult<MutableList<MineTurnoverData>> {
+    suspend fun queryExtensionTurnover(): MResult<MutableList<MineExtensionTurnoverData>> {
         return withContextIO{
             mineApiService.queryExtensionTurnover()
+        }
+    }
+    suspend fun queryGoodsList(): MResult<MutableList<MineGoodsDetailData>> {
+        return withContextIO{
+            mineApiService.queryGoodsList()
         }
     }
 

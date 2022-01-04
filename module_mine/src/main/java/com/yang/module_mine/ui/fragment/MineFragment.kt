@@ -16,7 +16,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.module_mine.R
-import com.yang.module_mine.data.ViewHistoryData
+import com.yang.module_mine.data.MineViewHistoryData
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.fra_mine.*
 import kotlin.math.abs
@@ -76,15 +76,15 @@ class MineFragment : BaseLazyFragment() {
 
     private fun initRecyclerView() {
 
-        val mutableListOf = mutableListOf<ViewHistoryData>()
+        val mutableListOf = mutableListOf<MineViewHistoryData>()
         val picturePath = getFilePath().filterEmptyFile()
 
         picturePath.forEach {
-            mutableListOf.add(ViewHistoryData("1", it))
+            mutableListOf.add(MineViewHistoryData("1", it))
         }
         val videoPath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video").filterEmptyFile()
         videoPath.forEach {
-            mutableListOf.add(ViewHistoryData("2", it))
+            mutableListOf.add(MineViewHistoryData("2", it))
         }
 
         mAdapter = MAdapter(R.layout.item_mine_view_history_image, mutableListOf).apply {
@@ -142,38 +142,38 @@ class MineFragment : BaseLazyFragment() {
                 .navigation()
         }
         ll_view_history.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)
+            buildARouter(AppConstant.RoutePath.MINE_VIEW_HISTORY_ACTIVITY)
                 .navigation()
         }
         ll_my_obtain.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_OBTAIN_ACTIVITY)
+            buildARouter(AppConstant.RoutePath.MINE_OBTAIN_TURNOVER_ACTIVITY)
                 .navigation()
         }
         ll_my_sing.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_SIGN_ACTIVITY)
+            buildARouter(AppConstant.RoutePath.MINE_SIGN_TURNOVER_ACTIVITY)
                 .navigation()
         }
         ll_my_extension.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_EXTENSION_ACTIVITY)
+            buildARouter(AppConstant.RoutePath.MINE_EXTENSION_TURNOVER_ACTIVITY)
                 .navigation()
         }
-        ll_obtain_integral.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_EARN_OBTAIN_ACTIVITY)
+        ll_obtain_task.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_OBTAIN_TASK_ACTIVITY)
                 .navigation()
         }
-        ll_time_limit_extension.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_LIMIT_TIME_EXTENSION_ACTIVITY)
+        ll_extension_qr_code.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.MINE_EXTENSION_QR_CODE_ACTIVITY)
                 .navigation()
         }
-        ll_exchange_obtain.clicks().subscribe {
+        ll_obtain_exchange.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_OBTAIN_EXCHANGE_ACTIVITY)
                 .navigation()
         }
     }
 
-    inner class MAdapter(layoutResId: Int, list: MutableList<ViewHistoryData>) :
-        BaseQuickAdapter<ViewHistoryData, BaseViewHolder>(layoutResId, list) {
-        override fun convert(helper: BaseViewHolder, item: ViewHistoryData) {
+    inner class MAdapter(layoutResId: Int, list: MutableList<MineViewHistoryData>) :
+        BaseQuickAdapter<MineViewHistoryData, BaseViewHolder>(layoutResId, list) {
+        override fun convert(helper: BaseViewHolder, item: MineViewHistoryData) {
             val ivImage = helper.getView<ImageView>(R.id.iv_image)
             if (item.type == "2") {
                 Glide.with(ivImage)

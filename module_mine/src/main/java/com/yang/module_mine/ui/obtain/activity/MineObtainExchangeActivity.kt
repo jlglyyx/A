@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.view_normal_recyclerview.smartRefreshLayou
  * @Date 2021/9/13 17:16
  */
 @Route(path = AppConstant.RoutePath.MINE_OBTAIN_EXCHANGE_ACTIVITY)
-class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
+class MineObtainExchangeActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
@@ -46,12 +46,10 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
     override fun initView() {
         initSmartRefreshLayout()
         initRecyclerView()
-
-        commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
+        commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
                 buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_ACTIVITY).navigation()
             }
-
         }
     }
 
@@ -69,14 +67,15 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
     }
 
     private fun initRecyclerView() {
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         mAdapter = MineObtainExchangeAdapter(null)
         mAdapter.setOnItemClickListener { adapter, view, position ->
-
-            buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_DETAIL_ACTIVITY).navigation()
+            val item = mAdapter.getItem(position)
+            buildARouter(AppConstant.RoutePath.MINE_GOODS_DETAIL_ACTIVITY).withString(AppConstant.Constant.ID,item?.id).navigation()
         }
         recyclerView.adapter = mAdapter
-        mineViewModel.mMineTurnoverListLiveData.observe(this, Observer {
+        mineViewModel.mMineGoodsDetailListLiveData.observe(this, Observer {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
@@ -94,13 +93,14 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
                         smartRefreshLayout.setNoMoreData(false)
                         mAdapter.addData(it)
                     }
-                }else -> {
-                if (it.size == 0) {
-                    mineViewModel.showRecyclerViewEmptyEvent()
-                } else {
-                    mAdapter.replaceData(it)
                 }
-            }
+                else -> {
+                    if (it.size == 0) {
+                        mineViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
+                }
             }
         })
 
@@ -109,11 +109,11 @@ class MineObtainExchangeActivity:BaseActivity(), OnRefreshLoadMoreListener {
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
-        mineViewModel.queryObtainTurnover(pageNum)
+        mineViewModel.queryGoodsList()
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
-        mineViewModel.queryObtainTurnover(pageNum)
+        mineViewModel.queryGoodsList()
     }
 }

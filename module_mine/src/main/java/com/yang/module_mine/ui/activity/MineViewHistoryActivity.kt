@@ -16,7 +16,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_mine.R
-import com.yang.module_mine.data.ViewHistoryData
+import com.yang.module_mine.data.MineViewHistoryData
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 
@@ -26,8 +26,8 @@ import kotlinx.android.synthetic.main.view_normal_recyclerview.*
  * @Description 观看历史
  * @Date 2021/8/31 10:44
  */
-@Route(path = AppConstant.RoutePath.VIEW_HISTORY_ACTIVITY)
-class ViewHistoryActivity : BaseActivity(), OnRefreshLoadMoreListener {
+@Route(path = AppConstant.RoutePath.MINE_VIEW_HISTORY_ACTIVITY)
+class MineViewHistoryActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
@@ -111,9 +111,9 @@ class ViewHistoryActivity : BaseActivity(), OnRefreshLoadMoreListener {
         recyclerView.adapter = mAdapter
     }
 
-    inner class MAdapter(layoutResId: Int, list: MutableList<ViewHistoryData>?) :
-        BaseQuickAdapter<ViewHistoryData, BaseViewHolder>(layoutResId, list) {
-        override fun convert(helper: BaseViewHolder, item: ViewHistoryData) {
+    inner class MAdapter(layoutResId: Int, list: MutableList<MineViewHistoryData>?) :
+        BaseQuickAdapter<MineViewHistoryData, BaseViewHolder>(layoutResId, list) {
+        override fun convert(helper: BaseViewHolder, item: MineViewHistoryData) {
             val ivImage = helper.getView<ImageView>(R.id.iv_image)
             Glide.with(ivImage).load(item.filePath)
                 .error(R.drawable.iv_image_error)

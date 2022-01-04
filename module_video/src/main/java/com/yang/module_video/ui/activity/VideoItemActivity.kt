@@ -168,13 +168,13 @@ class VideoItemActivity : BaseActivity() {
                 item?.let {
                     when (view.id) {
                         com.yang.lib_common.R.id.siv_img -> {
-                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
+                            buildARouter(AppConstant.RoutePath.MINE_OTHER_PERSON_INFO_ACTIVITY).withString(
                                 AppConstant.Constant.ID,
                                 ""
                             ).navigation()
                         }
                         com.yang.lib_common.R.id.siv_reply_img -> {
-                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
+                            buildARouter(AppConstant.RoutePath.MINE_OTHER_PERSON_INFO_ACTIVITY).withString(
                                 AppConstant.Constant.ID,
                                 ""
                             ).navigation()

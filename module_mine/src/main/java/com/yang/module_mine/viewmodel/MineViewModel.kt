@@ -9,8 +9,7 @@ import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.filterEmptyFile
 import com.yang.lib_common.util.getFilePath
-import com.yang.module_mine.data.MineTurnoverData
-import com.yang.module_mine.data.ViewHistoryData
+import com.yang.module_mine.data.*
 import com.yang.module_mine.repository.MineRepository
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -29,11 +28,18 @@ class MineViewModel @Inject constructor(
 ) : BaseViewModel(application) {
 
     var mUserInfoData = MutableLiveData<UserInfoData>()
+
     var pictureListLiveData = MutableLiveData<MutableList<String>>()
 
-    var mViewHistoryListLiveData = MutableLiveData<MutableList<ViewHistoryData>>()
+    var mViewHistoryListLiveData = MutableLiveData<MutableList<MineViewHistoryData>>()
 
-    var mMineTurnoverListLiveData = MutableLiveData<MutableList<MineTurnoverData>>()
+    var mMineExtensionTurnoverListLiveData = MutableLiveData<MutableList<MineExtensionTurnoverData>>()
+
+    var mMineObtainTurnoverListLiveData = MutableLiveData<MutableList<MineObtainTurnoverData>>()
+
+    var mMineSignTurnoverListLiveData = MutableLiveData<MutableList<MineSignTurnoverData>>()
+
+    var mMineGoodsDetailListLiveData = MutableLiveData<MutableList<MineGoodsDetailData>>()
 
 
     fun login(userAccount: String, password: String) {
@@ -104,63 +110,63 @@ class MineViewModel @Inject constructor(
             showDialog(it.message)
             delayMissDialog()
         }, {
-            val mutableListOf = mutableListOf<ViewHistoryData>()
+            val mutableListOf = mutableListOf<MineViewHistoryData>()
             val picturePath = getFilePath().filterEmptyFile()
 
             picturePath.forEach {
-                mutableListOf.add(ViewHistoryData("1", it))
+                mutableListOf.add(MineViewHistoryData("1", it))
             }
             val videoPath =
                 getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video").filterEmptyFile()
             videoPath.forEach {
-                mutableListOf.add(ViewHistoryData("2", it))
+                mutableListOf.add(MineViewHistoryData("2", it))
             }
             mViewHistoryListLiveData.postValue(mutableListOf)
         }, errorDialog = false)
     }
 
-    fun queryObtainTurnover(pageNum:Int) {
+    fun queryObtainTurnover(pageNum: Int) {
         launch({
             mineRepository.queryObtainTurnover(pageNum)
         }, {
-            mMineTurnoverListLiveData.postValue(it.data)
+            mMineObtainTurnoverListLiveData.postValue(it.data)
 //            showDialog(it.message)
 //            delayMissDialog()
-        },{
-            mMineTurnoverListLiveData.postValue(mutableListOf<MineTurnoverData>().apply {
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
+        }, {
+            mMineObtainTurnoverListLiveData.postValue(mutableListOf<MineObtainTurnoverData>().apply {
+                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
+                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
+                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
+                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
+                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
+                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
             })
-        },errorDialog = false)
+        }, errorDialog = false)
     }
 
     fun querySignTurnover() {
         launch({
             mineRepository.querySignTurnover()
         }, {
-            mMineTurnoverListLiveData.postValue(it.data)
+            mMineSignTurnoverListLiveData.postValue(it.data)
 //            showDialog(it.message)
 //            delayMissDialog()
         }, {
-            mMineTurnoverListLiveData.postValue(mutableListOf<MineTurnoverData>().apply {
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
+            mMineSignTurnoverListLiveData.postValue(mutableListOf<MineSignTurnoverData>().apply {
+                add(MineSignTurnoverData("签到了一天", "100", "+100"))
+                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineSignTurnoverData("签到了一天", "100", "+100"))
+                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineSignTurnoverData("签到了一天", "100", "+100"))
+                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineSignTurnoverData("签到了一天", "100", "+100"))
+                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineSignTurnoverData("签到了一天", "100", "+100"))
+                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
             })
         }, errorDialog = false)
     }
@@ -169,21 +175,63 @@ class MineViewModel @Inject constructor(
         launch({
             mineRepository.queryExtensionTurnover()
         }, {
-            mMineTurnoverListLiveData.postValue(it.data)
+            mMineExtensionTurnoverListLiveData.postValue(it.data)
 //            showDialog(it.message)
 //            delayMissDialog()
         }, {
-            mMineTurnoverListLiveData.postValue(mutableListOf<MineTurnoverData>().apply {
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
-                add(MineTurnoverData("签到了一天","100","+100"))
-                add(MineTurnoverData("兑换了一块钱","99","-1"))
+            mMineExtensionTurnoverListLiveData.postValue(mutableListOf<MineExtensionTurnoverData>().apply {
+                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
+                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
+                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
+                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
+                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
+                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
+                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
+            })
+        }, errorDialog = false)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    fun queryGoodsList() {
+        launch({
+            mineRepository.queryGoodsList()
+        }, {
+            mMineGoodsDetailListLiveData.postValue(it.data)
+//            showDialog(it.message)
+//            delayMissDialog()
+        }, {
+            mMineGoodsDetailListLiveData.postValue(mutableListOf<MineGoodsDetailData>().apply {
+                add(MineGoodsDetailData("", "", ""))
+                add(MineGoodsDetailData("", "", ""))
+                add(MineGoodsDetailData("", "", ""))
+                add(MineGoodsDetailData("", "", ""))
+                add(MineGoodsDetailData("", "", ""))
+                add(MineGoodsDetailData("", "", ""))
+                add(MineGoodsDetailData("", "", ""))
+                add(MineGoodsDetailData("", "", ""))
             })
         }, errorDialog = false)
     }

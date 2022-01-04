@@ -18,8 +18,8 @@ import kotlinx.android.synthetic.main.act_mine_shapping_address.*
  * @Description 我的收货地址
  * @Date 2021/9/26 11:45
  */
-@Route(path = AppConstant.RoutePath.MINE_SHIPPING_ADDRESS_ACTIVITY)
-class MineShippingAddressActivity:BaseActivity() {
+@Route(path = AppConstant.RoutePath.MINE_ADDRESS_ACTIVITY)
+class MineAddressActivity:BaseActivity() {
 
     lateinit var mAdapter: MineShippingAddressAdapter
 

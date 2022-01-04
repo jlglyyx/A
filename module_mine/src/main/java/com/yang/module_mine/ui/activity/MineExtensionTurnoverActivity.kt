@@ -1,4 +1,4 @@
-package com.yang.module_mine.ui.obtain.activity
+package com.yang.module_mine.ui.activity
 
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,28 +11,27 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.module_mine.R
-import com.yang.module_mine.adapter.MineObtainAdapter
+import com.yang.module_mine.adapter.MineExtensionTurnoverAdapter
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 
 /**
  * @Author Administrator
- * @ClassName MineObtainActivity
- * @Description 我的积分历史
+ * @ClassName MineExtensionActivity
+ * @Description 我的推广历史
  * @Date 2021/9/10 10:51
  */
-@Route(path = AppConstant.RoutePath.MINE_OBTAIN_ACTIVITY)
-class MineObtainActivity : BaseActivity(), OnRefreshLoadMoreListener {
+@Route(path = AppConstant.RoutePath.MINE_EXTENSION_TURNOVER_ACTIVITY)
+class MineExtensionTurnoverActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
-
     private var pageNum = 1
 
-    private lateinit var mAdapter: MineObtainAdapter
+    private lateinit var mTurnoverAdapter: MineExtensionTurnoverAdapter
 
     override fun getLayout(): Int {
-        return R.layout.act_mine_obtain
+        return R.layout.act_mine_extension
     }
 
     override fun initData() {
@@ -58,16 +57,16 @@ class MineObtainActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter = MineObtainAdapter(null)
-        recyclerView.adapter = mAdapter
-        mineViewModel.mMineTurnoverListLiveData.observe(this, Observer {
+        mTurnoverAdapter = MineExtensionTurnoverAdapter(null)
+        recyclerView.adapter = mTurnoverAdapter
+        mineViewModel.mMineExtensionTurnoverListLiveData.observe(this, Observer {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
                     if (it.size == 0) {
                         mineViewModel.showRecyclerViewEmptyEvent()
                     } else {
-                        mAdapter.replaceData(it)
+                        mTurnoverAdapter.replaceData(it)
                     }
                 }
                 smartRefreshLayout.isLoading -> {
@@ -76,28 +75,29 @@ class MineObtainActivity : BaseActivity(), OnRefreshLoadMoreListener {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
-                        mAdapter.addData(it)
+                        mTurnoverAdapter.addData(it)
                     }
-                }else -> {
+                }
+                else -> {
                     if (it.size == 0) {
                         mineViewModel.showRecyclerViewEmptyEvent()
                     } else {
-                        mAdapter.replaceData(it)
+                        mTurnoverAdapter.replaceData(it)
                     }
                 }
             }
         })
 
-        registerRefreshAndRecyclerView(smartRefreshLayout, mAdapter)
+        registerRefreshAndRecyclerView(smartRefreshLayout, mTurnoverAdapter)
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
-        mineViewModel.queryObtainTurnover(pageNum)
+        mineViewModel.queryExtensionTurnover()
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
-        mineViewModel.queryObtainTurnover(pageNum)
+        mineViewModel.queryExtensionTurnover()
     }
 }

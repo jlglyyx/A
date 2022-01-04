@@ -6,6 +6,6 @@ package com.yang.module_mine.data
  * @Description
  * @Date 2021/12/28 16:25
  */
-data class ViewHistoryData(var type:String,var filePath:String) {
+data class MineViewHistoryData(var type:String, var filePath:String) {
     val id:String = ""
 }

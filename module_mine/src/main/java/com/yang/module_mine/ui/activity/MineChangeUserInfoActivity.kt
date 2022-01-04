@@ -20,8 +20,8 @@ import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
-import com.yang.module_mine.adapter.ActivityInfoAdapter
-import com.yang.module_mine.data.ActivityInfoData
+import com.yang.module_mine.adapter.MineActivityInfoAdapter
+import com.yang.module_mine.data.MineActivityInfoData
 import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.act_change_user_info.*
 import kotlinx.android.synthetic.main.act_other_person_info.commonToolBar
@@ -33,13 +33,13 @@ import kotlinx.android.synthetic.main.act_other_person_info.commonToolBar
  * @Description 修改信息
  * @Date 2021/8/27 14:53
  */
-@Route(path = AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY)
-class ChangeUserInfoActivity : BaseActivity() {
+@Route(path = AppConstant.RoutePath.MINE_CHANGE_USER_INFO_ACTIVITY)
+class MineChangeUserInfoActivity : BaseActivity() {
 
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
-    private lateinit var activityInfoAdapter: ActivityInfoAdapter
+    private lateinit var mineActivityInfoAdapter: MineActivityInfoAdapter
 
     private var imageUrl = ""
 
@@ -133,21 +133,21 @@ class ChangeUserInfoActivity : BaseActivity() {
     }
 
     private fun initRecyclerView() {
-        activityInfoAdapter = ActivityInfoAdapter(
+        mineActivityInfoAdapter = MineActivityInfoAdapter(
             R.layout.item_activity_info,
-            mutableListOf<ActivityInfoData>().apply {
-                add(ActivityInfoData("头像", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
-                add(ActivityInfoData("签名", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
-                add(ActivityInfoData("昵称", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
-                add(ActivityInfoData("性别", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
-                add(ActivityInfoData("职业", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
-                add(ActivityInfoData("公司", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
+            mutableListOf<MineActivityInfoData>().apply {
+                add(MineActivityInfoData("头像", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
+                add(MineActivityInfoData("签名", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
+                add(MineActivityInfoData("昵称", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
+                add(MineActivityInfoData("性别", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
+                add(MineActivityInfoData("职业", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
+                add(MineActivityInfoData("公司", AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY))
             })
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = activityInfoAdapter
+        recyclerView.adapter = mineActivityInfoAdapter
 
-        activityInfoAdapter.setOnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as ActivityInfoData
+        mineActivityInfoAdapter.setOnItemClickListener { adapter, view, position ->
+            val item = adapter.getItem(position) as MineActivityInfoData
             buildARouter(item.value).navigation()
         }
     }

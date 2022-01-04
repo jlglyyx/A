@@ -16,18 +16,18 @@ import dagger.Component
 interface MineComponent {
     fun provideMineViewModelFactory(): MineViewModelFactory
 
-    fun inject(changeUserInfoActivity: ChangeUserInfoActivity)
-    fun inject(otherPersonInfoActivity: OtherPersonInfoActivity)
-    fun inject(viewHistoryActivity: ViewHistoryActivity)
-    fun inject(mineObtainActivity: MineObtainActivity)
+    fun inject(mineChangeUserInfoActivity: MineChangeUserInfoActivity)
+    fun inject(mineOtherPersonInfoActivity: MineOtherPersonInfoActivity)
+    fun inject(mineViewHistoryActivity: MineViewHistoryActivity)
+    fun inject(mineObtainTurnoverActivity: MineObtainTurnoverActivity)
     fun inject(mineObtainExchangeActivity: MineObtainExchangeActivity)
     fun inject(mineExchangeActivity: MineExchangeActivity)
-    fun inject(mineExchangeGoodsDetailActivity: MineExchangeGoodsDetailActivity)
-    fun inject(mineSignActivity: MineSignActivity)
-    fun inject(mineExtensionActivity: MineExtensionActivity)
-    fun inject(mineLimitTimeExtensionActivity: MineLimitTimeExtensionActivity)
+    fun inject(mineGoodsDetailActivity: MineGoodsDetailActivity)
+    fun inject(mineSignTurnoverActivity: MineSignTurnoverActivity)
+    fun inject(mineExtensionTurnoverActivity: MineExtensionTurnoverActivity)
+    fun inject(mineExtensionQRCodeActivity: MineExtensionQRCodeActivity)
     fun inject(mineAddAddressActivity: MineAddAddressActivity)
-    fun inject(changePasswordActivity: ChangePasswordActivity)
+    fun inject(mineChangePasswordActivity: MineChangePasswordActivity)
 
     fun inject(mineFragment: MineFragment)
     fun inject(mineExchangeStatusFragment: MineExchangeStatusFragment)

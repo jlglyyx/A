@@ -25,7 +25,7 @@ class AccountSettingActivity:BaseActivity() {
 
     override fun initView() {
         icv_change_password.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.CHANGE_PASSWORD_ACTIVITY).navigation()
+            buildARouter(AppConstant.RoutePath.MINE_CHANGE_PASSWORD_ACTIVITY).navigation()
         }
     }
 

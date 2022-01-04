@@ -32,11 +32,32 @@ class MineExchangeStatusFragment :BaseLazyFragment(), OnRefreshLoadMoreListener 
 
     private lateinit var mAdapter: MineExchangeStatusAdapter
 
+    var type:Int = -1
+
     override fun getLayout(): Int {
         return R.layout.act_mine_exchange_status
     }
 
     override fun initData() {
+
+        arguments?.apply {
+            type = getInt(AppConstant.Constant.TYPE,-1)
+        }
+
+        when(type){
+            AppConstant.Constant.NUM_ZERO ->{
+
+            }
+            AppConstant.Constant.NUM_ONE ->{
+
+            }
+            AppConstant.Constant.NUM_TWO ->{
+
+            }
+            AppConstant.Constant.NUM_THREE ->{
+
+            }
+        }
 
     }
 

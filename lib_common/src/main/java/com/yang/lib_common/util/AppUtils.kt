@@ -25,6 +25,8 @@ private const val TAG = "AppUtils"
 
 val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
 
+val formatDate_YYYYMMMDDHHMMSS = SimpleDateFormat("yyyyMMddHHmmss")
+
 /**
  * @return 宽高集合
  */

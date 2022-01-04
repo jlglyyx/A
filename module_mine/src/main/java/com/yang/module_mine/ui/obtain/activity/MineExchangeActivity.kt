@@ -42,10 +42,10 @@ class MineExchangeActivity :BaseActivity() {
         titles.add("待付款")
         titles.add("待发货")
         titles.add("待收货")
-        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
-        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
-        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
-        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).navigation() as Fragment)
+        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).withInt(AppConstant.Constant.DATA,AppConstant.Constant.NUM_ZERO).navigation() as Fragment)
+        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).withInt(AppConstant.Constant.DATA,AppConstant.Constant.NUM_ONE).navigation() as Fragment)
+        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).withInt(AppConstant.Constant.DATA,AppConstant.Constant.NUM_TWO).navigation() as Fragment)
+        fragments.add(buildARouter(AppConstant.RoutePath.MINE_EXCHANGE_STATUS_FRAGMENT).withInt(AppConstant.Constant.DATA,AppConstant.Constant.NUM_THREE).navigation() as Fragment)
     }
 
     override fun initView() {

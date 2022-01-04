@@ -105,39 +105,39 @@ interface AppConstant {
          */
         const val MINE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MainActivity"
 
-        const val OTHER_PERSON_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/OtherPersonInfoActivity"
+        const val MINE_OTHER_PERSON_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineOtherPersonInfoActivity"
 
-        const val CHANGE_USER_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ChangeUserInfoActivity"
+        const val MINE_CHANGE_USER_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineChangeUserInfoActivity"
 
-        const val VIEW_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ViewHistoryActivity"
+        const val MINE_VIEW_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineViewHistoryActivity"
 
-        const val MINE_OBTAIN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainActivity"
+        const val MINE_OBTAIN_TURNOVER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainTaskActivity"
 
         const val MINE_OBTAIN_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainExchangeActivity"
 
         const val MINE_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeActivity"
 
-        const val MINE_EXCHANGE_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeDetailActivity"
+        const val MINE_GOODS_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineGoodsDetailActivity"
 
-        const val MINE_SIGN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineSignActivity"
+        const val MINE_SIGN_TURNOVER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineSignTurnoverActivity"
 
-        const val MINE_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionActivity"
+        const val MINE_EXTENSION_TURNOVER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionTurnoverActivity"
 
-        const val MINE_LIMIT_TIME_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineLimitTimeExtensionActivity"
+        const val MINE_EXTENSION_QR_CODE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionQRCodeActivity"
 
-        const val MINE_SHIPPING_ADDRESS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineShippingAddressActivity"
+        const val MINE_ADDRESS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineAddressActivity"
 
-        const val CHANGE_PASSWORD_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ChangePasswordActivity"
+        const val MINE_CHANGE_PASSWORD_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineChangePasswordActivity"
 
 
 
         const val MINE_ADD_ADDRESS_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineAddAddressActivity"
 
-        const val MINE_EARN_OBTAIN_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineEarnObtainActivity"
+        const val MINE_OBTAIN_TASK_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineObtainTaskActivity"
 
         const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineOrderDetailActivity"
 
-        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
+        const val MINE_CREATE_ORDER_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineCreateOrderActivity"
 
 
 

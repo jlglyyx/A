@@ -24,8 +24,8 @@ import kotlinx.android.synthetic.main.act_other_person_info.*
  * @Description 其他人信息
  * @Date 2021/9/10 10:51
  */
-@Route(path = AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY)
-class OtherPersonInfoActivity : BaseActivity() {
+@Route(path = AppConstant.RoutePath.MINE_OTHER_PERSON_INFO_ACTIVITY)
+class MineOtherPersonInfoActivity : BaseActivity() {
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
 
@@ -54,7 +54,7 @@ class OtherPersonInfoActivity : BaseActivity() {
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
-                buildARouter(AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY).navigation()
+                buildARouter(AppConstant.RoutePath.MINE_CHANGE_USER_INFO_ACTIVITY).navigation()
             }
         }
         iv_bg.imageUrl =
