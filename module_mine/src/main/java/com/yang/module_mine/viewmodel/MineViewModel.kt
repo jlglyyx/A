@@ -6,11 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoData
+import com.yang.lib_common.room.BaseAppDatabase
+import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.filterEmptyFile
 import com.yang.lib_common.util.getFilePath
-import com.yang.module_mine.data.*
+import com.yang.module_mine.data.MineExtensionTurnoverData
+import com.yang.module_mine.data.MineObtainTurnoverData
+import com.yang.module_mine.data.MineSignTurnoverData
+import com.yang.module_mine.data.MineViewHistoryData
 import com.yang.module_mine.repository.MineRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import java.io.File
@@ -215,24 +222,20 @@ class MineViewModel @Inject constructor(
 
 
 
-    fun queryGoodsList() {
+    fun queryGoodsList(type:Int,pageNum: Int) {
         launch({
             mineRepository.queryGoodsList()
         }, {
             mMineGoodsDetailListLiveData.postValue(it.data)
-//            showDialog(it.message)
-//            delayMissDialog()
         }, {
-            mMineGoodsDetailListLiveData.postValue(mutableListOf<MineGoodsDetailData>().apply {
-                add(MineGoodsDetailData("", "", ""))
-                add(MineGoodsDetailData("", "", ""))
-                add(MineGoodsDetailData("", "", ""))
-                add(MineGoodsDetailData("", "", ""))
-                add(MineGoodsDetailData("", "", ""))
-                add(MineGoodsDetailData("", "", ""))
-                add(MineGoodsDetailData("", "", ""))
-                add(MineGoodsDetailData("", "", ""))
-            })
+            withContext(Dispatchers.IO){
+                if (type == 0){
+                    mMineGoodsDetailListLiveData.postValue(BaseAppDatabase.instance.mineGoodsDetailDao().queryData())
+                }else{
+                    mMineGoodsDetailListLiveData.postValue(BaseAppDatabase.instance.mineGoodsDetailDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT))
+                }
+
+            }
         }, errorDialog = false)
     }
 

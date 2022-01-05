@@ -43,8 +43,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
-                        android:paddingVertical="@dimen/dp_10"
-                        android:paddingHorizontal="@dimen/dp_5">
+                        android:padding="@dimen/dp_10">
 
                         <TextView
                             android:id="@+id/tv_phone"
@@ -152,7 +151,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:layout_marginTop="@dimen/dp_20">
 
@@ -202,7 +201,6 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_create_time" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </LinearLayout>
     </com.yang.lib_common.widget.DampScrollView>

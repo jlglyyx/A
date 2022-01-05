@@ -109,11 +109,11 @@ class MineObtainExchangeActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
-        mineViewModel.queryGoodsList()
+        mineViewModel.queryGoodsList(0,pageNum)
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
-        mineViewModel.queryGoodsList()
+        mineViewModel.queryGoodsList(0,pageNum)
     }
 }

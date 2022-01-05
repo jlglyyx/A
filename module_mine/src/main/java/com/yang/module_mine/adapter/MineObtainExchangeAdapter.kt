@@ -5,7 +5,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yang.module_mine.R
-import com.yang.module_mine.data.MineGoodsDetailData
+import com.yang.lib_common.room.entity.MineGoodsDetailData
 
 /**
  * @Author Administrator

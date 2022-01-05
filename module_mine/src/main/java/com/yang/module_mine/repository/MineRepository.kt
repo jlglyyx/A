@@ -3,6 +3,7 @@ package com.yang.module_mine.repository
 import com.yang.lib_common.base.repository.BaseRepository
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.remote.di.response.MResult
+import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.module_mine.api.MineApiService
 import com.yang.module_mine.data.*
 import kotlinx.coroutines.Dispatchers

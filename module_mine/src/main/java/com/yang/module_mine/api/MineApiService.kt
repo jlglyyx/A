@@ -3,6 +3,7 @@ package com.yang.module_mine.api
 import com.yang.lib_common.api.BaseApiService
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.remote.di.response.MResult
+import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.module_mine.data.*
 import okhttp3.RequestBody
 import retrofit2.http.*

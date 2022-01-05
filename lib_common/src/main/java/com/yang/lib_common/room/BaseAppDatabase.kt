@@ -16,7 +16,7 @@ import java.io.File
  * @Description
  * @Date 2021/8/5 14:22
  */
-@Database(entities = [ImageTypeData::class,VideoTypeData::class,SearchData::class, ImageDataItem::class, VideoDataItem::class,UploadTaskData::class],version = 1,exportSchema = true)
+@Database(entities = [ImageTypeData::class,VideoTypeData::class,SearchData::class, ImageDataItem::class, VideoDataItem::class,UploadTaskData::class,MineGoodsDetailData::class],version = 1,exportSchema = true)
 abstract class BaseAppDatabase : RoomDatabase() {
 
     abstract fun imageTypeDao(): ImageTypeDao
@@ -30,6 +30,8 @@ abstract class BaseAppDatabase : RoomDatabase() {
     abstract fun videoDataDao(): VideoDataDao
 
     abstract fun uploadTaskDao(): UploadTaskDao
+
+    abstract fun mineGoodsDetailDao(): MineGoodsDetailDao
 
     companion object {
         val instance: BaseAppDatabase by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
