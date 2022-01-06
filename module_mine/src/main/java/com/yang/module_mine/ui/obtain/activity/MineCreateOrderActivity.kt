@@ -14,15 +14,20 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.formatDate_YYYYMMMDDHHMMSS
 import com.yang.lib_common.util.simpleDateFormat
+import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_mine.R
 import com.yang.module_mine.data.MineShippingAddressData
+import com.yang.module_mine.viewmodel.MineViewModel
 import kotlinx.android.synthetic.main.act_mine_create_order_detail.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -37,6 +42,9 @@ import java.util.*
  */
 @Route(path = AppConstant.RoutePath.MINE_CREATE_ORDER_ACTIVITY)
 class MineCreateOrderActivity : BaseActivity() {
+
+    @InjectViewModel
+    lateinit var mineViewModel: MineViewModel
 
     private lateinit var registerForActivityResult: ActivityResultLauncher<Intent>
 
@@ -71,10 +79,29 @@ class MineCreateOrderActivity : BaseActivity() {
         cv_address.clicks().subscribe {
             registerForActivityResult.launch(Intent(this@MineCreateOrderActivity,MineAddressActivity::class.java))
         }
+
+        commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
+            override fun tvRightClickListener() {
+                mineViewModel.exchangeGoods()
+//                lifecycleScope.launch(Dispatchers.IO) {
+//                    BaseAppDatabase.instance.mineGoodsDetailDao().insertData(MineGoodsDetailData(UUID.randomUUID().toString().replace("-",""), 2, "==========================="))
+//                    withContext(Dispatchers.Main){
+//                        showShort("兑换成功")
+//                        finish()
+//                    }
+//                }
+
+            }
+        }
     }
 
     override fun initViewModel() {
 
+        InjectViewModelProxy.inject(this)
+    }
+
+    override fun initUIChangeLiveData(): UIChangeLiveData {
+        return mineViewModel.uC
     }
 
     @SuppressLint("SetTextI18n")
@@ -90,6 +117,7 @@ class MineCreateOrderActivity : BaseActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             BaseAppDatabase.instance.mineGoodsDetailDao().insertData(MineGoodsDetailData(UUID.randomUUID().toString().replace("-",""), 1, "${formatDate_YYYYMMMDDHHMMSS.format(date)}$format"))
         }
+        mineViewModel.createGoods()
     }
 
 

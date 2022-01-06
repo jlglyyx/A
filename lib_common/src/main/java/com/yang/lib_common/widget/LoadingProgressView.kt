@@ -107,8 +107,13 @@ class LoadingProgressView : View {
 
     private fun getBitmap() {
         val filePath = getFilePath().filterEmptyFile()
+        var randomNum = 1
         if (filePath.size > 0) {
-            val s = filePath[Random().nextInt(filePath.size - 1)]
+            if (filePath.size > 1){
+                randomNum = filePath.size - 1
+            }
+
+            val s = filePath[Random().nextInt(randomNum)]
             Log.i("TAG", "createBitmap: $s")
             imageBitmap = BitmapFactory.decodeFile(s)
             imageBitmap = imageBitmap?.let {

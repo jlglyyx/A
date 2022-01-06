@@ -4,7 +4,10 @@ import com.yang.lib_common.api.BaseApiService
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.MineGoodsDetailData
-import com.yang.module_mine.data.*
+import com.yang.module_mine.data.MineExtensionTurnoverData
+import com.yang.module_mine.data.MineObtainTurnoverData
+import com.yang.module_mine.data.MineSignTurnoverData
+import com.yang.module_mine.data.MineViewHistoryData
 import okhttp3.RequestBody
 import retrofit2.http.*
 
@@ -40,5 +43,11 @@ interface MineApiService : BaseApiService {
 
     @POST("user/queryGoodsList")
     suspend fun queryGoodsList(): MResult<MutableList<MineGoodsDetailData>>
+
+    @POST("user/createGoods")
+    suspend fun createGoods(): MResult<MineGoodsDetailData>
+
+    @POST("user/exchangeGoods")
+    suspend fun exchangeGoods(): MResult<MineGoodsDetailData>
 
 }

@@ -202,26 +202,6 @@ class MineViewModel @Inject constructor(
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     fun queryGoodsList(type:Int,pageNum: Int) {
         launch({
             mineRepository.queryGoodsList()
@@ -238,6 +218,25 @@ class MineViewModel @Inject constructor(
             }
         }, errorDialog = false)
     }
+    fun createGoods() {
+        launch({
+            mineRepository.createGoods()
+        }, {
+
+        }, {
+
+        },messages = *arrayOf("开始创建"))
+    }
+    fun exchangeGoods() {
+        launch({
+            mineRepository.exchangeGoods()
+        }, {
+
+        }, {
+
+        },messages = *arrayOf("开始兑换"))
+    }
+
 
 }
 

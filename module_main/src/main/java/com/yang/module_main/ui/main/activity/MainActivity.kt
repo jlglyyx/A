@@ -140,6 +140,7 @@ class MainActivity : BaseActivity() {
                 tab.setIcon(selectIcon[position])
                 (tab.view.getChildAt(0) as ImageView).imageTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
+                //tab.customView = ATabLayout(this)
             } else {
                 tab.setIcon(icon[position])
                 (tab.view.getChildAt(0) as ImageView).imageTintList =

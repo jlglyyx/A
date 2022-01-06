@@ -5,7 +5,10 @@ import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.remote.di.response.MResult
 import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.module_mine.api.MineApiService
-import com.yang.module_mine.data.*
+import com.yang.module_mine.data.MineExtensionTurnoverData
+import com.yang.module_mine.data.MineObtainTurnoverData
+import com.yang.module_mine.data.MineSignTurnoverData
+import com.yang.module_mine.data.MineViewHistoryData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.RequestBody
@@ -75,6 +78,16 @@ class MineRepository @Inject constructor(private val mineApiService: MineApiServ
     suspend fun queryGoodsList(): MResult<MutableList<MineGoodsDetailData>> {
         return withContextIO{
             mineApiService.queryGoodsList()
+        }
+    }
+    suspend fun createGoods(): MResult<MineGoodsDetailData> {
+        return withContextIO{
+            mineApiService.createGoods()
+        }
+    }
+    suspend fun exchangeGoods(): MResult<MineGoodsDetailData> {
+        return withContextIO{
+            mineApiService.exchangeGoods()
         }
     }
 

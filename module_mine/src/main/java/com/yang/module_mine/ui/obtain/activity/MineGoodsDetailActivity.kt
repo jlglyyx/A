@@ -15,7 +15,9 @@ import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.showShort
 import com.yang.module_mine.R
+import com.yang.module_mine.dialog.MineChooseGoodsDialog
 import com.yang.module_mine.viewmodel.MineViewModel
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.act_mine_exchange_goods_detail.*
@@ -28,7 +30,7 @@ import kotlin.math.abs
  * @Date 2021/9/14 10:39
  */
 @Route(path = AppConstant.RoutePath.MINE_GOODS_DETAIL_ACTIVITY)
-class MineGoodsDetailActivity :BaseActivity() {
+class MineGoodsDetailActivity : BaseActivity() {
 
     @InjectViewModel
     lateinit var mineViewModel: MineViewModel
@@ -37,7 +39,7 @@ class MineGoodsDetailActivity :BaseActivity() {
 
     private lateinit var mAdapter: NormalImageAdapter<String>
 
-    private var id:String = ""
+    private var id: String = ""
 
     private var currentPagePosition = 0
 
@@ -47,7 +49,7 @@ class MineGoodsDetailActivity :BaseActivity() {
 
     override fun initData() {
         intent?.apply {
-            id = getStringExtra(AppConstant.Constant.ID)?:""
+            id = getStringExtra(AppConstant.Constant.ID) ?: ""
         }
         initBanner()
     }
@@ -56,7 +58,16 @@ class MineGoodsDetailActivity :BaseActivity() {
         initRecyclerView()
         initAppBarLayout()
         tv_exchange.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.MINE_CREATE_ORDER_ACTIVITY).navigation()
+            XPopup.Builder(this).asCustom(MineChooseGoodsDialog(this).apply {
+                clickListener = object : MineChooseGoodsDialog.ClickListener {
+                    override fun onClick(data:String) {
+                        showShort(data)
+                        dismiss()
+                        buildARouter(AppConstant.RoutePath.MINE_CREATE_ORDER_ACTIVITY).navigation()
+                    }
+                }
+            }).show()
+
         }
     }
 
@@ -125,11 +136,9 @@ class MineGoodsDetailActivity :BaseActivity() {
                 add(BannerBean("https://scpic.chinaz.net/Files/pic/pic9/202107/bpic23678_s.jpg"))
                 add(BannerBean("https://scpic1.chinaz.net/Files/pic/pic9/202107/apic33909_s.jpg"))
                 add(BannerBean("https://scpic2.chinaz.net/Files/pic/pic9/202107/bpic23656_s.jpg"))
-            }),false)
+            }), false)
             .indicator = CircleIndicator(this)
     }
-
-
 
 
 }
