@@ -1,17 +1,27 @@
 package com.yang.module_main.ui.menu.fragment
 
 import androidx.core.app.ActivityOptionsCompat
+import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.amap.api.location.AMapLocation
 import com.bumptech.glide.Glide
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.fragment.BaseFragment
+import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.module_main.R
+import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fra_left.*
 
 @Route(path = AppConstant.RoutePath.LEFT_FRAGMENT)
 class LeftFragment : BaseFragment() {
+
+
+    @InjectViewModel
+    lateinit var mainViewModel: MainViewModel
+
     override fun getLayout(): Int {
         return R.layout.fra_left
     }
@@ -86,6 +96,13 @@ class LeftFragment : BaseFragment() {
         }
 
         tv_login_out.clicks().subscribe {
+            mainViewModel.loginOut()
+        }
+    }
+
+    override fun initViewModel() {
+        InjectViewModelProxy.inject(this)
+        mainViewModel.uC.requestSuccessEvent.observe(this, Observer {
             getDefaultMMKV().encode(AppConstant.Constant.LOGIN_STATUS, -1)
             getDefaultMMKV().clearAll()
             removeAllActivity()
@@ -95,10 +112,11 @@ class LeftFragment : BaseFragment() {
                     R.anim.fade_out
                 )
             ).navigation(requireActivity())
-        }
+        })
     }
 
-    override fun initViewModel() {
+    override fun initUIChangeLiveData(): UIChangeLiveData {
+        return mainViewModel.uC
     }
 
 }

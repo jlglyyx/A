@@ -23,9 +23,12 @@ interface MainApiService : BaseApiService {
     @POST("/uploadFile")
     suspend fun uploadFileAndParam(@Body file: MutableList<RequestBody>): MResult<MutableList<String>>
 
-    @POST("user/addComment")
-    suspend fun addComment(@QueryMap params: Map<String, String>): MResult<String>
+    @POST("user/insertComment")
+    suspend fun insertComment(@QueryMap params: Map<String, String>): MResult<String>
 
     @POST("user/queryCollect")
-    suspend fun queryCollect(@Query("type") type: String, @Query(AppConstant.Constant.PAGE_SIZE) pageSize: Int, @Query(AppConstant.Constant.PAGE_NUMBER) pageNum: Int): MResult<String>
+    suspend fun queryCollect(@Query("type") type: String, @Query(AppConstant.Constant.PAGE_SIZE) pageSize: Int, @Query(AppConstant.Constant.PAGE_NUMBER) pageNum: Int): MResult<MutableList<String>>
+
+    @POST("user/loginOut")
+    suspend fun loginOut(): MResult<String>
 }

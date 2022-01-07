@@ -21,9 +21,9 @@ interface VideoApiService : BaseApiService {
     @POST("video/queryVideoType")
     suspend fun getVideoTypeData(): MResult<MutableList<VideoTypeData>>
 
-    @POST("user/dynamic/insertUserDynamic")
-    suspend fun addViewHistory(@Query("id") id: String, @Query("type") type: String): MResult<String>
+    @POST("user/dynamic/insertViewHistory")
+    suspend fun insertViewHistory(@Query("id") id: String, @Query("type") type: String): MResult<String>
 
-    @POST("user/addComment")
-    suspend fun addComment(@QueryMap params: Map<String, String>): MResult<String>
+    @POST("user/insertComment")
+    suspend fun insertComment(@QueryMap params: Map<String, String>): MResult<String>
 }

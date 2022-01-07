@@ -23,7 +23,7 @@ interface PictureApiService : BaseApiService {
     @POST("user/addViewHistory")
     suspend fun addViewHistory(@Query("id") id: String, @Query("type") type: String): MResult<String>
 
-    @POST("user/addComment")
-    suspend fun addComment(@QueryMap params: Map<String, String>): MResult<String>
+    @POST("user/insertComment")
+    suspend fun insertComment(@QueryMap params: Map<String, String>): MResult<String>
 
 }

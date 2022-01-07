@@ -9,21 +9,24 @@ import org.jetbrains.annotations.NotNull
  * @Description
  * @Date 2021/12/21 9:17
  */
+
 class InjectViewModelProxy {
 
     companion object {
+
         private const val TAG = "InjectViewModelProxy"
-        fun inject(@NotNull a: Any) {
+
+        @Suppress("UNCHECKED_CAST")
+        fun inject(@NotNull any: Any) {
             try {
-                val java = a::class.java.simpleName
+                val java = any::class.java.simpleName
                 val className = "com.yang.processor." + java + "_InjectViewModel"
                 val forName = Class.forName(className)
                 val injectManager: InjectManager<Any> = forName.newInstance() as InjectManager<Any>
-                injectManager.inject(a)
+                injectManager.inject(any)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
-
 }

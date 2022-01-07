@@ -54,7 +54,7 @@ class DynamicDetailActivity : BaseActivity() {
         id = intent.getStringExtra(AppConstant.Constant.ID)
         getDynamicDetail()
         mainViewModel.dynamicListLiveData.observe(this, Observer {
-            val dynamicData = it[1]
+            val dynamicData = it[0]
             initItemMainContentImage(dynamicData)
             initItemMainTitle(dynamicData)
             initItemMainContentText(dynamicData)
@@ -113,7 +113,7 @@ class DynamicDetailActivity : BaseActivity() {
                             comment = s
                         })
                         //nestedScrollView.fullScroll(View.FOCUS_DOWN)
-                        addComment(s)
+                        insertComment(s)
 
                         commentAdapter.getViewByPosition(
                             recyclerView,
@@ -140,10 +140,10 @@ class DynamicDetailActivity : BaseActivity() {
         return mainViewModel.uC
     }
 
-    private fun addComment(comment:String){
+    private fun insertComment(comment:String){
         val mutableMapOf = mutableMapOf<String, String>()
         mutableMapOf[AppConstant.Constant.COMMENT] = comment
-        mainViewModel.addComment(mutableMapOf)
+        mainViewModel.insertComment(mutableMapOf)
     }
 
     private fun getDynamicDetail() {
@@ -211,7 +211,7 @@ class DynamicDetailActivity : BaseActivity() {
                                                     }
                                                 }
                                             }
-                                            addComment(s)
+                                            insertComment(s)
                                         }
 
                                     }

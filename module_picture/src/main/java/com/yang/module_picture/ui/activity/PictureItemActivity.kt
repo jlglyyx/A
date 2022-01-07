@@ -64,7 +64,7 @@ class PictureItemActivity : BaseActivity() {
                         commentAdapter.addData(0, CommentData(0, 0).apply {
                             comment = s
                         })
-                        addComment(s)
+                        insertComment(s)
                         commentAdapter.getViewByPosition(
                             recyclerView,
                             0,
@@ -90,10 +90,10 @@ class PictureItemActivity : BaseActivity() {
         InjectViewModelProxy.inject(this)
     }
 
-    private fun addComment(comment: String) {
+    private fun insertComment(comment: String) {
         val mutableMapOf = mutableMapOf<String, String>()
         mutableMapOf[AppConstant.Constant.COMMENT] = comment
-        pictureViewModel.addComment(mutableMapOf)
+        pictureViewModel.insertComment(mutableMapOf)
     }
 
     private fun addViewHistory() {
@@ -172,7 +172,7 @@ class PictureItemActivity : BaseActivity() {
                                                         }
                                                     }
                                                 }
-                                                addComment(s)
+                                                insertComment(s)
                                             }
 
                                         }

@@ -37,9 +37,9 @@ class PictureRepository @Inject constructor(private val pictureApiService: Pictu
         }
     }
 
-    suspend fun addComment(params: Map<String, String>): MResult<String> {
+    suspend fun insertComment(params: Map<String, String>): MResult<String> {
         return withContext(Dispatchers.IO) {
-            pictureApiService.addComment(params)
+            pictureApiService.insertComment(params)
         }
     }
 }

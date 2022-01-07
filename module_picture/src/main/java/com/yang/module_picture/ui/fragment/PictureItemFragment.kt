@@ -56,25 +56,6 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
 
-    }
-
-    private fun initSmartRefreshLayout() {
-        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
-    }
-
-
-    private fun initRecyclerView() {
-        recyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        mAdapter = PictureAdapter(R.layout.item_picture_image, mutableListOf()).also {
-            it.setOnItemClickListener { adapter, view, position ->
-                val imageData = adapter.data[position] as ImageDataItem
-                buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
-                    .withString(AppConstant.Constant.ID, imageData.id)
-                    .navigation()
-            }
-        }
-        recyclerView.adapter = mAdapter
         pictureModule.mImageData.observe(this, Observer {
 
             when {
@@ -96,6 +77,27 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 }
             }
         })
+
+    }
+
+    private fun initSmartRefreshLayout() {
+        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+    }
+
+
+    private fun initRecyclerView() {
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        mAdapter = PictureAdapter(R.layout.item_picture_image, mutableListOf()).also {
+            it.setOnItemClickListener { adapter, view, position ->
+                val imageData = adapter.data[position] as ImageDataItem
+                buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
+                    .withString(AppConstant.Constant.ID, imageData.id)
+                    .navigation()
+            }
+        }
+        recyclerView.adapter = mAdapter
+
 
         registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
     }

@@ -68,7 +68,7 @@ class VideoItemActivity : BaseActivity() {
             this.url = it
             initVideo()
         }
-        addViewHistory()
+        insertViewHistory()
     }
 
     override fun initView() {
@@ -96,7 +96,7 @@ class VideoItemActivity : BaseActivity() {
                         commentAdapter.addData(0, CommentData(0, 0).apply {
                             comment = s
                         })
-                        addComment(s)
+                        insertComment(s)
                         commentAdapter.getViewByPosition(
                             recyclerView,
                             0,
@@ -131,14 +131,14 @@ class VideoItemActivity : BaseActivity() {
         nestedScrollView.scrollTo(intArray[0], intArray[1])
     }
 
-    private fun addComment(comment:String){
+    private fun insertComment(comment:String){
         paramMap.clear()
         paramMap[AppConstant.Constant.COMMENT] = comment
-        videoViewModel.addComment(paramMap)
+        videoViewModel.insertComment(paramMap)
     }
 
-    private fun addViewHistory() {
-        videoViewModel.addViewHistory("","")
+    private fun insertViewHistory() {
+        videoViewModel.insertViewHistory("","")
     }
 
     override fun initViewModel() {
@@ -163,7 +163,7 @@ class VideoItemActivity : BaseActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         commentAdapter = CommentAdapter(mutableListOf()).apply {
-            setOnItemChildClickListener { adapter, view, position ->
+            setOnItemChildClickListener { _, view, position ->
                 val item = commentAdapter.getItem(position)
                 item?.let {
                     when (view.id) {
@@ -210,7 +210,7 @@ class VideoItemActivity : BaseActivity() {
                                                     }
                                                 }
                                             }
-                                            addComment(s)
+                                            insertComment(s)
                                         }
                                     }
                                 }).show()
@@ -225,10 +225,8 @@ class VideoItemActivity : BaseActivity() {
         }
         recyclerView.adapter = commentAdapter
 
-        collectionRecyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        collectionAdapter =
-            CollectionAdapter(R.layout.item_video_collection, mutableListOf()).apply {
+        collectionRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        collectionAdapter = CollectionAdapter(R.layout.item_video_collection, mutableListOf()).apply {
                 setOnItemClickListener { adapter, view, position ->
                     val item = adapter.getItem(position) as VideoDataItem
                     url = item.videoUrl.toString()
@@ -246,7 +244,6 @@ class VideoItemActivity : BaseActivity() {
                     }
                     initVideo()
                     detailPlayer.startPlayLogic()
-
                 }
             }
         collectionRecyclerView.adapter = collectionAdapter

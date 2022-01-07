@@ -70,7 +70,6 @@ class MineViewHistoryActivity : BaseActivity(), OnRefreshLoadMoreListener {
                 }
             }
         })
-
     }
 
     override fun initView() {
@@ -109,6 +108,7 @@ class MineViewHistoryActivity : BaseActivity(), OnRefreshLoadMoreListener {
             }
         }
         recyclerView.adapter = mAdapter
+        registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
     }
 
     inner class MAdapter(layoutResId: Int, list: MutableList<MineViewHistoryData>?) :

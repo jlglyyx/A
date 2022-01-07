@@ -96,6 +96,35 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
+
+        pictureViewModel.mImageData.observe(this, Observer {
+            when {
+                smartRefreshLayout.isRefreshing -> {
+                    smartRefreshLayout.finishRefresh()
+                    if (it.list.isEmpty()) {
+                        pictureViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+                    }
+                }
+                smartRefreshLayout.isLoading -> {
+                    smartRefreshLayout.finishLoadMore()
+                    if (pageNum != 1 && it.list.isNotEmpty()) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(false)
+                        mAdapter.addData(it.list)
+                    }
+                }
+                else -> {
+                    if (it.list.isEmpty()) {
+                        pictureViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+                    }
+                }
+            }
+        })
     }
 
     private fun initSmartRefreshLayout() {
@@ -128,35 +157,6 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             }
         }
         recyclerView.adapter = mAdapter
-        pictureViewModel.mImageData.observe(this, Observer {
-            when {
-                smartRefreshLayout.isRefreshing -> {
-                    smartRefreshLayout.finishRefresh()
-                    if (it.list.isEmpty()) {
-                        pictureViewModel.showRecyclerViewEmptyEvent()
-                    } else {
-                        mAdapter.replaceData(it.list)
-                    }
-                }
-                smartRefreshLayout.isLoading -> {
-                    smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.list.isNotEmpty()) {
-                        smartRefreshLayout.setNoMoreData(true)
-                    } else {
-                        smartRefreshLayout.setNoMoreData(false)
-                        mAdapter.addData(it.list)
-                    }
-                }
-                else -> {
-                    if (it.list.isEmpty()) {
-                        pictureViewModel.showRecyclerViewEmptyEvent()
-                    } else {
-                        mAdapter.replaceData(it.list)
-                    }
-                }
-            }
-        })
-
         registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
     }
 

@@ -14,6 +14,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.clicks
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_video.R
 import com.yang.module_video.viewmodel.VideoViewModel
@@ -37,23 +38,7 @@ class VideoFragment : BaseLazyFragment() {
     override fun initData() {
 
         videoViewModel.getVideoTypeData()
-        videoViewModel.mVideoTypeData.observe(this, Observer {
 
-            it.forEach { videoTypeData ->
-                titles.add(videoTypeData.name)
-                fragments.add(
-                    buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
-                        .withString(AppConstant.Constant.TYPE,videoTypeData.type)
-                        .navigation() as Fragment
-                )
-            }
-            lifecycleScope.launch(Dispatchers.IO){
-                BaseAppDatabase.instance.videoTypeDao().updateData(it)
-            }
-            initViewPager()
-            initTabLayout()
-
-        })
         //videoModule.getVideoRepository()
     }
 
@@ -74,6 +59,10 @@ class VideoFragment : BaseLazyFragment() {
 
         }
         commonToolBar.ivSearch.visibility = View.VISIBLE
+
+        view_error_re_load_data.clicks().subscribe {
+            videoViewModel.getVideoTypeData()
+        }
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
@@ -82,6 +71,28 @@ class VideoFragment : BaseLazyFragment() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
+
+        videoViewModel.mVideoTypeData.observe(this, Observer {
+            view_error_re_load_data.visibility = View.GONE
+            it.forEach { videoTypeData ->
+                titles.add(videoTypeData.name)
+                fragments.add(
+                    buildARouter(AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
+                        .withString(AppConstant.Constant.TYPE,videoTypeData.type)
+                        .navigation() as Fragment
+                )
+            }
+            lifecycleScope.launch(Dispatchers.IO){
+                BaseAppDatabase.instance.videoTypeDao().updateData(it)
+            }
+            initViewPager()
+            initTabLayout()
+
+        })
+
+        videoViewModel.uC.requestFailEvent.observe(this, Observer {
+            view_error_re_load_data.visibility = View.VISIBLE
+        })
 
     }
 

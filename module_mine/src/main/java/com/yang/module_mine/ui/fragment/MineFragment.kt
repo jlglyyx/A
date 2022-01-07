@@ -1,7 +1,8 @@
 package com.yang.module_mine.ui.fragment
 
-import android.os.Environment
+import android.view.View
 import android.widget.ImageView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -14,7 +15,9 @@ import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.util.*
+import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.getUserInfo
 import com.yang.module_mine.R
 import com.yang.module_mine.data.MineViewHistoryData
 import com.yang.module_mine.viewmodel.MineViewModel
@@ -63,6 +66,11 @@ class MineFragment : BaseLazyFragment() {
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
             .into(siv_toolbar_img)
+
+        mineViewModel.queryViewHistory()
+
+
+
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
@@ -71,23 +79,24 @@ class MineFragment : BaseLazyFragment() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
+
+        mineViewModel.mViewHistoryListLiveData.observe(this, Observer {
+            if (it.isNullOrEmpty()){
+                ll_view_history.visibility = View.GONE
+                recyclerView.visibility = View.GONE
+            }else{
+                ll_view_history.visibility = View.VISIBLE
+                recyclerView.visibility = View.VISIBLE
+                mAdapter.replaceData(it)
+            }
+        })
     }
 
 
     private fun initRecyclerView() {
 
-        val mutableListOf = mutableListOf<MineViewHistoryData>()
-        val picturePath = getFilePath().filterEmptyFile()
 
-        picturePath.forEach {
-            mutableListOf.add(MineViewHistoryData("1", it))
-        }
-        val videoPath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video").filterEmptyFile()
-        videoPath.forEach {
-            mutableListOf.add(MineViewHistoryData("2", it))
-        }
-
-        mAdapter = MAdapter(R.layout.item_mine_view_history_image, mutableListOf).apply {
+        mAdapter = MAdapter(R.layout.item_mine_view_history_image, null).apply {
             setOnItemClickListener { adapter, view, position ->
                 val item = mAdapter.getItem(position)
                 item?.let {
@@ -171,7 +180,7 @@ class MineFragment : BaseLazyFragment() {
         }
     }
 
-    inner class MAdapter(layoutResId: Int, list: MutableList<MineViewHistoryData>) :
+    inner class MAdapter(layoutResId: Int, list: MutableList<MineViewHistoryData>?) :
         BaseQuickAdapter<MineViewHistoryData, BaseViewHolder>(layoutResId, list) {
         override fun convert(helper: BaseViewHolder, item: MineViewHistoryData) {
             val ivImage = helper.getView<ImageView>(R.id.iv_image)

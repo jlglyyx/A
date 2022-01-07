@@ -7,6 +7,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getDefaultMMKV
+import com.yang.module_login.R
 import com.yang.module_login.repository.LoginRepository
 import java.util.*
 import javax.inject.Inject
@@ -23,8 +24,6 @@ class LoginViewModel @Inject constructor(
 
     var mUserInfoData = MutableLiveData<UserInfoData>()
 
-    var a:Int = 0
-
     fun login(userAccount: String, password: String) {
         launch({
             loginRepository.login(userAccount, password)
@@ -35,7 +34,7 @@ class LoginViewModel @Inject constructor(
             delayMissDialog()
         },{
             getDefaultMMKV().encode(AppConstant.Constant.TOKEN, UUID.randomUUID().toString())
-        }, messages = *arrayOf("请求中..."))
+        }, messages = *arrayOf(getString(R.string.string_login_ing),getString(R.string.string_login_success)))
     }
     fun splashLogin(userAccount: String, password: String) {
         launch({
@@ -57,7 +56,7 @@ class LoginViewModel @Inject constructor(
             mUserInfoData.postValue(it.data)
             showDialog(it.message)
             delayMissDialog()
-        }, messages = *arrayOf("请求中..."))
+        }, messages = *arrayOf(getString(R.string.string_register_ing),getString(R.string.string_register_success)))
     }
 
 }

@@ -1,7 +1,6 @@
 package com.yang.module_mine.viewmodel
 
 import android.app.Application
-import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
@@ -9,8 +8,7 @@ import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.filterEmptyFile
-import com.yang.lib_common.util.getFilePath
+import com.yang.module_mine.R
 import com.yang.module_mine.data.MineExtensionTurnoverData
 import com.yang.module_mine.data.MineObtainTurnoverData
 import com.yang.module_mine.data.MineSignTurnoverData
@@ -54,11 +52,9 @@ class MineViewModel @Inject constructor(
             mineRepository.login(userAccount, password)
         }, {
             mUserInfoData.postValue(it.data)
-            showDialog(it.message)
-            delayMissDialog()
         }, {
             buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY).navigation()
-        }, messages = *arrayOf("请求中..."))
+        }, messages = *arrayOf(getString(R.string.string_requesting)))
     }
 
     fun register(userInfoData: UserInfoData) {
@@ -66,9 +62,7 @@ class MineViewModel @Inject constructor(
             mineRepository.register(userInfoData)
         }, {
             mUserInfoData.postValue(it.data)
-            showDialog(it.message)
-            delayMissDialog()
-        }, messages = *arrayOf("请求中..."))
+        }, messages = *arrayOf(getString(R.string.string_requesting)))
     }
 
     fun uploadFile(filePaths: MutableList<String>) {
@@ -76,15 +70,14 @@ class MineViewModel @Inject constructor(
             val mutableMapOf = mutableMapOf<String, RequestBody>()
             filePaths.forEach {
                 val file = File(it)
-                val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-                val encode =
-                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+                val requestBody = RequestBody.create(MediaType.parse(AppConstant.ClientInfo.CONTENT_TYPE), file)
+                val encode = URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", AppConstant.ClientInfo.UTF_8)
                 mutableMapOf["file\";filename=\"$encode"] = requestBody
             }
             mineRepository.uploadFile(mutableMapOf)
         }, {
             pictureListLiveData.postValue(it.data)
-        }, messages = *arrayOf("上传中", "添加成功"))
+        }, messages = *arrayOf(getString(R.string.string_uploading), getString(R.string.string_insert_success)))
     }
 
     fun changePassword(password: String) {
@@ -92,11 +85,7 @@ class MineViewModel @Inject constructor(
             mineRepository.changePassword(password)
         }, {
             requestSuccess()
-            showDialog(it.message)
-            delayMissDialog()
-        }, {
-            requestSuccess()
-        }, messages = *arrayOf("请求中..."))
+        }, messages = *arrayOf(getString(R.string.string_change_password_ing), getString(R.string.string_change_password_success), getString(R.string.string_change_password_fail)))
     }
 
     fun changeUserInfo(userInfoData: UserInfoData) {
@@ -104,9 +93,7 @@ class MineViewModel @Inject constructor(
             mineRepository.changeUserInfo(userInfoData)
         }, {
             mUserInfoData.postValue(it.data)
-            showDialog(it.message)
-            delayMissDialog()
-        }, messages = *arrayOf("请求中..."))
+        }, messages = *arrayOf(getString(R.string.string_requesting)))
     }
 
     fun queryViewHistory() {
@@ -114,21 +101,9 @@ class MineViewModel @Inject constructor(
             mineRepository.queryViewHistory()
         }, {
             mViewHistoryListLiveData.postValue(it.data)
-            showDialog(it.message)
-            delayMissDialog()
         }, {
-            val mutableListOf = mutableListOf<MineViewHistoryData>()
-            val picturePath = getFilePath().filterEmptyFile()
-
-            picturePath.forEach {
-                mutableListOf.add(MineViewHistoryData("1", it))
-            }
-            val videoPath =
-                getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video").filterEmptyFile()
-            videoPath.forEach {
-                mutableListOf.add(MineViewHistoryData("2", it))
-            }
-            mViewHistoryListLiveData.postValue(mutableListOf)
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
         }, errorDialog = false)
     }
 
@@ -137,21 +112,9 @@ class MineViewModel @Inject constructor(
             mineRepository.queryObtainTurnover(pageNum)
         }, {
             mMineObtainTurnoverListLiveData.postValue(it.data)
-//            showDialog(it.message)
-//            delayMissDialog()
         }, {
-            mMineObtainTurnoverListLiveData.postValue(mutableListOf<MineObtainTurnoverData>().apply {
-                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
-                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
-                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
-                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
-                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineObtainTurnoverData("签到了一天", "100", "+100"))
-                add(MineObtainTurnoverData("兑换了一块钱", "99", "-1"))
-            })
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
         }, errorDialog = false)
     }
 
@@ -160,21 +123,9 @@ class MineViewModel @Inject constructor(
             mineRepository.querySignTurnover()
         }, {
             mMineSignTurnoverListLiveData.postValue(it.data)
-//            showDialog(it.message)
-//            delayMissDialog()
         }, {
-            mMineSignTurnoverListLiveData.postValue(mutableListOf<MineSignTurnoverData>().apply {
-                add(MineSignTurnoverData("签到了一天", "100", "+100"))
-                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineSignTurnoverData("签到了一天", "100", "+100"))
-                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineSignTurnoverData("签到了一天", "100", "+100"))
-                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineSignTurnoverData("签到了一天", "100", "+100"))
-                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineSignTurnoverData("签到了一天", "100", "+100"))
-                add(MineSignTurnoverData("兑换了一块钱", "99", "-1"))
-            })
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
         }, errorDialog = false)
     }
 
@@ -183,41 +134,35 @@ class MineViewModel @Inject constructor(
             mineRepository.queryExtensionTurnover()
         }, {
             mMineExtensionTurnoverListLiveData.postValue(it.data)
-//            showDialog(it.message)
-//            delayMissDialog()
         }, {
-            mMineExtensionTurnoverListLiveData.postValue(mutableListOf<MineExtensionTurnoverData>().apply {
-                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
-                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
-                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
-                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
-                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
-                add(MineExtensionTurnoverData("签到了一天", "100", "+100"))
-                add(MineExtensionTurnoverData("兑换了一块钱", "99", "-1"))
-            })
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
         }, errorDialog = false)
     }
 
 
-    fun queryGoodsList(type:Int,pageNum: Int) {
+    fun queryGoodsList(type: Int, pageNum: Int) {
         launch({
             mineRepository.queryGoodsList()
         }, {
             mMineGoodsDetailListLiveData.postValue(it.data)
         }, {
-            withContext(Dispatchers.IO){
-                if (type == 0){
-                    mMineGoodsDetailListLiveData.postValue(BaseAppDatabase.instance.mineGoodsDetailDao().queryData())
-                }else{
-                    mMineGoodsDetailListLiveData.postValue(BaseAppDatabase.instance.mineGoodsDetailDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT))
+            withContext(Dispatchers.IO) {
+                if (type == 0) {
+                    mMineGoodsDetailListLiveData.postValue(
+                        BaseAppDatabase.instance.mineGoodsDetailDao().queryData()
+                    )
+                } else {
+                    mMineGoodsDetailListLiveData.postValue(
+                        BaseAppDatabase.instance.mineGoodsDetailDao()
+                            .queryDataByType(type, pageNum, AppConstant.Constant.PAGE_SIZE_COUNT)
+                    )
                 }
 
             }
         }, errorDialog = false)
     }
+
     fun createGoods() {
         launch({
             mineRepository.createGoods()
@@ -225,8 +170,9 @@ class MineViewModel @Inject constructor(
 
         }, {
 
-        },messages = *arrayOf("开始创建"))
+        }, messages = *arrayOf("开始创建"))
     }
+
     fun exchangeGoods() {
         launch({
             mineRepository.exchangeGoods()
@@ -234,7 +180,7 @@ class MineViewModel @Inject constructor(
 
         }, {
 
-        },messages = *arrayOf("开始兑换"))
+        }, messages = *arrayOf("开始兑换"))
     }
 
 

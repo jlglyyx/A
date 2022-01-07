@@ -8,7 +8,8 @@ interface AppConstant {
 
         const val BASE_PORT = "20000"
 
-        const val BASE_URL = "https://www.wanandroid.com/"
+        const val BASE_URL = "https://www.baidu.com/"
+//        const val BASE_URL = "https://www.wanandroid.com/"
 //        const val BASE_URL = "http://jlgl.free.idcfengye.com/"
 //        const val BASE_URL = "http://10.16.242.28:20000/"
 
@@ -16,11 +17,15 @@ interface AppConstant {
 
         const val TAG_LOG = "httpLog"
 
-        const val CONNECT_TIMEOUT: Long = 1000
+        const val CONNECT_TIMEOUT = 1000L
 
-        const val READ_TIMEOUT: Long = 1000
+        const val READ_TIMEOUT = 1000L
 
-        const val WRITE_TIMEOUT: Long = 1000
+        const val WRITE_TIMEOUT = 1000L
+
+        const val CONTENT_TYPE = "multipart/form-data"
+
+        const val UTF_8 = "UTF-8"
     }
 
     object RoutePath {

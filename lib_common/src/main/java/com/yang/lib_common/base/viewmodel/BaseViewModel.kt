@@ -2,9 +2,11 @@ package com.yang.lib_common.base.viewmodel
 
 import android.app.Application
 import android.text.TextUtils
-import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.yang.lib_common.R
+import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.handle.ErrorHandle
@@ -23,7 +25,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * showDialog
      */
-    fun showDialog(content: String = "加载中") {
+    fun showDialog(content: String = getString(R.string.string_requesting)) {
         uC.showLoadingEvent.value = content
     }
 
@@ -51,7 +53,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * 关闭刷新和加载
      */
-    fun cancelRefreshLoadMore(){
+    fun cancelRefreshLoadMore() {
         uC.refreshEvent.call()
         uC.loadMoreEvent.call()
     }
@@ -59,60 +61,79 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * 请求成功
      */
-    fun requestSuccess(){
+    fun requestSuccess() {
         uC.requestSuccessEvent.call()
     }
+
+    /**
+     * 请求成功
+     */
+    fun requestSuccess(value: Any) {
+        uC.requestSuccessEvent.postValue(value)
+    }
+
     /**
      * 请求失败
      */
-    fun requestFail(){
+    fun requestFail() {
         uC.requestFailEvent.call()
+    }
+
+    /**
+     * 请求失败
+     */
+    fun requestFail(value: Any) {
+        uC.requestFailEvent.postValue(value)
     }
 
     /**
      * 结束activity
      */
-    fun finishActivity(){
+    fun finishActivity() {
         uC.finishActivityEvent.call()
     }
 
     /**
      * 展示recyclerView 布局类型
      */
-    fun showRecyclerViewEvent(type:Int){
+    fun showRecyclerViewEvent(type: Int) {
         uC.showRecyclerViewEvent.postValue(type)
     }
 
     /**
      * 展示recyclerView 加载失败
      */
-    fun showRecyclerViewErrorEvent(){
+    fun showRecyclerViewErrorEvent() {
         uC.showRecyclerViewEvent.postValue(AppConstant.LoadingViewEnum.ERROR_VIEW)
     }
+
     /**
      * 展示recyclerView 加载空数据
      */
-    fun showRecyclerViewEmptyEvent(){
+    fun showRecyclerViewEmptyEvent() {
         uC.showRecyclerViewEvent.postValue(AppConstant.LoadingViewEnum.EMPTY_VIEW)
     }
 
+    /**
+     * 延时
+     */
     suspend fun delayTime(timeMillis: Long = 1000) {
         delay(timeMillis)
     }
+
+    /**
+     * 延时**后消失dialog
+     */
     suspend fun delayMissDialog(timeMillis: Long = 1000) {
-        delay(timeMillis)
+        delayTime(timeMillis)
         dismissDialog()
     }
 
-    private suspend fun handleException(exception: Throwable, content: String = "") {
-        val handle = ErrorHandle(exception).handle()
-        if (TextUtils.isEmpty(content)) {
-            showDialog(handle)
-        } else {
-            showDialog(content)
-        }
-        delayTime(1000)
-        dismissDialog()
+    /**
+     * 获取资源文字
+     */
+    fun getString(@StringRes resId: Int): String {
+        return getApplication<BaseApplication>().getString(resId)
     }
 
 
@@ -127,36 +148,51 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     fun <T> launch(
         onRequest: suspend () -> T,
         onSuccess: suspend (t: T) -> Unit = {},
-        error: suspend (t: Throwable) -> Unit = {},
-        vararg messages: String = arrayOf(),
-        errorDialog: Boolean = true
+        onError: suspend (t: Throwable) -> Unit = {},
+        errorDialog: Boolean = true,
+        vararg messages: String = arrayOf()
     ) {
         viewModelScope.launch {
             try {
-                if (messages.isNotEmpty()) {
-                    showDialog(messages[0])
-                    delayTime()
-                }
-                val data = onRequest()
-                onSuccess(data)
-                if (messages.isNotEmpty() && messages.size >= 2) {
-                    showDialog(messages[1])
-                }
-                delayTime()
+                requestDialogMessage(0, *messages)
+                onSuccess(onRequest())
+                requestDialogMessage(1, *messages)
                 dismissDialog()
             } catch (t: Throwable) {
-                error(t)
-                Log.i("BaseViewModel", "launch: ${t.message}")
+                onError(t)
                 if (errorDialog) {
-                    if (messages.isNotEmpty() && messages.size >= 3) {
-                        handleException(t, messages[2])
-                    } else {
-                        handleException(t)
-                    }
+                    handleException(t, if (messages.size >= 3) { messages[2] } else { "" })
                 }
             }
         }
     }
+
+    /**
+     * 改变请求弹框文字
+     */
+    private suspend fun requestDialogMessage(index: Int, vararg messages: String) {
+        val size = messages.size
+        if (index >= size) {
+            return
+        }
+        showDialog(messages[index])
+        delayTime()
+    }
+
+    /**
+     * 统一处理请求失败
+     */
+    private suspend fun handleException(exception: Throwable, content: String = "") {
+        val handle = ErrorHandle(exception).handle()
+        if (TextUtils.isEmpty(content)) {
+            showDialog(handle)
+        } else {
+            showDialog(content)
+        }
+        delayTime(1000)
+        dismissDialog()
+    }
+
 
     override fun onCleared() {
         super.onCleared()

@@ -71,6 +71,27 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
+
+        videoViewModel.mVideoData.observe(this, Observer {
+            when {
+                smartRefreshLayout.isRefreshing -> {
+                    smartRefreshLayout.finishRefresh()
+                    mAdapter.replaceData(it.list)
+                }
+                smartRefreshLayout.isLoading -> {
+                    smartRefreshLayout.finishLoadMore()
+                    if (pageNum != 1 && it.list.isEmpty()) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(false)
+                        mAdapter.addData(it.list)
+                    }
+                }
+                else -> {
+                    mAdapter.replaceData(it.list)
+                }
+            }
+        })
     }
 
 
@@ -103,29 +124,6 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             }
         }
         recyclerView.adapter = mAdapter
-
-
-        videoViewModel.mVideoData.observe(this, Observer
-        {
-            when {
-                smartRefreshLayout.isRefreshing -> {
-                    smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it.list)
-                }
-                smartRefreshLayout.isLoading -> {
-                    smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.list.isEmpty()) {
-                        smartRefreshLayout.setNoMoreData(true)
-                    } else {
-                        smartRefreshLayout.setNoMoreData(false)
-                        mAdapter.addData(it.list)
-                    }
-                }
-                else -> {
-                    mAdapter.replaceData(it.list)
-                }
-            }
-        })
 
         registerRefreshAndRecyclerView(smartRefreshLayout, mAdapter)
     }

@@ -33,15 +33,15 @@ class VideoRepository @Inject constructor(private val videoApiService: VideoApiS
     }
 
 
-    suspend fun addViewHistory(id: String, type: String): MResult<String> {
+    suspend fun insertViewHistory(id: String, type: String): MResult<String> {
         return withContext(Dispatchers.IO) {
-            videoApiService.addViewHistory(id, type)
+            videoApiService.insertViewHistory(id, type)
         }
     }
 
-    suspend fun addComment(params: Map<String, String>): MResult<String> {
+    suspend fun insertComment(params: Map<String, String>): MResult<String> {
         return withContext(Dispatchers.IO) {
-            videoApiService.addComment(params)
+            videoApiService.insertComment(params)
         }
     }
 

@@ -1,15 +1,13 @@
 package com.yang.module_main.viewmodel
 
 import android.app.Application
-import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
-import com.yang.lib_common.util.filterEmptyFile
-import com.yang.lib_common.util.getFilePath
 import com.yang.lib_common.util.toJson
+import com.yang.module_main.R
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.repository.MainRepository
 import okhttp3.MediaType
@@ -42,10 +40,7 @@ class MainViewModel @Inject constructor(
         }, {
             LiveDataBus.instance.with("refresh_dynamic").value = "refresh_dynamic"
             finishActivity()
-        }, {
-            LiveDataBus.instance.with("refresh_dynamic").value = "refresh_dynamic"
-            finishActivity()
-        }, messages = *arrayOf("正在努力发表中...", "发表成功"))
+        }, messages = *arrayOf(getString(R.string.string_insert_dynamic_ing), getString(R.string.string_insert_dynamic_success), getString(R.string.string_insert_dynamic_fail)))
     }
 
     fun getDynamicList(params: Map<String, String>) {
@@ -92,24 +87,8 @@ class MainViewModel @Inject constructor(
                 imageUrls =
                     "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"
             })
-            mutableListOf.add(DynamicData().apply {
-                imageUrls =
-                    "https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg#https://img2.baidu.com/it/u=3583098839,704145971&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=889#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"
-            })
-            mutableListOf.add(DynamicData().apply {
-                imageUrls =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4"
-            })
-            mutableListOf.add(DynamicData().apply {
-                imageUrls =
-                    "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg"
-            })
-            mutableListOf.add(DynamicData().apply {
-                imageUrls =
-                    "https://img1.baidu.com/it/u=3222474767,386356710&fm=26&fmt=auto#https://img1.baidu.com/it/u=1834859148,419625166&fm=26&fmt=auto&gp=0.jpg#https://img2.baidu.com/it/u=3583098839,704145971&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=889"
-            })
             dynamicListLiveData.postValue(mutableListOf)
-        }, messages = *arrayOf("请求中"))
+        }, messages = *arrayOf(getString(R.string.string_requesting)))
     }
 
     fun uploadFile(filePaths: MutableList<MediaInfoBean>) {
@@ -117,15 +96,15 @@ class MainViewModel @Inject constructor(
             val mutableMapOf = mutableMapOf<String, RequestBody>()
             filePaths.forEach {
                 val file = File(it.filePath.toString())
-                val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                val requestBody = RequestBody.create(MediaType.parse(AppConstant.ClientInfo.CONTENT_TYPE), file)
                 val encode =
-                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", AppConstant.ClientInfo.UTF_8)
                 mutableMapOf["file\";filename=\"$encode"] = requestBody
             }
             mainRepository.uploadFile(mutableMapOf)
         }, {
             pictureListLiveData.postValue(it.data)
-        }, messages = *arrayOf("上传中", "添加成功"))
+        }, messages = *arrayOf(getString(R.string.string_uploading), getString(R.string.string_insert_success)))
     }
 
     fun uploadFileAndParam(filePaths: MutableList<MediaInfoBean>) {
@@ -133,9 +112,9 @@ class MainViewModel @Inject constructor(
             val mutableListOf = mutableListOf<RequestBody>()
             filePaths.forEach {
                 val file = File(it.filePath.toString())
-                val requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                val requestBody = RequestBody.create(MediaType.parse(AppConstant.ClientInfo.CONTENT_TYPE), file)
                 val encode =
-                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", "UTF-8")
+                    URLEncoder.encode("${System.currentTimeMillis()}_${file.name}", AppConstant.ClientInfo.UTF_8)
                 val build = MultipartBody.Builder()
                     .addFormDataPart("param", "".toJson())
                     .addFormDataPart("file", encode, requestBody).build()
@@ -145,12 +124,12 @@ class MainViewModel @Inject constructor(
             mainRepository.uploadFileAndParam(mutableListOf)
         }, {
             pictureListLiveData.postValue(it.data)
-        }, messages = *arrayOf("上传中", "添加成功"))
+        }, messages = *arrayOf(getString(R.string.string_uploading), getString(R.string.string_insert_success)))
     }
 
-    fun addComment(params: Map<String, String>) {
+    fun insertComment(params: Map<String, String>) {
         launch({
-            mainRepository.addComment(params)
+            mainRepository.insertComment(params)
         }, {
 
         })
@@ -160,13 +139,19 @@ class MainViewModel @Inject constructor(
         launch({
             mainRepository.queryCollect(type,pageSize,AppConstant.Constant.PAGE_SIZE_COUNT)
         }, {
-
+            pictureCollectListLiveData.postValue(it.data)
         },{
-            val filePath = getFilePath("${Environment.getExternalStorageDirectory()}/MFiles/$type").filterEmptyFile()
-            pictureCollectListLiveData.postValue(filePath)
-//            showRecyclerViewErrorEvent()
-//            cancelRefreshLoadMore()
+            cancelRefreshLoadMore()
+            showRecyclerViewErrorEvent()
         },errorDialog = false)
+    }
+
+    fun loginOut(){
+        launch({
+            mainRepository.loginOut()
+        },{
+            requestSuccess()
+        },messages = *arrayOf(getString(R.string.string_login_out_ing), getString(R.string.string_login_out_success)))
     }
 
 }

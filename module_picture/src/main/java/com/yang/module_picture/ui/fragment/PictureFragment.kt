@@ -12,6 +12,7 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.clicks
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_picture.R
 import com.yang.module_picture.viewmodel.PictureViewModel
@@ -23,7 +24,7 @@ class PictureFragment : BaseLazyFragment() {
     @InjectViewModel
     lateinit var pictureModule: PictureViewModel
 
-    lateinit var fragments: MutableList<Fragment>
+    private lateinit var fragments: MutableList<Fragment>
 
     private lateinit var titles: MutableList<String>
 
@@ -33,22 +34,6 @@ class PictureFragment : BaseLazyFragment() {
 
     override fun initData() {
         pictureModule.getImageTypeData()
-
-
-
-        pictureModule.mImageTypeData.observe(this, Observer {
-
-            it.forEach { imageTypeData ->
-                titles.add(imageTypeData.name)
-                fragments.add(
-                    buildARouter(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT)
-                        .withString(AppConstant.Constant.TYPE, imageTypeData.type)
-                        .navigation() as Fragment
-                )
-            }
-            initViewPager()
-            initTabLayout()
-        })
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener() {
                 buildARouter(AppConstant.RoutePath.PICTURE_UPLOAD_ACTIVITY).navigation()
@@ -71,6 +56,10 @@ class PictureFragment : BaseLazyFragment() {
     override fun initView() {
         titles = mutableListOf()
         fragments = mutableListOf()
+
+        view_error_re_load_data.clicks().subscribe {
+            pictureModule.getImageTypeData()
+        }
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -79,6 +68,24 @@ class PictureFragment : BaseLazyFragment() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
+
+        pictureModule.mImageTypeData.observe(this, Observer {
+            view_error_re_load_data.visibility = View.GONE
+            it.forEach { imageTypeData ->
+                titles.add(imageTypeData.name)
+                fragments.add(
+                    buildARouter(AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT)
+                        .withString(AppConstant.Constant.TYPE, imageTypeData.type)
+                        .navigation() as Fragment
+                )
+            }
+            initViewPager()
+            initTabLayout()
+        })
+
+        pictureModule.uC.requestFailEvent.observe(this, Observer {
+            view_error_re_load_data.visibility = View.VISIBLE
+        })
     }
 
 
@@ -88,14 +95,6 @@ class PictureFragment : BaseLazyFragment() {
         if (fragments.size != 0) {
             viewPager.offscreenPageLimit = fragments.size
         }
-//        if(fragments.size != 0){
-//            viewPager.offscreenPageLimit = if (fragments.size > 20){
-//                20
-//            }else{
-//                fragments.size
-//            }
-//        }
-
     }
 
     private fun initTabLayout() {

@@ -129,11 +129,11 @@ class LoginActivity : BaseActivity() {
 
     private fun checkForm() {
         if (TextUtils.isEmpty(et_user.text.toString())) {
-            showShort(getString(R.string.input_account))
+            showShort(getString(R.string.string_input_account))
             return
         }
         if (TextUtils.isEmpty(et_password.text.toString())) {
-            showShort(getString(R.string.input_password))
+            showShort(getString(R.string.string_input_password))
             return
         }
         loginViewModel.login(et_user.text.toString(), et_password.text.toString())
@@ -162,7 +162,7 @@ class LoginActivity : BaseActivity() {
                 delay(1000)
             }
             tv_verification_code.isClickable = true
-            tv_verification_code.text = getString(R.string.re_get_verification_code)
+            tv_verification_code.text = getString(R.string.string_re_get_verification_code)
         }
     }
 
