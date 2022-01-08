@@ -74,7 +74,7 @@ class MineSignTurnoverActivity:BaseActivity() , OnRefreshLoadMoreListener {
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.isNullOrEmpty()) {
+                    if (it.isNullOrEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)

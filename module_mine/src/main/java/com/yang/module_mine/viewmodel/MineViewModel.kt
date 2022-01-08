@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.UserInfoData
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.room.entity.MineGoodsDetailData
 import com.yang.lib_common.util.buildARouter

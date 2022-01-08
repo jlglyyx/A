@@ -13,7 +13,6 @@ import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
-import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
@@ -75,20 +74,20 @@ class MineChangeUserInfoActivity : BaseActivity() {
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
-                val userInfoData = UserInfoData(
-                    null,
-                    null,
-                    et_name.text.toString(),
-                    null,
-                    null,
-                    null,
-                    url,
-                    0,
-                    null,
-                    null,
-                    null
-                )
-                mineViewModel.changeUserInfo(userInfoData)
+//                val userInfoData = UserInfoData(
+//                    "null",
+//                    null,
+//                    et_name.text.toString(),
+//                    null,
+//                    null,
+//                    null,
+//                    url,
+//                    0,
+//                    null,
+//                    null,
+//                    null
+//                )
+//                mineViewModel.changeUserInfo(userInfoData)
             }
 
         }

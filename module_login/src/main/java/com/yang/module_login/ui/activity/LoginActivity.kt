@@ -1,33 +1,32 @@
 package com.yang.module_login.ui.activity
 
-import android.app.Activity
-import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.gson.Gson
 import com.yang.apt_annotation.annotain.InjectViewModel
+import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.getDefaultMMKV
-import com.yang.lib_common.util.showShort
+import com.yang.lib_common.util.*
 import com.yang.module_login.R
 import com.yang.module_login.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.act_login.*
+import kotlinx.android.synthetic.main.act_login.et_password
+import kotlinx.android.synthetic.main.act_login.et_user
+import kotlinx.android.synthetic.main.act_login.tv_verification_code
+import kotlinx.android.synthetic.main.act_register.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.LOGIN_ACTIVITY)
@@ -43,11 +42,14 @@ class LoginActivity : BaseActivity() {
 
     private var mediaPlayer:MediaPlayer? = null
 
+    private var data = -1
+
     override fun getLayout(): Int {
         return R.layout.act_login
     }
 
     override fun initData() {
+        data = intent.getIntExtra(AppConstant.Constant.DATA,-1)
 
         Log.i(TAG, "initData: $loginViewModel")
     }
@@ -55,28 +57,25 @@ class LoginActivity : BaseActivity() {
     override fun initView() {
         initVideoView()
 
-        val registerForActivityResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == Activity.RESULT_OK && null != it.data) {
-                    it.data!!.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
-                        ?.let { beans ->
-                            videoUrl = beans[0].filePath.toString()
-                            surfaceView.restartVideo(videoUrl)
-                        }
-                }
-            }
-
-
-
+//        val registerForActivityResult =
+//            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+//                if (it.resultCode == Activity.RESULT_OK && null != it.data) {
+//                    it.data!!.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
+//                        ?.let { beans ->
+//                            videoUrl = beans[0].filePath.toString()
+//                            surfaceView.restartVideo(videoUrl)
+//                        }
+//                }
+//            }
         bt_login.clicks().subscribe {
 
-            val forName = Class.forName("com.yang.module_main.ui.main.activity.PictureSelectActivity")
-            val intent = Intent(this,forName)
-            intent.putExtra(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_TWO)
-            intent.putExtra(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
-            registerForActivityResult.launch(intent)
+//            val forName = Class.forName("com.yang.module_main.ui.main.activity.PictureSelectActivity")
+//            val intent = Intent(this,forName)
+//            intent.putExtra(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_TWO)
+//            intent.putExtra(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
+//            registerForActivityResult.launch(intent)
 
-            //checkForm()
+            checkForm()
             //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
@@ -121,28 +120,13 @@ class LoginActivity : BaseActivity() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
-    }
 
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return loginViewModel.uC
-    }
-
-    private fun checkForm() {
-        if (TextUtils.isEmpty(et_user.text.toString())) {
-            showShort(getString(R.string.string_input_account))
-            return
-        }
-        if (TextUtils.isEmpty(et_password.text.toString())) {
-            showShort(getString(R.string.string_input_password))
-            return
-        }
-        loginViewModel.login(et_user.text.toString(), et_password.text.toString())
         loginViewModel.mUserInfoData.observe(this, Observer {
             getDefaultMMKV().encode(
                 AppConstant.Constant.LOGIN_STATUS,
                 AppConstant.Constant.LOGIN_SUCCESS
             )
-            getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
+            updateUserInfo(it)
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                 ActivityOptionsCompat.makeCustomAnimation(
                     this@LoginActivity,
@@ -152,6 +136,34 @@ class LoginActivity : BaseActivity() {
             ).navigation()
             finish()
         })
+    }
+
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return loginViewModel.uC
+    }
+
+    private fun checkForm() {
+
+        if (TextUtils.isEmpty(et_user.text.toString())) {
+            showShort(getString(R.string.string_input_account))
+            return
+        }
+
+        if (TextUtils.equals(et_user.text.toString(),"30")){
+            deleteDirectory(File("${BaseApplication.baseApplication.cacheDir}/app_/db_"))
+            Log.i(TAG, "checkForm: 数据库删除成功")
+        }
+
+        if (TextUtils.isEmpty(et_password.text.toString())) {
+            showShort(getString(R.string.string_input_password))
+            return
+        }
+        if (et_password.text.toString().length < 6){
+            showShort("密码长度最少六位")
+            return
+        }
+        loginViewModel.login(et_user.text.toString(), et_password.text.toString())
+
     }
 
     private fun initTimer() {
@@ -169,6 +181,13 @@ class LoginActivity : BaseActivity() {
     private fun initVideoView() {
         lifecycle.addObserver(surfaceView)
         mediaPlayer = surfaceView.initMediaPlayer(videoUrl)
+    }
+
+    override fun finish() {
+        super.finish()
+        if (data != -1){
+            overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out)
+        }
     }
 
     override fun onDestroy() {

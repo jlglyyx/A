@@ -116,7 +116,7 @@ interface AppConstant {
 
         const val MINE_VIEW_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineViewHistoryActivity"
 
-        const val MINE_OBTAIN_TURNOVER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainTaskActivity"
+        const val MINE_OBTAIN_TURNOVER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainTurnoverActivity"
 
         const val MINE_OBTAIN_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainExchangeActivity"
 
@@ -134,15 +134,13 @@ interface AppConstant {
 
         const val MINE_CHANGE_PASSWORD_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineChangePasswordActivity"
 
+        const val MINE_ADD_ADDRESS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineAddAddressActivity"
 
+        const val MINE_OBTAIN_TASK_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainTaskActivity"
 
-        const val MINE_ADD_ADDRESS_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineAddAddressActivity"
+        const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineOrderDetailActivity"
 
-        const val MINE_OBTAIN_TASK_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineObtainTaskActivity"
-
-        const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineOrderDetailActivity"
-
-        const val MINE_CREATE_ORDER_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineCreateOrderActivity"
+        const val MINE_CREATE_ORDER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineCreateOrderActivity"
 
 
 

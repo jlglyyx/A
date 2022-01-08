@@ -8,6 +8,8 @@
     <string name="string_uploading">上传中…</string>
     <string name="string_insert_success">添加成功</string>
 
+    <string name="string_password_digits">~!@#$%^&amp;*():";',./\|[]{}?-=+_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
 
 
     <string name="string_change_password_ing">正在修改密码…</string>

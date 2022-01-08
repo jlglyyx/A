@@ -1,8 +1,8 @@
 package com.yang.module_login.repository
 
 import com.yang.lib_common.base.repository.BaseRepository
-import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.remote.di.response.MResult
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.module_login.api.LoginApiService
 import javax.inject.Inject
 

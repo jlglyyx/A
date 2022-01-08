@@ -39,7 +39,6 @@ class VideoFragment : BaseLazyFragment() {
 
         videoViewModel.getVideoTypeData()
 
-        //videoModule.getVideoRepository()
     }
 
     override fun initView() {
@@ -74,6 +73,7 @@ class VideoFragment : BaseLazyFragment() {
 
         videoViewModel.mVideoTypeData.observe(this, Observer {
             view_error_re_load_data.visibility = View.GONE
+            tabLayout.visibility = View.VISIBLE
             it.forEach { videoTypeData ->
                 titles.add(videoTypeData.name)
                 fragments.add(
@@ -91,6 +91,7 @@ class VideoFragment : BaseLazyFragment() {
         })
 
         videoViewModel.uC.requestFailEvent.observe(this, Observer {
+            tabLayout.visibility = View.GONE
             view_error_re_load_data.visibility = View.VISIBLE
         })
 

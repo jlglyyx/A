@@ -45,12 +45,17 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     @InjectViewModel
     lateinit var pictureViewModel: PictureViewModel
+
     private var pageNum = 1
+
     private var list = mutableListOf<SearchData>()
+
     private lateinit var flowLayoutAdapter: FlowLayoutAdapter
+
     private lateinit var mAdapter: PictureSearchAdapter
 
     private var type:Int = -1
+
     private var keyword = ""
 
     override fun getLayout(): Int {
@@ -80,7 +85,6 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             et_search.clearFocus()
             keyword = et_search.text.toString()
             onRefresh(smartRefreshLayout)
-
             if (list.findLast { TextUtils.equals(it.content, et_search.text.toString()) } != null){
                 return@subscribe
             }
@@ -101,7 +105,7 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    if (it.list.isEmpty()) {
+                    if (it.list.isNullOrEmpty()) {
                         pictureViewModel.showRecyclerViewEmptyEvent()
                     } else {
                         mAdapter.replaceData(it.list)
@@ -109,7 +113,7 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.list.isNotEmpty()) {
+                    if (it.list.isNullOrEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
@@ -130,6 +134,7 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
     private fun initSmartRefreshLayout() {
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
     }
+
     private fun initTextListener(){
 
         et_search.setOnFocusChangeListener { v, hasFocus ->
@@ -168,7 +173,6 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
         }else{
             iv_delete.visibility = View.VISIBLE
         }
-
         flowLayout.setOnTagClickListener { view, position, parent ->
             keyword = list[position].content
             et_search.setText(list[position].content)
@@ -180,13 +184,7 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
     }
 
     private fun insertData() {
-        val searchData = SearchData(
-            UUID.randomUUID().toString().replace("-", ""),
-            type,
-            et_search.text.toString(),
-            simpleDateFormat.format(System.currentTimeMillis()),
-            simpleDateFormat.format(System.currentTimeMillis())
-        )
+        val searchData = SearchData(UUID.randomUUID().toString().replace("-", ""), type, et_search.text.toString(), simpleDateFormat.format(System.currentTimeMillis()), simpleDateFormat.format(System.currentTimeMillis()))
         lifecycleScope.launch(Dispatchers.Main) {
             val async = async(Dispatchers.IO) {
                 BaseAppDatabase.instance.searchHistoryDao().insertData(searchData)
@@ -201,9 +199,7 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     private fun queryData() {
         lifecycleScope.launch(Dispatchers.Main) {
-            val async = async(Dispatchers.IO) {
-                BaseAppDatabase.instance.searchHistoryDao().queryAllByType(type)
-            }
+            val async = async(Dispatchers.IO) { BaseAppDatabase.instance.searchHistoryDao().queryAllByType(type) }
             list.addAll(async.await())
             initFlowLayout()
         }
@@ -253,10 +249,6 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        lifecycleScope.cancel()
-    }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
@@ -266,5 +258,10 @@ class PictureSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
         pictureViewModel.getImageInfo("",pageNum,keyword,true)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycleScope.cancel()
     }
 }

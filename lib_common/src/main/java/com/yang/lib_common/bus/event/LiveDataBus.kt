@@ -39,6 +39,7 @@ class LiveDataBus {
     }
 
 
+
     private inner class ObserverWrapper<T>(var observer: Observer<T>) : Observer<T> {
 
         override fun onChanged(t: T) {
@@ -91,7 +92,7 @@ class LiveDataBus {
         }
 
         override fun removeObserver(observer: Observer<in T>) {
-            var realObserver: Observer<in T> = if (observerMap.containsKey(observer)) {
+            val realObserver: Observer<in T> = if (observerMap.containsKey(observer)) {
                 observerMap.remove(observer) as Observer<in T>
             } else {
                 observer

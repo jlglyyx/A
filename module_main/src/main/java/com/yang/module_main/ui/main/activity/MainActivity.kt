@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
@@ -15,6 +16,7 @@ import com.tbruyelle.rxpermissions3.RxPermissions
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.TabAndViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
@@ -100,6 +102,10 @@ class MainActivity : BaseActivity() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
+
+        LiveDataBus.instance.with("openDrawerLayout").observe(this, Observer {
+            drawerLayout.openDrawer(GravityCompat.START)
+        })
 
     }
 

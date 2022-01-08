@@ -8,12 +8,14 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import androidx.core.app.ActivityOptionsCompat
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.tencent.mmkv.MMKV
+import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
-import com.yang.lib_common.data.UserInfoData
+import com.yang.lib_common.room.entity.UserInfoData
 import io.reactivex.rxjava3.core.Observable
 import java.io.File
 import java.text.DecimalFormat
@@ -26,6 +28,8 @@ private const val TAG = "AppUtils"
 val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
 
 val formatDate_YYYYMMMDDHHMMSS = SimpleDateFormat("yyyyMMddHHmmss")
+
+val formatDate_YYYY_MMM_DD_HHMMSS = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
 /**
  * @return 宽高集合
@@ -171,6 +175,12 @@ fun getUserInfo(): UserInfoData? {
     }
     return null
 }
+/**
+ * @return 更新用户缓存
+ */
+fun updateUserInfo(userInfoData:UserInfoData) {
+    getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, userInfoData.toJson())
+}
 
 /**
  * @return 返回xx,xx
@@ -307,21 +317,26 @@ fun formatSize(size: Long): String {
  * @return 删除文件夹
  */
 fun deleteDirectory(file: File) {
-    if (file.isDirectory) {
-        file.listFiles()?.let {
-            if (it.isNotEmpty()) {
-                for (mFile in it) {
-                    if (mFile.isDirectory) {
-                        deleteDirectory(file)
-                    } else {
-                        deleteFile(mFile)
+    try {
+        if (file.isDirectory) {
+            file.listFiles()?.let {
+                if (it.isNotEmpty()) {
+                    for (mFile in it) {
+                        if (mFile.isDirectory) {
+                            deleteDirectory(file)
+                        } else {
+                            deleteFile(mFile)
+                        }
                     }
                 }
             }
+        } else {
+            deleteFile(file)
         }
-    } else {
-        deleteFile(file)
+    }catch (e:Exception){
+        e.printStackTrace()
     }
+
 }
 
 /**
@@ -331,5 +346,16 @@ fun deleteFile(file: File) {
     if (file.exists()) {
         file.delete()
     }
+}
+
+
+/**
+ * 跳转登录页
+ */
+fun buildARouterLogin(mContext: Context){
+    buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+        .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(mContext, R.anim.bottom_in, R.anim.bottom_out))
+        .withInt(AppConstant.Constant.DATA,0)
+        .navigation(mContext)
 }
 

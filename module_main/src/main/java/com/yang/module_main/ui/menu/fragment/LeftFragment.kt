@@ -1,5 +1,6 @@
 package com.yang.module_main.ui.menu.fragment
 
+import android.annotation.SuppressLint
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -29,21 +30,32 @@ class LeftFragment : BaseFragment() {
     override fun initData() {
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initView() {
         val userInfo = getUserInfo()
-        Glide.with(this).load(
-            userInfo?.userImage
-                ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e"
-        ).error(R.drawable.iv_image_error)
-            .placeholder(R.drawable.iv_image_placeholder).into(siv_head)
-        tv_name.text = userInfo?.userName ?: "张三"
+        userInfo.let {
+            Glide.with(this)
+                .load(it?.userImage ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder).into(siv_head)
+            tv_name.text = it?.userName ?: "修改一下昵称吧"
+            tv_account.text = it?.userAccount
+            tv_location.text = it?.userLocationAddress
+            tv_desc.text = it?.userDescribe?:"人生在世总要留点什么吧..."
+            tv_vip_level.text = "vip${it?.userVipLevel?:""}"
+        }
+
+
 
         LocationUtil(requireContext()).apply {
             lifecycle.addObserver(this)
             locationListener = object : LocationUtil.LocationListener {
                 override fun onLocationListener(aMapLocation: AMapLocation) {
-                    tv_location.text =
-                        aMapLocation.city + aMapLocation.district + aMapLocation.aoiName
+                    tv_location.text = aMapLocation.city + aMapLocation.district + aMapLocation.aoiName
+                    userInfo?.let {
+                        it.userLocationAddress = tv_location.text.toString()
+                        updateUserInfo(it)
+                    }
                 }
 
             }
@@ -113,6 +125,7 @@ class LeftFragment : BaseFragment() {
                 )
             ).navigation(requireActivity())
         })
+
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {

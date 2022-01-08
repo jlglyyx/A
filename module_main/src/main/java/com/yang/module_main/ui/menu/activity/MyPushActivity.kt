@@ -48,19 +48,28 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it)
+                    if (it.isNullOrEmpty()) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.isNullOrEmpty()) {
+                    if (it.isNullOrEmpty()) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
                         smartRefreshLayout.setNoMoreData(false)
                         mAdapter.addData(it)
-                    } else {
-                        smartRefreshLayout.setNoMoreData(true)
+
                     }
                 }
                 else -> {
-                    mAdapter.replaceData(it)
+                    if (it.isNullOrEmpty()) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
                 }
             }
         })

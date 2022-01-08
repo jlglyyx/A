@@ -49,8 +49,8 @@ class MainViewModel @Inject constructor(
         }, {
             dynamicListLiveData.postValue(it.data)
         }, {
-            showRecyclerViewErrorEvent()
-            cancelRefreshLoadMore()
+//            showRecyclerViewErrorEvent()
+//            cancelRefreshLoadMore()
             val mutableListOf = mutableListOf<DynamicData>()
             mutableListOf.add(DynamicData().apply {
                 imageUrls =
@@ -149,6 +149,8 @@ class MainViewModel @Inject constructor(
     fun loginOut(){
         launch({
             mainRepository.loginOut()
+        },{
+            requestSuccess()
         },{
             requestSuccess()
         },messages = *arrayOf(getString(R.string.string_login_out_ing), getString(R.string.string_login_out_success)))

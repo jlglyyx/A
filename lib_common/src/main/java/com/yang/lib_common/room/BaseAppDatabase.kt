@@ -1,6 +1,5 @@
 package com.yang.lib_common.room
 
-import android.os.Environment
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -16,8 +15,10 @@ import java.io.File
  * @Description
  * @Date 2021/8/5 14:22
  */
-@Database(entities = [ImageTypeData::class,VideoTypeData::class,SearchData::class, ImageDataItem::class, VideoDataItem::class,UploadTaskData::class,MineGoodsDetailData::class],version = 1,exportSchema = true)
+@Database(entities = [UserInfoData::class,ImageTypeData::class,VideoTypeData::class,SearchData::class, ImageDataItem::class, VideoDataItem::class,UploadTaskData::class,MineGoodsDetailData::class],version = 1,exportSchema = true)
 abstract class BaseAppDatabase : RoomDatabase() {
+
+    abstract fun userInfoDao(): UserInfoDao
 
     abstract fun imageTypeDao(): ImageTypeDao
 
@@ -46,12 +47,19 @@ abstract class BaseAppDatabase : RoomDatabase() {
         }
 
         private fun createFile():String{
-            val file = File("${Environment.getExternalStorageDirectory()}/MFiles/db")
+            val file = File("${BaseApplication.baseApplication.cacheDir}/app_/db_")
             if (!file.exists()){
                 file.mkdirs()
             }
             return file.path
         }
+//        private fun createFile():String{
+//            val file = File("${Environment.getExternalStorageDirectory()}/MFiles/db")
+//            if (!file.exists()){
+//                file.mkdirs()
+//            }
+//            return file.path
+//        }
     }
 
 

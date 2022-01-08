@@ -71,6 +71,7 @@ class PictureFragment : BaseLazyFragment() {
 
         pictureModule.mImageTypeData.observe(this, Observer {
             view_error_re_load_data.visibility = View.GONE
+            tabLayout.visibility = View.VISIBLE
             it.forEach { imageTypeData ->
                 titles.add(imageTypeData.name)
                 fragments.add(
@@ -84,6 +85,7 @@ class PictureFragment : BaseLazyFragment() {
         })
 
         pictureModule.uC.requestFailEvent.observe(this, Observer {
+            tabLayout.visibility = View.GONE
             view_error_re_load_data.visibility = View.VISIBLE
         })
     }

@@ -1,5 +1,6 @@
 package com.yang.module_mine.ui.fragment
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.Observer
@@ -12,10 +13,12 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.appbar.AppBarLayout
 import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
+import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
+import com.yang.lib_common.util.buildARouterLogin
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
 import com.yang.module_mine.R
@@ -46,26 +49,30 @@ class MineFragment : BaseLazyFragment() {
         lifecycle.addObserver(iv_bg)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initData() {
         val userInfo = getUserInfo()
-        tv_toolbar_name.text = userInfo?.userName ?: "点击登录"
-        tv_name.text = userInfo?.userName ?: "点击登录"
-        Glide.with(this)
-            .load(
-                userInfo?.userImage
-                    ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e"
-            )
-            .error(R.drawable.iv_image_error)
-            .placeholder(R.drawable.iv_image_placeholder)
-            .into(siv_img)
-        Glide.with(this)
-            .load(
-                userInfo?.userImage
-                    ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e"
-            )
-            .error(R.drawable.iv_image_error)
-            .placeholder(R.drawable.iv_image_placeholder)
-            .into(siv_toolbar_img)
+        userInfo.let {
+
+            Glide.with(this)
+                .load(it?.userImage ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder)
+                .into(siv_img)
+
+            Glide.with(this)
+                .load(it?.userImage ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
+                .error(R.drawable.iv_image_error)
+                .placeholder(R.drawable.iv_image_placeholder)
+                .into(siv_toolbar_img)
+            tv_toolbar_name.text = it?.userName ?: "点击登录"
+            tv_name.text = it?.userName ?: "点击登录"
+
+            tv_obtain.text = "${it?.userObtain ?: "0"}分"
+            tv_sign.text = "${it?.userSign ?: "0"}天"
+            tv_extension.text = "${it?.userExtension ?: "0"}人"
+        }
+
 
         mineViewModel.queryViewHistory()
 
@@ -143,12 +150,10 @@ class MineFragment : BaseLazyFragment() {
 
     private fun initViewClickListener() {
         tv_name.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-                .navigation()
+            buildARouterLogin(mContext)
         }
         tv_toolbar_name.clicks().subscribe {
-            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-                .navigation()
+            buildARouterLogin(mContext)
         }
         ll_view_history.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_VIEW_HISTORY_ACTIVITY)
@@ -177,6 +182,9 @@ class MineFragment : BaseLazyFragment() {
         ll_obtain_exchange.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.MINE_OBTAIN_EXCHANGE_ACTIVITY)
                 .navigation()
+        }
+        siv_toolbar_img.clicks().subscribe {
+            LiveDataBus.instance.with("openDrawerLayout").postValue("openDrawerLayout")
         }
     }
 

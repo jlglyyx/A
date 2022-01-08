@@ -35,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/tabTabLayout"
+            android:visibility="gone"
             android:background="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>

@@ -16,9 +16,7 @@ import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.dialog.EditBottomDialog
 import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.proxy.InjectViewModelProxy
-import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.symbolToList
+import com.yang.lib_common.util.*
 import com.yang.module_main.R
 import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.data.model.DynamicData
@@ -106,6 +104,12 @@ class DynamicDetailActivity : BaseActivity() {
     override fun initView() {
         initRecyclerView()
         tv_send_comment.clicks().subscribe {
+
+            if (getDefaultMMKV().decodeInt(AppConstant.Constant.LOGIN_STATUS, -1) == AppConstant.Constant.LOGIN_NO_PERMISSION){
+                buildARouterLogin(this)
+                return@subscribe
+            }
+
             XPopup.Builder(this).autoOpenSoftInput(true).asCustom(EditBottomDialog(this).apply {
                 dialogCallBack = object : EditBottomDialog.DialogCallBack {
                     override fun getComment(s: String) {

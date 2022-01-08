@@ -74,7 +74,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    if (it.size == 0) {
+                    if (it.isNullOrEmpty()) {
                         mainViewModel.showRecyclerViewEmptyEvent()
                     } else {
                         mAdapter.replaceData(it)
@@ -82,7 +82,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.isNullOrEmpty()) {
+                    if (it.isNullOrEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
@@ -91,7 +91,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     }
                 }
                 else -> {
-                    if (it.size == 0) {
+                    if (it.isNullOrEmpty()) {
                         mainViewModel.showRecyclerViewEmptyEvent()
                     } else {
                         mAdapter.replaceData(it)
@@ -146,6 +146,10 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener() {
+                if (getDefaultMMKV().decodeInt(AppConstant.Constant.LOGIN_STATUS, -1) == AppConstant.Constant.LOGIN_NO_PERMISSION){
+                    buildARouterLogin(mContext)
+                    return
+                }
                 registerForActivityResult.launch(
                     Intent(requireContext(), AddDynamicActivity::class.java)
                 )
@@ -266,6 +270,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT.toString()
         mainViewModel.getDynamicList(mutableMapOf)
     }
+
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++

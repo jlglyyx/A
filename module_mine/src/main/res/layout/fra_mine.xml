@@ -99,6 +99,7 @@
                                     android:ellipsize="end"
                                     android:gravity="center"
                                     android:maxLines="1"
+                                    android:id="@+id/tv_obtain"
                                     android:text="1000000分"
                                     android:layout_marginTop="@dimen/dp_10"
                                     android:textSize="@dimen/sp_14" />
@@ -126,6 +127,7 @@
                                     android:gravity="center"
                                     android:maxLines="1"
                                     android:text="100000天"
+                                    android:id="@+id/tv_sign"
                                     android:layout_marginTop="@dimen/dp_10"
                                     android:textSize="@dimen/sp_14" />
                             </LinearLayout>
@@ -151,6 +153,7 @@
                                     android:ellipsize="end"
                                     android:gravity="center"
                                     android:maxLines="1"
+                                    android:id="@+id/tv_extension"
                                     android:text="10000000人"
                                     android:layout_marginTop="@dimen/dp_10"
                                     android:textSize="@dimen/sp_14" />

@@ -19,6 +19,7 @@ import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.down.DownLoadManagerService
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
 import com.yang.lib_common.proxy.InjectViewModelProxy
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.*
 import com.yang.module_login.R
 import com.yang.module_login.viewmodel.LoginViewModel
@@ -76,12 +77,11 @@ class SplashActivity : BaseActivity() {
 
         initPermission()
 
-
     }
 
     private fun downVideo() {
         val file = File("${Environment.getExternalStorageDirectory()}/MFiles/video/register.mp4")
-        if (file.exists()){
+        if (file.exists()) {
             return
         }
         MultiMoreThreadDownload.Builder(this)
@@ -112,67 +112,14 @@ class SplashActivity : BaseActivity() {
                                 tv_timer.text = "${i}s点击跳过"
                                 delay(1000)
                             }
-                            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-                                .withOptionsCompat(
-                                    ActivityOptionsCompat.makeCustomAnimation(
-                                        this@SplashActivity,
-                                        0,
-                                        0
-                                    )
-                                )
-                                .navigation(this@SplashActivity)
-                            finish()
+                            toLogin(userInfo)
                         }
 
                         tv_timer.clicks().subscribe {
                             launch.cancel()
-                            if (null == userInfo) {
-                                buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-                                    .withOptionsCompat(
-                                        ActivityOptionsCompat.makeCustomAnimation(
-                                            this@SplashActivity,
-                                            0,
-                                            0
-                                        )
-                                    )
-                                    .navigation(this@SplashActivity)
-                                finish()
-                            } else {
-
-                                loginViewModel.splashLogin(userInfo.userAccount!!, userInfo.userPassword!!)
-                                loginViewModel.mUserInfoData.observe(this, Observer {
-                                    getDefaultMMKV().encode(
-                                        AppConstant.Constant.LOGIN_STATUS,
-                                        AppConstant.Constant.LOGIN_SUCCESS
-                                    )
-                                    getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
-                                    buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
-                                        ActivityOptionsCompat.makeCustomAnimation(
-                                            this@SplashActivity,
-                                            R.anim.fade_in,
-                                            R.anim.fade_out
-                                        )
-                                    ).navigation()
-                                    finish()
-                                })
-
-                                tv_timer.clicks().subscribe {
-                                    getDefaultMMKV().encode(
-                                        AppConstant.Constant.LOGIN_STATUS,
-                                        AppConstant.Constant.LOGIN_NO_PERMISSION
-                                    )
-                                    buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
-                                        ActivityOptionsCompat.makeCustomAnimation(
-                                            this@SplashActivity,
-                                            R.anim.fade_in,
-                                            R.anim.fade_out
-                                        )
-                                    )
-                                        .navigation(this@SplashActivity)
-                                    finish()
-                                }
-                            }
+                            toLogin(userInfo)
                         }
+                        toLogin(userInfo)
                     }
                     it.shouldShowRequestPermissionRationale -> {
 
@@ -183,6 +130,39 @@ class SplashActivity : BaseActivity() {
                     }
                 }
             }
+    }
+
+
+    private fun toLogin(userInfo: UserInfoData?) {
+        if (null == userInfo) {
+            buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+                .withOptionsCompat(
+                    ActivityOptionsCompat.makeCustomAnimation(
+                        this@SplashActivity,
+                        0,
+                        0
+                    )
+                )
+                .navigation(this@SplashActivity)
+            finish()
+        } else {
+            loginViewModel.splashLogin(userInfo.userAccount, userInfo.userPassword)
+            loginViewModel.mUserInfoData.observe(this, Observer { mUserInfo ->
+                getDefaultMMKV().encode(
+                    AppConstant.Constant.LOGIN_STATUS,
+                    AppConstant.Constant.LOGIN_SUCCESS
+                )
+                updateUserInfo(mUserInfo)
+                buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
+                    ActivityOptionsCompat.makeCustomAnimation(
+                        this@SplashActivity,
+                        R.anim.fade_in,
+                        R.anim.fade_out
+                    )
+                ).navigation()
+                finish()
+            })
+        }
     }
 
 

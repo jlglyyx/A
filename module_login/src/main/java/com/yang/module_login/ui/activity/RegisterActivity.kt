@@ -8,9 +8,10 @@ import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.data.UserInfoData
 import com.yang.lib_common.proxy.InjectViewModelProxy
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.formatDate_YYYY_MMM_DD_HHMMSS
 import com.yang.lib_common.util.showShort
 import com.yang.module_login.R
 import com.yang.module_login.viewmodel.LoginViewModel
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.act_register.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
 
 @Route(path = AppConstant.RoutePath.REGISTER_ACTIVITY)
 class RegisterActivity : BaseActivity() {
@@ -51,6 +53,10 @@ class RegisterActivity : BaseActivity() {
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
+
+        loginViewModel.mUserInfoData.observe(this, Observer {
+            finish()
+        })
     }
 
     private fun checkForm(){
@@ -62,6 +68,12 @@ class RegisterActivity : BaseActivity() {
             showShort("请输入密码")
             return
         }
+
+        if (et_password.text.toString().length < 6){
+            showShort("密码长度最少六位")
+            return
+        }
+
         if (TextUtils.isEmpty(et_confirm_password.text.toString())){
             showShort("请确认密码")
             return
@@ -71,22 +83,34 @@ class RegisterActivity : BaseActivity() {
             return
         }
         val userInfoData = UserInfoData(
+            UUID.randomUUID().toString().replace("-",""),
             null,
             null,
-            et_user.text.toString(),
+            null,
+            null,
+            null,
+            null,
             et_user.text.toString(),
             et_password.text.toString(),
             null,
             null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            1,
+            false,
             0,
             null,
             null,
-            null
+            null,
+            formatDate_YYYY_MMM_DD_HHMMSS.format(Date()),
+            formatDate_YYYY_MMM_DD_HHMMSS.format(Date()),
+            ""
         )
         loginViewModel.register(userInfoData)
-        loginViewModel.mUserInfoData.observe(this, Observer {
-            finish()
-        })
+
     }
 
     private fun initTimer() {
