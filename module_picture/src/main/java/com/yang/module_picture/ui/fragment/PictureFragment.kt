@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fra_picture.*
 class PictureFragment : BaseLazyFragment() {
 
     @InjectViewModel
-    lateinit var pictureModule: PictureViewModel
+    lateinit var pictureViewModule: PictureViewModel
 
     private lateinit var fragments: MutableList<Fragment>
 
@@ -33,7 +33,7 @@ class PictureFragment : BaseLazyFragment() {
     }
 
     override fun initData() {
-        pictureModule.getImageTypeData()
+        pictureViewModule.getImageTypeData()
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener() {
                 buildARouter(AppConstant.RoutePath.PICTURE_UPLOAD_ACTIVITY).navigation()
@@ -58,18 +58,18 @@ class PictureFragment : BaseLazyFragment() {
         fragments = mutableListOf()
 
         view_error_re_load_data.clicks().subscribe {
-            pictureModule.getImageTypeData()
+            pictureViewModule.getImageTypeData()
         }
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return pictureModule.uC
+        return pictureViewModule.uC
     }
 
     override fun initViewModel() {
         InjectViewModelProxy.inject(this)
 
-        pictureModule.mImageTypeData.observe(this, Observer {
+        pictureViewModule.mImageTypeData.observe(this, Observer {
             view_error_re_load_data.visibility = View.GONE
             tabLayout.visibility = View.VISIBLE
             it.forEach { imageTypeData ->
@@ -84,7 +84,7 @@ class PictureFragment : BaseLazyFragment() {
             initTabLayout()
         })
 
-        pictureModule.uC.requestFailEvent.observe(this, Observer {
+        pictureViewModule.uC.requestFailEvent.observe(this, Observer {
             tabLayout.visibility = View.GONE
             view_error_re_load_data.visibility = View.VISIBLE
         })

@@ -116,7 +116,7 @@ class MineChangeUserInfoActivity : BaseActivity() {
 
         ll_image.clicks().subscribe {
             val forName = Class.forName("com.yang.module_main.ui.main.activity.PictureSelectActivity")
-            val intent = Intent(this,forName)
+            val intent = Intent(this, forName)
             intent.putExtra(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_ONE)
             intent.putExtra(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
             registerForActivityResult.launch(intent)

@@ -11,6 +11,6 @@ import javax.annotation.processing.ProcessingEnvironment
  */
 interface IProcessor {
 
-    fun createProcessor(className:String, proxyInfoData:ProxyInfoData, processingEnv: ProcessingEnvironment)
+    fun createProcessor(className:String, proxyInfoData: ProxyInfoData, processingEnv: ProcessingEnvironment)
 
 }

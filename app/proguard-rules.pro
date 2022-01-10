@@ -87,7 +87,7 @@
    public *;
 }
 #不混淆自定义注解生成的类
--keep class * implements com.yang.apt_annotation.manager.InjectManager{*;}
+-keep class * implements com.yang.apt_processor.manager.InjectManager{*;}
 #不混淆ViewModel
 -keep class **.*ViewModel{*;}
 #不混淆dagger2 Component
