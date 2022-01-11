@@ -12,6 +12,7 @@ import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.formatDate_YYYY_MMM_DD_HHMMSS
+import com.yang.lib_common.util.isPhone
 import com.yang.lib_common.util.showShort
 import com.yang.module_login.R
 import com.yang.module_login.viewmodel.LoginViewModel
@@ -40,13 +41,20 @@ class RegisterActivity : BaseActivity() {
             checkForm()
         }
         tv_verification_code.clicks().subscribe {
-            initTimer()
+            val phone = et_user.text.toString().isPhone()
+            if (phone) {
+                initTimer()
+            } else {
+                showShort("请输入正确的手机号")
+            }
+
         }
         tv_to_login.clicks().subscribe {
             finish()
-            overridePendingTransition(R.anim.fade_in,R.anim.fade_out)
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         }
     }
+
     override fun initUIChangeLiveData(): UIChangeLiveData {
         return loginViewModel.uC
     }
@@ -59,31 +67,31 @@ class RegisterActivity : BaseActivity() {
         })
     }
 
-    private fun checkForm(){
-        if (TextUtils.isEmpty(et_user.text.toString())){
+    private fun checkForm() {
+        if (TextUtils.isEmpty(et_user.text.toString())) {
             showShort("请输入账号")
             return
         }
-        if (TextUtils.isEmpty(et_password.text.toString())){
+        if (TextUtils.isEmpty(et_password.text.toString())) {
             showShort("请输入密码")
             return
         }
 
-        if (et_password.text.toString().length < 6){
+        if (et_password.text.toString().length < 6) {
             showShort("密码长度最少六位")
             return
         }
 
-        if (TextUtils.isEmpty(et_confirm_password.text.toString())){
+        if (TextUtils.isEmpty(et_confirm_password.text.toString())) {
             showShort("请确认密码")
             return
         }
-        if (!TextUtils.equals(et_password.text.toString(),et_confirm_password.text.toString())){
+        if (!TextUtils.equals(et_password.text.toString(), et_confirm_password.text.toString())) {
             showShort("两次密码不一致")
             return
         }
         val userInfoData = UserInfoData(
-            UUID.randomUUID().toString().replace("-",""),
+            UUID.randomUUID().toString().replace("-", ""),
             null,
             null,
             null,

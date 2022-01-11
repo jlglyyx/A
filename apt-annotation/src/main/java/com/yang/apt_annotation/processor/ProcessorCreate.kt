@@ -1,10 +1,7 @@
 package com.yang.apt_annotation.processor
 
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.TypeSpec
 import com.yang.apt_annotation.data.ProxyInfoData
 import javax.annotation.processing.ProcessingEnvironment
-import javax.lang.model.element.Modifier
 
 /**
  * @Author Administrator
@@ -24,12 +21,13 @@ class ProcessorCreate(
      */
     private val mutableMap = mutableMapOf<String, String>()
 
+
     override fun createProcessor(
         className: String,
         proxyInfoData: ProxyInfoData,
         processingEnv: ProcessingEnvironment
     ) {
-        //parseProcessor()
+
         /**
          * 创建的文件名
          * createSourceFile == PictureFragment_InjectViewModel
@@ -66,7 +64,7 @@ class ProcessorCreate(
              */
             val substring = u.substring(u.lastIndexOf(".") + 1)
 
-            if(mutableMap.containsValue(u)){
+            if (mutableMap.containsValue(u)) {
                 /**
                  * 如果存在相同类型的ViewModel 则取之前缓存的key
                  * at == pictureViewModelClass au == com.yang.module_picture.viewmodel.PictureViewModel
@@ -75,11 +73,11 @@ class ProcessorCreate(
                  * viewModelStoreOwner.pictureViewModuleaa = DaggerUtil.getViewModel(viewModelStoreOwner, factory, pictureViewModuleClass);
                  */
                 mutableMap.forEach { (at, au) ->
-                    if (au == u){
+                    if (au == u) {
                         forName = at
                     }
                 }
-            }else{
+            } else {
                 /**
                  * 如果不存在则加入缓存
                  */
@@ -106,7 +104,7 @@ class ProcessorCreate(
                     "import $className;\n"
         )
         openWriter.write("package com.yang.processor;\n\n")
-        openWriter.write(packageStringBuilder.toString()+"\n")
+        openWriter.write(packageStringBuilder.toString() + "\n")
         openWriter.write("public class ${proxyInfoData.className}_InjectViewModel implements InjectManager<$className>{\n")
         openWriter.write(
             "   @Override\n" +
@@ -128,16 +126,47 @@ class ProcessorCreate(
         openWriter.write("}")
         openWriter.flush()
         openWriter.close()
+
+        //parseProcessor()
     }
 
 
-    private fun parseProcessor(){
-
-        val build = TypeSpec.classBuilder("HHHH_InjectViewModel").addModifiers(Modifier.PUBLIC, Modifier.FINAL).build()
-        val builder = JavaFile.builder("com.yang.processor", build).build()
-        builder.writeTo(System.out)
-
-//        TypeSpec.classBuilder("com.yang.processor.${proxyInfoData.className}_InjectViewModel")
-    }
+//    private fun parseProcessor() {
+//        val injectManagerClassName = ClassName.get("", InjectManager::class.java.canonicalName)
+//        val genericsClassName = ClassName.get("", mClassName)
+//        val genericsInterface = ParameterizedTypeName.get(injectManagerClassName, TypeVariableName.get(genericsClassName.canonicalName()))
+//        mProcessingEnv.messager.printMessage(
+//            Diagnostic.Kind.WARNING,
+//            "$\n ${injectManagerClassName} \n=ssssssss= $genericsClassName \n=ssssssss= $genericsInterface"
+//        )
+//        val classBuild = TypeSpec.classBuilder("ass__aaaaInjectViewModel")
+////        val classBuild = TypeSpec.classBuilder("${mProxyInfoData.className}__aaaaInjectViewModel")
+//            .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+//            .addSuperinterface(genericsInterface)
+//        val overrideClassName = ClassName.get("", "java.lang.Override")
+//        val nullableClassName = ClassName.get("", "androidx.annotation.Nullable")
+//        val methodSpecBuild = MethodSpec.methodBuilder("inject")
+//            .addAnnotation(overrideClassName)
+//            .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+//            .addStatement("        com.yang.module_${packageName}.di.component.${prefixName}Component ${fieldName}Component = com.yang.module_${packageName}.helper.${prefixName}DaggerHelp.get${prefixName}Component(viewModelStoreOwner)")
+//            .addStatement("        ${fieldName}Component.inject(viewModelStoreOwner)")
+//            .addCode("\n    try {\n")
+//            .addStatement("        Class<com.yang.module_${packageName}.di.component.Dagger${prefixName}Component> dagger${prefixName}ComponentClass = com.yang.module_${packageName}.di.component.Dagger${prefixName}Component.class")
+//            .addStatement("        java.lang.reflect.Field provide${prefixName}ViewModelFactoryProvider = dagger${prefixName}ComponentClass.getDeclaredField(\"provide${prefixName}ViewModelFactoryProvider\")")
+//            .addStatement("        provide${prefixName}ViewModelFactoryProvider.setAccessible(true)")
+//            .addStatement("        javax.inject.Provider<com.yang.module_${packageName}.di.factory.${prefixName}ViewModelFactory> o = (javax.inject.Provider<com.yang.module_${packageName}.di.factory.${prefixName}ViewModelFactory>) provide${prefixName}ViewModelFactoryProvider.get(${fieldName}Component)")
+//            .addStatement("        com.yang.module_${packageName}.di.factory.${prefixName}ViewModelFactory factory = o.get()")
+//            .addStatement("         $elementNameListBuilder")
+//            .addCode("      } catch (Exception e) {")
+//            .addStatement("\n       e.printStackTrace()")
+//            .addCode("\n    }")
+//        val parameterSpecBuild = ParameterSpec.builder(genericsClassName, "viewModelStoreOwner")
+//            .addAnnotation(nullableClassName)
+//            .build()
+//        methodSpecBuild.addParameter(parameterSpecBuild)
+//        classBuild.addMethod(methodSpecBuild.build()).build()
+//        val javaFileBuilder = JavaFile.builder("com.yang.processor", classBuild.build()).build()
+//        javaFileBuilder.writeTo(mProcessingEnv.filer)
+//    }
 
 }

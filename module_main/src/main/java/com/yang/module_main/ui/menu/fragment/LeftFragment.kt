@@ -38,7 +38,11 @@ class LeftFragment : BaseFragment() {
                 .load(it?.userImage ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
                 .error(R.drawable.iv_image_error)
                 .placeholder(R.drawable.iv_image_placeholder).into(siv_head)
-            tv_name.text = it?.userName ?: "修改一下昵称吧"
+            if (getDefaultMMKV().decodeInt(AppConstant.Constant.LOGIN_STATUS, -1) == AppConstant.Constant.LOGIN_SUCCESS){
+                tv_name.text = it?.userName ?: "修改一下昵称吧"
+            }else{
+                tv_name.text = "点击登录"
+            }
             tv_account.text = it?.userAccount
             tv_location.text = it?.userLocationAddress
             tv_desc.text = it?.userDescribe?:"人生在世总要留点什么吧..."

@@ -21,6 +21,7 @@ import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
+import java.util.regex.Pattern
 
 
 private const val TAG = "AppUtils"
@@ -357,5 +358,14 @@ fun buildARouterLogin(mContext: Context){
         .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(mContext, R.anim.bottom_in, R.anim.bottom_out))
         .withInt(AppConstant.Constant.DATA,0)
         .navigation(mContext)
+}
+
+/**
+ * 是否是手机号
+ */
+fun String.isPhone():Boolean{
+    val pattern = Pattern.compile("^1[0-9]{10}")
+    val matcher = pattern.matcher(this)
+    return matcher.matches()
 }
 

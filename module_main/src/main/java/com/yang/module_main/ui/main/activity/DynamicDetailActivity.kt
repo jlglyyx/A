@@ -24,7 +24,6 @@ import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_dynamic_detail.*
 import kotlinx.android.synthetic.main.item_dynamic_detail_comment.*
 import kotlinx.android.synthetic.main.item_dynamic_detail_comment.view.*
-import kotlinx.android.synthetic.main.item_main_content_image.*
 import kotlinx.android.synthetic.main.item_main_content_text.*
 
 /**

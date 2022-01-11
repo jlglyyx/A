@@ -14,6 +14,7 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
 import com.yang.lib_common.proxy.InjectViewModelProxy
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.getUserInfo
@@ -74,20 +75,34 @@ class MineChangeUserInfoActivity : BaseActivity() {
     override fun initView() {
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack {
             override fun tvRightClickListener() {
-//                val userInfoData = UserInfoData(
-//                    "null",
-//                    null,
-//                    et_name.text.toString(),
-//                    null,
-//                    null,
-//                    null,
-//                    url,
-//                    0,
-//                    null,
-//                    null,
-//                    null
-//                )
-//                mineViewModel.changeUserInfo(userInfoData)
+                val userInfoData = UserInfoData(
+                    "",
+                    null,
+                    et_name.text.toString(),
+                    null,
+                    null,
+                    null,
+                    url,
+                    "",
+                    "",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    0,
+                    false,
+                    0,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+                mineViewModel.changeUserInfo(userInfoData)
             }
 
         }
@@ -107,7 +122,8 @@ class MineChangeUserInfoActivity : BaseActivity() {
                         ?.let { beans ->
                             imageUrl = beans[0].filePath.toString()
                             mineViewModel.uploadFile(mutableListOf(imageUrl))
-                            Glide.with(this).load(imageUrl).centerCrop().error(R.drawable.iv_image_error)
+                            Glide.with(this).load(imageUrl).centerCrop()
+                                .error(R.drawable.iv_image_error)
                                 .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
                         }
                 }
@@ -115,7 +131,8 @@ class MineChangeUserInfoActivity : BaseActivity() {
 
 
         ll_image.clicks().subscribe {
-            val forName = Class.forName("com.yang.module_main.ui.main.activity.PictureSelectActivity")
+            val forName =
+                Class.forName("com.yang.module_main.ui.main.activity.PictureSelectActivity")
             val intent = Intent(this, forName)
             intent.putExtra(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_ONE)
             intent.putExtra(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)

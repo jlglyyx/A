@@ -18,6 +18,7 @@ import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.addActivity
 import com.yang.lib_common.util.removeActivity
+import kotlin.system.measureTimeMillis
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -30,6 +31,7 @@ abstract class BaseActivity : AppCompatActivity() {
     val TAG = this.javaClass.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val openTime = measureTimeMillis {
         super.onCreate(savedInstanceState)
         setContentView(getLayout())
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -41,7 +43,8 @@ abstract class BaseActivity : AppCompatActivity() {
         initView()
         registerListener()
         addActivity(this)
-        Log.e(TAG, "OpenView===: $TAG")
+        }
+        Log.e(TAG, "OpenView===: $TAG  OpeTime===: $openTime")
     }
 
     abstract fun getLayout(): Int

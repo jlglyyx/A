@@ -73,7 +73,7 @@ class LifecycleMediaPlayer : ViewGroup, SurfaceHolder.Callback, ILifecycleObserv
                 .setUsage(AudioAttributes.USAGE_MEDIA).build()
         )
         screenPx = getScreenPx(mContext)
-        setWillNotDraw(true)
+        setWillNotDraw(false)
         initSurfaceView()
         setBackgroundColor(Color.BLACK)
     }

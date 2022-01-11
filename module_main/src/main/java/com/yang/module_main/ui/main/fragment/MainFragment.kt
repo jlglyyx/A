@@ -1,15 +1,14 @@
 package com.yang.module_main.ui.main.fragment
 
 import android.content.Intent
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -29,14 +28,15 @@ import com.yang.lib_common.dialog.ImageViewPagerDialog
 import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.*
 import com.yang.lib_common.widget.CommonToolBar
+import com.yang.lib_common.widget.GridNinePictureView
 import com.yang.module_main.R
-import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.data.model.DynamicData
 import com.yang.module_main.ui.main.activity.AddDynamicActivity
 import com.yang.module_main.ui.main.activity.MainActivity
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
+import kotlinx.android.synthetic.main.view_dynamic_item.*
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import kotlinx.coroutines.cancel
 import javax.inject.Inject
@@ -195,6 +195,9 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     .navigation()
             }
         }
+        recyclerView.setOnClickListener {
+            Log.i(TAG, "initRecyclerView: ")
+        }
         recyclerView.adapter = mAdapter
         registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
     }
@@ -222,6 +225,12 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                 helper.setGone(R.id.mRecyclerView, true)
                 initItemMainContentImage(helper, item)
             }
+            if (item.imageUrls.isNullOrEmpty()) {
+                helper.setGone(R.id.gridNinePictureView, false)
+            } else {
+                helper.setGone(R.id.gridNinePictureView, true)
+                initItemMainContentImage(helper, item)
+            }
 
             initItemMainIdentification(helper, item)
         }
@@ -240,24 +249,43 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         }
 
         private fun initItemMainContentImage(helper: BaseViewHolder, item: DynamicData) {
-            val mRecyclerView = helper.getView<RecyclerView>(R.id.mRecyclerView)
-            mRecyclerView.layoutManager = GridLayoutManager(mContext, 3)
-            val dynamicAdapter = DynamicAdapter(
-                R.layout.view_item_grid_nine_picture,
-                item.imageUrls?.symbolToList("#")!!
-            )
-            mRecyclerView.adapter = dynamicAdapter
-            dynamicAdapter.setOnItemClickListener { adapter, view, position ->
-                val imageViewPagerDialog =
-                    ImageViewPagerDialog(
-                        requireContext(),
-                        item.imageUrls?.symbolToList("#")!!,
-                        position,
-                        true
-                    )
-                XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
+
+            val gridNinePictureView = helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
+            gridNinePictureView.data = item.imageUrls?.symbolToList("#")!!
+            gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback{
+                override fun imageClickListener(position: Int) {
+                    val imageViewPagerDialog =
+                        ImageViewPagerDialog(
+                            requireContext(),
+                            item.imageUrls?.symbolToList("#")!!,
+                            position,
+                            true
+                        )
+                    XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
+                }
+
             }
         }
+//        private fun initItemMainContentImage(helper: BaseViewHolder, item: DynamicData) {
+//            val mRecyclerView = helper.getView<RecyclerView>(R.id.mRecyclerView)
+//            mRecyclerView.layoutManager = GridLayoutManager(mContext, 3)
+//            val dynamicAdapter = DynamicAdapter(
+//                R.layout.view_item_grid_nine_picture,
+//                item.imageUrls?.symbolToList("#")!!
+//            )
+//
+//            dynamicAdapter.setOnItemClickListener { adapter, view, position ->
+//                val imageViewPagerDialog =
+//                    ImageViewPagerDialog(
+//                        requireContext(),
+//                        item.imageUrls?.symbolToList("#")!!,
+//                        position,
+//                        true
+//                    )
+//                XPopup.Builder(requireContext()).asCustom(imageViewPagerDialog).show()
+//            }
+//            mRecyclerView.adapter = dynamicAdapter
+//        }
 
         private fun initItemMainIdentification(helper: BaseViewHolder, item: DynamicData) {
 
