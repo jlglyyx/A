@@ -3,6 +3,8 @@ package com.yang.module_login.ui.activity
 import android.media.MediaPlayer
 import android.os.Environment
 import android.text.TextUtils
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
@@ -44,6 +46,8 @@ class LoginActivity : BaseActivity() {
 
     private var data = -1
 
+    private var passwordVisibility = false
+
     override fun getLayout(): Int {
         return R.layout.act_login
     }
@@ -56,27 +60,19 @@ class LoginActivity : BaseActivity() {
 
     override fun initView() {
         initVideoView()
-
-//        val registerForActivityResult =
-//            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-//                if (it.resultCode == Activity.RESULT_OK && null != it.data) {
-//                    it.data!!.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
-//                        ?.let { beans ->
-//                            videoUrl = beans[0].filePath.toString()
-//                            surfaceView.restartVideo(videoUrl)
-//                        }
-//                }
-//            }
+        iv_password_visibility.setOnClickListener {
+            if (passwordVisibility){
+                et_password.transformationMethod = PasswordTransformationMethod.getInstance()
+                iv_password_visibility.setImageResource(R.drawable.iv_password_gone)
+            }else{
+                et_password.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                iv_password_visibility.setImageResource(R.drawable.iv_password_visibility)
+            }
+            passwordVisibility = !passwordVisibility
+            et_password.setSelection(et_password.text.toString().length)
+        }
         bt_login.clicks().subscribe {
-
-//            val forName = Class.forName("com.yang.module_main.ui.main.activity.PictureSelectActivity")
-//            val intent = Intent(this,forName)
-//            intent.putExtra(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_TWO)
-//            intent.putExtra(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
-//            registerForActivityResult.launch(intent)
-
             checkForm()
-            //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
             getDefaultMMKV().encode(
@@ -159,7 +155,7 @@ class LoginActivity : BaseActivity() {
             return
         }
         if (et_password.text.toString().length < 6){
-            showShort("密码长度最少六位")
+            showShort(getString(R.string.string_password_must_six))
             return
         }
         loginViewModel.login(et_user.text.toString(), et_password.text.toString())

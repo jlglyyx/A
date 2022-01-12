@@ -26,6 +26,7 @@ import com.yang.lib_common.helper.getRemoteComponent
 import com.yang.lib_common.service.DaemonRemoteService
 import com.yang.lib_common.service.DaemonService
 import com.yang.lib_common.util.NetworkUtil
+import com.yang.lib_common.util.TTAdManagerUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -54,6 +55,7 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         initNetworkStatusListener(baseApplication)
         initVideo()
         initWebView()
+        initCSJAdvertise()
     }
 
     companion object {
@@ -169,6 +171,15 @@ class BaseApplication : Application() ,Application.ActivityLifecycleCallbacks{
         }
         Log.i(TAG, "initWebView: ==>${measureTimeMillis}")
 
+    }
+
+    private fun initCSJAdvertise(){
+        val measureTimeMillis = measureTimeMillis {
+            CoroutineScope(Dispatchers.Main).launch {
+                TTAdManagerUtil.instance.initAd(this@BaseApplication)
+            }
+        }
+        Log.i(TAG, "initCSJAdvertise: ==>${measureTimeMillis}")
     }
 
     override fun onTrimMemory(level: Int) {

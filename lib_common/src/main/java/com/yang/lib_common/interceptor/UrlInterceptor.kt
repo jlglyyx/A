@@ -9,6 +9,10 @@ class UrlInterceptor : Interceptor {
     companion object {
         private const val TAG = "UrlInterceptor"
         var url: String? = null
+
+        /**
+         * 每次拦截器修改baseUrl后 下次是否还是使用修改的url 默认不使用
+         */
         var disposable: Boolean = false
     }
 

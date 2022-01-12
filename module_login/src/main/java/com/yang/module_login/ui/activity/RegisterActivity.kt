@@ -69,25 +69,25 @@ class RegisterActivity : BaseActivity() {
 
     private fun checkForm() {
         if (TextUtils.isEmpty(et_user.text.toString())) {
-            showShort("请输入账号")
+            showShort(getString(R.string.string_input_account))
             return
         }
         if (TextUtils.isEmpty(et_password.text.toString())) {
-            showShort("请输入密码")
+            showShort(getString(R.string.string_input_password))
             return
         }
 
         if (et_password.text.toString().length < 6) {
-            showShort("密码长度最少六位")
+            showShort(getString(R.string.string_password_must_six))
             return
         }
 
         if (TextUtils.isEmpty(et_confirm_password.text.toString())) {
-            showShort("请确认密码")
+            showShort(getString(R.string.string_confirm_password))
             return
         }
         if (!TextUtils.equals(et_password.text.toString(), et_confirm_password.text.toString())) {
-            showShort("两次密码不一致")
+            showShort(getString(R.string.string_password_no_match))
             return
         }
         val userInfoData = UserInfoData(

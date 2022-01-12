@@ -1,7 +1,12 @@
 package com.yang.module_main.data.model
 
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd
+import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.yang.lib_common.constant.AppConstant
 
-class DynamicData {
+
+class DynamicData(var mItemType:Int = AppConstant.Constant.ITEM_CONTENT) : MultiItemEntity{
+
 
     var id: String? = null
     var userId: String? = null
@@ -17,6 +22,13 @@ class DynamicData {
     var browseNumber: String? = null
     var updateTime: String? = null
     var extraInfo: String? = null
+
+    var mTTNativeExpressAd: TTNativeExpressAd? = null
+
+    override fun getItemType(): Int {
+
+        return mItemType
+    }
 
 
 }

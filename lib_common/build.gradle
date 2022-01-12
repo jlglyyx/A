@@ -64,6 +64,7 @@ dependencies {
     rootProject.ext.testImplementationDependencies.each { k, v -> testImplementation v }
 
     rootProject.ext.apiProjectDependencies.each { k, v -> api project(path: v) }
+    api 'com.pangle.cn:ads-sdk-pro:4.0.1.9'
 
     //debugImplementation 'com.glance.guolindev:glance:1.0.0-alpha01'
 

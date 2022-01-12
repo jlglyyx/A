@@ -238,6 +238,9 @@ interface AppConstant {
 
         const val BUNDLE = "bundle"
 
+        const val ITEM_CONTENT = 0
+        const val ITEM_AD = 1
+
         const val ITEM_MAIN_TITLE = 0
         const val ITEM_MAIN_CONTENT_TEXT = 1
         const val ITEM_MAIN_CONTENT_IMAGE = 2

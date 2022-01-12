@@ -66,6 +66,15 @@
 #-keep class com.amap.api.navi.**{*;}
 #-keep class com.autonavi.**{*;}
 
+#优化
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+#保护内部类
+-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
+-keep class com.bytedance.sdk.openadsdk.** {*;}
+-keep public interface com.bytedance.sdk.openadsdk.downloadnew.** {*;}
+-keep class com.pgl.sys.ces.* {*;}
+
 
 #------app混淆配置------#
 #-printmapping mapping.txt

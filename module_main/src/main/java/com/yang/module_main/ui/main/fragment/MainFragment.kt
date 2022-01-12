@@ -2,6 +2,7 @@ package com.yang.module_main.ui.main.fragment
 
 import android.content.Intent
 import android.util.Log
+import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -11,7 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseQuickAdapter
+import com.bytedance.sdk.openadsdk.*
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -39,7 +41,9 @@ import kotlinx.android.synthetic.main.fra_main.*
 import kotlinx.android.synthetic.main.view_dynamic_item.*
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
 import kotlinx.coroutines.cancel
+import java.util.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 
 @Route(path = AppConstant.RoutePath.MAIN_FRAGMENT)
@@ -56,6 +60,9 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private var mutableListOf: MutableList<DynamicData> = mutableListOf()
 
     private var pageNum = 1
+
+    private var mTTAdNative: TTAdNative? = null
+
 
     override fun getLayout(): Int {
         return R.layout.fra_main
@@ -78,6 +85,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                         mainViewModel.showRecyclerViewEmptyEvent()
                     } else {
                         mAdapter.replaceData(it)
+
                     }
                 }
                 smartRefreshLayout.isLoading -> {
@@ -87,7 +95,6 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
                         mAdapter.addData(it)
-
                     }
                 }
                 else -> {
@@ -98,12 +105,16 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     }
                 }
             }
+            if (mAdapter.data.size > 0){
+                loadSplashAd()
+            }
         })
     }
 
     override fun initView() {
         initRecyclerView()
-        val registerForActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        val registerForActivityResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode != AppCompatActivity.RESULT_OK) {
                     return@registerForActivityResult
                 }
@@ -139,14 +150,21 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         }
         val userInfo = getUserInfo()
         Glide.with(this)
-            .load(userInfo?.userImage?:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
+            .load(
+                userInfo?.userImage
+                    ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e"
+            )
             .error(R.drawable.iv_image_error)
             .placeholder(R.drawable.iv_image_placeholder)
             .into(commonToolBar.ivBack)
 
         commonToolBar.imageAddCallBack = object : CommonToolBar.ImageAddCallBack {
             override fun imageAddClickListener() {
-                if (getDefaultMMKV().decodeInt(AppConstant.Constant.LOGIN_STATUS, -1) == AppConstant.Constant.LOGIN_NO_PERMISSION){
+                if (getDefaultMMKV().decodeInt(
+                        AppConstant.Constant.LOGIN_STATUS,
+                        -1
+                    ) == AppConstant.Constant.LOGIN_NO_PERMISSION
+                ) {
                     buildARouterLogin(mContext)
                     return
                 }
@@ -176,22 +194,59 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         InjectViewModelProxy.inject(this)
     }
 
+    private fun loadSplashAd() {
+        mTTAdNative = TTAdSdk.getAdManager().createAdNative(requireContext())
+        val adSlot = AdSlot.Builder()
+            .setCodeId("947667043") //广告位id
+            .setSupportDeepLink(true)
+            .setAdCount(3) //请求广告数量为1到3条
+            .setExpressViewAcceptedSize(1080f, 0f) //期望模板广告view的size,单位dp
+            .setAdLoadType(TTAdLoadType.PRELOAD) //推荐使用，用于标注此次的广告请求用途为预加载（当做缓存）还是实时加载，方便后续为开发者优化相关策略
+            .build()
+        mTTAdNative?.loadNativeExpressAd(adSlot, object : TTAdNative.NativeExpressAdListener {
+            override fun onError(p0: Int, p1: String?) {
+                Log.i(TAG, "onError: $p0  $p1")
+            }
+
+            override fun onNativeExpressAdLoad(p0: MutableList<TTNativeExpressAd>?) {
+                Log.i(TAG, "onNativeExpressAdLoad: ${p0?.size}")
+                if (p0.isNullOrEmpty()) {
+                    return
+                }
+                p0.forEach {
+                    val adIndex = Random.nextInt(mAdapter.data.size - 1)
+                    val item = mAdapter.getItem(adIndex)
+                    mAdapter.setData(adIndex, DynamicData(AppConstant.Constant.ITEM_AD).apply {
+                        mTTNativeExpressAd = it
+                        it.render()
+                    })
+                    mAdapter.addData(item!!)
+                }
+
+            }
+
+        })
+    }
+
 
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = MAdapter(mutableListOf).apply {
-            setOnItemChildClickListener { adapter, view, position ->
+            setOnItemChildClickListener { _, view, _ ->
                 when (view.id) {
                     R.id.siv_img -> {
-                        buildARouter(AppConstant.RoutePath.MINE_OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
+                        buildARouter(AppConstant.RoutePath.MINE_OTHER_PERSON_INFO_ACTIVITY).withString(
+                            AppConstant.Constant.ID,
+                            ""
+                        ).navigation()
                     }
                 }
             }
 
-            setOnItemClickListener { adapter, view, position ->
+            setOnItemClickListener { _, _, position ->
                 val item = mAdapter.getItem(position)
                 buildARouter(AppConstant.RoutePath.DYNAMIC_DETAIL_ACTIVITY)
-                    .withString(AppConstant.Constant.ID,item?.id)
+                    .withString(AppConstant.Constant.ID, item?.id)
                     .navigation()
             }
         }
@@ -199,47 +254,65 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             Log.i(TAG, "initRecyclerView: ")
         }
         recyclerView.adapter = mAdapter
-        registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
+        registerRefreshAndRecyclerView(smartRefreshLayout, mAdapter)
     }
 
     inner class MAdapter(list: MutableList<DynamicData>) :
-        BaseQuickAdapter<DynamicData, BaseViewHolder>(list) {
+        BaseMultiItemQuickAdapter<DynamicData, BaseViewHolder>(list) {
 
         init {
-            mLayoutResId = R.layout.view_dynamic_item
+            addItemType(AppConstant.Constant.ITEM_CONTENT, R.layout.view_dynamic_item)
+            addItemType(AppConstant.Constant.ITEM_AD, R.layout.item_ad)
         }
 
         override fun convert(helper: BaseViewHolder, item: DynamicData) {
-            initItemMainTitle(helper, item)
+            when (item.mItemType) {
+                AppConstant.Constant.ITEM_CONTENT -> {
+                    initItemMainTitle(helper, item)
 
-            if (item.content.isNullOrEmpty()) {
-                helper.setGone(R.id.item_main_content_text, false)
-            } else {
-                helper.setGone(R.id.item_main_content_text, true)
-                initItemMainContentText(helper, item)
+                    if (item.content.isNullOrEmpty()) {
+                        helper.setGone(R.id.item_main_content_text, false)
+                    } else {
+                        helper.setGone(R.id.item_main_content_text, true)
+                        initItemMainContentText(helper, item)
+                    }
+
+                    if (item.imageUrls.isNullOrEmpty()) {
+                        helper.setGone(R.id.mRecyclerView, false)
+                    } else {
+                        helper.setGone(R.id.mRecyclerView, true)
+                        initItemMainContentImage(helper, item)
+                    }
+                    if (item.imageUrls.isNullOrEmpty()) {
+                        helper.setGone(R.id.gridNinePictureView, false)
+                    } else {
+                        helper.setGone(R.id.gridNinePictureView, true)
+                        initItemMainContentImage(helper, item)
+                    }
+
+                    initItemMainIdentification(helper, item)
+                }
+                AppConstant.Constant.ITEM_AD -> {
+                    val adContainer = helper.getView<FrameLayout>(R.id.adContainer)
+                    adContainer.removeAllViews()
+                    item.mTTNativeExpressAd?.expressAdView?.let {
+                        if (it.parent == null) {
+                            adContainer.addView(it)
+                        }
+                    }
+                }
             }
 
-            if (item.imageUrls.isNullOrEmpty()) {
-                helper.setGone(R.id.mRecyclerView, false)
-            } else {
-                helper.setGone(R.id.mRecyclerView, true)
-                initItemMainContentImage(helper, item)
-            }
-            if (item.imageUrls.isNullOrEmpty()) {
-                helper.setGone(R.id.gridNinePictureView, false)
-            } else {
-                helper.setGone(R.id.gridNinePictureView, true)
-                initItemMainContentImage(helper, item)
-            }
-
-            initItemMainIdentification(helper, item)
         }
 
         private fun initItemMainTitle(helper: BaseViewHolder, item: DynamicData) {
             val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
             helper.addOnClickListener(R.id.siv_img)
             helper.setText(R.id.tv_time, item.createTime)
-            Glide.with(sivImg).load(item.userImage?:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e")
+            Glide.with(sivImg).load(
+                item.userImage
+                    ?: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2F39%2Fb7%2F53%2F39b75357f98675e2d6d5dcde1fb805a3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642840086&t=2a7574a5d8ecc96669ac3e050fe4fd8e"
+            )
                 .error(R.drawable.iv_image_error)
                 .placeholder(R.drawable.iv_image_placeholder).into(sivImg)
         }
@@ -252,7 +325,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
             val gridNinePictureView = helper.getView<GridNinePictureView>(R.id.gridNinePictureView)
             gridNinePictureView.data = item.imageUrls?.symbolToList("#")!!
-            gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback{
+            gridNinePictureView.imageCallback = object : GridNinePictureView.ImageCallback {
                 override fun imageClickListener(position: Int) {
                     val imageViewPagerDialog =
                         ImageViewPagerDialog(
@@ -295,7 +368,8 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private fun getDynamicList() {
         val mutableMapOf = mutableMapOf<String, String>()
         mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum.toString()
-        mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT.toString()
+        mutableMapOf[AppConstant.Constant.PAGE_SIZE] =
+            AppConstant.Constant.PAGE_SIZE_COUNT.toString()
         mainViewModel.getDynamicList(mutableMapOf)
     }
 
