@@ -211,7 +211,7 @@ class SplashActivity : BaseActivity(), TTSplashAd.AdInteractionListener {
                 .navigation(this@SplashActivity)
             finish()
         } else {
-            loginViewModel.splashLogin(userInfo!!.userAccount, userInfo!!.userPassword)
+            loginViewModel.splashLogin(userInfo?.userAccount?:"", userInfo?.userPassword?:"")
             loginViewModel.mUserInfoData.observe(this, Observer { mUserInfo ->
                 getDefaultMMKV().encode(
                     AppConstant.Constant.LOGIN_STATUS,

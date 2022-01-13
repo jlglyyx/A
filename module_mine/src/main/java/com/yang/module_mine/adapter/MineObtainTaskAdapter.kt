@@ -16,6 +16,7 @@ class MineObtainTaskAdapter(layoutResId: Int, data: MutableList<MineEarnObtainDa
     override fun convert(helper: BaseViewHolder, item: MineEarnObtainData) {
 
         helper.setText(R.id.tv_content, item.content)
-            .setText(R.id.tv_finish, if (item.finnish) "已完成" else "去完成")
+            .setText(R.id.tv_finish, "${item.currentTask}/${item.countTask}")
+            .addOnClickListener(R.id.tv_finish)
     }
 }

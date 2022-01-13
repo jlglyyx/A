@@ -1,12 +1,14 @@
 package com.yang.module_mine.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.bytedance.sdk.openadsdk.*
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.room.entity.MineGoodsDetailData
+import com.yang.lib_common.room.entity.UserInfoData
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_mine.R
 import com.yang.module_mine.data.MineExtensionTurnoverData
@@ -45,6 +47,8 @@ class MineViewModel @Inject constructor(
     var mMineSignTurnoverListLiveData = MutableLiveData<MutableList<MineSignTurnoverData>>()
 
     var mMineGoodsDetailListLiveData = MutableLiveData<MutableList<MineGoodsDetailData>>()
+
+    var mTTRewardMineTaskAd = MutableLiveData<TTRewardVideoAd>()
 
 
     fun login(userAccount: String, password: String) {
@@ -184,5 +188,35 @@ class MineViewModel @Inject constructor(
     }
 
 
+
+    fun loadMineTaskAd(){
+        val bigAdSlot = AdSlot.Builder()
+            .setCodeId("947676680") //广告位id
+            .setUserID("tag123")//tag_id
+            .setMediaExtra("media_extra") //附加参数
+            .setOrientation(TTAdConstant.VERTICAL)
+            .setExpressViewAcceptedSize(0f, 0f) //期望模板广告view的size,单位dp
+            .setAdLoadType(TTAdLoadType.PRELOAD) //推荐使用，用于标注此次的广告请求用途为预加载（当做缓存）还是实时加载，方便后续为开发者优化相关策略
+            .build()
+        mTTAdNative?.loadRewardVideoAd(bigAdSlot, object : TTAdNative.RewardVideoAdListener {
+            override fun onError(code: Int, message: String?) {
+                Log.i("TAG", "onError: $code  $message")
+            }
+
+
+            override fun onRewardVideoAdLoad(p0: TTRewardVideoAd?) {
+            }
+
+            //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
+            override fun onRewardVideoCached() {
+
+            }
+
+            override fun onRewardVideoCached(ad: TTRewardVideoAd?) {
+                mTTRewardMineTaskAd.postValue(ad)
+            }
+
+        })
+    }
 }
 

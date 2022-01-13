@@ -1,11 +1,17 @@
 package com.yang.module_main.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.bytedance.sdk.openadsdk.AdSlot
+import com.bytedance.sdk.openadsdk.TTAdLoadType
+import com.bytedance.sdk.openadsdk.TTAdNative
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
+import com.yang.lib_common.util.toCloseAd
 import com.yang.lib_common.util.toJson
 import com.yang.module_main.R
 import com.yang.module_main.data.model.DynamicData
@@ -33,6 +39,8 @@ class MainViewModel @Inject constructor(
     var pictureListLiveData = MutableLiveData<MutableList<String>>()
 
     var pictureCollectListLiveData = MutableLiveData<MutableList<String>>()
+
+    var mTTNativeExpressAdList = mutableListOf<DynamicData>()
 
     fun addDynamic(dynamicData: DynamicData) {
         launch({
@@ -168,6 +176,39 @@ class MainViewModel @Inject constructor(
         },{
             requestSuccess()
         },messages = *arrayOf(getString(R.string.string_login_out_ing), getString(R.string.string_login_out_success)))
+    }
+
+
+    fun loadMainAd(){
+        /*vip等级大于等于2不展示广告*/
+        if (toCloseAd(2)) {
+            return
+        }
+        val adSlot = AdSlot.Builder()
+            .setCodeId("947667043") //广告位id
+            .setSupportDeepLink(true)
+            .setAdCount(1) //请求广告数量为1到3条
+            .setExpressViewAcceptedSize(0f, 0f) //期望模板广告view的size,单位dp
+            .setAdLoadType(TTAdLoadType.PRELOAD) //推荐使用，用于标注此次的广告请求用途为预加载（当做缓存）还是实时加载，方便后续为开发者优化相关策略
+            .build()
+        mTTAdNative?.loadNativeExpressAd(adSlot, object : TTAdNative.NativeExpressAdListener {
+            override fun onError(p0: Int, p1: String?) {
+                Log.i("TAG", "onError: $p0  $p1")
+            }
+            override fun onNativeExpressAdLoad(p0: MutableList<TTNativeExpressAd>?) {
+                Log.i("TAG", "onNativeExpressAdLoad: ${p0?.size}")
+                if (p0.isNullOrEmpty()) {
+                    return
+                }
+                mTTNativeExpressAdList.clear()
+                p0.forEach {
+                    mTTNativeExpressAdList.add(DynamicData(AppConstant.Constant.ITEM_AD).apply {
+                        mTTNativeExpressAd = it
+                        it.render()
+                    })
+                }
+            }
+        })
     }
 
 }

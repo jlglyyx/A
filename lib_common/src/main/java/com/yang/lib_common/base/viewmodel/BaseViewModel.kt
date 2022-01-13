@@ -5,6 +5,8 @@ import android.text.TextUtils
 import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.bytedance.sdk.openadsdk.TTAdNative
+import com.bytedance.sdk.openadsdk.TTAdSdk
 import com.yang.lib_common.R
 import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.bus.event.UIChangeLiveData
@@ -20,6 +22,11 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
      * ui状态控制器
      */
     var uC = UIChangeLiveData()
+
+    /**
+     * 广告Manager
+     */
+    var  mTTAdNative: TTAdNative? = TTAdSdk.getAdManager().createAdNative(application)
 
 
     /**
@@ -137,6 +144,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
 
+
     /**
      * 请求
      * @param onRequest 请求
@@ -196,6 +204,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
 
     override fun onCleared() {
         super.onCleared()
+        mTTAdNative = null
         viewModelScope.cancel()
     }
 }

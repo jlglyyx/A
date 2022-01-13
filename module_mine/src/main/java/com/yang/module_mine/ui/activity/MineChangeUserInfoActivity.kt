@@ -120,11 +120,13 @@ class MineChangeUserInfoActivity : BaseActivity() {
                 if (it.resultCode == Activity.RESULT_OK && null != it.data) {
                     it.data!!.getParcelableArrayListExtra<MediaInfoBean>(AppConstant.Constant.DATA)
                         ?.let { beans ->
-                            imageUrl = beans[0].filePath.toString()
-                            mineViewModel.uploadFile(mutableListOf(imageUrl))
-                            Glide.with(this).load(imageUrl).centerCrop()
-                                .error(R.drawable.iv_image_error)
-                                .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
+                            if (beans.isNotEmpty()){
+                                imageUrl = beans[0].filePath.toString()
+                                mineViewModel.uploadFile(mutableListOf(imageUrl))
+                                Glide.with(this).load(imageUrl).centerCrop()
+                                    .error(R.drawable.iv_image_error)
+                                    .placeholder(R.drawable.iv_image_placeholder).into(siv_image)
+                            }
                         }
                 }
             }

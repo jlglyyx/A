@@ -369,3 +369,20 @@ fun String.isPhone():Boolean{
     return matcher.matches()
 }
 
+/**
+ *
+ */
+fun toCloseAd(vipLevel:Int):Boolean{
+    val userInfo = getUserInfo()
+    userInfo?.let {
+        /*如果过期了返回*/
+        if (it.userVipExpired){
+            return false
+        }
+        if (it.userVipLevel >= vipLevel){
+            return true
+        }
+    }
+    return false
+}
+

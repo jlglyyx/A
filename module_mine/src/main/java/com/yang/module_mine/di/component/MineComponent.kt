@@ -29,6 +29,7 @@ interface MineComponent {
     fun inject(mineAddAddressActivity: MineAddAddressActivity)
     fun inject(mineChangePasswordActivity: MineChangePasswordActivity)
     fun inject(mineCreateOrderActivity: MineCreateOrderActivity)
+    fun inject(mineObtainTaskActivity: MineObtainTaskActivity)
 
     fun inject(mineFragment: MineFragment)
     fun inject(mineExchangeStatusFragment: MineExchangeStatusFragment)

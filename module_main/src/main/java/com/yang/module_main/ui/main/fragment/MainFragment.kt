@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
@@ -40,7 +39,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fra_main.*
 import kotlinx.android.synthetic.main.view_dynamic_item.*
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
-import kotlinx.coroutines.cancel
 import java.util.*
 import javax.inject.Inject
 import kotlin.random.Random
@@ -78,6 +76,11 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         })
 
         mainViewModel.dynamicListLiveData.observe(this, Observer {
+            if (it.isNotEmpty() && mainViewModel.mTTNativeExpressAdList.isNotEmpty()){
+                mainViewModel.mTTNativeExpressAdList.forEach { adItem ->
+                    it.add(Random.nextInt(0,it.size),adItem)
+                }
+            }
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
@@ -104,9 +107,6 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                         mAdapter.replaceData(it)
                     }
                 }
-            }
-            if (mAdapter.data.size > 0){
-                loadSplashAd()
             }
         })
     }
@@ -194,39 +194,6 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         InjectViewModelProxy.inject(this)
     }
 
-    private fun loadSplashAd() {
-        mTTAdNative = TTAdSdk.getAdManager().createAdNative(requireContext())
-        val adSlot = AdSlot.Builder()
-            .setCodeId("947667043") //广告位id
-            .setSupportDeepLink(true)
-            .setAdCount(3) //请求广告数量为1到3条
-            .setExpressViewAcceptedSize(1080f, 0f) //期望模板广告view的size,单位dp
-            .setAdLoadType(TTAdLoadType.PRELOAD) //推荐使用，用于标注此次的广告请求用途为预加载（当做缓存）还是实时加载，方便后续为开发者优化相关策略
-            .build()
-        mTTAdNative?.loadNativeExpressAd(adSlot, object : TTAdNative.NativeExpressAdListener {
-            override fun onError(p0: Int, p1: String?) {
-                Log.i(TAG, "onError: $p0  $p1")
-            }
-
-            override fun onNativeExpressAdLoad(p0: MutableList<TTNativeExpressAd>?) {
-                Log.i(TAG, "onNativeExpressAdLoad: ${p0?.size}")
-                if (p0.isNullOrEmpty()) {
-                    return
-                }
-                p0.forEach {
-                    val adIndex = Random.nextInt(mAdapter.data.size - 1)
-                    val item = mAdapter.getItem(adIndex)
-                    mAdapter.setData(adIndex, DynamicData(AppConstant.Constant.ITEM_AD).apply {
-                        mTTNativeExpressAd = it
-                        it.render()
-                    })
-                    mAdapter.addData(item!!)
-                }
-
-            }
-
-        })
-    }
 
 
     private fun initRecyclerView() {
@@ -293,6 +260,7 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     initItemMainIdentification(helper, item)
                 }
                 AppConstant.Constant.ITEM_AD -> {
+                    /*广告view*/
                     val adContainer = helper.getView<FrameLayout>(R.id.adContainer)
                     adContainer.removeAllViews()
                     item.mTTNativeExpressAd?.expressAdView?.let {
@@ -300,6 +268,22 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                             adContainer.addView(it)
                         }
                     }
+                    item.mTTNativeExpressAd?.setDislikeCallback(requireActivity(), object :
+                        TTAdDislike.DislikeInteractionCallback {
+                        override fun onShow() {
+
+                        }
+
+                        override fun onSelected(p0: Int, p1: String?, p2: Boolean) {
+                            val indexOf = mData.indexOf(item)
+                            this@MAdapter.remove(indexOf)
+                        }
+
+                        override fun onCancel() {
+
+                        }
+
+                    })
                 }
             }
 
@@ -377,17 +361,23 @@ class MainFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
         getDynamicList()
+        mainViewModel.loadMainAd()
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
         getDynamicList()
+        mainViewModel.loadMainAd()
     }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
-        lifecycleScope.cancel()
+        mAdapter.data.filter {
+            it.mItemType != AppConstant.Constant.ITEM_AD
+        }.forEach {
+            it.mTTNativeExpressAd?.destroy()
+        }
     }
 
 

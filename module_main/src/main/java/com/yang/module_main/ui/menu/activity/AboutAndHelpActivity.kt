@@ -26,6 +26,14 @@ class AboutAndHelpActivity:BaseActivity() {
     }
 
     override fun initView() {
+
+        icv_ad.clicks().subscribe {
+            buildARouter(AppConstant.RoutePath.WEB_VIEW_ACTIVITY)
+                .withString(AppConstant.Constant.TITLE,"关于广告")
+                .withString(AppConstant.Constant.URL,"file:///android_asset/AboutAD.htm")
+                .navigation()
+        }
+
         icv_version.rightContent = getVersionName(this)
         icv_help.clicks().subscribe {
             buildARouter(AppConstant.RoutePath.WEB_VIEW_ACTIVITY)

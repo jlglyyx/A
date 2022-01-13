@@ -19,6 +19,7 @@ import com.yang.module_picture.adapter.PictureAdapter
 import com.yang.module_picture.viewmodel.PictureViewModel
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.fra_item_picture.*
+import kotlin.random.Random
 
 @Route(path = AppConstant.RoutePath.PICTURE_ITEM_FRAGMENT)
 class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
@@ -33,20 +34,21 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     private lateinit var mAdapter: PictureAdapter
 
+
     override fun getLayout(): Int {
         return R.layout.fra_item_picture
     }
 
     override fun initData() {
         queryType = arguments?.getString(AppConstant.Constant.TYPE)
-        smartRefreshLayout.autoRefresh()
-        initRecyclerView()
+        pictureModule.getImageInfo(queryType ?: "", pageNum)
+        initSmartRefreshLayout()
+
     }
 
     override fun initView() {
         initBanner()
-        initSmartRefreshLayout()
-
+        initRecyclerView()
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
@@ -57,11 +59,21 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         InjectViewModelProxy.inject(this)
 
         pictureModule.mImageData.observe(this, Observer {
-
+            if (it.list.isNotEmpty() && pictureModule.mTTNativeExpressAdList.isNotEmpty()){
+                pictureModule.mTTNativeExpressAdList.forEach { adItem ->
+                    it.list.add(Random.nextInt(0,it.list.size),adItem)
+                }
+            }
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it.list)
+                    if (it.list.isNullOrEmpty()) {
+                        pictureModule.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+
+                    }
+
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
@@ -73,9 +85,14 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
                     }
                 }
                 else -> {
-                    mAdapter.replaceData(it.list)
+                    if (it.list.isNullOrEmpty()) {
+                        pictureModule.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+                    }
                 }
             }
+
         })
 
     }
@@ -88,7 +105,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     private fun initRecyclerView() {
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        mAdapter = PictureAdapter(R.layout.item_picture_image, mutableListOf()).also {
+        mAdapter = PictureAdapter(requireActivity(), mutableListOf()).also {
             it.setOnItemClickListener { adapter, view, position ->
                 val imageData = adapter.data[position] as ImageDataItem
                 buildARouter(AppConstant.RoutePath.PICTURE_ITEM_ACTIVITY)
@@ -99,7 +116,7 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         recyclerView.adapter = mAdapter
 
 
-        registerRefreshAndRecyclerView(smartRefreshLayout,mAdapter)
+        registerRefreshAndRecyclerView(smartRefreshLayout, mAdapter)
     }
 
     private fun initBanner() {
@@ -135,15 +152,24 @@ class PictureItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
 
-
-
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
         pictureModule.getImageInfo(queryType ?: "", pageNum)
+        pictureModule.loadPictureAd()
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
         pictureModule.getImageInfo(queryType ?: "", pageNum)
+        pictureModule.loadPictureAd()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mAdapter.data.filter {
+            it.mItemType != AppConstant.Constant.ITEM_AD
+        }.forEach {
+            it.mTTNativeExpressAd?.destroy()
+        }
     }
 }

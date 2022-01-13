@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <com.yang.lib_common.widget.ItemContentView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -29,6 +28,13 @@
                 app:itemLeftImgVisible="false"
                 android:layout_marginTop="@dimen/dp_10"
                 android:id="@+id/icv_help"
+                app:itemRightContentVisible="false"/>
+            <com.yang.lib_common.widget.ItemContentView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemLeftContent="关于广告"
+                app:itemLeftImgVisible="false"
+                android:id="@+id/icv_ad"
                 app:itemRightContentVisible="false"/>
             <com.yang.lib_common.widget.ItemContentView
                 android:layout_width="match_parent"
