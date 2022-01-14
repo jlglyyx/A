@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_10"
-                android:text="法外狂徒张三"
+                android:text="修改一下昵称吧"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_16"
                 app:layout_constraintLeft_toRightOf="@+id/siv_img"
@@ -72,14 +72,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
             <TextView
-                android:id="@+id/tv_lever"
+                android:id="@+id/tv_vip_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_10"
-                android:text="等级：一星"
+                android:text=""
                 android:layout_marginEnd="@dimen/dp_10"
                 android:textSize="@dimen/sp_13"
+                android:textColor="@color/red"
                 app:layout_constraintLeft_toRightOf="@+id/siv_img"
                 app:layout_constraintTop_toBottomOf="@+id/tv_account" />
 
@@ -88,7 +89,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_lever"
+                app:layout_constraintTop_toBottomOf="@+id/tv_vip_level"
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_15"
                 android:layout_marginEnd="@dimen/dp_10"
@@ -96,7 +97,7 @@
                 android:id="@+id/ll_desc"
                 android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/tv_desc"
+                    android:id="@+id/tv_info"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -124,12 +125,12 @@
                 android:id="@+id/ll_nick_name"
                 android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/tv_nick_name"
+                    android:id="@+id/tv_desc"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_13"
-                    android:text="像一颗小炒"
+                    android:text="人生在世总要留点什么吧..."
                     android:textColor="@color/black"
                     android:paddingHorizontal="@dimen/dp_10"
                      />

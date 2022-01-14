@@ -32,17 +32,18 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val openTime = measureTimeMillis {
-        super.onCreate(savedInstanceState)
-        setContentView(getLayout())
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
-        initViewModel()
-        uC = initUIChangeLiveData()
-        initData()
-        initView()
-        registerListener()
-        addActivity(this)
+            super.onCreate(savedInstanceState)
+            setContentView(getLayout())
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
+            initViewModel()
+            uC = initUIChangeLiveData()
+            initData()
+            initView()
+            registerListener()
+            addActivity(this)
+            //LogisticsCenter.instance.injectViewModel(this)
         }
         Log.e(TAG, "OpenView===: $TAG  OpeTime===: $openTime")
     }
