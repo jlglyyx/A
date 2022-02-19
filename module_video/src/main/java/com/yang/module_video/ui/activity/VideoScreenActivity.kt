@@ -12,17 +12,19 @@ import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_video.R
 import com.yang.module_video.data.VideoScreenData
-import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.act_video_screen.*
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -31,9 +33,9 @@ import javax.inject.Inject
  * @Date 2021/11/19 11:08
  */
 @Route(path = AppConstant.RoutePath.VIDEO_SCREEN_ACTIVITY)
-class VideoScreenActivity : BaseActivity() {
+class VideoScreenActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
-    @Inject
+    @InjectViewModel
     lateinit var videoViewModel: VideoViewModel
 
     private lateinit var screenOneAdapter: ScreenAdapter
@@ -41,6 +43,8 @@ class VideoScreenActivity : BaseActivity() {
     private lateinit var screenTwoAdapter: ScreenAdapter
 
     private lateinit var screenThreeAdapter: ScreenAdapter
+
+    private lateinit var mAdapter: MAdapter
 
 
     override fun getLayout(): Int {
@@ -52,7 +56,8 @@ class VideoScreenActivity : BaseActivity() {
     }
 
     override fun initData() {
-
+        smartRefreshLayout.autoRefresh()
+        initSmartRefreshLayout()
     }
 
     override fun initView() {
@@ -63,9 +68,12 @@ class VideoScreenActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getVideoComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
+    private fun initSmartRefreshLayout() {
+        smartRefreshLayout.setOnRefreshLoadMoreListener(this)
+    }
 
     private fun initScreenOneRecyclerView(recyclerView: RecyclerView) {
         screenOneAdapter =
@@ -161,26 +169,26 @@ class VideoScreenActivity : BaseActivity() {
     }
 
     private fun initRecyclerView() {
-        recyclerView.adapter =
-            MAdapter(mutableListOf<VideoDataItem>().apply {
-                repeat(50) {
-                    add(VideoDataItem().apply {
-                        videoTitle = "测试$it"
-                        videoUrl =
-                            "https://img0.baidu.com/it/u=1051577226,2771334401&fm=26&fmt=auto"
-                    })
-                }
-            }).apply {
-                setOnItemClickListener { adapter, view, position ->
-                    val videoDataItem = adapter.data[position] as VideoDataItem
-                    buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).withString(
-                        AppConstant.Constant.ID,
-                        videoDataItem.id
-                    ).navigation()
-                }
+        mAdapter = MAdapter(mutableListOf<VideoDataItem>().apply {
+            repeat(50) {
+                add(VideoDataItem().apply {
+                    videoTitle = "测试$it"
+                    videoUrl =
+                        "https://img0.baidu.com/it/u=1051577226,2771334401&fm=26&fmt=auto"
+                })
             }
-        recyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        }).apply {
+            setOnItemClickListener { adapter, view, position ->
+                val videoDataItem = adapter.data[position] as VideoDataItem
+                buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).withString(
+                    AppConstant.Constant.ID,
+                    videoDataItem.id
+                ).navigation()
+            }
+        }
+        recyclerView.adapter = mAdapter
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        registerRefreshAndRecyclerView(smartRefreshLayout, mAdapter)
     }
 
     private fun getScreenData() {
@@ -247,6 +255,14 @@ class VideoScreenActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    override fun onRefresh(refreshLayout: RefreshLayout) {
+
+    }
+
+    override fun onLoadMore(refreshLayout: RefreshLayout) {
+
     }
 
 }

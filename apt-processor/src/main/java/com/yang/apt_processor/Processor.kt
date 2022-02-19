@@ -1,21 +1,23 @@
 package com.yang.apt_processor
 
 import com.google.auto.service.AutoService
-import com.yang.apt_annotation.InjectViewModel
+import com.yang.apt_annotation.adapter.ProcessorAdapter
+import com.yang.apt_annotation.annotain.InjectViewModel
+import com.yang.apt_annotation.data.ProxyInfoData
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.ProcessingEnvironment
 import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.TypeElement
-import javax.tools.Diagnostic
 
 @AutoService(Processor::class)
 class Processor : AbstractProcessor() {
 
+    private var proxyInfoMap = mutableMapOf<String, ProxyInfoData>()
+
     override fun init(processingEnv: ProcessingEnvironment) {
         super.init(processingEnv)
-        processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, "==============")
     }
 
     override fun getSupportedAnnotationTypes(): MutableSet<String> {
@@ -33,62 +35,39 @@ class Processor : AbstractProcessor() {
         roundEnv: RoundEnvironment
     ): Boolean {
         try {
+            proxyInfoMap.clear()
+            val elementsAnnotatedWith = roundEnv.getElementsAnnotatedWith(InjectViewModel::class.java)
+            /*获取注解信息*/
+            elementsAnnotatedWith.forEach { element ->
+                val enclosingElement = element.enclosingElement as TypeElement
+                /*注解所在全限定类名*/
+                val qualifiedName = enclosingElement.qualifiedName.toString()
+                var proxyInfo = proxyInfoMap[qualifiedName]
+                if (null == proxyInfo){
+                    proxyInfo = ProxyInfoData()
+                }
+                /*注解注解类 类型*/
+                val elementQualifiedName = element.asType()
+                /*注解*/
+//                val annotation = element.getAnnotation(InjectViewModel::class.java)
+//                /*注解值*/
+//                proxyInfo.elementValue = annotation.value
+                /*注解所在简单类名*/
+                proxyInfo.className = enclosingElement.simpleName.toString()
+                /*注解名集合*/
+                proxyInfo.elementNameMap[element.toString()] = elementQualifiedName.toString()
 
+                proxyInfoMap[qualifiedName] = proxyInfo
 
-
-
-//            val createSourceFile = processingEnv.filer.createSourceFile("com.yang.processor.VideoComponent")
-//            val openWriter = createSourceFile.openWriter()
-//            val elementsAnnotatedWith = roundEnv.getElementsAnnotatedWith(InjectViewModel::class.java)
-//            openWriter.write("import com.yang.module_video.*;\n")
-//            openWriter.write("@ActivityScope\n")
-//            openWriter.write("public interface VideoComponent {\n")
-//            elementsAnnotatedWith.forEach {
-//                openWriter.write("void inject(${it.simpleName} m${it.simpleName});\n")
-//                processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, "============打印==${it.simpleName}")
-//            }
-//            openWriter.write("}")
-//            openWriter.flush()
-//            openWriter.close()
-//
-//            val classBuilder = TypeSpec.classBuilder("LogUtil").addModifiers(
-//                Modifier.PUBLIC,
-//                Modifier.FINAL
-//            )
-//
-//            classBuilder.addMethod(
-//                MethodSpec.methodBuilder("i")
-//                    .addParameter(
-//                        ParameterSpec.builder(TypeName.OBJECT, "msg", Modifier.FINAL).build()
-//                    )
-//                    .addCode("android.util.Log.i(\"TAG\", \"输出: \"+msg.toString());")
-//                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-//                    .build()
-//            )
-//            classBuilder.addMethod(
-//                MethodSpec.methodBuilder("d")
-//                    .addParameter(
-//                        ParameterSpec.builder(TypeName.OBJECT, "msg", Modifier.FINAL).build()
-//                    )
-//                    .addCode("android.util.Log.d(\"TAG\", \"输出: \"+msg.toString());")
-//                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-//                    .build()
-//            )
-//            classBuilder.addMethod(
-//                MethodSpec.methodBuilder("e")
-//                    .addParameter(
-//                        ParameterSpec.builder(TypeName.OBJECT, "msg", Modifier.FINAL).build()
-//                    )
-//                    .addCode("android.util.Log.e(\"TAG\", \"输出: \"+msg.toString());")
-//                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-//                    .build()
-//            )
-//            val builder = JavaFile.builder("com.yang.processor", classBuilder.build()).build()
-//            builder.writeTo(processingEnv.filer)
+            }
+            /*生成类文件*/
+            proxyInfoMap.forEach { (className, proxyInfo) ->
+                    ProcessorAdapter().getProcessor(className).createProcessor(className,proxyInfo,processingEnv)
+            }
         } catch (e: Exception) {
-            processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, "==============错误：${e.message}")
+            e.printStackTrace()
+            return false
         }
-
-        return false
+        return true
     }
 }

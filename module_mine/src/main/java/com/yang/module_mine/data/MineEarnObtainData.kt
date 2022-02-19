@@ -6,4 +6,4 @@ package com.yang.module_mine.data
  * @Description
  * @Date 2021/9/29 16:51
  */
-data class MineEarnObtainData(var content:String,var finnish:Boolean)
+data class MineEarnObtainData(var content:String,var countTask:Int,var currentTask:Int)

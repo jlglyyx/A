@@ -54,6 +54,7 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         uC = initUIChangeLiveData()
+        initData()
         initView()
         registerListener()
         Log.e(TAG, "OpenView===: $TAG")
@@ -169,8 +170,9 @@ abstract class BaseFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         unRegisterListener()
+        uC = null
+        mView = null
         loadingPopupView?.dismiss()
         loadingPopupView = null
-        mView = null
     }
 }

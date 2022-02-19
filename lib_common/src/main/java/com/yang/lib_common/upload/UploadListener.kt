@@ -8,9 +8,9 @@ package com.yang.lib_common.upload
  */
 interface UploadListener {
 
-    fun onProgress(noticeId: Int, progress: Int)
+    fun onProgress(id: String, progress: Int)
 
-    fun onSuccess(noticeId: Int)
+    fun onSuccess(id: String)
 
-    fun onFailed(noticeId: Int)
+    fun onFailed(id: String)
 }

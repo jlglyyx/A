@@ -4,9 +4,12 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd
+import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.yang.lib_common.constant.AppConstant
 
 data class VideoData(
-    var list: List<VideoDataItem>,
+    var list: MutableList<VideoDataItem>,
     var pageNum: Int?,
     var pageSize: Int?,
     var size: Int?,
@@ -14,13 +17,13 @@ data class VideoData(
 
 )
 @Entity(tableName = "video_data")
-class VideoDataItem {
+class VideoDataItem :MultiItemEntity{
+    @Ignore
+    var mItemType:Int = AppConstant.Constant.ITEM_CONTENT
     @Ignore
     var select = false
     @Ignore
     var position = 0
-    @ColumnInfo
-    var createTime: String? = null
     @PrimaryKey
     var id: String = ""
     @ColumnInfo
@@ -32,6 +35,8 @@ class VideoDataItem {
     @ColumnInfo
     var videoTitle: String? = null
     @ColumnInfo
+    var createTime: String? = null
+    @ColumnInfo
     var updateTime: String? = null
     @ColumnInfo
     var isLarge: Boolean = false
@@ -41,5 +46,12 @@ class VideoDataItem {
     var title: String? = null
     @Ignore
     var smartVideoUrls: MutableList<VideoDataItem>? = null
+
+    @Ignore
+    var mTTNativeExpressAd: TTNativeExpressAd? = null
+
+    override fun getItemType(): Int {
+        return mItemType
+    }
 }
 

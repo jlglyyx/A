@@ -1,6 +1,8 @@
 package com.yang.module_main.adapter
 
+import android.util.Log
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -18,9 +20,7 @@ import java.text.DecimalFormat
 class PictureSelectAdapter(
     layoutResId: Int,
     data: MutableList<MediaInfoBean>,
-    private val showSelect: Boolean = true
-) :
-    BaseQuickAdapter<MediaInfoBean, BaseViewHolder>(layoutResId, data) {
+    private val showSelect: Boolean = true) : BaseQuickAdapter<MediaInfoBean, BaseViewHolder>(layoutResId, data) {
 
 
     override fun convert(helper: BaseViewHolder, item: MediaInfoBean) {
@@ -47,33 +47,57 @@ class PictureSelectAdapter(
             helper.setVisible(R.id.cl_cb, false)
             helper.setVisible(R.id.tv_time, false)
         }
-
         if (item.fileType == 1) {
-            Glide.with(ivImg)
-                .setDefaultRequestOptions(RequestOptions().frame(1000).centerCrop())
-                .load(item.filePath)
-                .error(R.drawable.iv_image_error)
-                .placeholder(R.drawable.iv_image_placeholder)
-                .into(ivImg)
+            try {
+                Glide.with(ivImg)
+                    .setDefaultRequestOptions(RequestOptions().frame(1000).centerCrop())
+                    .load(item.filePath)
+                    .error(R.drawable.iv_image_error)
+                    .placeholder(R.drawable.iv_image_placeholder)
+                    .into(ivImg)
+            }catch (e:Exception){
+                Log.i(TAG, "convert: ssssssssssssssss     vvv ${e.message}")
+            }
             helper.setVisible(R.id.iv_play, true)
         } else {
-            Glide.with(ivImg)
-                .load(item.filePath)
-                .centerCrop()
-                .error(R.drawable.iv_image_error)
-                .placeholder(R.drawable.iv_image_placeholder)
-                .into(ivImg)
+            try {
+                Glide.with(ivImg)
+                    .load(item.filePath)
+                    .centerCrop()
+                    .error(R.drawable.iv_image_error)
+                    .placeholder(R.drawable.iv_image_placeholder)
+                    .into(ivImg)
+            }catch (e:Exception){
+                Log.i(TAG, "convert: ssssssssssssssss   ppp ${e.message}")
+            }
+
             helper.setVisible(R.id.iv_play, false)
         }
 
+
     }
+
+    override fun onViewAttachedToWindow(holder: BaseViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        Log.i("TAG=ssss", "onViewAttachedToWindow: ")
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        Log.i("TAGs", "onAttachedToRecyclerView: ")
+    }
+
+    override fun bindToRecyclerView(recyclerView: RecyclerView?) {
+        super.bindToRecyclerView(recyclerView)
+        Log.i("TAGs", "bindToRecyclerView: ")
+    }
+
 
     private fun secToTime(data: String): String {
         val time = data.toInt() / 1000
-        val timeStr: String?
+        val timeStr: String
         if (time <= 0) return "00:00:00" else {
-            timeStr =
-                "${unitFormat(time / 60 / 60 % 60)}:${unitFormat(time / 60 % 60)}:${unitFormat(time % 60)}"
+            timeStr = "${unitFormat(time / 60 / 60 % 60)}:${unitFormat(time / 60 % 60)}:${unitFormat(time % 60)}"
         }
         return timeStr
     }

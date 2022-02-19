@@ -1,3 +1,4 @@
+@file:JvmName("VideoDaggerHelp")
 package com.yang.module_video.helper
 
 import androidx.appcompat.app.AppCompatActivity

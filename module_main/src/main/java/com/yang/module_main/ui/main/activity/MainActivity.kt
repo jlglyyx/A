@@ -7,33 +7,33 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tbruyelle.rxpermissions3.RxPermissions
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.TabAndViewPagerAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
+import com.yang.lib_common.bus.event.LiveDataBus
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.scope.ModelWithFactory
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getScreenPx
 import com.yang.lib_common.util.px2dip
 import com.yang.lib_common.util.showShort
 import com.yang.module_main.R
-import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.ui.menu.fragment.LeftFragment
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
-import javax.inject.Inject
 
 
 @Route(path = AppConstant.RoutePath.MAIN_ACTIVITY)
 class MainActivity : BaseActivity() {
 
-    @Inject
-    @ModelWithFactory
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var fragments: MutableList<Fragment>
@@ -101,7 +101,11 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getMainComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
+
+        LiveDataBus.instance.with("openDrawerLayout").observe(this, Observer {
+            drawerLayout.openDrawer(GravityCompat.START)
+        })
 
     }
 
@@ -140,10 +144,13 @@ class MainActivity : BaseActivity() {
             tab.setIcon(icon[position])
             if (position == 0) {
                 tab.setIcon(selectIcon[position])
-                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.plum))
+                (tab.view.getChildAt(0) as ImageView).imageTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
+                //tab.customView = ATabLayout(this)
             } else {
                 tab.setIcon(icon[position])
-                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.grey))
+                (tab.view.getChildAt(0) as ImageView).imageTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.grey))
             }
             tab.view.setOnLongClickListener { true }
         }.attach()
@@ -159,12 +166,14 @@ class MainActivity : BaseActivity() {
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
                 tab.setIcon(icon[tab.position])
-                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.grey))
+                (tab.view.getChildAt(0) as ImageView).imageTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.grey))
             }
 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 tab.setIcon(selectIcon[tab.position])
-                (tab.view.getChildAt(0) as ImageView).imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity,R.color.plum))
+                (tab.view.getChildAt(0) as ImageView).imageTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.colorBar))
 
             }
 
@@ -183,14 +192,15 @@ class MainActivity : BaseActivity() {
             .subscribe {
                 when {
                     it.granted -> {
-
+                        //showShort("呦西，小伙子很不错")
                     }
 
                     it.shouldShowRequestPermissionRationale -> {
 
+                        showShort("逼崽子把权限关了还怎么玩，赶紧打开")
                     }
                     else -> {
-
+                        showShort("逼崽子把权限关了还怎么玩，赶紧打开")
                     }
                 }
             }

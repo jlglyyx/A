@@ -2,7 +2,6 @@ package com.yang.module_picture.di.module
 import android.app.Application
 import androidx.lifecycle.ViewModelStoreOwner
 import com.yang.lib_common.scope.ActivityScope
-import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.getViewModel
 import com.yang.module_picture.api.PictureApiService
 import com.yang.module_picture.di.factory.PictureViewModelFactory
@@ -41,7 +40,7 @@ class PictureModule(private val viewModelStoreOwner: ViewModelStoreOwner) {
 
     @ActivityScope
     @Provides
-    @ModelWithFactory
+
     fun provideModelWithFactory(
         pictureViewModelFactory: PictureViewModelFactory
     ): PictureViewModel =

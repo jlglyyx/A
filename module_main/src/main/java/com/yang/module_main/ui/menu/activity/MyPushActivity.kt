@@ -12,27 +12,25 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.lxj.xpopup.XPopup
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.dialog.ImageViewPagerDialog
-import com.yang.lib_common.scope.ModelWithFactory
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.getUserInfo
 import com.yang.lib_common.util.symbolToList
 import com.yang.module_main.R
 import com.yang.module_main.adapter.DynamicAdapter
 import com.yang.module_main.data.model.DynamicData
-import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.view_normal_recyclerview.*
-import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.MY_PUSH_ACTIVITY)
 class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
-    @Inject
-    @ModelWithFactory
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var mAdapter: MAdapter
@@ -46,31 +44,40 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
     override fun initData() {
         smartRefreshLayout.autoRefresh()
         initSmartRefreshLayout()
-
-    }
-
-    override fun initView() {
-        initRecyclerView()
         mainViewModel.dynamicListLiveData.observe(this, Observer {
             when {
                 smartRefreshLayout.isRefreshing -> {
                     smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it)
+                    if (it.isNullOrEmpty()) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.isNotEmpty()) {
+                    if (it.isNullOrEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)
                         mAdapter.addData(it)
+
                     }
                 }
                 else -> {
-                    mAdapter.replaceData(it)
+                    if (it.isNullOrEmpty()) {
+                        mainViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it)
+                    }
                 }
             }
         })
+    }
+
+    override fun initView() {
+        initRecyclerView()
+
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData {
@@ -78,7 +85,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
     }
 
     override fun initViewModel() {
-        getMainComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
 
 
     }
@@ -92,7 +99,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
             setOnItemChildClickListener { adapter, view, position ->
                 when (view.id) {
                     R.id.siv_img -> {
-                        buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
+                        buildARouter(AppConstant.RoutePath.MINE_OTHER_PERSON_INFO_ACTIVITY).withString(AppConstant.Constant.ID,"").navigation()
                     }
 
                 }
@@ -149,7 +156,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
             mRecyclerView.adapter = dynamicAdapter
             dynamicAdapter.setOnItemClickListener { adapter, view, position ->
                 val imageViewPagerDialog =
-                    ImageViewPagerDialog(this@MyPushActivity, item.imageUrls?.symbolToList("#")!!, position)
+                    ImageViewPagerDialog(this@MyPushActivity, item.imageUrls?.symbolToList("#")!!, position,true)
                 XPopup.Builder(this@MyPushActivity).asCustom(imageViewPagerDialog).show()
             }
         }
@@ -160,7 +167,7 @@ class MyPushActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
     private fun getDynamicList(){
         val mutableMapOf = mutableMapOf<String, String>()
-        mutableMapOf[AppConstant.Constant.USER_ID] = getUserInfo()?.id.toString()
+        mutableMapOf[AppConstant.Constant.USER_ID] = getUserInfo()?.id?:""
         mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum.toString()
         mutableMapOf[AppConstant.Constant.PAGE_SIZE] = AppConstant.Constant.PAGE_SIZE_COUNT.toString()
         mainViewModel.getDynamicList(mutableMapOf)

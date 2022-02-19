@@ -2,7 +2,6 @@ package com.yang.module_video.di.module
 import android.app.Application
 import androidx.lifecycle.ViewModelStoreOwner
 import com.yang.lib_common.scope.ActivityScope
-import com.yang.lib_common.scope.ModelWithFactory
 import com.yang.lib_common.util.getViewModel
 import com.yang.module_video.api.VideoApiService
 import com.yang.module_video.di.factory.VideoViewModelFactory
@@ -40,7 +39,7 @@ class VideoModule(private val viewModelStoreOwner: ViewModelStoreOwner) {
         )
     @ActivityScope
     @Provides
-    @ModelWithFactory
+
     fun provideModelWithFactory(
         videoViewModelFactory: VideoViewModelFactory
     ): VideoViewModel =

@@ -9,7 +9,10 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
-import okhttp3.Call
+import com.yang.lib_common.room.BaseAppDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 /**
@@ -30,31 +33,31 @@ class UploadService : Service(), UploadListener {
 
     inner class UploadServiceBinder : Binder() {
 
-        fun startUpload(filePath: MutableList<String>):Call {
+        fun startUpload(filePath: String) {
             return UploadManage.instance.startUpload(filePath)
         }
 
-        fun cancelUpload(uploadCall: Call){
-            UploadManage.instance.cancelUpload(uploadCall)
+        fun cancelUpload(){
+            UploadManage.instance.cancelUpload("")
         }
     }
 
-    override fun onProgress(noticeId: Int, progress: Int) {
+    override fun onProgress(id: String, progress: Int) {
 
-        showProgressNotice(noticeId, progress)
+        //showProgressNotice(id, progress)
     }
 
-    override fun onSuccess(noticeId: Int) {
-        showCompleteNotice(noticeId)
+    override fun onSuccess(id: String) {
+        //showCompleteNotice(id)
     }
 
-    override fun onFailed(noticeId: Int) {
+    override fun onFailed(id: String) {
 
     }
 
     override fun onCreate() {
         super.onCreate()
-        UploadManage.instance.addUploadListener(this)
+        //UploadManage.instance.addUploadListener(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -63,6 +66,15 @@ class UploadService : Service(), UploadListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        CoroutineScope(Dispatchers.IO).launch {
+            val queryData = BaseAppDatabase.instance.uploadTaskDao().queryData()
+            queryData.forEach {
+                if (it.status == 0){
+                    it.status = 2
+                    BaseAppDatabase.instance.uploadTaskDao().updateData(it)
+                }
+            }
+        }
     }
 
     private fun showProgressNotice(noticeId: Int, progress: Int) {

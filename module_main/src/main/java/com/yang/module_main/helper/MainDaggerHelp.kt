@@ -1,4 +1,4 @@
-@file:JvmName("MainDaggerHelp.kt")
+@file:JvmName("MainDaggerHelp")
 
 package com.yang.module_main.helper
 

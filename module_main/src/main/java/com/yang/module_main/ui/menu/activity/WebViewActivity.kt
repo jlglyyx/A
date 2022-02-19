@@ -5,14 +5,14 @@ import android.util.Log
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.*
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.module_main.R
-import com.yang.module_main.helper.getMainComponent
 import com.yang.module_main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.act_web_view.*
-import javax.inject.Inject
 
 
 /**
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.WEB_VIEW_ACTIVITY)
 class WebViewActivity : BaseActivity() {
 
-    @Inject
+    @InjectViewModel
     lateinit var mainViewModel: MainViewModel
 
     private var url = "https://www.baidu.com/"
@@ -40,7 +40,7 @@ class WebViewActivity : BaseActivity() {
 
     override fun initViewModel() {
 
-        getMainComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     override fun initView() {

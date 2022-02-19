@@ -1,5 +1,6 @@
 package com.yang.module_video.ui.fragment
 
+import android.widget.FrameLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,33 +9,35 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.chad.library.adapter.base.BaseQuickAdapter
+import com.bytedance.sdk.openadsdk.TTAdDislike
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
-import com.yang.apt_annotation.InjectViewModel
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.MBannerAdapter
 import com.yang.lib_common.base.ui.fragment.BaseLazyFragment
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.BannerBean
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.lib_common.util.buildARouter
 import com.yang.module_video.R
-import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.viewmodel.VideoViewModel
 import com.youth.banner.indicator.CircleIndicator
 import kotlinx.android.synthetic.main.fra_item_video.*
 import javax.inject.Inject
+import kotlin.random.Random
 
-@InjectViewModel(AppConstant.RoutePath.MODULE_MAIN)
+
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_FRAGMENT)
 class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
-    @Inject
-    lateinit var videoModule: VideoViewModel
+    @InjectViewModel
+    lateinit var videoViewModel: VideoViewModel
 
     @Inject
     lateinit var gson: Gson
@@ -52,25 +55,56 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
 
     override fun initData() {
         queryType = arguments?.getString(AppConstant.Constant.TYPE)
-        smartRefreshLayout.autoRefresh()
-        initRecyclerView()
-
-
+        videoViewModel.getVideoInfo(queryType ?: "", pageNum)
+        initSmartRefreshLayout()
     }
 
     override fun initView() {
-
         initBanner()
-        initSmartRefreshLayout()
-
+        initRecyclerView()
     }
 
     override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return videoModule.uC
+        return videoViewModel.uC
     }
 
     override fun initViewModel() {
-        getVideoComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
+
+        videoViewModel.mVideoData.observe(this, Observer {
+            if (it.list.isNotEmpty() && videoViewModel.mBigTTNativeExpressAdList.isNotEmpty()) {
+                videoViewModel.mBigTTNativeExpressAdList.forEach { adItem ->
+                    it.list.add(Random.nextInt(0, it.list.size), adItem)
+                }
+            }
+            when {
+                smartRefreshLayout.isRefreshing -> {
+                    smartRefreshLayout.finishRefresh()
+                    if (it.list.isNullOrEmpty()) {
+                        videoViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+
+                    }
+                }
+                smartRefreshLayout.isLoading -> {
+                    smartRefreshLayout.finishLoadMore()
+                    if (it.list.isNullOrEmpty()) {
+                        smartRefreshLayout.setNoMoreData(true)
+                    } else {
+                        smartRefreshLayout.setNoMoreData(false)
+                        mAdapter.addData(it.list)
+                    }
+                }
+                else -> {
+                    if (it.list.isNullOrEmpty()) {
+                        videoViewModel.showRecyclerViewEmptyEvent()
+                    } else {
+                        mAdapter.replaceData(it.list)
+                    }
+                }
+            }
+        })
     }
 
 
@@ -78,20 +112,21 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
         smartRefreshLayout.setOnRefreshLoadMoreListener(this)
     }
 
+
     private fun initRecyclerView() {
         val gridLayoutManager = LinearLayoutManager(requireContext())
         recyclerView.layoutManager = gridLayoutManager
         mAdapter = MAdapter(mutableListOf()).also {
             it.setOnItemChildClickListener { adapter, view, position ->
-                when(view.id){
-                    R.id.item_video_big_image ->{
+                when (view.id) {
+                    R.id.item_video_big_image -> {
                         val videoDataItem = adapter.data[position] as VideoDataItem
                         buildARouter(AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY).withString(
                             AppConstant.Constant.ID,
                             videoDataItem.id
                         ).navigation()
                     }
-                    R.id.item_video_recommend_type ->{
+                    R.id.item_video_recommend_type -> {
                         val videoDataItem = adapter.data[position] as VideoDataItem
                         buildARouter(AppConstant.RoutePath.VIDEO_SCREEN_ACTIVITY).withString(
                             AppConstant.Constant.ID,
@@ -103,29 +138,6 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
             }
         }
         recyclerView.adapter = mAdapter
-
-
-        videoModule.mVideoData.observe(this, Observer
-        {
-            when {
-                smartRefreshLayout.isRefreshing -> {
-                    smartRefreshLayout.finishRefresh()
-                    mAdapter.replaceData(it.list)
-                }
-                smartRefreshLayout.isLoading -> {
-                    smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.list.isEmpty()) {
-                        smartRefreshLayout.setNoMoreData(true)
-                    } else {
-                        smartRefreshLayout.setNoMoreData(false)
-                        mAdapter.addData(it.list)
-                    }
-                }
-                else -> {
-                    mAdapter.replaceData(it.list)
-                }
-            }
-        })
 
         registerRefreshAndRecyclerView(smartRefreshLayout, mAdapter)
     }
@@ -147,51 +159,77 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     inner class MAdapter(list: MutableList<VideoDataItem>) :
-        BaseQuickAdapter<VideoDataItem, BaseViewHolder>(list) {
+        BaseMultiItemQuickAdapter<VideoDataItem, BaseViewHolder>(list) {
         init {
-            mLayoutResId = R.layout.item_video
+            addItemType(AppConstant.Constant.ITEM_CONTENT, R.layout.item_video)
+            addItemType(AppConstant.Constant.ITEM_AD, R.layout.item_ad)
         }
 
         override fun convert(helper: BaseViewHolder, item: VideoDataItem) {
-            val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            val recyclerView = helper.getView<RecyclerView>(R.id.recyclerView)
-            helper.setText(R.id.tv_title, item.videoTitle)
-                .setText(R.id.tv_type,item.videoType)
-                .addOnClickListener(R.id.item_video_big_image)
-                .addOnClickListener(R.id.item_video_recommend_type)
+            when (item.mItemType) {
+                AppConstant.Constant.ITEM_CONTENT -> {
+                    val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
+                    val recyclerView = helper.getView<RecyclerView>(R.id.recyclerView)
+                    helper.setText(R.id.tv_title, item.videoTitle)
+                        .setText(R.id.tv_type, item.videoType)
+                        .addOnClickListener(R.id.item_video_big_image)
+                        .addOnClickListener(R.id.item_video_recommend_type)
 
 
-            item.videoUrl?.let {
-                if (it.endsWith(".mp4")){
-                    Glide.with(sivImg)
-                        .setDefaultRequestOptions(RequestOptions().frame(5000))
-                        .load(item.videoUrl)
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .error(R.drawable.iv_image_error)
-                        .placeholder(R.drawable.iv_image_placeholder)
-                        .override(1080,500)
-                        .into(sivImg)
-                }else{
-                    Glide.with(sivImg)
-                        .load(item.videoUrl)
-                        .error(R.drawable.iv_image_error)
-                        .placeholder(R.drawable.iv_image_placeholder)
-                        .into(sivImg)
+                    item.videoUrl?.let {
+                        if (it.endsWith(".mp4")) {
+                            Glide.with(sivImg)
+                                .setDefaultRequestOptions(RequestOptions().frame(5000))
+                                .load(item.videoUrl)
+                                .skipMemoryCache(true)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .error(R.drawable.iv_image_error)
+                                .placeholder(R.drawable.iv_image_placeholder)
+                                .override(1080, 500)
+                                .into(sivImg)
+                        } else {
+                            Glide.with(sivImg)
+                                .load(item.videoUrl)
+                                .error(R.drawable.iv_image_error)
+                                .placeholder(R.drawable.iv_image_placeholder)
+                                .into(sivImg)
+                        }
+                    }
+
+                    initRecyclerView(recyclerView, item.smartVideoUrls ?: mutableListOf())
+                }
+                AppConstant.Constant.ITEM_AD -> {
+                    /*广告view*/
+                    val adContainer = helper.getView<FrameLayout>(R.id.adContainer)
+                    adContainer.removeAllViews()
+                    item.mTTNativeExpressAd?.expressAdView?.let {
+                        if (it.parent == null) {
+                            adContainer.addView(it)
+                        }
+                    }
+                    item.mTTNativeExpressAd?.setDislikeCallback(requireActivity(), object :
+                        TTAdDislike.DislikeInteractionCallback {
+                        override fun onShow() {
+
+                        }
+
+                        override fun onSelected(p0: Int, p1: String?, p2: Boolean) {
+                            val indexOf = mData.indexOf(item)
+                            this@MAdapter.remove(indexOf)
+                        }
+
+                        override fun onCancel() {
+
+                        }
+
+                    })
                 }
             }
 
-
-
-
-            initRecyclerView(recyclerView, item.smartVideoUrls ?: mutableListOf())
         }
 
 
-        private fun initRecyclerView(
-            recyclerView: RecyclerView,
-            data: MutableList<VideoDataItem>
-        ) {
+        private fun initRecyclerView(recyclerView: RecyclerView, data: MutableList<VideoDataItem>) {
             recyclerView.adapter = MImageAdapter(data).also {
                 it.setOnItemClickListener { adapter, view, position ->
                     val videoDataItem = adapter.data[position] as VideoDataItem
@@ -206,43 +244,87 @@ class VideoItemFragment : BaseLazyFragment(), OnRefreshLoadMoreListener {
     }
 
     inner class MImageAdapter(list: MutableList<VideoDataItem>) :
-        BaseQuickAdapter<VideoDataItem, BaseViewHolder>(list) {
+        BaseMultiItemQuickAdapter<VideoDataItem, BaseViewHolder>(list) {
         init {
-            mLayoutResId = R.layout.item_video_smart_image
+            addItemType(AppConstant.Constant.ITEM_CONTENT, R.layout.item_video_smart_image)
+            addItemType(AppConstant.Constant.ITEM_AD, R.layout.item_ad)
         }
 
         override fun convert(helper: BaseViewHolder, item: VideoDataItem) {
-            helper.setText(R.id.tv_title, item.videoTitle)
-            val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
-            item.videoUrl?.let {
-                if (it.endsWith(".mp4")){
-                    Glide.with(sivImg)
-                        .setDefaultRequestOptions(RequestOptions().frame(5000))
-                        .load(item.videoUrl)
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .error(R.drawable.iv_image_error)
-                        .placeholder(R.drawable.iv_image_placeholder)
-                        .override(1080,500)
-                        .into(sivImg)
-                }else{
-                    Glide.with(sivImg)
-                        .load(item.videoUrl)
-                        .error(R.drawable.iv_image_error)
-                        .placeholder(R.drawable.iv_image_placeholder)
-                        .into(sivImg)
+            when (item.mItemType) {
+                AppConstant.Constant.ITEM_CONTENT -> {
+                    helper.setText(R.id.tv_title, item.videoTitle)
+                    val sivImg = helper.getView<ShapeableImageView>(R.id.siv_img)
+                    item.videoUrl?.let {
+                        if (it.endsWith(".mp4")) {
+                            Glide.with(sivImg)
+                                .setDefaultRequestOptions(RequestOptions().frame(5000))
+                                .load(item.videoUrl)
+                                .skipMemoryCache(true)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .error(R.drawable.iv_image_error)
+                                .placeholder(R.drawable.iv_image_placeholder)
+                                .override(1080, 500)
+                                .into(sivImg)
+                        } else {
+                            Glide.with(sivImg)
+                                .load(item.videoUrl)
+                                .error(R.drawable.iv_image_error)
+                                .placeholder(R.drawable.iv_image_placeholder)
+                                .into(sivImg)
+                        }
+                    }
+                }
+                AppConstant.Constant.ITEM_AD -> {
+                    /*广告view*/
+                    val adContainer = helper.getView<FrameLayout>(R.id.adContainer)
+                    adContainer.removeAllViews()
+                    item.mTTNativeExpressAd?.expressAdView?.let {
+                        if (it.parent == null) {
+                            adContainer.addView(it)
+                        }
+                    }
+                    item.mTTNativeExpressAd?.setDislikeCallback(requireActivity(), object :
+                        TTAdDislike.DislikeInteractionCallback {
+                        override fun onShow() {
+
+                        }
+
+                        override fun onSelected(p0: Int, p1: String?, p2: Boolean) {
+                            val indexOf = mData.indexOf(item)
+                            mData.remove(item)
+                            notifyItemChanged(indexOf)
+                        }
+
+                        override fun onCancel() {
+
+                        }
+
+                    })
                 }
             }
+
         }
     }
 
     override fun onLoadMore(refreshLayout: RefreshLayout) {
         pageNum++
-        videoModule.getVideoInfo(queryType ?: "", pageNum)
+        videoViewModel.getVideoInfo(queryType ?: "", pageNum)
+        videoViewModel.loadVideoAd()
     }
 
     override fun onRefresh(refreshLayout: RefreshLayout) {
         pageNum = 1
-        videoModule.getVideoInfo(queryType ?: "", pageNum)
+        videoViewModel.getVideoInfo(queryType ?: "", pageNum)
+        videoViewModel.loadVideoAd()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mAdapter.data.filter {
+            it.mItemType != AppConstant.Constant.ITEM_AD
+        }.forEach {
+            it.mTTNativeExpressAd?.destroy()
+        }
     }
 }

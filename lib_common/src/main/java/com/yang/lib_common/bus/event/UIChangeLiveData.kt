@@ -12,9 +12,9 @@ class UIChangeLiveData {
 
     val finishActivityEvent:SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    val requestSuccessEvent:SingleLiveEvent<Boolean> = SingleLiveEvent()
+    val requestSuccessEvent:SingleLiveEvent<Any> = SingleLiveEvent()
 
-    val requestFailEvent:SingleLiveEvent<Boolean> = SingleLiveEvent()
+    val requestFailEvent:SingleLiveEvent<Any> = SingleLiveEvent()
 
     val showRecyclerViewEvent:SingleLiveEvent<Int> = SingleLiveEvent()
 

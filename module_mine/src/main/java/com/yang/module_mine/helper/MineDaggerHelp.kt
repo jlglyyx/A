@@ -1,3 +1,4 @@
+@file:JvmName("MineDaggerHelp")
 package com.yang.module_mine.helper
 
 import androidx.appcompat.app.AppCompatActivity

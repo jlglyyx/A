@@ -1,3 +1,4 @@
+@file:JvmName("LoginDaggerHelp")
 package com.yang.module_login.helper
 
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +13,9 @@ private const val TAG = "LoginDaggerHelp.kt"
 
 fun getLoginComponent(activity: AppCompatActivity): LoginComponent {
     return DaggerLoginComponent.builder().remoteComponent(getRemoteComponent())
-        .loginModule(LoginModule(activity)).build()
+        .loginModule(LoginModule()).build()
 }
 fun getLoginComponent(fragment: Fragment): LoginComponent {
     return DaggerLoginComponent.builder().remoteComponent(getRemoteComponent())
-        .loginModule(LoginModule(fragment)).build()
+        .loginModule(LoginModule()).build()
 }

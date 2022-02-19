@@ -8,22 +8,29 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import androidx.core.app.ActivityOptionsCompat
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.tencent.mmkv.MMKV
+import com.yang.lib_common.R
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.constant.AppConstant.Constant.CLICK_TIME
-import com.yang.lib_common.data.UserInfoData
+import com.yang.lib_common.room.entity.UserInfoData
 import io.reactivex.rxjava3.core.Observable
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
+import java.util.regex.Pattern
 
 
 private const val TAG = "AppUtils"
 
 val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+
+val formatDate_YYYYMMMDDHHMMSS = SimpleDateFormat("yyyyMMddHHmmss")
+
+val formatDate_YYYY_MMM_DD_HHMMSS = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
 /**
  * @return 宽高集合
@@ -123,6 +130,13 @@ fun getFilePath(
     return mutableListOf
 }
 
+fun MutableList<String>.filterEmptyFile():MutableList<String>{
+    return this.filterNot {
+        val file = File(it)
+        !file.exists()
+    }.toMutableList()
+}
+
 /**
  * @return 获取文件夹下所有文件夹路径
  */
@@ -162,6 +176,12 @@ fun getUserInfo(): UserInfoData? {
     }
     return null
 }
+/**
+ * @return 更新用户缓存
+ */
+fun updateUserInfo(userInfoData:UserInfoData) {
+    getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, userInfoData.toJson())
+}
 
 /**
  * @return 返回xx,xx
@@ -189,21 +209,26 @@ fun String.symbolToList(symbol: String = ","): MutableList<String> {
 }
 
 /**
+ * 不行 content://com.android.externalstorage.documents/document/primary%3AMFiles%2Fpicture%2F1638856053728_a.jpg
+ * 可以 content://com.miui.gallery.open/raw/%2Fstorage%2Femulated%2F0%2FPictures%2F20211223_092453.jpg
  * @return uri2path
  */
 fun uri2path(context: Context, uri: Uri): String {
     var path = ""
     val contentResolver = context.contentResolver
     val projection = arrayOf(MediaStore.Images.Media.DATA)
-    val query = contentResolver.query(uri, projection, null, null, null)
+    val query =
+        contentResolver.query(uri, projection, null, null, null)
     try {
         query?.let {
             val columnIndex = query.getColumnIndex(MediaStore.Images.Media.DATA)
             it.moveToFirst()
             path = query.getString(columnIndex)
+            Log.i(TAG, "uri2path: $path")
             query.close()
         }
     } catch (e: Exception) {
+        e.printStackTrace()
         Log.i(TAG, "uri2path: ${e.message}")
     }
 
@@ -293,21 +318,26 @@ fun formatSize(size: Long): String {
  * @return 删除文件夹
  */
 fun deleteDirectory(file: File) {
-    if (file.isDirectory) {
-        file.listFiles()?.let {
-            if (it.isNotEmpty()) {
-                for (mFile in it) {
-                    if (mFile.isDirectory) {
-                        deleteDirectory(file)
-                    } else {
-                        deleteFile(mFile)
+    try {
+        if (file.isDirectory) {
+            file.listFiles()?.let {
+                if (it.isNotEmpty()) {
+                    for (mFile in it) {
+                        if (mFile.isDirectory) {
+                            deleteDirectory(file)
+                        } else {
+                            deleteFile(mFile)
+                        }
                     }
                 }
             }
+        } else {
+            deleteFile(file)
         }
-    } else {
-        deleteFile(file)
+    }catch (e:Exception){
+        e.printStackTrace()
     }
+
 }
 
 /**
@@ -317,5 +347,42 @@ fun deleteFile(file: File) {
     if (file.exists()) {
         file.delete()
     }
+}
+
+
+/**
+ * 跳转登录页
+ */
+fun buildARouterLogin(mContext: Context){
+    buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
+        .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(mContext, R.anim.bottom_in, R.anim.bottom_out))
+        .withInt(AppConstant.Constant.DATA,0)
+        .navigation(mContext)
+}
+
+/**
+ * 是否是手机号
+ */
+fun String.isPhone():Boolean{
+    val pattern = Pattern.compile("^1[0-9]{10}")
+    val matcher = pattern.matcher(this)
+    return matcher.matches()
+}
+
+/**
+ *
+ */
+fun toCloseAd(vipLevel:Int):Boolean{
+    val userInfo = getUserInfo()
+    userInfo?.let {
+        /*如果过期了返回*/
+        if (it.userVipExpired){
+            return false
+        }
+        if (it.userVipLevel >= vipLevel){
+            return true
+        }
+    }
+    return false
 }
 

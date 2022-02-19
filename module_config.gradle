@@ -27,6 +27,10 @@ android {
                 includeCompileClasspath = false
             }
         }
+
+        ndk{
+            abiFilters  "armeabi-v7a","arm64-v8a"
+        }
     }
 
     kotlinOptions {
@@ -39,7 +43,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -64,6 +68,9 @@ android {
     dependencies {
         rootProject.ext.kaptDependencies.each { k, v -> kapt v }
         rootProject.ext.compileOnlyDependencies.each { k, v -> compileOnly v }
+        rootProject.ext.kaptProjectDependencies.each { k, v -> kapt project(path: v) }
+//        implementation project(path: ':apt-annotation')
+//        implementation project(path: ':apt-processor')
     }
 }
 

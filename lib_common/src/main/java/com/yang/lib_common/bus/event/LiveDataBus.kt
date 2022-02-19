@@ -27,16 +27,17 @@ class LiveDataBus {
         }
     }
 
-    fun <T> with(key: String, type: Class<T>): MutableLiveData<T> {
+    fun <T> with(key: String, type: Class<T>): BusMutableLiveData<T> {
         if (!bus.containsKey(key)) {
             bus[key] = BusMutableLiveData()
         }
-        return bus[key] as MutableLiveData<T>
+        return bus[key] as BusMutableLiveData<T>
     }
 
-    fun with(key: String): MutableLiveData<Any> {
+    fun with(key: String): BusMutableLiveData<Any> {
         return with(key, Any::class.java)
     }
+
 
 
     private inner class ObserverWrapper<T>(var observer: Observer<T>) : Observer<T> {
@@ -45,7 +46,7 @@ class LiveDataBus {
             if (isCallOnObserve()) {
                 return
             }
-            observer.onChanged(t);
+            observer.onChanged(t)
         }
 
         private fun isCallOnObserve(): Boolean {
@@ -68,14 +69,15 @@ class LiveDataBus {
         }
     }
 
-    private inner class BusMutableLiveData<T> : MutableLiveData<T>() {
+
+    inner class BusMutableLiveData<T> : MutableLiveData<T>() {
 
         private val observerMap: MutableMap<Observer<*>, Observer<*>> = mutableMapOf()
 
         override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
             super.observe(owner, observer)
             try {
-                hook(observer as Observer<T>)
+                hook(observer)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -90,15 +92,17 @@ class LiveDataBus {
         }
 
         override fun removeObserver(observer: Observer<in T>) {
-            var realObserver: Observer<in T> = if (observerMap.containsKey(observer)) {
+            val realObserver: Observer<in T> = if (observerMap.containsKey(observer)) {
                 observerMap.remove(observer) as Observer<in T>
             } else {
                 observer
             }
             super.removeObserver(realObserver)
         }
-
-        private fun hook(@NonNull observer: Observer<T>) {
+        /**
+         * 更新 mVersion
+         */
+        private fun hook(@NonNull observer: Observer<in T>) {
             val classLiveData = LiveData::class.java
             val fieldObservers: Field = classLiveData.getDeclaredField("mObservers")
             fieldObservers.isAccessible = true

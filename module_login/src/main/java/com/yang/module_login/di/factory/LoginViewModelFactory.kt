@@ -31,6 +31,5 @@ class LoginViewModelFactory(private val application: Application, private val lo
             e.printStackTrace()
             throw java.lang.IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
-        throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
 }

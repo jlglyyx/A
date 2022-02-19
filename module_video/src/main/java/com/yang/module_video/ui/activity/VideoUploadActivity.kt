@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,21 +12,22 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.lxj.xpopup.XPopup
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.MediaInfoBean
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.upload.UploadService
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.dip2px
+import com.yang.lib_common.util.showShort
 import com.yang.lib_common.widget.CommonToolBar
 import com.yang.module_video.R
-import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.act_video_upload.*
 import java.util.*
-import javax.inject.Inject
 
 /**
  * @Author Administrator
@@ -38,7 +38,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.VIDEO_UPLOAD_ACTIVITY)
 class VideoUploadActivity : BaseActivity() {
 
-    @Inject
+    @InjectViewModel
     lateinit var videoViewModel: VideoViewModel
 
     private var selectType = ""
@@ -103,19 +103,22 @@ class VideoUploadActivity : BaseActivity() {
             buildARouter(AppConstant.RoutePath.PICTURE_SELECT_ACTIVITY)
                 .withParcelableArrayList(AppConstant.Constant.DATA, selectFileList as ArrayList)
                 .withInt(AppConstant.Constant.TYPE, AppConstant.Constant.NUM_TWO)
-                .withInt(AppConstant.Constant.NUM, AppConstant.Constant.NUM_ONE)
+                .withInt(AppConstant.Constant.NUM, AppConstant.Constant.NUM_TWO)
                 .navigation(this, FILE_CODE)
         }
 
         commonToolBar.tVRightCallBack = object : CommonToolBar.TVRightCallBack{
             override fun tvRightClickListener() {
-                if (TextUtils.isEmpty(selectType)){
-                    return
-                }
+//                if (TextUtils.isEmpty(selectType)){
+//                    showShort("请选择文件类别")
+//                    return
+//                }
                 if (videoUploadAdapter.data.isEmpty()){
+                    showShort("请选择文件")
                     return
                 }
-                uploadServiceBinder?.startUpload(videoUploadAdapter.data)
+                //BaseAppDatabase.instance.uploadTaskDao().deleteData()
+                uploadServiceBinder?.startUpload(videoUploadAdapter.data[0])
                 buildARouter(AppConstant.RoutePath.VIDEO_UPLOAD_TASK_ACTIVITY).navigation()
             }
         }
@@ -123,15 +126,13 @@ class VideoUploadActivity : BaseActivity() {
     }
 
     override fun initViewModel() {
-        getVideoComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun initRecyclerView(){
         recyclerView.layoutManager = LinearLayoutManager(this)
         videoUploadAdapter = VideoUploadAdapter(R.layout.item_upload,mutableListOf())
         recyclerView.adapter = videoUploadAdapter
-        videoUploadAdapter.addData("/storage/emulated/0/MFiles/video/B/舞蹈/aaa.mp4")
-        videoUploadAdapter.addData("/storage/emulated/0/MFiles/video/B/跳舞/aaa.mp4")
     }
 
 

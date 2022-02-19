@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_100"
                 android:orientation="vertical"
-                android:background="@color/plum"
+                android:background="@color/colorBar"
                 android:gravity="center"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -34,7 +34,8 @@
                     android:id="@+id/cv_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp_10"
+                    android:layout_marginHorizontal="@dimen/dp_5"
+                    android:layout_marginVertical="@dimen/dp_10"
                     app:cardCornerRadius="@dimen/dp_10">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -134,7 +135,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:layout_marginTop="@dimen/dp_20">
 
@@ -183,7 +184,42 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_create_time" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_5"
+                android:background="@color/white"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/black"
+                    android:id="@+id/tv_hold_order_time"
+                    android:layout_height="wrap_content"
+                    android:text="将在15:20后释放订单"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_5"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/black"
+                    android:id="@+id/tv_cancel_order"
+                    android:background="@drawable/shape_user_input_bg"
+                    android:layout_marginHorizontal="@dimen/dp_5"
+                    android:text="取消订单"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_5"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/black"
+                    android:id="@+id/tv_pay_order"
+                    android:background="@drawable/shape_user_input_bg"
+                    android:text="去支付"/>
+
+            </LinearLayout>
         </LinearLayout>
     </com.yang.lib_common.widget.DampScrollView>
 </LinearLayout>

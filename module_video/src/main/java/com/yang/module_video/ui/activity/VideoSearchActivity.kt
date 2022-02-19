@@ -11,18 +11,19 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.gson.Gson
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.room.entity.SearchData
+import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
 import com.yang.lib_common.util.simpleDateFormat
 import com.yang.module_video.R
 import com.yang.module_video.adapter.VideoAdapter
-import com.yang.module_video.helper.getVideoComponent
-import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.module_video.viewmodel.VideoViewModel
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
@@ -44,7 +45,7 @@ import javax.inject.Inject
 @Route(path = AppConstant.RoutePath.VIDEO_SEARCH_ACTIVITY)
 class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
 
-    @Inject
+    @InjectViewModel
     lateinit var videoViewModel: VideoViewModel
     @Inject
     lateinit var gson: Gson
@@ -98,7 +99,7 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
     }
 
     override fun initViewModel() {
-        getVideoComponent(this).inject(this)
+        InjectViewModelProxy.inject(this)
     }
 
     private fun initSmartRefreshLayout() {
@@ -144,7 +145,7 @@ class VideoSearchActivity : BaseActivity(), OnRefreshLoadMoreListener {
                 }
                 smartRefreshLayout.isLoading -> {
                     smartRefreshLayout.finishLoadMore()
-                    if (pageNum != 1 && it.list.isNotEmpty()) {
+                    if (it.list.isNullOrEmpty()) {
                         smartRefreshLayout.setNoMoreData(true)
                     } else {
                         smartRefreshLayout.setNoMoreData(false)

@@ -117,7 +117,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp_14" />
                 <EditText
-                    android:id="@+id/et_user_sign"
+                    android:id="@+id/et_desc"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"

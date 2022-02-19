@@ -8,17 +8,12 @@
         android:id="@+id/surfaceView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_cover"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white" />
 
     <ImageView
         android:id="@+id/iv_image"
@@ -43,10 +38,12 @@
         android:layout_height="@dimen/dp_40"
         android:layout_marginHorizontal="@dimen/dp_10"
         android:background="@drawable/shape_user_input_bg"
-        android:hint="账号"
+        android:hint="@string/string_input_account"
         android:maxLines="1"
         android:padding="@dimen/dp_10"
-        android:textSize="@dimen/sp_16"
+        android:textSize="@dimen/sp_14"
+        android:inputType="number"
+        android:maxLength="13"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -60,14 +57,26 @@
         android:layout_marginHorizontal="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@drawable/shape_user_input_bg"
-        android:hint="密码"
+        android:hint="@string/string_input_password"
         android:inputType="textPassword"
         android:maxLines="1"
+        android:maxLength="13"
+        android:digits="@string/string_password_digits"
         android:padding="@dimen/dp_10"
-        android:textSize="@dimen/sp_16"
+        android:textSize="@dimen/sp_14"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_user" />
+    <ImageView
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:src="@drawable/iv_password_gone"
+        android:padding="@dimen/dp_5"
+        android:id="@+id/iv_password_visibility"
+        android:layout_marginEnd="@dimen/dp_10"
+        app:layout_constraintEnd_toEndOf="@+id/et_password"
+        app:layout_constraintTop_toTopOf="@+id/et_password"
+        app:layout_constraintBottom_toBottomOf="@+id/et_password"/>
 
     <LinearLayout
         android:id="@+id/ll_verification_code"
@@ -86,7 +95,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
-            android:hint="验证码"
+            android:hint="@string/string_verification_code"
             android:maxLines="1"
             android:padding="@dimen/dp_10"
             android:textSize="@dimen/sp_16" />
@@ -103,7 +112,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:padding="@dimen/dp_10"
-            android:text="获取验证码" />
+            android:text="@string/string_get_verification_code" />
     </LinearLayout>
 
 
@@ -117,7 +126,8 @@
         android:layout_marginHorizontal="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@drawable/shape_user_input_bg"
-        android:text="登录"
+        android:text="@string/string_login"
+        android:textSize="@dimen/sp_14"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_verification_code" />
@@ -129,7 +139,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp_10"
-        android:text="暂不登录"
+        android:text="@string/string_no_login"
+        android:textSize="@dimen/sp_14"
         app:layout_constraintTop_toBottomOf="@+id/bt_login"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -139,7 +150,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp_10"
-        android:text="没有账号?立即注册"
+        android:text="@string/string_register_now"
+        android:textSize="@dimen/sp_14"
         app:layout_constraintTop_toBottomOf="@+id/bt_login"
         app:layout_constraintRight_toRightOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

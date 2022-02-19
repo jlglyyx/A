@@ -34,10 +34,24 @@ class LoginInterceptor : IInterceptor {
     /**
      * 需要登录操作页面
      */
-    private var toLoginList = arrayListOf<String>()
-//    private var toLoginList = arrayListOf(AppConstant.RoutePath.CHANGE_USER_INFO_ACTIVITY)
+    private var toLoginList = arrayListOf(
+        AppConstant.RoutePath.MINE_OTHER_PERSON_INFO_ACTIVITY,
+        AppConstant.RoutePath.OPEN_VIP_ACTIVITY,
+        AppConstant.RoutePath.MY_PUSH_ACTIVITY,
+        AppConstant.RoutePath.MY_COLLECTION_ACTIVITY,
+        AppConstant.RoutePath.PRIVACY_ACTIVITY,
+        AppConstant.RoutePath.SETTING_ACTIVITY,
+        AppConstant.RoutePath.ADD_DYNAMIC_ACTIVITY,
+        AppConstant.RoutePath.MINE_OBTAIN_TURNOVER_ACTIVITY,
+        AppConstant.RoutePath.MINE_SIGN_TURNOVER_ACTIVITY,
+        AppConstant.RoutePath.MINE_EXTENSION_TURNOVER_ACTIVITY,
+        AppConstant.RoutePath.MINE_OBTAIN_EXCHANGE_ACTIVITY,
+        AppConstant.RoutePath.MINE_OBTAIN_TASK_ACTIVITY,
+        AppConstant.RoutePath.OPEN_VIP_ACTIVITY
+    )
 
     override fun process(postcard: Postcard, callback: InterceptorCallback) {
+        postcard.timeout = 2
         when (getDefaultMMKV().decodeInt(AppConstant.Constant.LOGIN_STATUS, -1)) {
             AppConstant.Constant.LOGIN_SUCCESS -> {
                 callback.onContinue(postcard)
@@ -47,11 +61,15 @@ class LoginInterceptor : IInterceptor {
             }
             AppConstant.Constant.LOGIN_NO_PERMISSION -> {
                 val indexOf = toLoginList.indexOf(postcard.path)
-                if (indexOf != -1){
-                    buildARouter(AppConstant.RoutePath.LOGIN_ACTIVITY)
-                        .withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(mContext,R.anim.bottom_in, R.anim.bottom_out))
-                        .navigation(mContext)
-                }else{
+                if (indexOf != -1) {
+                    postcard.group = AppConstant.RoutePath.MODULE_LOGIN
+                    postcard.path = AppConstant.RoutePath.LOGIN_ACTIVITY
+                    postcard.destination = Class.forName("com.yang.module_login.ui.activity.LoginActivity")
+                    postcard.withOptionsCompat(ActivityOptionsCompat.makeCustomAnimation(mContext, R.anim.bottom_in, R.anim.bottom_out))
+                    /*数据传递存在风险 其他页面传递来了数据 未清除其他页面传递的数据 可能在下个页面存在数据接收风险*/
+                    postcard.withInt(AppConstant.Constant.DATA,0)
+                    callback.onContinue(postcard)
+                } else {
                     callback.onContinue(postcard)
                 }
             }
@@ -60,7 +78,6 @@ class LoginInterceptor : IInterceptor {
             }
         }
         Log.i(TAG, "process: 拦截器====${postcard.path}=====")
-//        Log.i(TAG, "process: 拦截器====$postcard=====")
     }
 
     override fun init(context: Context) {

@@ -8,7 +8,8 @@ interface AppConstant {
 
         const val BASE_PORT = "20000"
 
-        const val BASE_URL = "http://www.baidu.com/"
+        const val BASE_URL = "https://www.baidu.com/"
+//        const val BASE_URL = "https://www.wanandroid.com/"
 //        const val BASE_URL = "http://jlgl.free.idcfengye.com/"
 //        const val BASE_URL = "http://10.16.242.28:20000/"
 
@@ -16,11 +17,15 @@ interface AppConstant {
 
         const val TAG_LOG = "httpLog"
 
-        const val CONNECT_TIMEOUT: Long = 1000
+        const val CONNECT_TIMEOUT = 1000L
 
-        const val READ_TIMEOUT: Long = 1000
+        const val READ_TIMEOUT = 1000L
 
-        const val WRITE_TIMEOUT: Long = 1000
+        const val WRITE_TIMEOUT = 1000L
+
+        const val CONTENT_TYPE = "multipart/form-data"
+
+        const val UTF_8 = "UTF-8"
     }
 
     object RoutePath {
@@ -30,7 +35,6 @@ interface AppConstant {
         private const val PROVIDE = "provide"
 
         const val MODULE_MAIN = "module_main"
-        const val MODULE_HOME = "module_home"
         const val MODULE_MINE = "module_mine"
         const val MODULE_VIDEO = "module_video"
         const val MODULE_PICTURE = "module_picture"
@@ -59,8 +63,8 @@ interface AppConstant {
 
         const val MAIN_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MainFragment"
         const val LEFT_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/LeftFragment"
-        const val MY_COLLECTION_PICTURE_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionPictureFragment"
-        const val MY_COLLECTION_VIDEO_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionVideoFragment"
+        const val MY_COLLECTION_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyCollectionFragment"
+        const val MY_DOWNLOAD_FRAGMENT = "/$MODULE_MAIN/$FRAGMENT/MyDownLoadFragment"
 
 
         /**
@@ -106,39 +110,37 @@ interface AppConstant {
          */
         const val MINE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MainActivity"
 
-        const val OTHER_PERSON_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/OtherPersonInfoActivity"
+        const val MINE_OTHER_PERSON_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineOtherPersonInfoActivity"
 
-        const val CHANGE_USER_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ChangeUserInfoActivity"
+        const val MINE_CHANGE_USER_INFO_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineChangeUserInfoActivity"
 
-        const val VIEW_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ViewHistoryActivity"
+        const val MINE_VIEW_HISTORY_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineViewHistoryActivity"
 
-        const val MINE_OBTAIN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainActivity"
+        const val MINE_OBTAIN_TURNOVER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainTurnoverActivity"
 
         const val MINE_OBTAIN_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainExchangeActivity"
 
         const val MINE_EXCHANGE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeActivity"
 
-        const val MINE_EXCHANGE_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExchangeDetailActivity"
+        const val MINE_GOODS_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineGoodsDetailActivity"
 
-        const val MINE_SIGN_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineSignActivity"
+        const val MINE_SIGN_TURNOVER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineSignTurnoverActivity"
 
-        const val MINE_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionActivity"
+        const val MINE_EXTENSION_TURNOVER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionTurnoverActivity"
 
-        const val MINE_LIMIT_TIME_EXTENSION_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineLimitTimeExtensionActivity"
+        const val MINE_EXTENSION_QR_CODE_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineExtensionQRCodeActivity"
 
-        const val MINE_SHIPPING_ADDRESS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineShippingAddressActivity"
+        const val MINE_ADDRESS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineAddressActivity"
 
-        const val CHANGE_PASSWORD_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/ChangePasswordActivity"
+        const val MINE_CHANGE_PASSWORD_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineChangePasswordActivity"
 
+        const val MINE_ADD_ADDRESS_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineAddAddressActivity"
 
+        const val MINE_OBTAIN_TASK_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineObtainTaskActivity"
 
-        const val MINE_ADD_ADDRESS_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineAddAddressActivity"
+        const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineOrderDetailActivity"
 
-        const val MINE_EARN_OBTAIN_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineEarnObtainActivity"
-
-        const val MINE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineOrderDetailActivity"
-
-        const val MINE_CREATE_ORDER_DETAIL_ACTIVITY = "/$MODULE_MINE/$FRAGMENT/MineCreateOrderDetailActivity"
+        const val MINE_CREATE_ORDER_ACTIVITY = "/$MODULE_MINE/$ACTIVITY/MineCreateOrderActivity"
 
 
 
@@ -184,7 +186,7 @@ interface AppConstant {
 
         const val CONTENT = "content"
 
-        const val PAGE_SIZE_COUNT = 2
+        const val PAGE_SIZE_COUNT = 10
 
         const val TAB_HEIGHT = "TAB_HEIGHT"
 
@@ -221,6 +223,23 @@ interface AppConstant {
         const val IP = "ip"
 
         const val PORT = "port"
+
+        const val FONT_TYPE = "fontType"
+
+        const val VIDEO = "video"
+
+        const val PICTURE = "picture"
+
+        const val COLLECT = "collect"
+
+        const val DOWNLOAD = "download"
+
+        const val COMMENT = "comment"
+
+        const val BUNDLE = "bundle"
+
+        const val ITEM_CONTENT = 0
+        const val ITEM_AD = 1
 
         const val ITEM_MAIN_TITLE = 0
         const val ITEM_MAIN_CONTENT_TEXT = 1

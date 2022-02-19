@@ -203,37 +203,38 @@ abstract class BaseLazyFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        Log.i("TAG", "onPause: ")
+        Log.i(TAG, "onPause: ")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.i("TAG", "onStop: ")
+        Log.i(TAG, "onStop: ")
     }
 
 
     override fun onStart() {
         super.onStart()
-        Log.i("TAG", "onStart: ")
+        Log.i(TAG, "onStart: ")
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("TAG", "onDestroy: ")
+        Log.i(TAG, "onDestroy: ")
     }
 
     override fun onDetach() {
         super.onDetach()
-        Log.i("TAG", "onDetach: ")
+        Log.i(TAG, "onDetach: ")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         unRegisterListener()
+        uC = null
+        mView = null
         loadingPopupView?.dismiss()
         loadingPopupView = null
-        mView = null
     }
 
 }

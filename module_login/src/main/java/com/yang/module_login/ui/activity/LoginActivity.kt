@@ -3,27 +3,32 @@ package com.yang.module_login.ui.activity
 import android.media.MediaPlayer
 import android.os.Environment
 import android.text.TextUtils
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
-import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.gson.Gson
+import com.yang.apt_annotation.annotain.InjectViewModel
+import com.yang.lib_common.app.BaseApplication
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.bus.event.UIChangeLiveData
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.util.buildARouter
-import com.yang.lib_common.util.clicks
-import com.yang.lib_common.util.getDefaultMMKV
-import com.yang.lib_common.util.showShort
+import com.yang.lib_common.proxy.InjectViewModelProxy
+import com.yang.lib_common.util.*
 import com.yang.module_login.R
-import com.yang.module_login.helper.getLoginComponent
 import com.yang.module_login.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.act_login.*
+import kotlinx.android.synthetic.main.act_login.et_password
+import kotlinx.android.synthetic.main.act_login.et_user
+import kotlinx.android.synthetic.main.act_login.tv_verification_code
+import kotlinx.android.synthetic.main.act_register.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.LOGIN_ACTIVITY)
@@ -32,23 +37,42 @@ class LoginActivity : BaseActivity() {
     @Inject
     lateinit var gson: Gson
 
-    @Inject
+    @InjectViewModel
     lateinit var loginViewModel: LoginViewModel
 
+    private var videoUrl = "${Environment.getExternalStorageDirectory()}/MFiles/video/aaa.mp4"
+
+    private var mediaPlayer:MediaPlayer? = null
+
+    private var data = -1
+
+    private var passwordVisibility = false
 
     override fun getLayout(): Int {
         return R.layout.act_login
     }
 
     override fun initData() {
+        data = intent.getIntExtra(AppConstant.Constant.DATA,-1)
 
+        Log.i(TAG, "initData: $loginViewModel")
     }
 
     override fun initView() {
         initVideoView()
+        iv_password_visibility.setOnClickListener {
+            if (passwordVisibility){
+                et_password.transformationMethod = PasswordTransformationMethod.getInstance()
+                iv_password_visibility.setImageResource(R.drawable.iv_password_gone)
+            }else{
+                et_password.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                iv_password_visibility.setImageResource(R.drawable.iv_password_visibility)
+            }
+            passwordVisibility = !passwordVisibility
+            et_password.setSelection(et_password.text.toString().length)
+        }
         bt_login.clicks().subscribe {
             checkForm()
-            //buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).navigation()
         }
         tv_not_login.clicks().subscribe {
             getDefaultMMKV().encode(
@@ -83,30 +107,22 @@ class LoginActivity : BaseActivity() {
         }
     }
 
+
+    /**
+     * 1.去除loginViewModelFactory
+     * 2.去除getLoginComponent(this).inject(this)
+     * 3.去除loginViewModel = getViewModel(loginViewModelFactory,LoginViewModel::class.java)
+     */
+
     override fun initViewModel() {
-        getLoginComponent(this).inject(this)
-    }
+        InjectViewModelProxy.inject(this)
 
-    override fun initUIChangeLiveData(): UIChangeLiveData? {
-        return loginViewModel.uC
-    }
-
-    private fun checkForm() {
-        if (TextUtils.isEmpty(et_user.text.toString())) {
-            showShort("请输入账号")
-            return
-        }
-        if (TextUtils.isEmpty(et_password.text.toString())) {
-            showShort("请输入密码")
-            return
-        }
-        loginViewModel.login(et_user.text.toString(), et_password.text.toString())
         loginViewModel.mUserInfoData.observe(this, Observer {
             getDefaultMMKV().encode(
                 AppConstant.Constant.LOGIN_STATUS,
                 AppConstant.Constant.LOGIN_SUCCESS
             )
-            getDefaultMMKV().encode(AppConstant.Constant.USER_INFO, gson.toJson(it))
+            updateUserInfo(it)
             buildARouter(AppConstant.RoutePath.MAIN_ACTIVITY).withOptionsCompat(
                 ActivityOptionsCompat.makeCustomAnimation(
                     this@LoginActivity,
@@ -118,6 +134,34 @@ class LoginActivity : BaseActivity() {
         })
     }
 
+    override fun initUIChangeLiveData(): UIChangeLiveData? {
+        return loginViewModel.uC
+    }
+
+    private fun checkForm() {
+
+        if (TextUtils.isEmpty(et_user.text.toString())) {
+            showShort(getString(R.string.string_input_account))
+            return
+        }
+
+        if (TextUtils.equals(et_user.text.toString(),"30")){
+            deleteDirectory(File("${BaseApplication.baseApplication.cacheDir}/app_/db_"))
+            Log.i(TAG, "checkForm: 数据库删除成功")
+        }
+
+        if (TextUtils.isEmpty(et_password.text.toString())) {
+            showShort(getString(R.string.string_input_password))
+            return
+        }
+        if (et_password.text.toString().length < 6){
+            showShort(getString(R.string.string_password_must_six))
+            return
+        }
+        loginViewModel.login(et_user.text.toString(), et_password.text.toString())
+
+    }
+
     private fun initTimer() {
         lifecycleScope.launch {
             tv_verification_code.isClickable = false
@@ -126,22 +170,21 @@ class LoginActivity : BaseActivity() {
                 delay(1000)
             }
             tv_verification_code.isClickable = true
-            tv_verification_code.text = "重新获取验证码"
+            tv_verification_code.text = getString(R.string.string_re_get_verification_code)
         }
     }
 
     private fun initVideoView() {
         lifecycle.addObserver(surfaceView)
-        val mediaPlayer = surfaceView.initMediaPlayer("${Environment.getExternalStorageDirectory()}/MFiles/video/register.mp4")
-        mediaPlayer?.setOnInfoListener { mp, what, extra ->
-            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                iv_cover.visibility = View.GONE
-            }
-            Log.i(TAG, "setOnInfoListener: $mp   $what   $extra")
-            return@setOnInfoListener false
-        }
+        mediaPlayer = surfaceView.initMediaPlayer(videoUrl)
     }
 
+    override fun finish() {
+        super.finish()
+        if (data != -1){
+            overridePendingTransition(R.anim.bottom_in, R.anim.bottom_out)
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

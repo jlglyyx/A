@@ -3,12 +3,9 @@ package com.yang.module_mine.di.module
 import android.app.Application
 import androidx.lifecycle.ViewModelStoreOwner
 import com.yang.lib_common.scope.ActivityScope
-import com.yang.lib_common.scope.ModelWithFactory
-import com.yang.lib_common.util.getViewModel
 import com.yang.module_mine.api.MineApiService
 import com.yang.module_mine.di.factory.MineViewModelFactory
 import com.yang.module_mine.repository.MineRepository
-import com.yang.module_mine.viewmodel.MineViewModel
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -41,17 +38,4 @@ class MineModule(private val viewModelStoreOwner: ViewModelStoreOwner) {
             mineRepository
         )
 
-    @ActivityScope
-    @Provides
-    @ModelWithFactory
-    fun provideModelWithFactory(
-        mineViewModelFactory: MineViewModelFactory
-    ): MineViewModel =
-        getViewModel(viewModelStoreOwner, mineViewModelFactory, MineViewModel::class.java)
-
-//    @ActivityScope
-//    @Provides
-//    @ModelNoFactory
-//    fun provideModelNoFactory(
-//    ): LoginViewModel = getViewModel(viewModelStoreOwner,LoginViewModel::class.java)
 }

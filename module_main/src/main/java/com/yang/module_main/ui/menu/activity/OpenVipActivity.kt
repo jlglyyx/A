@@ -2,6 +2,7 @@ package com.yang.module_main.ui.menu.activity
 
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.lxj.xpopup.XPopup
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.util.simpleDateFormat
@@ -28,12 +29,16 @@ class OpenVipActivity:BaseActivity() {
 
     private var maxProgress = 100
 
+    private var payTypeArray = arrayOf("微信","支付宝")
+
+    private var selectPayType = ""
+
     override fun getLayout(): Int {
         return R.layout.act_open_vip
     }
 
     override fun initData() {
-        tv_time.text = simpleDateFormat.format(dateTime)
+        tv_time.text = "到期时间："+simpleDateFormat.format(dateTime)
     }
 
     override fun initView() {
@@ -57,9 +62,16 @@ class OpenVipActivity:BaseActivity() {
         recyclerView.layoutManager = GridLayoutManager(this,3)
 
         mAdapter.setOnItemClickListener { adapter, view, position ->
-            val item = adapter.getItem(position) as OpenVipData
-            tv_time.text = setTime(item.time)
-            setMProgress(item.experience)
+
+            val asBottomList = XPopup.Builder(this).asBottomList(
+                "", payTypeArray
+            ) { position, text ->
+                selectPayType = payTypeArray[position]
+                val item = adapter.getItem(position) as OpenVipData
+                tv_time.text = setTime(item.time)
+                setMProgress(item.experience)
+            }
+            asBottomList.show()
         }
     }
 

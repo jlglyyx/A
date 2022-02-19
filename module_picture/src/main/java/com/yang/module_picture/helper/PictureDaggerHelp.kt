@@ -1,3 +1,4 @@
+@file:JvmName("PictureDaggerHelp")
 package com.yang.module_picture.helper
 
 import androidx.appcompat.app.AppCompatActivity

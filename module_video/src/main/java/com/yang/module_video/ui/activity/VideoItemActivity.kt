@@ -4,12 +4,14 @@ import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Environment
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.bytedance.sdk.openadsdk.TTRewardVideoAd
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.tabs.TabLayout
@@ -18,26 +20,28 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
+import com.yang.apt_annotation.annotain.InjectViewModel
 import com.yang.lib_common.adapter.CommentAdapter
 import com.yang.lib_common.base.ui.activity.BaseActivity
 import com.yang.lib_common.constant.AppConstant
 import com.yang.lib_common.data.CommentData
 import com.yang.lib_common.dialog.EditBottomDialog
 import com.yang.lib_common.down.thread.MultiMoreThreadDownload
+import com.yang.lib_common.proxy.InjectViewModelProxy
 import com.yang.lib_common.room.entity.VideoDataItem
 import com.yang.lib_common.util.buildARouter
 import com.yang.lib_common.util.clicks
+import com.yang.lib_common.util.toCloseAd
 import com.yang.module_video.R
-import com.yang.module_video.helper.getVideoComponent
 import com.yang.module_video.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.act_video_item.*
-import javax.inject.Inject
 
 @Route(path = AppConstant.RoutePath.VIDEO_ITEM_ACTIVITY)
 class VideoItemActivity : BaseActivity() {
 
-    @Inject
-    lateinit var videoModule: VideoViewModel
+    @InjectViewModel
+    lateinit var videoViewModel: VideoViewModel
+
     private lateinit var orientationUtils: OrientationUtils
     private lateinit var commentAdapter: CommentAdapter
 
@@ -50,6 +54,8 @@ class VideoItemActivity : BaseActivity() {
 
     private var isScroll = false
 
+    val paramMap = mutableMapOf<String, String>()
+
     override fun getLayout(): Int {
         return R.layout.act_video_item
     }
@@ -59,13 +65,13 @@ class VideoItemActivity : BaseActivity() {
         val id = intent.getStringExtra(AppConstant.Constant.ID)
         val url = intent.getStringExtra(AppConstant.Constant.URL)
         id?.let {
-            videoModule.getVideoItemData(it)
+            videoViewModel.getVideoItemData(it)
         }
         url?.let {
             this.url = it
             initVideo()
         }
-
+        insertViewHistory()
     }
 
     override fun initView() {
@@ -93,27 +99,34 @@ class VideoItemActivity : BaseActivity() {
                         commentAdapter.addData(0, CommentData(0, 0).apply {
                             comment = s
                         })
-                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
+                        insertComment(s)
                         commentAdapter.getViewByPosition(
                             recyclerView,
                             0,
                             com.yang.lib_common.R.id.siv_img
                         )?.let { it1 ->
+                            it1.isFocusable = true
+                            it1.requestFocus()
                             scrollToPosition(it1)
                         }
+                        nestedScrollView.fullScroll(View.FOCUS_DOWN)
                     }
 
                 }
             }).show()
         }
         tv_video_down.clicks().subscribe {
-            MultiMoreThreadDownload.Builder(this)
-                .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
-                .filePath("${System.currentTimeMillis()}.mp4")
-                .fileUrl(url)
-                .threadNum(50)
-                .build()
-                .start()
+            if (toCloseAd(3)) {
+                MultiMoreThreadDownload.Builder(this)
+                    .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
+                    .filePath("${System.currentTimeMillis()}.mp4")
+                    .fileUrl(url)
+                    .threadNum(50)
+                    .build()
+                    .start()
+                return@subscribe
+            }
+            videoViewModel.loadVideoDownAd()
         }
 
 
@@ -125,21 +138,92 @@ class VideoItemActivity : BaseActivity() {
         nestedScrollView.scrollTo(intArray[0], intArray[1])
     }
 
+    private fun insertComment(comment: String) {
+        paramMap.clear()
+        paramMap[AppConstant.Constant.COMMENT] = comment
+        videoViewModel.insertComment(paramMap)
+    }
+
+    private fun insertViewHistory() {
+        videoViewModel.insertViewHistory("", "")
+    }
+
     override fun initViewModel() {
-        getVideoComponent(this).inject(this)
-        videoModule.mVideoItemData.observe(this, Observer {
-            if (it.size == 0){
+        InjectViewModelProxy.inject(this)
+        videoViewModel.mVideoItemData.observe(this, Observer {
+            if (it.size == 0) {
                 return@Observer
             }
-            for ((index,videoDataItem) in it.withIndex()){
-                if (index == 0){
+            for ((index, videoDataItem) in it.withIndex()) {
+                if (index == 0) {
                     videoDataItem.select = true
                 }
-                videoDataItem.position = index+1
+                videoDataItem.position = index + 1
             }
             url = it[0].videoUrl.toString()
             initVideo()
             collectionAdapter.replaceData(it)
+        })
+
+        videoViewModel.mTTRewardVideoDownAd.observe(this, Observer {
+
+            //step6:在获取到广告后展示,强烈建议在onRewardVideoCached回调后，展示广告，提升播放体验
+            //该方法直接展示广告
+//                    mttRewardVideoAd.showRewardVideoAd(RewardVideoActivity.this);
+
+            it?.setRewardAdInteractionListener(object :
+                TTRewardVideoAd.RewardAdInteractionListener {
+                override fun onAdShow() {
+
+                    Log.i(TAG, "onAdShow: ")
+                }
+
+                override fun onAdVideoBarClick() {
+
+                    Log.i(TAG, "onAdVideoBarClick: ")
+                }
+
+                override fun onAdClose() {
+
+                    Log.i(TAG, "onAdClose: ")
+                    MultiMoreThreadDownload.Builder(this@VideoItemActivity)
+                        .parentFilePath("${Environment.getExternalStorageDirectory()}/MFiles/video")
+                        .filePath("${System.currentTimeMillis()}.mp4")
+                        .fileUrl(url)
+                        .threadNum(50)
+                        .build()
+                        .start()
+                }
+
+                override fun onVideoComplete() {
+                    Log.i(TAG, "onVideoComplete: ")
+                }
+
+                override fun onVideoError() {
+
+                    Log.i(TAG, "onVideoError: ")
+                }
+
+                override fun onRewardVerify(
+                    p0: Boolean,
+                    p1: Int,
+                    p2: String?,
+                    p3: Int,
+                    p4: String?
+                ) {
+
+                    Log.i(TAG, "onRewardVerify: ")
+                }
+
+                override fun onSkippedVideo() {
+                    Log.i(TAG, "onSkippedVideo: ")
+
+                }
+
+            })
+
+            //展示广告，并传入广告展示的场景
+            it.showRewardVideoAd(this@VideoItemActivity)
         })
     }
 
@@ -147,18 +231,18 @@ class VideoItemActivity : BaseActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         commentAdapter = CommentAdapter(mutableListOf()).apply {
-            setOnItemChildClickListener { adapter, view, position ->
+            setOnItemChildClickListener { _, view, position ->
                 val item = commentAdapter.getItem(position)
                 item?.let {
                     when (view.id) {
                         com.yang.lib_common.R.id.siv_img -> {
-                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
+                            buildARouter(AppConstant.RoutePath.MINE_OTHER_PERSON_INFO_ACTIVITY).withString(
                                 AppConstant.Constant.ID,
                                 ""
                             ).navigation()
                         }
                         com.yang.lib_common.R.id.siv_reply_img -> {
-                            buildARouter(AppConstant.RoutePath.OTHER_PERSON_INFO_ACTIVITY).withString(
+                            buildARouter(AppConstant.RoutePath.MINE_OTHER_PERSON_INFO_ACTIVITY).withString(
                                 AppConstant.Constant.ID,
                                 ""
                             ).navigation()
@@ -181,21 +265,23 @@ class VideoItemActivity : BaseActivity() {
                                                 }
                                                 1, 2 -> {
                                                     it.parentId?.let { mParentId ->
-                                                        val mPosition = commentAdapter.data.indexOf(commentAdapter.data.findLast {
-                                                            TextUtils.equals(it.parentId,mParentId)
-                                                        }?.apply {
-                                                            addSubItem(CommentData(1, 2).apply {
-                                                                comment = s
-                                                                parentId = mParentId
+                                                        val mPosition = commentAdapter.data.indexOf(
+                                                            commentAdapter.data.findLast {
+                                                                TextUtils.equals(it.parentId,
+                                                                    mParentId)
+                                                            }?.apply {
+                                                                addSubItem(CommentData(1, 2).apply {
+                                                                    comment = s
+                                                                    parentId = mParentId
+                                                                })
                                                             })
-                                                        })
                                                         commentAdapter.collapse(mPosition)
                                                         commentAdapter.expand(mPosition)
                                                     }
                                                 }
                                             }
+                                            insertComment(s)
                                         }
-
                                     }
                                 }).show()
                         }
@@ -209,19 +295,20 @@ class VideoItemActivity : BaseActivity() {
         }
         recyclerView.adapter = commentAdapter
 
-        collectionRecyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        collectionRecyclerView.layoutManager = LinearLayoutManager(this,
+            LinearLayoutManager.HORIZONTAL,
+            false)
         collectionAdapter =
             CollectionAdapter(R.layout.item_video_collection, mutableListOf()).apply {
                 setOnItemClickListener { adapter, view, position ->
                     val item = adapter.getItem(position) as VideoDataItem
                     url = item.videoUrl.toString()
-                    if (item.select){
+                    if (item.select) {
                         item.select = false
                         adapter.notifyItemChanged(position)
-                    }else{
+                    } else {
                         adapter.data.forEach {
-                            if ((it as VideoDataItem).select){
+                            if ((it as VideoDataItem).select) {
                                 it.select = false
                             }
                         }
@@ -230,7 +317,6 @@ class VideoItemActivity : BaseActivity() {
                     }
                     initVideo()
                     detailPlayer.startPlayLogic()
-
                 }
             }
         collectionRecyclerView.adapter = collectionAdapter
@@ -327,17 +413,17 @@ class VideoItemActivity : BaseActivity() {
     inner class CollectionAdapter(layoutResId: Int, data: MutableList<VideoDataItem>) :
         BaseQuickAdapter<VideoDataItem, BaseViewHolder>(layoutResId, data) {
         override fun convert(helper: BaseViewHolder, item: VideoDataItem) {
-            helper.setText(R.id.bt_collection,item.position.toString())
-            if (item.select){
+            helper.setText(R.id.bt_collection, item.position.toString())
+            if (item.select) {
                 helper.setTextColor(R.id.bt_collection,
-                    ContextCompat.getColor(mContext,R.color.mediumslateblue))
-            }else{
-                helper.setTextColor(R.id.bt_collection,ContextCompat.getColor(mContext,R.color.black))
+                    ContextCompat.getColor(mContext, R.color.mediumslateblue))
+            } else {
+                helper.setTextColor(R.id.bt_collection, ContextCompat.getColor(mContext,
+                    R.color.black))
             }
         }
 
     }
-
 
 
     override fun onBackPressed() {

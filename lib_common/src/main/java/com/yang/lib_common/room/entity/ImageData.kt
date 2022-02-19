@@ -2,7 +2,11 @@ package com.yang.lib_common.room.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd
+import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.yang.lib_common.constant.AppConstant
 
 /**
  *des:
@@ -11,7 +15,7 @@ import androidx.room.PrimaryKey
  *@date 2021/6/11
  */
 data class ImageData(
-    val list: List<ImageDataItem>,
+    val list: MutableList<ImageDataItem>,
     val pageNum: Int?,
     val pageSize: Int?,
     val size: Int?,
@@ -20,8 +24,6 @@ data class ImageData(
 
 @Entity(tableName = "image_data")
 data class ImageDataItem(
-    @ColumnInfo
-    var createTime: String?,
     @PrimaryKey
     var id: String,
     @ColumnInfo
@@ -37,5 +39,17 @@ data class ImageDataItem(
     @ColumnInfo
     var imageExtraInfo: String?,
     @ColumnInfo
+    var createTime: String?,
+    @ColumnInfo
     var updateTime: String?
-)
+):MultiItemEntity {
+
+    @Ignore
+    var mItemType:Int = AppConstant.Constant.ITEM_CONTENT
+    @Ignore
+    var mTTNativeExpressAd: TTNativeExpressAd? = null
+
+    override fun getItemType(): Int {
+        return mItemType
+    }
+}

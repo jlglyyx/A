@@ -2,17 +2,21 @@ package com.yang.module_picture.viewmodel
 
 import android.app.Application
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.bytedance.sdk.openadsdk.AdSlot
+import com.bytedance.sdk.openadsdk.TTAdLoadType
+import com.bytedance.sdk.openadsdk.TTAdNative
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd
 import com.yang.lib_common.base.viewmodel.BaseViewModel
 import com.yang.lib_common.constant.AppConstant
-import com.yang.lib_common.room.BaseAppDatabase
 import com.yang.lib_common.room.entity.ImageData
 import com.yang.lib_common.room.entity.ImageDataItem
 import com.yang.lib_common.room.entity.ImageTypeData
-import com.yang.lib_common.util.getDirectoryName
+import com.yang.lib_common.util.getScreenDpi
+import com.yang.lib_common.util.toCloseAd
+import com.yang.module_picture.R
 import com.yang.module_picture.repository.PictureRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -31,14 +35,21 @@ class PictureViewModel @Inject constructor(
 
     var mImageTypeData = MutableLiveData<MutableList<ImageTypeData>>()
 
-    fun getImageInfo(type:String = "",pageNum:Int,keyword:String = "",showDialog:Boolean = false) {
-        if (showDialog){
+    var mTTNativeExpressAdList = mutableListOf<ImageDataItem>()
+
+    fun getImageInfo(
+        type: String = "",
+        pageNum: Int,
+        keyword: String = "",
+        showDialog: Boolean = false
+    ) {
+        if (showDialog) {
             launch({
                 val mutableMapOf = mutableMapOf<String, Any>()
-                if (!TextUtils.isEmpty(type)){
+                if (!TextUtils.isEmpty(type)) {
                     mutableMapOf[AppConstant.Constant.TYPE] = type
                 }
-                if (!TextUtils.isEmpty(keyword)){
+                if (!TextUtils.isEmpty(keyword)) {
                     mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
                 }
                 mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum
@@ -46,47 +57,17 @@ class PictureViewModel @Inject constructor(
                 pictureRepository.getImageInfo(mutableMapOf)
             }, {
                 mImageData.postValue(it.data)
-            },{
-                showRecyclerViewErrorEvent()
+            }, {
                 cancelRefreshLoadMore()
-                withContext(Dispatchers.IO) {
-                    if (BaseAppDatabase.instance.imageDataDao().queryData().size == 0) {
-                        val directoryName = getDirectoryName()
-                        val mutableListOf = mutableListOf<ImageDataItem>()
-                        var count = 0
-                        directoryName.forEachIndexed { index, file ->
-                            val listFiles = file.listFiles()
-                            listFiles.forEachIndexed { chilldIndex, chilldFile ->
-                                mutableListOf.add(
-                                    ImageDataItem(
-                                        System.currentTimeMillis().toString(),
-                                        "${count++}",
-                                        chilldFile.name,
-                                        "$index",
-                                        chilldFile.absolutePath,
-                                        chilldFile.name,
-                                        chilldFile.name,
-                                        "",
-                                        System.currentTimeMillis().toString()
-                                    )
-                                )
-                            }
-                        }
-                        BaseAppDatabase.instance.imageDataDao().insertData(mutableListOf)
-                        mImageData.postValue(ImageData(BaseAppDatabase.instance.imageDataDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT),null,null,null,null))
-                    }else{
-                        mImageData.postValue(ImageData(BaseAppDatabase.instance.imageDataDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT),null,null,null,null))
-                    }
-
-                }
-            }, messages = *arrayOf("加载中"))
-        }else{
+                showRecyclerViewErrorEvent()
+            }, messages = *arrayOf(getString(R.string.string_loading)))
+        } else {
             launch({
                 val mutableMapOf = mutableMapOf<String, Any>()
-                if (!TextUtils.isEmpty(type)){
+                if (!TextUtils.isEmpty(type)) {
                     mutableMapOf[AppConstant.Constant.TYPE] = type
                 }
-                if (!TextUtils.isEmpty(keyword)){
+                if (!TextUtils.isEmpty(keyword)) {
                     mutableMapOf[AppConstant.Constant.KEYWORD] = keyword
                 }
                 mutableMapOf[AppConstant.Constant.PAGE_NUMBER] = pageNum
@@ -94,78 +75,92 @@ class PictureViewModel @Inject constructor(
                 pictureRepository.getImageInfo(mutableMapOf)
             }, {
                 mImageData.postValue(it.data)
-            },{
-//                showRecyclerViewErrorEvent()
-//                cancelRefreshLoadMore()
-                withContext(Dispatchers.IO) {
-                    if (BaseAppDatabase.instance.imageDataDao().queryData().size == 0) {
-                        val directoryName = getDirectoryName()
-                        val mutableListOf = mutableListOf<ImageDataItem>()
-                        var count = 0
-                        directoryName.forEachIndexed { index, file ->
-                            val listFiles = file.listFiles()
-                            listFiles.forEachIndexed { chilldIndex, chilldFile ->
-                                mutableListOf.add(
-                                    ImageDataItem(
-                                        System.currentTimeMillis().toString(),
-                                        "${count++}",
-                                        chilldFile.name,
-                                        "$index",
-                                        chilldFile.absolutePath,
-                                        chilldFile.name,
-                                        chilldFile.name,
-                                        "",
-                                        System.currentTimeMillis().toString()
-                                    )
-                                )
-                            }
-                        }
-                        BaseAppDatabase.instance.imageDataDao().insertData(mutableListOf)
-                        mImageData.postValue(ImageData(BaseAppDatabase.instance.imageDataDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT),null,null,null,null))
-                    }else{
-                        mImageData.postValue(ImageData(BaseAppDatabase.instance.imageDataDao().queryDataByType(type,pageNum,AppConstant.Constant.PAGE_SIZE_COUNT),null,null,null,null))
-                    }
+            }, {
 
-                }
-            },errorDialog = false)
+                mImageData.postValue(ImageData(mutableListOf<ImageDataItem>().apply {
+                    for (i in 0..10){
+                        add(ImageDataItem("$i","测$i","$i","https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202003%2F26%2F20200326212002_rxlyj.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1641715864&t=fa48084bc521db8a18fe5f61842cab7e","$i","$i","","",""))
+                    }
+                },0,0,0,"0"))
+//                cancelRefreshLoadMore()
+//                showRecyclerViewErrorEvent()
+            }, errorDialog = false)
         }
 
     }
-    fun getImageItemData(sid:String) {
+
+    fun getImageItemData(sid: String) {
         launch({
             pictureRepository.getImageItemData(sid)
         }, {
             mImageItemData.postValue(it.data)
-        },errorDialog = false)
+        }, errorDialog = false)
     }
+
     fun getImageTypeData() {
         launch({
             pictureRepository.getImageTypeData()
         }, {
             mImageTypeData.postValue(it.data)
         }, {
-            withContext(Dispatchers.IO) {
-                if (BaseAppDatabase.instance.imageTypeDao().queryData().size == 0) {
-                    val mutableListOf = mutableListOf<ImageTypeData>()
-                    val directoryName = getDirectoryName()
-                    directoryName.forEachIndexed { index, s ->
-                        mutableListOf.add(
-                            ImageTypeData(
-                                index,
-                                s.name,
-                                "$index",
-                                ""
-                            )
-                        )
-                    }
-                    BaseAppDatabase.instance.imageTypeDao().insertData(mutableListOf)
-                    mImageTypeData.postValue(BaseAppDatabase.instance.imageTypeDao().queryData())
-                }else{
-                    mImageTypeData.postValue(BaseAppDatabase.instance.imageTypeDao().queryData())
+            mImageTypeData.postValue(mutableListOf<ImageTypeData>().apply {
+                for (i in 0..5){
+                    add(ImageTypeData(i,"测$i","$i",null))
                 }
+            })
 
+            //requestFail()
+        }, messages = *arrayOf(getString(R.string.string_loading)))
+    }
+
+
+    fun addViewHistory(id: String, type: String) {
+        launch({
+            pictureRepository.addViewHistory(id, type)
+        }, {
+
+        })
+    }
+
+    fun insertComment(params: Map<String, String>) {
+        launch({
+            pictureRepository.insertComment(params)
+        }, {
+
+        })
+    }
+
+    fun loadPictureAd(){
+        if (toCloseAd(2)) {
+            return
+        }
+        val adSlot = AdSlot.Builder()
+            .setCodeId("947672204") //广告位id
+            .setSupportDeepLink(true)
+            .setAdCount(3) //请求广告数量为1到3条
+            .setExpressViewAcceptedSize(getScreenDpi(getApplication())[0] / 2 - 4f, 0f) //期望模板广告view的size,单位dp
+            .setAdLoadType(TTAdLoadType.PRELOAD) //推荐使用，用于标注此次的广告请求用途为预加载（当做缓存）还是实时加载，方便后续为开发者优化相关策略
+            .build()
+        mTTAdNative?.loadNativeExpressAd(adSlot, object : TTAdNative.NativeExpressAdListener {
+            override fun onError(p0: Int, p1: String?) {
+                Log.i("TAG", "onError: $p0  $p1")
             }
-        }, "加载中...")
+            override fun onNativeExpressAdLoad(p0: MutableList<TTNativeExpressAd>?) {
+                Log.i("TAG", "onNativeExpressAdLoad: ${p0?.size}")
+                if (p0.isNullOrEmpty()) {
+                    return
+                }
+                mTTNativeExpressAdList.clear()
+                p0.forEach {
+                    mTTNativeExpressAdList.add(ImageDataItem("10", null, null,
+                        null, null, null, null, null, null).apply {
+                        mItemType = AppConstant.Constant.ITEM_AD
+                        mTTNativeExpressAd = it
+                        it.render()
+                    })
+                }
+            }
+        })
     }
 
 }
