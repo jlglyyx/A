@@ -12,6 +12,3 @@ dependencies {
     implementation project(path: ':apt-annotation')
 
 }
-
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
