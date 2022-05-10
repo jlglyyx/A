@@ -5,7 +5,7 @@ buildscript {
     ext.arouter_register_version = "1.0.2"
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.0"
@@ -23,7 +23,7 @@ allprojects {
         maven { url 'https://jitpack.io' }
         mavenCentral()
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 

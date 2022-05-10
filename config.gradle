@@ -34,7 +34,7 @@ ext {
     apiDependencies = [
             "BaseRecyclerViewAdapterHelper": 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30',
             "dagger"                       : 'com.google.dagger:dagger:2.2',
-            //网络请求t
+            //网络请求
             "retrofit2"                    : 'com.squareup.retrofit2:retrofit:2.9.0',
             //retrofit+Gson适配器
             "converter-gson"               : 'com.squareup.retrofit2:converter-gson:2.9.0',
@@ -56,7 +56,7 @@ ext {
             "arouter-api"                  : "com.alibaba:arouter-api:1.5.2",
             "material"                     : "com.google.android.material:material:1.4.0",
             //视频播放器
-            "GSYVideoPlayer"               : "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5-jitpack",
+            "GSYVideoPlayer"               : "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.4-jitpack",
             "rxbinding"                    : "com.jakewharton.rxbinding4:rxbinding-material:4.0.0",
             "rxpermissions"                : "com.github.tbruyelle:rxpermissions:0.12",
             "mmkv"                         : "com.tencent:mmkv:1.0.23",
